@@ -580,14 +580,14 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v50</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v51</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v50 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v51 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -604,7 +604,7 @@
   <button id="playBtn">JOUER</button>
   <div class="tsRow"><button id="custBtn">👤 Personnaliser</button><button id="arenaBtn">⚔️ Arène co-op</button></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v50</div></div>
+  <div class="tsVer">v51</div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
 <div id="arField"><canvas id="arCv"></canvas><div id="arTop"></div><button id="arQuit" aria-label="Quitter">✕</button><button id="arSk"><span>FRAPPE<br>BRUME</span></button><div id="arPick"></div><div id="arEnd"></div></div>
@@ -2395,7 +2395,12 @@ function showBackups() {
   modal("🛟 Sauvegardes de secours", "Le jeu garde une copie de ta partie à chaque lancement. Choisis celle à remettre :<br><br>" + list.map((e, i) => '<button class="smallBtn bakRow" data-bk="' + i + '">' + new Date(e.t).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) + " · niveau " + e.lvl + " · record " + e.best + (e.reb ? " · " + e.reb + " renaissance(s)" : "") + "</button>").join("") + "<br><b class='worse'>Ta partie actuelle sera remplacée.</b>", [{ t: "Fermer", alt: true }]);
   document.querySelectorAll("[data-bk]").forEach(b => b.onclick = () => {
     const e = list[+b.dataset.bk]; if (!e) return;
-    saveLock = true; localStorage.setItem(SAVE_KEY, e.raw); location.reload();
+    const when = new Date(e.t).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+    closeModal();
+    setTimeout(() => modal("⚠️ Remplacer ta partie ?", "Tu vas <b>perdre ta partie actuelle</b> :<br>niveau <b>" + fmt(S.maxLevel) + "</b> · record " + fmt(S.best || 1) + (S.rebirths ? " · " + S.rebirths + " renaissance(s)" : "") +
+      "<br><br>Elle sera remplacée par la sauvegarde du <b>" + when + "</b> :<br>niveau <b>" + e.lvl + "</b> · record " + e.best + (e.reb ? " · " + e.reb + " renaissance(s)" : "") +
+      "<br><br><b class='worse'>Tu ne pourras pas annuler.</b>",
+      [{ t: "Annuler", alt: true }, { t: "Oui, remplacer", f: () => { saveLock = true; localStorage.setItem(SAVE_KEY, e.raw); location.reload(); } }]), 200);
   });
 }
 function sendAccount() {
@@ -5210,6 +5215,8 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 51, d: "Sauvegardes de secours plus sûres", l: [
+    "Choisir une sauvegarde de secours demande maintenant une <b>confirmation</b> : le jeu te montre ta partie actuelle et celle qui va la remplacer avant de changer quoi que ce soit."] },
   { v: 50, d: "Petit ménage", l: [
     "Le pack de rattrapage de la v48 est terminé : merci à tous d'avoir été patients !",
     "L'ancien « code long » de sauvegarde est retiré. Pour changer de téléphone, utilise ton <b>🔑 Code de compte</b> (⚙️ Options → Envoyer / Récupérer).",
@@ -5334,7 +5341,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 50, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 51, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
