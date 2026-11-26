@@ -41,11 +41,28 @@
   .tab { flex: 1; padding: 6px 0 5px; border: none; background: none; color: #9a98ad; font-weight: 700; font-size: 10px; border-bottom: 3px solid transparent; position: relative; min-width: 0; }
   .tab .ti { display: block; font-size: 18px; margin-bottom: 1px; }
   .tab.dot::after { content: ""; position: absolute; top: 5px; right: 22%; width: 8px; height: 8px; border-radius: 50%; background: #e63946; }
-  #skillBar { position: absolute; left: 10px; bottom: 10px; display: flex; gap: 6px; }
-  .skB { position: relative; width: 46px; height: 46px; border-radius: 50%; border: 2px solid #8ecae6; background: #23304a; font-size: 21px; color: #fff; overflow: hidden; padding: 0; }
+  #skillBar { position: absolute; left: 8px; bottom: 8px; display: flex; flex-wrap: wrap-reverse; gap: 5px; max-width: 172px; }
+  .skB { position: relative; width: 39px; height: 39px; border-radius: 50%; border: 2px solid #8ecae6; background: #23304a; font-size: 18px; color: #fff; overflow: hidden; padding: 0; }
   .skB .cdv { position: absolute; inset: 0; background: rgba(0,0,0,.62); display: none; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
   .skB.on { border-color: #ffd166; box-shadow: 0 0 12px #ffd166; }
   .treeHead { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #1f2338; border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; }
+  .treeHead2 { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: linear-gradient(135deg, #252a48, #1c1f35); border: 1px solid #343a5c; border-radius: 12px; padding: 8px 10px; }
+  .th2s { display: block; font-size: 11px; color: #9a98ad; }
+  .brTabs { display: flex; gap: 6px; margin: 8px 0; }
+  .brTab { flex: 1; border: 1px solid #343a5c; background: #1d2034; color: #c8c6d8; border-radius: 10px; padding: 6px 2px; font-weight: 800; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+  .brTab small { font-size: 10px; color: #9a98ad; font-weight: 700; }
+  .brTab.on { border-color: var(--c); color: var(--c); background: #262a46; box-shadow: 0 0 10px -3px var(--c); }
+  .nodeGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .node2 { position: relative; border: 2px solid #343a5c; background: #1d2034; border-radius: 12px; padding: 7px 3px 5px; color: #e8e6f0; display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 84px; }
+  .node2 .ni { font-size: 22px; line-height: 1.1; } .node2 .ni .ic { width: 24px; height: 24px; }
+  .node2 .nn { font-size: 10px; font-weight: 800; line-height: 1.15; text-align: center; color: #c8c6d8; }
+  .node2 .nr { font-size: 10px; font-weight: 900; color: #9a98ad; }
+  .node2 .nStep { position: absolute; top: 3px; left: 5px; font-size: 9px; color: #6a6d84; font-weight: 800; }
+  .node2.got { border-color: var(--c); background: linear-gradient(180deg, #262a46, #1d2034); } .node2.got .nr { color: var(--c); }
+  .node2.max { box-shadow: 0 0 10px -3px var(--c); }
+  .node2.sk { border-style: double; border-width: 3px; } .node2.sk.got { border-color: #ffd166; }
+  .node2.lock { opacity: .45; }
+  .node2.can::after { content: "+"; position: absolute; top: 2px; right: 5px; font-size: 13px; font-weight: 900; color: #52d17c; }
   .tree { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .branch { display: flex; flex-direction: column; align-items: center; background: #1a1d2e; border-radius: 12px; padding: 8px 4px 10px; }
   .bTitle { font-weight: 800; font-size: 12px; margin-bottom: 8px; }
@@ -161,6 +178,26 @@
   .vbBtn { background: linear-gradient(180deg, #8a2ce0, #5a12b0) !important; box-shadow: 0 2px 0 #34096a !important; }
   .fuseLk { opacity: .55; } .afChips .smallBtn:disabled { opacity: .45; }
   .afChips { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; } .afChips .smallBtn { flex: 1; font-weight: 800; } .afChips .smallBtn.on { background: #3a3f66; outline: 2px solid currentColor; }
+  #custBtn { margin-top: 12px; border: 1px solid #5a4a8a; background: rgba(30,22,60,.75); color: #e6e2ff; font-weight: 800; font-size: 14px; padding: 9px 18px; border-radius: 12px; z-index: 2; position: relative; animation: logoIn .4s ease-out; }
+  .custOpen { width: 100%; border: 1px solid #5a4a8a; background: linear-gradient(180deg, #2e2850, #221d3c); color: #fff; font-weight: 900; font-size: 15px; padding: 12px; border-radius: 12px; margin-bottom: 6px; }
+  #custPanel { position: fixed; inset: 0; z-index: 45; display: none; align-items: center; justify-content: center; background: rgba(8,8,20,.78); padding: 12px; }
+  #custPanel.show { display: flex; }
+  body.custOn #modal { z-index: 60; } body.custOn #toast { z-index: 61; }
+  #custBox { position: relative; width: 100%; max-width: 440px; max-height: 94vh; display: flex; flex-direction: column; background: linear-gradient(180deg, #262b48, #1b1e33); border: 1px solid #3a4070; border-radius: 18px; box-shadow: 0 10px 40px rgba(0,0,0,.6); overflow: hidden; }
+  #custHead { padding: 12px 48px 8px 16px; font-weight: 900; font-size: 18px; color: #ffd166; }
+  #custClose { position: absolute; top: 8px; right: 10px; width: 34px; height: 34px; border-radius: 50%; border: none; background: #343a5c; color: #fff; font-size: 18px; font-weight: 900; }
+  #custPrevWrap { display: flex; justify-content: center; background: radial-gradient(ellipse at 50% 60%, #3a3070 0%, #1e1a38 55%, transparent 75%); margin: 0 12px; border-radius: 14px; }
+  #custBody { overflow-y: auto; padding: 6px 14px 4px; }
+  .cuRow { margin: 8px 0 4px; } .cuLbl { font-size: 12px; font-weight: 800; color: #9a98ad; margin-bottom: 5px; display: flex; justify-content: space-between; }
+  .cuSex { display: flex; gap: 8px; } .cuSex button { flex: 1; border: 2px solid #343a5c; background: #1d2034; color: #c8c6d8; font-weight: 900; font-size: 14px; padding: 9px; border-radius: 12px; }
+  .cuSex button.on { border-color: #ffd166; color: #ffd166; background: #2a2a40; }
+  .cuChips { display: flex; flex-wrap: wrap; gap: 6px; } .cuChips button { border: 1px solid #343a5c; background: #1d2034; color: #c8c6d8; font-weight: 800; font-size: 12px; padding: 6px 10px; border-radius: 10px; }
+  .cuChips button.on { border-color: #ffd166; color: #ffd166; box-shadow: 0 0 8px -2px #ffd166; }
+  .cuSw { display: flex; flex-wrap: wrap; gap: 8px; } .cuSw button { position: relative; width: 34px; height: 34px; border-radius: 50%; border: 2px solid rgba(255,255,255,.15); padding: 0; }
+  .cuSw button.on { border-color: #ffd166; box-shadow: 0 0 0 2px #1b1e33, 0 0 0 4px #ffd166; }
+  .cuSw button.lockd { opacity: .55; } .cuSw button .pp { position: absolute; right: -5px; bottom: -5px; font-size: 10px; }
+  .cuSw button.energy { background: conic-gradient(#5ce1ff, #ffd166, #ff4d5e, #52ffa0, #c07cff, #5ce1ff) !important; }
+  #custDone { margin: 8px 14px 14px; border: none; border-radius: 12px; padding: 12px; font-weight: 900; font-size: 16px; color: #1a1230; background: linear-gradient(180deg, #ffe08a, #ffb84a); box-shadow: 0 4px 0 #a8742a; }
   #newsBtn { position: absolute; top: 14px; right: 14px; border: 1px solid #5a4a8a; background: rgba(30,22,60,.75); color: #ffd166; font-weight: 800; font-size: 13px; padding: 8px 12px; border-radius: 12px; z-index: 2; }
   #newsBtn .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff4d5e; margin-left: 6px; vertical-align: 1px; box-shadow: 0 0 6px #ff4d5e; }
   #newsPanel { position: fixed; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center; background: rgba(8,8,20,.7); padding: 16px; }
@@ -490,13 +527,13 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v41</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v42</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v41 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v42 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -511,8 +548,10 @@
   <div id="tsLoad"><i id="tsLoadFill"></i></div><div id="tsLoadTxt">Chargement…</div>
   <button id="newsBtn">📜 Nouveautés<span class="dot" id="newsDot"></span></button>
   <button id="playBtn">JOUER</button>
+  <button id="custBtn">👤 Personnaliser</button>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v41</div></div>
+  <div class="tsVer">v42</div></div>
+<div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="newsPanel"><div id="newsBox"><div id="newsHead">📜 Nouveautés</div><button id="newsClose" aria-label="Fermer">✕</button><div id="newsBody"></div></div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
@@ -718,7 +757,7 @@ function newState() {
     tree: {}, bonusPts: 0, music: true,
     stats: { bossKills: 0, taps: 0, legend: 0, items: 0, forges: 0, rares: 0, skills: 0, quests: 0, time: 0, bestHit: 0, goldTotal: 0 },
     ach: {}, daily: null, bestiary: {}, pets: {}, pet: null,
-    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, seenVer: 0 };
+    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0, sex: "h", hs: 0, skin: 1, eye: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, seenVer: 0 };
 }
 let S = newState();
 function load() {
@@ -1062,22 +1101,22 @@ function updateSkillBar() {
   const free = ptsFree() > 0, t = document.querySelector('.tab[data-p="pSk"]');
   if (t && t.classList.contains("dot") !== free) t.classList.toggle("dot", free);
 }
+let treeTab = 0;
+const brSpent = b => b.nodes.reduce((a, n) => a + T(n.id), 0), brTotal = b => b.nodes.reduce((a, n) => a + n.max, 0);
 function refreshSkills() {
-  const box = $("skList"), free = ptsFree();
-  let h = '<div class="treeHead"><div><b style="font-size:22px;color:#ffd166">' + free + '</b> point' + (free > 1 ? "s" : "") + ' à placer<br><span style="font-size:11px;color:#9a98ad">' +
-    ptsEarned() + ' gagnés · 1 point tous les 10 niveaux · ' + TREE_TOTAL + ' points pour tout remplir · l\'arbre repart à zéro à la Renaissance</span></div><button class="smallBtn" id="treeReset">↺ Réinitialiser</button></div><div class="tree">';
-  for (const b of BRANCHES) {
-    h += '<div class="branch"><div class="bTitle" style="color:' + b.color + '">' + b.icon + " " + b.name + '</div>';
-    b.nodes.forEach((n, i) => {
-      const r = T(n.id), open = nodeOpen(n), can = open && r < n.max && free > 0;
-      if (i) h += '<div class="link' + (r || open && T(b.nodes[i - 1].id) ? " lit" : "") + '" style="--c:' + b.color + '"></div>';
-      h += '<button class="node' + (n.skill ? " sk" : "") + (r ? " got" : "") + (open ? "" : " lock") + (can ? " can" : "") + '" style="--c:' + b.color + '" data-n="' + n.id + '">' +
-        '<span class="ni">' + (open ? n.icon : ic("lock")) + '</span><span class="nr">' + r + "/" + n.max + '</span></button>';
-    });
-    h += '</div>';
-  }
-  box.innerHTML = h + '</div>';
-  box.querySelectorAll(".node").forEach(el => el.onclick = () => showNode(NODE[el.dataset.n]));
+  const box = $("skList"), free = ptsFree(), br = BRANCHES[treeTab] || BRANCHES[0];
+  let h = '<div class="treeHead2"><div><b style="font-size:20px;color:#ffd166">' + free + '</b> point' + (free > 1 ? "s" : "") + ' à placer<span class="th2s">' + ptsSpent() + " / " + TREE_TOTAL + ' placés · 1 point tous les 10 niveaux</span></div><button class="smallBtn" id="treeReset">↺ Réinitialiser</button></div>';
+  h += '<div class="brTabs">' + BRANCHES.map((b, i) => '<button class="brTab' + (i === treeTab ? " on" : "") + '" style="--c:' + b.color + '" data-bt="' + i + '"><span>' + b.icon + " " + b.name + "</span><small>" + brSpent(b) + " / " + brTotal(b) + "</small></button>").join("") + "</div>";
+  h += '<div class="nodeGrid">';
+  br.nodes.forEach((n, i) => {
+    const r = T(n.id), open = nodeOpen(n), can = open && r < n.max && free > 0;
+    h += '<button class="node2' + (n.skill ? " sk" : "") + (r ? " got" : "") + (r >= n.max ? " max" : "") + (open ? "" : " lock") + (can ? " can" : "") + '" style="--c:' + br.color + '" data-n="' + n.id + '">' +
+      '<span class="nStep">' + (i + 1) + '</span><span class="ni">' + (open ? n.icon : ic("lock")) + '</span><span class="nn">' + n.name + '</span><span class="nr">' + r + "/" + n.max + "</span></button>";
+  });
+  h += '</div><div class="hint" style="margin-top:8px">Touche une compétence pour voir son effet et y mettre un point. Chaque compétence demande au moins 1 point dans la précédente. Les compétences actives (bord doré) ajoutent un bouton dans le combat. L\'arbre repart à zéro à la Renaissance.</div>';
+  box.innerHTML = h;
+  box.querySelectorAll(".node2").forEach(el => el.onclick = () => showNode(NODE[el.dataset.n]));
+  box.querySelectorAll("[data-bt]").forEach(el => el.onclick = () => { treeTab = +el.dataset.bt; sfx("buy"); refreshSkills(); });
   $("treeReset").onclick = () => {
     if (!ptsSpent()) { toast("Aucun point placé"); return; }
     modal("↺ Réinitialiser l'arbre ?", "Tous tes points te sont rendus pour les replacer comme tu veux. C'est gratuit.", [{ t: "Annuler", alt: true }, { t: "Réinitialiser", f: () => { S.tree = {}; afterTree(); toast("Points rendus"); } }]);
@@ -2280,13 +2319,18 @@ const CL = () => CLASSES[S.cls] || CLASSES.spectre;
 const LOOKS = {
   coat: { label: "Manteau", list: [["Nuit", "#1b2130", "#11151f"], ["Acier", "#3a4250", "#262c36"], ["Cramoisi", "#4a161c", "#300d11"], ["Forêt", "#17352c", "#0e221c"], ["Améthyste", "#2e1c48", "#1d1030"], ["Ivoire", "#d8d2c4", "#a8a090"]] },
   trim: { label: "Énergie", list: [["Cyan", "#5ce1ff"], ["Or", "#ffd166"], ["Rouge", "#ff4d5e"], ["Émeraude", "#52ffa0"], ["Violet", "#c07cff"], ["Blanc", "#f0f4ff"]] },
-  hair: { label: "Cheveux", list: [["Argent", "#e4eaf4", "#9fb0c8"], ["Noir", "#2e2e3c", "#17171f"], ["Blond", "#f2d27a", "#c8a04a"], ["Roux", "#d0653a", "#9a4220"], ["Rose", "#f0a0c8", "#c070a0"], ["Bleu nuit", "#4a6ab4", "#2a4078"]] }
+  hair: { label: "Cheveux", list: [["Argent", "#e4eaf4", "#9fb0c8"], ["Noir", "#2e2e3c", "#17171f"], ["Blond", "#f2d27a", "#c8a04a"], ["Roux", "#d0653a", "#9a4220"], ["Rose", "#f0a0c8", "#c070a0"], ["Bleu nuit", "#4a6ab4", "#2a4078"], ["Châtain", "#8a5a3a", "#5a3a22"], ["Blanc", "#f6f6fa", "#c8ccd8"], ["Violet", "#a070e0", "#6a40a8"], ["Vert", "#5ac88a", "#2e8a5a"]] }
 };
+// options gratuites (choisies au début, modifiables quand tu veux)
+const SKINS = [["Claire", "#f6dfcc"], ["Pêche", "#f1d8c4"], ["Dorée", "#e3bb94"], ["Mate", "#c99a74"], ["Brune", "#9a6a4a"], ["Ébène", "#6e4a34"]];
+const EYES = [["Énergie", null], ["Bleu", "#4fa8ff"], ["Vert", "#52d17c"], ["Ambre", "#ffb03a"], ["Violet", "#b07cff"], ["Rouge", "#ff4d5e"], ["Gris", "#b8c4d6"]];
+const HSTYLES = [["auto", "Selon la classe"], ["spiky", "Mèches"], ["court", "Courts"], ["tail", "Queue de cheval"], ["long", "Mi-longs"], ["longf", "Longs"], ["chignon", "Chignon"]];
 const LOOK_PRICE = 4;
 const lookOwned = (k, i) => i < 2 || S.owned[k + i];
 function heroColors() {
   const L = S.look, c = LOOKS.coat.list[L.coat] || LOOKS.coat.list[0], tr = (LOOKS.trim.list[L.trim] || LOOKS.trim.list[0])[1], h = LOOKS.hair.list[L.hair] || LOOKS.hair.list[0];
-  return { coat: c[1], coatD: c[2], trim: tr, shirt: "#2c3344", skin: "#f1d8c4", hair: h[1], hairD: h[2], eye: tr };
+  const sk = (SKINS[L.skin] || SKINS[1])[1], ey = (EYES[L.eye] || EYES[0])[1] || tr, hs = (HSTYLES[L.hs] || HSTYLES[0])[0];
+  return { coat: c[1], coatD: c[2], trim: tr, shirt: "#2c3344", skin: sk, hair: h[1], hairD: h[2], eye: ey, sex: L.sex === "f" ? "f" : "h", hs: hs === "auto" ? null : hs };
 }
 const rgba = (hex, a) => { const [r, g, b] = hexRgb(hex); return "rgba(" + r + "," + g + "," + b + "," + a + ")"; };
 const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
@@ -2303,13 +2347,12 @@ const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
     { id: "hl200", name: "Légende vivante", ok: () => S.hlv >= 200 },
     { id: "vb1", name: "Fléau du Néant", ok: () => (S.vbKills || 0) >= 1 }
   ]);
-function drawHeroPreview(c) {
-  const sz = 150; c.width = c.height = sz * DPR; c.style.width = c.style.height = sz + "px";
+function drawHeroPreview(c, tt = 1.3, sz = 150) { c.width = c.height = sz * DPR; c.style.width = c.style.height = sz + "px";
   const tmp = mkOff(HOFF), tint = mkOff(HOFF);
   HC = heroColors();
-  drawOff(tmp, HOFF, HOFF / 2, HOFF - 15, () => { heroArt(1.3, false, 0, 0); heroWeapon(1.3, 0, 0, 0); });
+  drawOff(tmp, HOFF, HOFF / 2, HOFF - 15, () => { heroArt(tt, false, Math.sin(tt * 3) * 1.5, 0); heroWeapon(tt, Math.sin(tt * 3) * 1.5, 0, 0); });
   const x = c.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height);
-  withCtx(x, () => { ctx.setTransform(DPR, 0, 0, DPR, 0, 0); sticker(tmp, tint, HOFF, (sz - HOFF) / 2 + 4, -6); });
+  withCtx(x, () => { ctx.setTransform(DPR * sz / 150, 0, 0, DPR * sz / 150, 0, 0); sticker(tmp, tint, HOFF, (150 - HOFF) / 2 + 4, -6); });
 }
 function refreshHero() {
   let h = '<div class="heroTop"><canvas id="heroPrev"></canvas><div><b style="font-size:18px">' + CL().name + '</b><br><span class="titleTxt">« ' + ((TITLES.find(x => x.id === S.title) || TITLES[0]).name) + ' »</span><br><span style="font-size:12px;color:#9a98ad">' + CL().weapon + " · " + CL().desc + "</span></div></div>";
@@ -2319,15 +2362,7 @@ function refreshHero() {
     h += '<div class="upg' + (act ? " petCard act" : "") + '"><div class="upgIcon">' + ic(c.icon) + '</div><div class="upgTxt"><div class="upgName">' + c.name + ' <span class="lv">' + c.weapon + '</span></div><div class="upgDesc">' + (ok ? c.desc : ic("lock") + " Atteins le niveau " + c.unlock) + "</div></div>" +
       '<button class="buy" data-cls="' + id + '"' + (ok && !act ? "" : " disabled") + ">" + (act ? "Actif" : ok ? "Choisir" : "🔒") + "</button></div>";
   }
-  h += '<div class="secTitle"><span>' + ic("palette") + ' Apparence</span><span style="font-size:11px;color:#9a98ad">' + LOOK_PRICE + " Cristaux par couleur</span></div>";
-  for (const k in LOOKS) {
-    h += '<div class="lookRow"><span>' + LOOKS[k].label + '</span><div class="sw">';
-    LOOKS[k].list.forEach((c, i) => {
-      const own = lookOwned(k, i), on = S.look[k] === i;
-      h += '<button class="swb' + (on ? " on" : "") + (own ? "" : " lockd") + '" data-lk="' + k + '" data-li="' + i + '" title="' + c[0] + '" style="background:' + c[1] + '">' + (own ? "" : '<span class="pp">' + PERLE + "</span>") + "</button>";
-    });
-    h += "</div></div>";
-  }
+  h += '<div class="secTitle"><span>' + ic("palette") + ' Apparence</span></div><button class="custOpen" id="heroCust">👤 Personnaliser mon chasseur</button>';
   const got = TITLES.filter(x => x.ok());
   h += '<div class="secTitle"><span>' + ic("medal") + ' Titres</span><span style="font-size:11px;color:#9a98ad">' + got.length + " / " + TITLES.length + " · débloqués avec les succès et la Tour</span></div><div class=\"titleList\">";
   for (const x of got) h += '<button class="titleChip' + ((S.title || "novice") === x.id ? " on" : "") + '" data-ti="' + x.id + '">' + x.name + "</button>";
@@ -2336,15 +2371,7 @@ function refreshHero() {
   $("heroPanel").innerHTML = h;
   drawHeroPreview($("heroPrev"));
   $("heroPanel").querySelectorAll("[data-cls]").forEach(b => b.onclick = () => { S.cls = b.dataset.cls; heroShots = []; sfx("rare"); refreshHero(); refreshStats(); save(); });
-  $("heroPanel").querySelectorAll("[data-lk]").forEach(b => b.onclick = () => {
-    const k = b.dataset.lk, i = +b.dataset.li;
-    if (!lookOwned(k, i)) {
-      if (S.perles < LOOK_PRICE) { toast("Il faut " + LOOK_PRICE + " " + PERLE); return; }
-      modal("", "Débloquer la couleur <b>" + LOOKS[k].list[i][0] + "</b> pour " + LOOK_PRICE + " " + PERLE + " ?", [{ t: "Annuler", alt: true }, { t: "Débloquer", f: () => { S.perles -= LOOK_PRICE; S.owned[k + i] = true; S.look[k] = i; sfx("rare"); refreshHero(); refreshTop(); save(); } }]);
-      return;
-    }
-    S.look[k] = i; sfx("buy"); refreshHero(); save();
-  });
+  $("heroCust").onclick = openCust;
   $("heroPanel").querySelectorAll("[data-ti]").forEach(b => b.onclick = () => { S.title = b.dataset.ti; sfx("buy"); refreshHero(); save(); });
 }
 
@@ -3305,10 +3332,18 @@ function heroArt(t, walking, bob, lg) {
   const hy = -86 + bob, hw = Math.sin(t * (walking ? 10 : 2)) * (walking ? 2.2 : 1);
   ctx.save(); ctx.translate(4, hy + 9); ctx.scale(1.28, 1.28); ctx.translate(-4, -(hy + 9));
   ctx.fillStyle = HC.hairD; ctx.beginPath();
-  const hs = CL().hair;
+  const hs = HC.hs || (HC.sex === "f" && CL().hair === "spiky" ? "longf" : CL().hair);
   if (hs === "tail") { // queue de cheval
     ctx.moveTo(-6, hy - 6); ctx.quadraticCurveTo(-14, hy - 8, -16, hy - 2); ctx.quadraticCurveTo(-24 + hw * 2, hy + 6, -22 + hw * 3, hy + 20); ctx.quadraticCurveTo(-16 + hw, hy + 10, -10, hy + 4); ctx.lineTo(-4, hy + 8); ctx.lineTo(4, hy + 2); ctx.lineTo(4, hy - 12); ctx.closePath(); ctx.fill();
     ctx.fillStyle = HC.trim; ctx.fillRect(-15, hy - 4, 3.4, 4.4); ctx.fillStyle = HC.hairD;
+  } else if (hs === "court") { // cheveux courts
+    ctx.moveTo(4, hy - 12); ctx.quadraticCurveTo(-11, hy - 13, -10, hy - 1); ctx.quadraticCurveTo(-10, hy + 7, -4, hy + 9); ctx.lineTo(4, hy + 4); ctx.closePath(); ctx.fill();
+  } else if (hs === "longf") { // longs cheveux qui flottent
+    ctx.moveTo(5, hy - 12); ctx.quadraticCurveTo(-13, hy - 14, -13, hy); ctx.quadraticCurveTo(-16 + hw, hy + 20, -12 + hw * 2, hy + 38); ctx.lineTo(-6 + hw, hy + 32); ctx.lineTo(-4 + hw, hy + 39); ctx.quadraticCurveTo(0, hy + 22, 3, hy + 8); ctx.closePath(); ctx.fill();
+  } else if (hs === "chignon") { // chignon
+    ctx.moveTo(4, hy - 12); ctx.quadraticCurveTo(-11, hy - 13, -10, hy - 1); ctx.quadraticCurveTo(-10, hy + 7, -4, hy + 9); ctx.lineTo(4, hy + 4); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.arc(-9, hy - 10, 6, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = HC.hair; ctx.beginPath(); ctx.arc(-9.5, hy - 11, 3.4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = HC.trim; ctx.fillRect(-5.5, hy - 12, 2.2, 4.4); ctx.fillStyle = HC.hairD;
   } else if (hs === "long") { // cheveux longs
     ctx.moveTo(4, hy - 12); ctx.quadraticCurveTo(-12, hy - 12, -12, hy); ctx.quadraticCurveTo(-13 + hw, hy + 14, -9 + hw * 1.5, hy + 24); ctx.lineTo(-4, hy + 20); ctx.lineTo(-6, hy + 26); ctx.lineTo(0, hy + 16); ctx.lineTo(2, hy + 6); ctx.closePath(); ctx.fill();
   } else {
@@ -3331,7 +3366,11 @@ function heroArt(t, walking, bob, lg) {
   ctx.strokeStyle = "#141824"; ctx.lineWidth = 1.5; ctx.lineCap = "round";
   ctx.beginPath(); ctx.moveTo(4.6, ey - 0.1); ctx.quadraticCurveTo(7.5, ey - 3, 10.4, ey - 0.8); ctx.stroke();
   ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(4.4, ey - 4); ctx.lineTo(10, ey - 4.6); ctx.moveTo(11, ey - 4.4); ctx.lineTo(13.2, ey - 3.6); ctx.stroke();
-  ctx.lineWidth = 0.9; ctx.beginPath(); ctx.moveTo(12.6, ey + 2); ctx.lineTo(13.4, ey + 4); ctx.lineTo(12.4, ey + 4.2); ctx.moveTo(8.6, ey + 7.2); ctx.lineTo(11.2, ey + 6.8); ctx.stroke();
+  ctx.lineWidth = 0.9; ctx.beginPath(); ctx.moveTo(12.6, ey + 2); ctx.lineTo(13.4, ey + 4); ctx.lineTo(12.4, ey + 4.2); if (HC.sex !== "f") { ctx.moveTo(8.6, ey + 7.2); ctx.lineTo(11.2, ey + 6.8); } ctx.stroke();
+  if (HC.sex === "f" && !blink) { // cils et lèvres
+    ctx.strokeStyle = "#141824"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(10.2, ey - 1); ctx.lineTo(11.4, ey - 2.6); ctx.moveTo(9.4, ey - 1.8); ctx.lineTo(10.1, ey - 3.3); ctx.moveTo(4.8, ey + 0.2); ctx.lineTo(3.8, ey - 0.8); ctx.stroke();
+  }
+  if (HC.sex === "f") { ctx.fillStyle = "#d4707e"; ctx.beginPath(); ctx.ellipse(10, ey + 7, 1.7, 0.85, -0.08, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = "rgba(255,120,150,.28)"; ctx.beginPath(); ctx.ellipse(11.5, ey + 3.6, 2, 1.1, 0, 0, Math.PI * 2); ctx.fill(); }
   // mèches devant
   ctx.fillStyle = HC.hair; ctx.beginPath();
   ctx.moveTo(-5, hy - 7); ctx.lineTo(-2, hy - 14); ctx.lineTo(6, hy - 15); ctx.lineTo(14, hy - 11); ctx.lineTo(15, hy - 3); ctx.lineTo(11.8, hy - 6); ctx.lineTo(10.6, hy - 1.5);
@@ -4402,8 +4441,54 @@ function refreshAll() {
 
 /* ================== DÉMARRAGE ================== */
 // Appli installable : enregistre le service worker (seulement quand le jeu est en ligne, ex. GitHub Pages)
+/* ================== PERSONNALISATION DU CHASSEUR ================== */
+let custRaf = 0;
+function openCust() {
+  document.body.classList.add("custOn"); $("custPanel").classList.add("show"); refreshCust();
+  const c = $("custPrev"), loop = () => { if (!$("custPanel").classList.contains("show")) return; drawHeroPreview(c, performance.now() / 1000, 210); custRaf = requestAnimationFrame(loop); };
+  cancelAnimationFrame(custRaf); setTimeout(loop, 0);
+}
+function closeCust() {
+  $("custPanel").classList.remove("show"); document.body.classList.remove("custOn"); cancelAnimationFrame(custRaf); save();
+  try { drawHeroPreview($("titleHero")); } catch (e) {}
+  offH && (offH._k = ""); heroHurtWas = !heroHurtWas; // force le redessin du chasseur
+  if ($("pUpg").classList.contains("active") && curSub("c") === "cHero") refreshHero();
+}
+function refreshCust() {
+  const L = S.look; let h = "";
+  h += '<div class="cuRow"><div class="cuLbl">Personnage</div><div class="cuSex"><button data-sex="h" class="' + (L.sex !== "f" ? "on" : "") + '">♂ Homme</button><button data-sex="f" class="' + (L.sex === "f" ? "on" : "") + '">♀ Femme</button></div></div>';
+  h += '<div class="cuRow"><div class="cuLbl">Coiffure</div><div class="cuChips">' + HSTYLES.map((x, i) => '<button data-hs="' + i + '" class="' + ((L.hs || 0) === i ? "on" : "") + '">' + x[1] + "</button>").join("") + "</div></div>";
+  const sw = (key, list, cur, paid, lbl) => '<div class="cuRow"><div class="cuLbl"><span>' + lbl + "</span>" + (paid ? "<span>" + LOOK_PRICE + " " + PERLE + " par couleur bloquée</span>" : "") + '</div><div class="cuSw">' +
+    list.map((c, i) => { const own = !paid || lookOwned(key, i); return '<button data-k="' + key + '" data-i="' + i + '" title="' + c[0] + '" class="' + (cur === i ? "on" : "") + (own ? "" : " lockd") + (key === "eye" && !c[1] ? " energy" : "") + '" style="background:' + (c[1] || "#888") + '">' + (own ? "" : '<span class="pp">' + PERLE + "</span>") + "</button>"; }).join("") + "</div></div>";
+  h += sw("hair", LOOKS.hair.list, L.hair, true, "Couleur des cheveux");
+  h += sw("skin", SKINS, L.skin == null ? 1 : L.skin, false, "Peau");
+  h += sw("eye", EYES, L.eye || 0, false, "Yeux");
+  h += sw("coat", LOOKS.coat.list, L.coat, true, "Manteau");
+  h += sw("trim", LOOKS.trim.list, L.trim, true, "Énergie (bordures, regard, sabre)");
+  $("custBody").innerHTML = h;
+  $("custBody").querySelectorAll("[data-sex]").forEach(b => b.onclick = () => { L.sex = b.dataset.sex; sfx("buy"); refreshCust(); });
+  $("custBody").querySelectorAll("[data-hs]").forEach(b => b.onclick = () => { L.hs = +b.dataset.hs; sfx("buy"); refreshCust(); });
+  $("custBody").querySelectorAll("[data-k]").forEach(b => b.onclick = () => {
+    const k = b.dataset.k, i = +b.dataset.i;
+    if (LOOKS[k] && !lookOwned(k, i)) {
+      if (S.perles < LOOK_PRICE) { toast("Il faut " + LOOK_PRICE + " " + PERLE + " (gagnés avec les Renaissances)"); return; }
+      modal("", "Débloquer la couleur <b>" + LOOKS[k].list[i][0] + "</b> pour " + LOOK_PRICE + " " + PERLE + " ?", [{ t: "Annuler", alt: true }, { t: "Débloquer", f: () => { S.perles -= LOOK_PRICE; S.owned[k + i] = true; L[k] = i; sfx("rare"); refreshCust(); save(); } }]);
+      return;
+    }
+    L[k] = i; sfx("buy"); refreshCust();
+  });
+}
+$("custBtn").onclick = e => { e.stopPropagation(); openCust(); };
+$("custClose").onclick = closeCust; $("custDone").onclick = closeCust;
+$("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
+
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 42, d: "Personnalisation et compétences", l: [
+    "<b>👤 Personnalise ton chasseur</b> dès l'écran d'accueil (ou Chasseur → Héros) : <b>homme ou femme</b>, 7 coiffures, 10 couleurs de cheveux, 6 couleurs de peau, 7 couleurs d'yeux, manteau et énergie, avec un aperçu animé.",
+    "Les nouvelles options (personnage, coiffure, peau, yeux) sont gratuites. Les couleurs spéciales se débloquent toujours avec des Cristaux.",
+    "<b>Arbre de compétences</b> plus compact : une branche à la fois (Guerrier, Gardien, Pillard) avec des onglets, et toutes les compétences tiennent sur un écran.",
+    "Les boutons des compétences en combat sont plus petits et passent sur 2 rangées s'il y en a beaucoup, pour ne plus cacher le combat."] },
   { v: 41, d: "Renaissances rééquilibrées", l: [
     "Les <b>Cristaux</b> gagnés en renaissant suivent mieux ton niveau : un bonus s'ajoute selon le niveau atteint (×1,2 au niveau 100, ×2 au niveau 500, ×3 au niveau 1000).",
     "<b>Départ rapide</b> te fait maintenant repartir à un pourcentage du niveau que tu avais atteint (3 % par niveau, jusqu'à 30 %), au lieu d'un petit nombre fixe. Exemple : niveau 800 atteint avec Départ rapide niv. 10 → tu repars du niveau 240.",
@@ -4481,7 +4566,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 41, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 42, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
