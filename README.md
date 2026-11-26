@@ -21,15 +21,18 @@ Brumeria est un jeu **idle / farming** : ton chasseur combat tout seul, toi tu f
 Pas de prise de tête : tu peux jouer 2 minutes ou 2 heures, ta progression est sauvegardée automatiquement.
 
 - **1 000 niveaux** répartis dans **10 zones**, chacune avec ses décors, sa météo, sa musique et ses monstres.
+- **💀 Mode Difficile** : une fois le niveau 1000 atteint, recommence les 1000 niveaux face à des monstres bien plus redoutables.
+- **🌑 Le Seigneur du Néant** : un boss géant dès le niveau 500, avec une arène à lui, qui revient 3 heures après chaque défaite.
 - **Des vagues de monstres** (jusqu'à 6 à la fois) et des **boss** tous les 10 niveaux.
 - **Équipement complet** : arme, casque, armure, gants, ceinture, bottes, amulette.
-- **6 raretés** : Commun, Rare, Épique, Légendaire, **Mythique**… et **Divin**, extrêmement rare.
+- **9 raretés** : Commun, Rare, Épique, Légendaire, **Diamant**, **Émeraude**, **Saphir**, **Mythique**… et **Divin**, réservé aux événements.
 - **Panoplies de classe** (Épéiste, Mage, Archer) avec bonus de set.
 - **Gemmes** à sertir, **forge** et **inventaire** avec vente automatique.
-- **Renaissance** : recommence plus fort et gagne des **Cristaux** pour l'**arbre de compétences**.
+- **Renaissance** : recommence plus fort et gagne des **Cristaux**, puis débloque la **Renaissance avancée**.
+- **Arbre de compétences**, **niveau du chasseur** (1 → 200), **accessoires** et **33 familiers**.
 - **La Tour de Brume** : des étages de défis de plus en plus durs.
 - **Événements**, **succès**, **titres**, **apparences**, **clans** et **classement**.
-- **Vitesse ×1 / ×2 / ×4** et 3 niveaux de qualité graphique.
+- **Vitesse ×1 / ×2 / ×3** et 3 niveaux de qualité graphique.
 
 > Le jeu n'a pas de fin : de nouvelles zones et de nouveaux monstres arrivent avec les mises à jour.
 
@@ -45,7 +48,9 @@ Ta sauvegarde est enregistrée **sur ton appareil** : chaque joueur a sa propre 
 
 Tout dans Brumeria est original : les personnages, les monstres, les décors, les icônes,
 les sons et la musique sont dessinés et générés directement par le code du jeu.
-Aucune image, aucun son et aucun personnage externe n'est utilisé.
+
+Seule exception : l'apparence du **Seigneur du Néant** et son arène ont été créées
+pour le projet avec un générateur d'images (ChatGPT).
 
 ---
 
