@@ -159,6 +159,13 @@
   .newsV { margin: 10px 0 4px; font-weight: 900; color: #9fd0ff; font-size: 15px; } .newsV small { color: #8a88a0; font-weight: 600; font-size: 11px; margin-left: 6px; }
   .newsV.cur { color: #ffd166; }
   #newsBody ul { margin: 0; padding-left: 18px; } #newsBody li { margin: 3px 0; line-height: 1.35; }
+  #sceneWrap { transition: flex-basis .25s ease, min-height .25s ease; }
+  #sceneWrap.sm { flex-basis: 26%; min-height: 190px; } #sceneWrap.lg { flex-basis: 54%; }
+  #sceneWrap.drag { transition: none; }
+  #grip { flex: none; height: 16px; display: flex; align-items: center; justify-content: center; background: #181b2b; touch-action: none; cursor: ns-resize; position: relative; z-index: 3; }
+  #grip::before { content: ""; position: absolute; left: 0; right: 0; top: -10px; bottom: -6px; }
+  #grip i { width: 44px; height: 5px; border-radius: 3px; background: #4a5080; box-shadow: 0 0 6px rgba(111,168,255,.35); }
+  #grip.on i { background: #6fa8ff; }
   #xpBar { position: relative; height: 15px; background: #12152a; border-bottom: 1px solid #262a44; overflow: hidden; cursor: pointer; flex: none; }
   #xpFill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, #3d5bd9, #6fa8ff 70%, #bfe2ff); box-shadow: 0 0 8px #6fa8ff; transition: width .35s; }
   #xpTxt { position: relative; display: block; text-align: center; font-size: 10px; font-weight: 800; line-height: 15px; color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; letter-spacing: .3px; }
@@ -410,6 +417,7 @@
     <button id="skillBtn"><span class="in">FRAPPE<br>BRUME</span></button>
   </div>
 
+  <div id="grip" aria-label="Glisser pour agrandir ou réduire le combat"><i></i></div>
   <div id="tabs">
     <button class="tab active" data-p="pUpg"><span class="ti">⚔️</span>Chasseur</button>
     <button class="tab" data-p="pSk"><span class="ti">✨</span>Compétences</button>
@@ -459,13 +467,13 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v35</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v36</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v35 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v36 — sauvegarde automatique</p>
     </div>
   </div>
 </div>
@@ -479,7 +487,7 @@
   <button id="newsBtn">📜 Nouveautés<span class="dot" id="newsDot"></span></button>
   <button id="playBtn">JOUER</button>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v35</div></div>
+  <div class="tsVer">v36</div></div>
 <div id="newsPanel"><div id="newsBox"><div id="newsHead">📜 Nouveautés</div><button id="newsClose" aria-label="Fermer">✕</button><div id="newsBody"></div></div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
@@ -4069,6 +4077,29 @@ $("resetBtn").onclick = () => modal("Tout effacer ?", "Ta progression, ton or et
 document.addEventListener("visibilitychange", () => { if (document.hidden) { save(); stopMusic(); } else { offlineGains(); refreshAll(); } });
 window.addEventListener("pagehide", save);
 window.addEventListener("resize", resize);
+/* ---- poignée : glisse vers le haut pour réduire le combat (plus de place pour les menus), vers le bas pour l'agrandir ---- */
+const SCENE_MODES = ["sm", "", "lg"];
+function setSceneMode(m, anim = true) {
+  S.sceneMode = Math.max(0, Math.min(2, m)); const w = $("sceneWrap");
+  w.classList.remove("sm", "lg", "drag"); w.style.flexBasis = ""; w.style.minHeight = "";
+  if (SCENE_MODES[S.sceneMode]) w.classList.add(SCENE_MODES[S.sceneMode]);
+  setTimeout(resize, anim ? 270 : 0); save();
+}
+(() => {
+  const g = $("grip"), w = $("sceneWrap"); let y0 = null, h0 = 0, moved = false;
+  g.addEventListener("pointerdown", e => { y0 = e.clientY; h0 = w.getBoundingClientRect().height; moved = false; g.classList.add("on"); g.setPointerCapture(e.pointerId); });
+  g.addEventListener("pointermove", e => {
+    if (y0 === null) return; const dy = e.clientY - y0; if (Math.abs(dy) > 6) moved = true; if (!moved) return;
+    w.classList.add("drag"); w.style.minHeight = "150px"; w.style.flexBasis = Math.max(150, Math.min(window.innerHeight * 0.62, h0 + dy)) + "px";
+  });
+  const end = e => {
+    if (y0 === null) return; const dy = e.clientY - y0; y0 = null; g.classList.remove("on");
+    if (!moved) { setSceneMode(S.sceneMode === 0 ? 1 : 0); return; }               // simple appui : réduit / remet normal
+    const hh = w.getBoundingClientRect().height / ((($("app").getBoundingClientRect().height) || window.innerHeight));
+    setSceneMode(hh < 0.34 ? 0 : hh < 0.48 ? 1 : 2);                              // se cale sur la taille la plus proche
+  };
+  g.addEventListener("pointerup", end); g.addEventListener("pointercancel", end);
+})();
 
 function refreshAll() {
   refreshTop(); refreshUpg(); refreshBag(); updateBagTab(); refreshSkills(); refreshReb(); buildSkillBar(); refreshXp();
@@ -4087,6 +4118,9 @@ function refreshAll() {
 // Appli installable : enregistre le service worker (seulement quand le jeu est en ligne, ex. GitHub Pages)
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 36, d: "Écran réglable", l: [
+    "Une <b>poignée</b> sous le combat : glisse-la vers le <b>haut</b> pour réduire le combat et avoir plus de place dans les menus, vers le <b>bas</b> pour l'agrandir.",
+    "Un simple appui sur la poignée réduit le combat ou le remet à sa taille normale. Ton choix est gardé."] },
   { v: 35, d: "Grand sac et arbre géant", l: [
     "Le sac peut maintenant aller jusqu'à <b>1 000 emplacements</b> : achète des agrandissements de <b>+50</b> avec ton or (Sac → Équipement, sous tes objets).",
     "Chaque agrandissement coûte plus cher que le précédent : il faudra aller de plus en plus loin pour les payer.",
@@ -4120,7 +4154,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 35, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 36, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -4143,6 +4177,8 @@ $("xpBar").onclick = () => { document.querySelector('.tab[data-p="pUpg"]').click
 setTimeout(() => checkUpdate(false), 4000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastUpdCheck > 3e5) checkUpdate(false); });
 load();
+if (S.sceneMode == null) S.sceneMode = 1;
+if (S.sceneMode !== 1) { $("sceneWrap").classList.add(SCENE_MODES[S.sceneMode]); }
 resize();
 hero.hp = P.maxHp();
 spawnMonster();
