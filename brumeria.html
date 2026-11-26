@@ -234,6 +234,18 @@
   .rrList { text-align: left; font-size: 13px; line-height: 1.5; margin-bottom: 8px; max-height: 45vh; overflow-y: auto; }
   #custBtn { margin-top: 12px; border: 1px solid #5a4a8a; background: rgba(30,22,60,.75); color: #e6e2ff; font-weight: 800; font-size: 14px; padding: 9px 18px; border-radius: 12px; z-index: 2; position: relative; animation: logoIn .4s ease-out; }
   .custOpen { width: 100%; border: 1px solid #5a4a8a; background: linear-gradient(180deg, #2e2850, #221d3c); color: #fff; font-weight: 900; font-size: 15px; padding: 12px; border-radius: 12px; margin-bottom: 6px; }
+  #clanPanel { position: fixed; inset: 0; z-index: 45; display: none; align-items: center; justify-content: center; background: rgba(8,8,20,.78); padding: 12px; } #clanPanel.show { display: flex; }
+  #clanClose { position: absolute; top: 8px; right: 10px; width: 34px; height: 34px; border-radius: 50%; border: none; background: #343a5c; color: #fff; font-size: 18px; font-weight: 900; }
+  #clanBtn { margin-top: 8px; border: 1px solid #5a4a8a; background: rgba(30,22,60,.75); color: #e6e2ff; font-weight: 800; font-size: 14px; padding: 9px 18px; border-radius: 12px; }
+  #clanTitleTag { position: relative; z-index: 2; margin-top: 6px; font-weight: 900; font-size: 14px; min-height: 18px; } .clanTag { font-weight: 900; }
+  .clHead { display: flex; gap: 10px; align-items: center; border: 2px solid; border-radius: 14px; padding: 10px; background: #1a1d2e; } .clEmbBig { font-size: 40px; }
+  .clName { font-size: 18px; font-weight: 900; } .clName small { font-size: 13px; } .clLvl { font-size: 12px; color: #c9c7d8; margin: 2px 0 4px; }
+  .xpBarIn { height: 7px; background: #11131f; border-radius: 4px; overflow: hidden; width: 200px; max-width: 100%; } .xpBarIn i { display: block; height: 100%; background: linear-gradient(90deg, #7c5cff, #c07cff); }
+  .clBonus, .clCode, .clOn { font-size: 12px; color: #c9c7d8; margin: 8px 0 0; } .clCode .acctCode { font-size: 16px; }
+  .clMem { display: flex; align-items: center; gap: 8px; padding: 7px 8px; background: #1a1d2e; border-radius: 10px; margin: 5px 0; font-size: 13px; } .clMem.me { border: 1px solid #5a4a8a; }
+  .clMN { flex: 1; } .clMN small { display: block; color: #9a98ad; font-size: 11px; } .clDot { width: 9px; height: 9px; border-radius: 50%; background: #555; } .clDot.on { background: #52d17c; box-shadow: 0 0 6px #52d17c; }
+  .clChat { background: #11131f; border-radius: 10px; padding: 8px; height: 150px; overflow-y: auto; font-size: 13px; line-height: 1.45; color: #ddd; } .clChat b { color: #ffd166; }
+  .clSay { display: flex; gap: 6px; margin-top: 6px; } .clSay .buy { padding: 8px 12px; } .clEmb { font-size: 18px !important; }
   #custPanel { position: fixed; inset: 0; z-index: 45; display: none; align-items: center; justify-content: center; background: rgba(8,8,20,.78); padding: 12px; }
   #custPanel.show { display: flex; }
   body.custOn #modal { z-index: 60; } body.custOn #toast { z-index: 61; }
@@ -242,6 +254,7 @@
   #custClose { position: absolute; top: 8px; right: 10px; width: 34px; height: 34px; border-radius: 50%; border: none; background: #343a5c; color: #fff; font-size: 18px; font-weight: 900; }
   #custPrevWrap { display: flex; justify-content: center; background: radial-gradient(ellipse at 50% 60%, #3a3070 0%, #1e1a38 55%, transparent 75%); margin: 0 12px; border-radius: 14px; }
   #custBody { overflow-y: auto; padding: 6px 14px 4px; }
+  .cuIn { width: 100%; box-sizing: border-box; border: 1px solid #343a5c; background: #1d2034; color: #fff; font-weight: 800; font-size: 15px; padding: 8px 10px; border-radius: 10px; }
   .cuRow { margin: 8px 0 4px; } .cuLbl { font-size: 12px; font-weight: 800; color: #9a98ad; margin-bottom: 5px; display: flex; justify-content: space-between; }
   .cuSex { display: flex; gap: 8px; } .cuSex button { flex: 1; border: 2px solid #343a5c; background: #1d2034; color: #c8c6d8; font-weight: 900; font-size: 14px; padding: 9px; border-radius: 12px; }
   .cuSex button.on { border-color: #ffd166; color: #ffd166; background: #2a2a40; }
@@ -586,14 +599,14 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v52</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v53</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v52 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v53 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -608,9 +621,10 @@
   <div id="tsLoad"><i id="tsLoadFill"></i></div><div id="tsLoadTxt">Chargement…</div>
   <button id="newsBtn">📜 Nouveautés<span class="dot" id="newsDot"></span></button>
   <button id="playBtn">JOUER</button>
-  <div class="tsRow"><button id="custBtn">👤 Personnaliser · 🧬 Race</button><button id="arenaBtn">⚔️ Arène co-op</button></div>
+  <div class="tsRow"><button id="custBtn">👤 Personnaliser · 🧬 Race</button></div><div class="tsRow"><button id="clanBtn">🛡️ Clan</button><button id="arenaBtn">⚔️ Arène co-op</button></div><div id="clanTitleTag"></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v52</div></div>
+  <div class="tsVer">v53</div></div>
+<div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
 <div id="arField"><canvas id="arCv"></canvas><div id="arTop"></div><button id="arQuit" aria-label="Quitter">✕</button><button id="arSk"><span>FRAPPE<br>BRUME</span></button><div id="arPick"></div><div id="arEnd"></div></div>
@@ -819,7 +833,7 @@ function newState() {
     tree: {}, bonusPts: 0, music: true,
     stats: { bossKills: 0, taps: 0, legend: 0, items: 0, forges: 0, rares: 0, skills: 0, quests: 0, time: 0, bestHit: 0, goldTotal: 0 },
     ach: {}, daily: null, bestiary: {}, pets: {}, pet: null,
-    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0, sex: "h", hs: 0, skin: 1, eye: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, autoExp: { on: false, h: 4 }, race: "humain", rerolls: 0, rrPity: 0, rrPack: false, raceSeen: { humain: 1 }, seenVer: 0 };
+    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0, sex: "h", hs: 0, skin: 1, eye: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, autoExp: { on: false, h: 4 }, race: "humain", rerolls: 0, rrPity: 0, rrPack: false, raceSeen: { humain: 1 }, clan: null, clanC: 0, seenVer: 0 };
 }
 let S = newState();
 let loadedOK = false; // tant que la sauvegarde n'est pas chargée, on n'écrit JAMAIS dessus
@@ -1003,7 +1017,7 @@ function killMonster() {
   rollLoot(wasBoss || mon.rare, mon.rare); if (wasBoss && T("p5")) rollLoot(true);
   const bk = mon.zb ? "zb" + zoneIdx(S.level) : mon.type; S.bestiary[bk] = (S.bestiary[bk] || 0) + 1;
   if (mon.rare) { S.bestiary["or_" + bk] = (S.bestiary["or_" + bk] || 0) + 1; S.stats.rares++; }
-  qProg("kill"); if (wasBoss) { S.stats.bossKills++; qProg("boss"); dropPet(mon.zb); if (Math.random() < 0.3 + 0.1 * T("p9") || mon.zb) { const gt = randGem(); addGem(gt); setTimeout(() => toast(gemIcon(gt, 16) + " " + GEMS[gt].name + " trouvé !"), 1300); } }
+  qProg("kill"); clanAddPts(wasBoss ? 3 : 0.05); if (wasBoss) { S.stats.bossKills++; qProg("boss"); dropPet(mon.zb); if (Math.random() < 0.3 + 0.1 * T("p9") || mon.zb) { const gt = randGem(); addGem(gt); setTimeout(() => toast(gemIcon(gt, 16) + " " + GEMS[gt].name + " trouvé !"), 1300); } }
   if (wasBoss && S.level >= MAX_LEVEL) {
     bossTimer = 0; S.kills = 0; S.auto = true;
     if (S.diff && !S.wonH) { S.wonH = true; modal("💀 Mode Difficile terminé !", "Tu as vaincu le <b>Dévoreur d'Étoiles</b> en mode <b>Difficile</b> !<br><br>Tu fais partie des plus grands chasseurs de Brumeria. D'autres défis arrivent bientôt…", [{ t: "Légendaire !" }]); }
@@ -2080,7 +2094,7 @@ function rollRace() {
   if (RACES[got].r >= 3) S.rrPity = 0;
   S.raceSeen = S.raceSeen || {}; S.raceSeen[got] = 1; return got;
 }
-function setRace(id) { S.race = id; statF++; offH && (offH._k = ""); heroHurtWas = !heroHurtWas; sfx("rare"); vib(40); save(); if ($("custPanel").classList.contains("show")) refreshCust(); refreshStats(); }
+function setRace(id) { S.race = id; S.look.race = id; statF++; offH && (offH._k = ""); heroHurtWas = !heroHurtWas; sfx("rare"); vib(40); save(); if ($("custPanel").classList.contains("show")) refreshCust(); refreshStats(); }
 function doReroll(n) {
   n = Math.min(n, S.rerolls || 0); if (n <= 0) { toast("Plus de reroll : achète-en avec des Cristaux, ou gagne-les tous les 10 niveaux du chasseur"); return; }
   S.rerolls -= n; const got = []; for (let i = 0; i < n; i++) got.push(rollRace());
@@ -2114,7 +2128,7 @@ function showRaces() {
   modal("🧬 Les races", "<div class='rrList'>" + Object.keys(RACES).map(id => (S.raceSeen && S.raceSeen[id] || id === (S.race || "humain") ? raceName(id) : "<span style='color:#777'>❔ ???</span>") + " <small>(" + RARITY[RACES[id].r].name + ", " + String(RACES[id].w).replace(".", ",") + " %)</small><br><small>" + raceTxt(id) + "</small>").join("<br>") + "</div><small>Tu gagnes 1 reroll tous les 10 niveaux du chasseur. Tous les " + RACE_PITY + " tirages sans Légendaire, le suivant est garanti Légendaire ou mieux.</small>", [{ t: "OK" }]);
 }
 function accSum(st) {
-  let v = raceB(st);
+  let v = raceB(st) + clanB(st);
   for (const id of accOn()) { const a = ACCS.find(x => x.id === id); if (a.st === st || (a.st === "atkhp" && (st === "atk" || st === "hp")) || (a.st === "all" && (st === "atk" || st === "hp" || st === "gold"))) v += a.v; }
   return v;
 }
@@ -2530,13 +2544,21 @@ const LOOKS = {
 const SKINS = [["Claire", "#f6dfcc"], ["Pêche", "#f1d8c4"], ["Dorée", "#e3bb94"], ["Mate", "#c99a74"], ["Brune", "#9a6a4a"], ["Ébène", "#6e4a34"]];
 const EYES = [["Énergie", null], ["Bleu", "#4fa8ff"], ["Vert", "#52d17c"], ["Ambre", "#ffb03a"], ["Violet", "#b07cff"], ["Rouge", "#ff4d5e"], ["Gris", "#b8c4d6"]];
 const HSTYLES = [["auto", "Selon la classe"], ["spiky", "Mèches"], ["court", "Courts"], ["tail", "Queue de cheval"], ["long", "Mi-longs"], ["longf", "Longs"], ["chignon", "Chignon"]];
+// Coiffures séparées homme / femme (clé de style, nom)
+const HS_M = [["auto", "Selon la classe"], ["spiky", "Mèches"], ["court", "Courts"], ["crete", "Crête"], ["rase", "Rasés"], ["long", "Mi-longs"], ["tail", "Queue de cheval"], ["samourai", "Chignon samouraï"]];
+const HS_F = [["auto", "Selon la classe"], ["longf", "Longs"], ["couettes", "Couettes"], ["tresse", "Tresse"], ["carre", "Carré"], ["tail", "Queue haute"], ["chignon", "Chignon"], ["court", "Courts"]];
+const BEARDS = ["Aucune", "Courte", "Bouc", "Longue", "Moustache"];
+const MARKS = ["Aucune", "Cicatrice", "Peinture de guerre", "Taches de rousseur", "Tatouage de brume", "Maquillage"];
+const HACC = ["Aucun", "Bandeau", "Cache-œil", "Lunettes", "Boucles d'oreilles", "Couronne de fleurs", "Bandana"];
+const SCARVES = [["Aucune", null], ["Rouge", "#d23a48"], ["Bleue", "#3a7ad2"], ["Verte", "#3aa86a"], ["Dorée", "#e0b040"], ["Violette", "#8a4ad2"], ["Blanche", "#e8ecf4"], ["Noire", "#22242e"]];
+const hsKey = L => L.hk || (HSTYLES[L.hs] || HSTYLES[0])[0];
 const LOOK_PRICE = 4;
 const lookOwned = (k, i) => i < 2 || S.owned[k + i];
 function heroColors() {
   const L = S.look, c = LOOKS.coat.list[L.coat] || LOOKS.coat.list[0], tr = (LOOKS.trim.list[L.trim] || LOOKS.trim.list[0])[1], h = LOOKS.hair.list[L.hair] || LOOKS.hair.list[0];
-  const sk = (SKINS[L.skin] || SKINS[1])[1], ey = (EYES[L.eye] || EYES[0])[1] || tr, hs = (HSTYLES[L.hs] || HSTYLES[0])[0];
-  const R = RACE();
-  return { coat: c[1], coatD: c[2], trim: tr, shirt: "#2c3344", skin: R.skin || sk, hair: h[1], hairD: h[2], eye: R.eye || ey, sex: L.sex === "f" ? "f" : "h", hs: hs === "auto" ? null : hs, R };
+  const sk = (SKINS[L.skin] || SKINS[1])[1], ey = (EYES[L.eye] || EYES[0])[1] || tr, hs = hsKey(L);
+  const R = RACES[L.race] || RACE();
+  return { coat: c[1], coatD: c[2], trim: tr, shirt: "#2c3344", skin: R.skin || sk, hair: h[1], hairD: h[2], eye: R.eye || ey, sex: L.sex === "f" ? "f" : "h", hs: hs === "auto" ? null : hs, R, beard: L.sex === "f" ? 0 : (L.beard || 0), mark: L.mark || 0, hacc: L.hacc || 0, scarf: (SCARVES[L.scarf] || SCARVES[0])[1] };
 }
 const rgba = (hex, a) => { const [r, g, b] = hexRgb(hex); return "rgba(" + r + "," + g + "," + b + "," + a + ")"; };
 const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
@@ -2565,6 +2587,7 @@ function drawHeroPreview(c, tt = 1.3, sz = 150) { c.width = c.height = sz * DPR;
 }
 function refreshHero() {
   let h = '<div class="heroTop"><canvas id="heroPrev"></canvas><div><b style="font-size:18px">' + CL().name + '</b><br><span class="titleTxt">« ' + ((TITLES.find(x => x.id === S.title) || TITLES[0]).name) + ' »</span><br><span style="font-size:12px;color:#9a98ad">' + CL().weapon + " · " + CL().desc + "</span></div></div>";
+  if (S.clan) h += '<div class="hint" style="text-align:center">' + clanBadge() + " " + esc(S.clan.info.name) + " · niveau " + clanLvl() + "</div>";
   h += '<div class="secTitle"><span>' + ic("swords") + " Classe</span></div>";
   for (const id in CLASSES) {
     const c = CLASSES[id], ok = S.best >= c.unlock, act = (S.cls || "spectre") === id;
@@ -3583,6 +3606,13 @@ function heroArt(t, walking, bob, lg) {
   ctx.fillStyle = HC.coat; ctx.beginPath(); ctx.moveTo(-9, -70 + bob); ctx.lineTo(-7, -80 + bob); ctx.lineTo(0, -71 + bob); ctx.closePath(); ctx.fill();
   ctx.beginPath(); ctx.moveTo(11, -70 + bob); ctx.lineTo(9, -79 + bob); ctx.lineTo(5, -71 + bob); ctx.closePath(); ctx.fill();
   ctx.strokeStyle = HC.trim; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-7, -80 + bob); ctx.lineTo(0, -71 + bob); ctx.moveTo(9, -79 + bob); ctx.lineTo(5, -71 + bob); ctx.stroke();
+  if (HC.scarf) { // écharpe qui flotte au vent
+    const sw = Math.sin(t * (walking ? 10 : 3)) * (walking ? 3 : 1.5), sd = shade(HC.scarf, -0.25);
+    ctx.fillStyle = sd; ctx.beginPath(); ctx.moveTo(-6, -73 + bob); ctx.quadraticCurveTo(-16, -72 + bob + sw, -26, -66 + bob + sw * 1.6); ctx.lineTo(-24, -61 + bob + sw * 1.6); ctx.quadraticCurveTo(-14, -66 + bob + sw, -5, -68 + bob); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = HC.scarf; rr(-8, -76 + bob, 20, 7, 3.5); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-5, -72 + bob); ctx.quadraticCurveTo(-13, -69 + bob + sw, -20, -60 + bob + sw * 1.3); ctx.lineTo(-17, -57 + bob + sw * 1.3); ctx.quadraticCurveTo(-10, -65 + bob, -2, -70 + bob); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,.35)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-6, -74 + bob); ctx.lineTo(10, -74 + bob); ctx.stroke();
+  }
   // tête
   const hy = -86 + bob, hw = Math.sin(t * (walking ? 10 : 2)) * (walking ? 2.2 : 1);
   ctx.save(); ctx.translate(4, hy + 9); ctx.scale(1.28, 1.28); ctx.translate(-4, -(hy + 9));
@@ -3599,6 +3629,21 @@ function heroArt(t, walking, bob, lg) {
     ctx.moveTo(4, hy - 12); ctx.quadraticCurveTo(-11, hy - 13, -10, hy - 1); ctx.quadraticCurveTo(-10, hy + 7, -4, hy + 9); ctx.lineTo(4, hy + 4); ctx.closePath(); ctx.fill();
     ctx.beginPath(); ctx.arc(-9, hy - 10, 6, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = HC.hair; ctx.beginPath(); ctx.arc(-9.5, hy - 11, 3.4, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = HC.trim; ctx.fillRect(-5.5, hy - 12, 2.2, 4.4); ctx.fillStyle = HC.hairD;
+  } else if (hs === "crete" || hs === "rase") { // crête / rasés : presque rien derrière
+    ctx.moveTo(4, hy - 11); ctx.quadraticCurveTo(-9, hy - 11, -9, hy); ctx.quadraticCurveTo(-8, hy + 6, -3, hy + 8); ctx.lineTo(3, hy + 3); ctx.closePath(); ctx.fill();
+  } else if (hs === "samourai") { // chignon samouraï
+    ctx.moveTo(4, hy - 12); ctx.quadraticCurveTo(-11, hy - 13, -10, hy - 1); ctx.quadraticCurveTo(-10, hy + 7, -4, hy + 9); ctx.lineTo(4, hy + 4); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-2, hy - 15, 6, 3, -0.3, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = HC.trim; ctx.fillRect(-1, hy - 17, 2, 4.5); ctx.fillStyle = HC.hairD;
+  } else if (hs === "couettes") { // deux couettes
+    ctx.moveTo(4, hy - 12); ctx.quadraticCurveTo(-12, hy - 12, -11, hy); ctx.lineTo(-3, hy + 8); ctx.lineTo(4, hy + 3); ctx.closePath(); ctx.fill();
+    for (const [ox, oy, k] of [[-11, hy - 6, 1], [-6, hy - 9, 0.8]]) { ctx.beginPath(); ctx.moveTo(ox, oy); ctx.quadraticCurveTo(ox - 10 + hw * k, oy + 10, ox - 7 + hw * 2 * k, oy + 30); ctx.quadraticCurveTo(ox - 2 + hw * k, oy + 14, ox + 3, oy + 2); ctx.closePath(); ctx.fill(); }
+    ctx.fillStyle = HC.trim; circ(-11, hy - 6, 2.2); ctx.fillStyle = HC.hairD;
+  } else if (hs === "tresse") { // longue tresse
+    ctx.moveTo(4, hy - 12); ctx.quadraticCurveTo(-12, hy - 12, -11, hy); ctx.lineTo(-3, hy + 8); ctx.lineTo(4, hy + 3); ctx.closePath(); ctx.fill();
+    for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.ellipse(-9 + hw * k * 0.35, hy + 3 + k * 6, 3.6 - k * 0.25, 3.4, 0.3, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = HC.trim; circ(-9 + hw * 2.1, hy + 38, 1.8); ctx.fillStyle = HC.hairD;
+  } else if (hs === "carre") { // carré
+    ctx.moveTo(4, hy - 12); ctx.quadraticCurveTo(-13, hy - 13, -12, hy + 2); ctx.lineTo(-11, hy + 13); ctx.quadraticCurveTo(-4, hy + 15, 2, hy + 12); ctx.lineTo(3, hy + 4); ctx.closePath(); ctx.fill();
   } else if (hs === "long") { // cheveux longs
     ctx.moveTo(4, hy - 12); ctx.quadraticCurveTo(-12, hy - 12, -12, hy); ctx.quadraticCurveTo(-13 + hw, hy + 14, -9 + hw * 1.5, hy + 24); ctx.lineTo(-4, hy + 20); ctx.lineTo(-6, hy + 26); ctx.lineTo(0, hy + 16); ctx.lineTo(2, hy + 6); ctx.closePath(); ctx.fill();
   } else {
@@ -3627,13 +3672,40 @@ function heroArt(t, walking, bob, lg) {
   }
   if (HC.sex === "f") { ctx.fillStyle = "#d4707e"; ctx.beginPath(); ctx.ellipse(10, ey + 7, 1.7, 0.85, -0.08, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = "rgba(255,120,150,.28)"; ctx.beginPath(); ctx.ellipse(11.5, ey + 3.6, 2, 1.1, 0, 0, Math.PI * 2); ctx.fill(); }
   // mèches devant
+  if (hs === "rase") { ctx.fillStyle = shade(HC.hair, -0.05); ctx.beginPath(); ctx.moveTo(-6, hy - 6); ctx.quadraticCurveTo(2, hy - 15, 13, hy - 8); ctx.lineTo(13, hy - 6); ctx.quadraticCurveTo(4, hy - 11, -6, hy - 3); ctx.closePath(); ctx.fill(); }
+  else if (hs === "crete") { ctx.fillStyle = HC.hair; ctx.beginPath(); ctx.moveTo(-7, hy - 5); ctx.lineTo(-9, hy - 15); ctx.lineTo(-3, hy - 12); ctx.lineTo(-2, hy - 21); ctx.lineTo(3, hy - 14); ctx.lineTo(6, hy - 22); ctx.lineTo(8, hy - 13); ctx.lineTo(13, hy - 17); ctx.lineTo(13, hy - 8); ctx.quadraticCurveTo(3, hy - 12, -7, hy - 5); ctx.closePath(); ctx.fill(); }
+  else {
   ctx.fillStyle = HC.hair; ctx.beginPath();
   ctx.moveTo(-5, hy - 7); ctx.lineTo(-2, hy - 14); ctx.lineTo(6, hy - 15); ctx.lineTo(14, hy - 11); ctx.lineTo(15, hy - 3); ctx.lineTo(11.8, hy - 6); ctx.lineTo(10.6, hy - 1.5);
   ctx.lineTo(8, hy - 6); ctx.lineTo(5, hy - 1); ctx.lineTo(3.5, hy - 7); ctx.lineTo(0, hy - 2); ctx.lineTo(-1, hy - 7); ctx.closePath(); ctx.fill();
   ctx.fillStyle = "#ffffff"; ctx.globalAlpha = 0.7; ctx.beginPath(); ctx.moveTo(0, hy - 12); ctx.lineTo(7, hy - 13.5); ctx.lineTo(3, hy - 11); ctx.closePath(); ctx.fill(); ctx.globalAlpha = 1;
-  raceHead(RR, hy, ey, t);
+  }
+  raceHead(RR, hy, ey, t); faceExtras(hy, ey, t);
   if (E.casque) { const c = RCOL[E.casque.rar]; ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-3, hy - 9); ctx.quadraticCurveTo(6, hy - 13, 14.5, hy - 8); ctx.lineTo(14, hy - 5.8); ctx.quadraticCurveTo(6, hy - 10, -3, hy - 6.6); ctx.closePath(); ctx.fill(); ctx.fillStyle = "#fff"; circ(9, hy - 9.6, 1.2); }
   ctx.restore();
+}
+function faceExtras(hy, ey, t) {
+  ctx.lineWidth = 1; ctx.strokeStyle = "#141824";
+  const m = HC.mark;
+  if (m === 1) { ctx.strokeStyle = "#b0646a"; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(6, ey - 5); ctx.lineTo(10.5, ey + 4); ctx.moveTo(7, ey - 3); ctx.lineTo(8.6, ey - 3.6); ctx.moveTo(8.5, ey); ctx.lineTo(10, ey - 0.6); ctx.stroke(); }
+  if (m === 2) { ctx.strokeStyle = HC.trim; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(2.5, ey + 3); ctx.lineTo(8, ey + 2.6); ctx.moveTo(3, ey + 5.2); ctx.lineTo(8.5, ey + 4.8); ctx.stroke(); }
+  if (m === 3) { ctx.fillStyle = shade(HC.skin, -0.3); for (const [x, y] of [[9, 3], [10.6, 3.6], [12, 3], [8, 4.2], [11.2, 4.8], [6.8, 3.2]]) circ(x, ey + y, 0.45); }
+  if (m === 4) { ctx.strokeStyle = HC.trim; ctx.lineWidth = 0.9; ctx.globalAlpha = 0.6 + 0.3 * Math.sin(t * 2.5); ctx.beginPath(); ctx.moveTo(2, ey - 6); ctx.quadraticCurveTo(5, ey - 1, 2.5, ey + 4); ctx.quadraticCurveTo(5, ey + 6, 7.5, ey + 5); ctx.stroke(); circ(2.5, ey - 6, 0.9); ctx.globalAlpha = 1; }
+  if (m === 5) { ctx.strokeStyle = "#141824"; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(10.2, ey - 1); ctx.lineTo(11.6, ey - 2); ctx.stroke(); ctx.fillStyle = "rgba(255,110,150,.4)"; ctx.beginPath(); ctx.ellipse(10.5, ey + 3.8, 2.4, 1.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = "#c0406a"; ctx.beginPath(); ctx.ellipse(10, ey + 7, 1.8, 0.95, -0.08, 0, Math.PI * 2); ctx.fill(); }
+  const b = HC.beard; ctx.strokeStyle = "#141824"; ctx.lineWidth = 1;
+  if (b === 1) { ctx.fillStyle = rgba(HC.hairD, 0.55); ctx.beginPath(); ctx.moveTo(0, hy + 3); ctx.quadraticCurveTo(0, hy + 9, 6, hy + 11.5); ctx.quadraticCurveTo(11.5, hy + 9.5, 13, hy + 2); ctx.lineTo(12, hy + 6); ctx.quadraticCurveTo(9, hy + 9, 6.5, hy + 8.6); ctx.quadraticCurveTo(2.5, hy + 7, 0, hy + 3); ctx.fill(); }
+  if (b === 2) { ctx.fillStyle = HC.hair; ctx.beginPath(); ctx.moveTo(7.5, ey + 7.8); ctx.quadraticCurveTo(8, hy + 16, 10.5, hy + 15.5); ctx.quadraticCurveTo(12.4, hy + 13, 12.5, ey + 7.4); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  if (b === 3) { ctx.fillStyle = HC.hair; ctx.beginPath(); ctx.moveTo(0, hy + 3); ctx.quadraticCurveTo(1, hy + 18, 8, hy + 21); ctx.quadraticCurveTo(14, hy + 16, 13.5, hy + 4); ctx.quadraticCurveTo(10, hy + 10, 7, hy + 9.5); ctx.quadraticCurveTo(3, hy + 9, 0, hy + 3); ctx.fill(); ctx.stroke(); }
+  if (b === 4 || b === 2) { ctx.fillStyle = HC.hair; ctx.beginPath(); ctx.moveTo(8, ey + 6.4); ctx.quadraticCurveTo(10.5, ey + 4.6, 13.4, ey + 5.8); ctx.quadraticCurveTo(11, ey + 6.4, 8, ey + 7.4); ctx.closePath(); ctx.fill(); }
+  const a = HC.hacc;
+  if (a === 1) { ctx.fillStyle = HC.trim; ctx.beginPath(); ctx.moveTo(-4, hy - 8.5); ctx.quadraticCurveTo(5, hy - 12.5, 14.6, hy - 7.5); ctx.lineTo(14.4, hy - 5); ctx.quadraticCurveTo(5, hy - 9.6, -4, hy - 5.5); ctx.closePath(); ctx.fill(); ctx.stroke();
+    const fw = Math.sin(t * 6) * 2; ctx.beginPath(); ctx.moveTo(-4, hy - 7.5); ctx.quadraticCurveTo(-12, hy - 8 + fw, -18, hy - 3 + fw); ctx.lineTo(-15, hy - 1 + fw); ctx.quadraticCurveTo(-10, hy - 4, -4, hy - 5.5); ctx.fill(); ctx.stroke(); }
+  if (a === 2) { ctx.strokeStyle = "#141824"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-2, hy - 6); ctx.lineTo(13.5, ey - 2.5); ctx.stroke(); ctx.fillStyle = "#1a1c24"; ctx.beginPath(); ctx.ellipse(7.6, ey + 0.2, 3.2, 2.6, 0, 0, Math.PI * 2); ctx.fill(); }
+  if (a === 3) { ctx.strokeStyle = "#2a2c38"; ctx.lineWidth = 1; ctx.fillStyle = "rgba(180,230,255,.25)"; ctx.beginPath(); ctx.arc(7.8, ey, 2.7, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.arc(12.6, ey, 1.6, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.moveTo(10.5, ey - 0.4); ctx.lineTo(11, ey - 0.4); ctx.moveTo(5.1, ey - 0.4); ctx.lineTo(-1, ey - 2); ctx.stroke(); }
+  if (a === 4) { ctx.fillStyle = "#ffd166"; circ(0.5, hy + 6.5, 1.3); ctx.beginPath(); ctx.moveTo(0.5, hy + 8); ctx.lineTo(-0.6, hy + 11); ctx.lineTo(1.6, hy + 11); ctx.closePath(); ctx.fill(); }
+  if (a === 5) { const fc = ["#ff8fb0", "#ffd166", "#ffffff", "#c9a2ff", "#7cf0b0"]; for (let k = 0; k < 6; k++) { const ang = Math.PI + 0.15 + k * 0.5, x = 3 + Math.cos(ang) * 11, y = hy - 4 + Math.sin(ang) * 9.5; ctx.fillStyle = "#4a9a58"; circ(x + 1.4, y + 0.6, 1.2); ctx.fillStyle = fc[k % 5]; circ(x, y, 2); ctx.fillStyle = "#ffe08a"; circ(x, y, 0.7); } }
+  if (a === 6) { ctx.fillStyle = HC.trim; ctx.beginPath(); ctx.moveTo(-6, hy - 4); ctx.quadraticCurveTo(-4, hy - 16, 6, hy - 15.5); ctx.quadraticCurveTo(14, hy - 14, 14.5, hy - 6); ctx.quadraticCurveTo(5, hy - 10, -6, hy - 4); ctx.fill(); ctx.stroke();
+    const fw = Math.sin(t * 5) * 1.5; ctx.beginPath(); ctx.moveTo(-6, hy - 5); ctx.lineTo(-14, hy - 2 + fw); ctx.lineTo(-11, hy + 2 + fw); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.fillStyle = "rgba(255,255,255,.6)"; circ(4, hy - 12, 0.8); circ(9, hy - 11, 0.8); }
 }
 function raceHead(R, hy, ey, t) {
   ctx.lineWidth = 1; ctx.strokeStyle = "#141824";
@@ -4964,7 +5036,7 @@ function arJoin(code) {
     peer.on("open", () => {
       const c = peer.connect(AR_PREFIX + code, { reliable: true }); arNet.c = c;
       const to = setTimeout(() => arMenuMsg("Aucune partie trouvée avec le code " + code + ".", true), 9000);
-      c.on("open", () => { clearTimeout(to); arSend(c, { t: "hello", name: arName(), look: S.look, st: arMyStats(), v: GAME_VER }); });
+      c.on("open", () => { clearTimeout(to); arSend(c, { t: "hello", name: arName(), look: Object.assign({ race: S.race }, S.look), st: arMyStats(), v: GAME_VER }); });
       c.on("data", m => arClientData(m));
       c.on("close", () => { if (arena && arena.phase !== "over") arEnd("L'hôte a quitté la partie."); });
     });
@@ -5291,7 +5363,13 @@ function closeCust() {
 function refreshCust() {
   const L = S.look; let h = raceHtml();
   h += '<div class="cuRow"><div class="cuLbl">Personnage</div><div class="cuSex"><button data-sex="h" class="' + (L.sex !== "f" ? "on" : "") + '">♂ Homme</button><button data-sex="f" class="' + (L.sex === "f" ? "on" : "") + '">♀ Femme</button></div></div>';
-  h += '<div class="cuRow"><div class="cuLbl">Coiffure</div><div class="cuChips">' + HSTYLES.map((x, i) => '<button data-hs="' + i + '" class="' + ((L.hs || 0) === i ? "on" : "") + '">' + x[1] + "</button>").join("") + "</div></div>";
+  h += '<div class="cuRow"><div class="cuLbl">Pseudo</div><input id="cuPseudo" class="cuIn" maxlength="14" value="' + (S.pseudo || "Chasseur").replace(/[<>"]/g, "") + '"></div>';
+  const HL = L.sex === "f" ? HS_F : HS_M, hk = hsKey(L);
+  const chips = (key, list, cur, lbl) => '<div class="cuRow"><div class="cuLbl">' + lbl + '</div><div class="cuChips">' + list.map((x, i) => '<button data-' + key + '="' + i + '" class="' + (cur === i ? "on" : "") + '">' + x + "</button>").join("") + "</div></div>";
+  h += '<div class="cuRow"><div class="cuLbl">Coiffure ' + (L.sex === "f" ? "(femme)" : "(homme)") + '</div><div class="cuChips">' + HL.map(x => '<button data-hk="' + x[0] + '" class="' + (hk === x[0] ? "on" : "") + '">' + x[1] + "</button>").join("") + "</div></div>";
+  if (L.sex !== "f") h += chips("bd", BEARDS, L.beard || 0, "Barbe");
+  h += chips("mk", MARKS, L.mark || 0, "Visage");
+  h += chips("ha", HACC, L.hacc || 0, "Accessoire de tête");
   const sw = (key, list, cur, paid, lbl) => '<div class="cuRow"><div class="cuLbl"><span>' + lbl + "</span>" + (paid ? "<span>" + LOOK_PRICE + " " + PERLE + " par couleur bloquée</span>" : "") + '</div><div class="cuSw">' +
     list.map((c, i) => { const own = !paid || lookOwned(key, i); return '<button data-k="' + key + '" data-i="' + i + '" title="' + c[0] + '" class="' + (cur === i ? "on" : "") + (own ? "" : " lockd") + (key === "eye" && !c[1] ? " energy" : "") + '" style="background:' + (c[1] || "#888") + '">' + (own ? "" : '<span class="pp">' + PERLE + "</span>") + "</button>"; }).join("") + "</div></div>";
   h += sw("hair", LOOKS.hair.list, L.hair, true, "Couleur des cheveux");
@@ -5299,10 +5377,16 @@ function refreshCust() {
   h += sw("eye", EYES, L.eye || 0, false, "Yeux");
   h += sw("coat", LOOKS.coat.list, L.coat, true, "Manteau");
   h += sw("trim", LOOKS.trim.list, L.trim, true, "Énergie (bordures, regard, sabre)");
+  h += '<div class="cuRow"><div class="cuLbl">Écharpe</div><div class="cuSw">' + SCARVES.map((c, i) => '<button data-sc="' + i + '" title="' + c[0] + '" class="' + ((L.scarf || 0) === i ? "on" : "") + '" style="background:' + (c[1] || "repeating-linear-gradient(45deg,#333 0 4px,#555 4px 8px)") + '"></button>').join("") + "</div></div>";
   $("custBody").innerHTML = h;
   $("rr1").onclick = () => doReroll(1); $("rr10").onclick = () => doReroll(10); $("rrBuy").onclick = buyReroll; $("rrAll").onclick = showRaces;
-  $("custBody").querySelectorAll("[data-sex]").forEach(b => b.onclick = () => { L.sex = b.dataset.sex; sfx("buy"); refreshCust(); });
-  $("custBody").querySelectorAll("[data-hs]").forEach(b => b.onclick = () => { L.hs = +b.dataset.hs; sfx("buy"); refreshCust(); });
+  $("custBody").querySelectorAll("[data-sex]").forEach(b => b.onclick = () => { L.sex = b.dataset.sex; { const ok = (L.sex === "f" ? HS_F : HS_M).some(x => x[0] === hsKey(L)); if (!ok) L.hk = "auto"; } sfx("buy"); refreshCust(); });
+  $("custBody").querySelectorAll("[data-hk]").forEach(b => b.onclick = () => { L.hk = b.dataset.hk; sfx("buy"); refreshCust(); });
+  $("custBody").querySelectorAll("[data-bd]").forEach(b => b.onclick = () => { L.beard = +b.dataset.bd; sfx("buy"); refreshCust(); });
+  $("custBody").querySelectorAll("[data-mk]").forEach(b => b.onclick = () => { L.mark = +b.dataset.mk; sfx("buy"); refreshCust(); });
+  $("custBody").querySelectorAll("[data-ha]").forEach(b => b.onclick = () => { L.hacc = +b.dataset.ha; sfx("buy"); refreshCust(); });
+  $("custBody").querySelectorAll("[data-sc]").forEach(b => b.onclick = () => { L.scarf = +b.dataset.sc; sfx("buy"); refreshCust(); });
+  $("cuPseudo").onchange = () => { S.pseudo = ($("cuPseudo").value || "").replace(/[<>"]/g, "").trim().slice(0, 14) || "Chasseur"; save(); };
   $("custBody").querySelectorAll("[data-k]").forEach(b => b.onclick = () => {
     const k = b.dataset.k, i = +b.dataset.i;
     if (LOOKS[k] && !lookOwned(k, i)) {
@@ -5314,11 +5398,202 @@ function refreshCust() {
   });
 }
 $("custBtn").onclick = e => { e.stopPropagation(); openCust(); };
+/* ================== CLAN (sans serveur) ==================
+   Chaque clan a un code. Le premier membre connecté devient le « relais » (pair PeerJS « brumeria-clan-CODE »),
+   les autres s'y connectent : membres, points et chat se synchronisent quand vous jouez en même temps.
+   Tout passe par clanSend()/clanOnState() : pour passer plus tard sur un vrai serveur, il suffira de remplacer ces deux fonctions. */
+const CLAN_PREFIX = "brumeria-clan-", CLAN_MAX = 30, CLAN_LMAX = 20;
+const CLAN_EMB = ["🛡️", "⚔️", "🐺", "🐉", "🦅", "🔥", "🌙", "⭐", "💀", "👑", "🌊", "🍀"];
+const CLAN_COL = ["#5ce1ff", "#ffd166", "#ff4d5e", "#52ffa0", "#c07cff", "#ff9a3c"];
+let clanNet = null, clanT = 0, clanOnline = {}, clanJoinNet = null;
+const clanNeed = l => 40 * (l - 1) * (l - 1);
+const clanMembers = () => S.clan ? Object.entries(S.clan.roster).filter(([, m]) => !m.left && !m.kick) : [];
+const clanXP = () => clanMembers().reduce((a, [, m]) => a + (m.c || 0), 0);
+function clanLvl() { const x = clanXP(); let l = 1; while (l < CLAN_LMAX && x >= clanNeed(l + 1)) l++; return l; }
+function clanB(st) { if (!S.clan) return 0; const l = clanLvl(); return st === "atk" || st === "hp" || st === "gold" ? 2 * l : st === "xp" ? l : 0; }
+function clanChief() { const c = S.clan.info.chief, m = S.clan.roster[c]; if (m && !m.left && !m.kick) return c; const ms = clanMembers().sort((a, b) => (b[1].c || 0) - (a[1].c || 0)); return ms.length ? ms[0][0] : c; }
+const clanMe = () => ({ n: (S.pseudo || "Chasseur").slice(0, 14), lv: S.hlv || 1, b: S.best || 1, c: Math.floor(S.clanC || 0), r: S.race || "humain", t: Date.now() });
+function clanSelf() { if (S.clan) S.clan.roster[acctCode()] = Object.assign({}, S.clan.roster[acctCode()] || {}, clanMe(), { left: false }); }
+const clanPack = () => ({ code: S.clan.code, info: S.clan.info, roster: S.clan.roster, chat: S.clan.chat || [] });
+function clanAddPts(n) { if (S.clan) S.clanC = (S.clanC || 0) + n; }
+// fusionne l'état reçu d'un autre membre (le plus récent gagne)
+function clanOnState(st) {
+  if (!S.clan || !st || st.code !== S.clan.code) return;
+  if (st.info && (st.info.t || 0) > (S.clan.info.t || 0)) S.clan.info = st.info;
+  const me = acctCode();
+  for (const id in st.roster || {}) {
+    const a = S.clan.roster[id], b = st.roster[id];
+    if (a && (b.t || 0) <= (a.t || 0)) continue;
+    if (id === me && !b.kick) continue; // personne d'autre ne modifie ma fiche (sauf exclusion)
+    S.clan.roster[id] = b;
+  }
+  const seen = {}, all = (S.clan.chat || []).concat(st.chat || []).filter(m => m && m.id && !seen[m.id] && (seen[m.id] = 1));
+  S.clan.chat = all.sort((a, b) => a.t - b.t).slice(-40);
+  if (st.online) clanOnline = st.online;
+  if (S.clan.roster[me] && S.clan.roster[me].kick) { clanQuit(); modal("🛡️ Clan", "Tu as été exclu du clan.", [{ t: "OK" }]); return; }
+  statF++; clanUI();
+}
+function clanSend(m) { // client → relais, ou relais → tout le monde
+  if (!clanNet) return;
+  if (clanNet.hub) { if (m) clanHubMsg(null, m); else clanBroadcast(); }
+  else if (clanNet.hubConn) arSend(clanNet.hubConn, m || { t: "upd", clan: clanPack() });
+}
+function clanBroadcast() { if (!clanNet || !clanNet.hub || !S.clan) return; const st = Object.assign(clanPack(), { online: clanOnline }); for (const c of clanNet.conns) arSend(c, { t: "state", st }); clanUI(); }
+function clanHubMsg(c, m) {
+  if (!S.clan || !m) return;
+  if (m.t === "hello") {
+    const r = S.clan.roster[m.id];
+    if (r && r.kick) { arSend(c, { t: "kicked" }); return; }
+    if ((!r || r.left) && clanMembers().length >= CLAN_MAX) { arSend(c, { t: "full" }); return; }
+    if (m.me) { S.clan.roster[m.id] = Object.assign({}, m.me, { left: false, t: Date.now() }); }
+    if (c) { c._id = m.id; clanOnline[m.id] = 1; }
+    if (m.clan) clanOnState(m.clan);
+  } else if (m.t === "upd") clanOnState(m.clan);
+  else if (m.t === "chat" && m.msg) { S.clan.chat = (S.clan.chat || []).concat(m.msg).slice(-40); clanUI(); }
+  else if (m.t === "kick" && m.from === clanChief() && S.clan.roster[m.id]) { S.clan.roster[m.id] = Object.assign({}, S.clan.roster[m.id], { kick: true, t: Date.now() }); }
+  else if (m.t === "info" && m.from === clanChief() && m.info) { S.clan.info = m.info; }
+  clanBroadcast(); save();
+  const mine = S.clan.roster[acctCode()];
+  if (mine && mine.kick) setTimeout(() => { clanQuit(); modal("🛡️ Clan", "Tu as été exclu du clan.", [{ t: "OK" }]); }, 400); // j'étais le relais et on m'a exclu
+}
+function clanStop() { clearTimeout(clanT); if (clanNet) { try { clanNet.peer.destroy(); } catch (e) {} } clanNet = null; clanOnline = {}; }
+function clanRetry() { clanStop(); clanT = setTimeout(clanConnect, 3000 + Math.random() * 6000); }
+function clanConnect() {
+  if (!S.clan || !ONLINE) return; clanStop();
+  loadPeer().then(() => {
+    if (!S.clan) return;
+    const net = clanNet = { peer: new Peer(CLAN_PREFIX + S.clan.code), hub: false, conns: [] };
+    net.peer.on("open", () => { if (net !== clanNet) return; net.hub = true; clanOnline = { [acctCode()]: 1 }; clanSelf(); clanUI(); });
+    net.peer.on("connection", c => { net.conns.push(c); c.on("data", m => clanHubMsg(c, m)); c.on("close", () => { net.conns = net.conns.filter(x => x !== c); if (c._id) delete clanOnline[c._id]; clanBroadcast(); }); });
+    net.peer.on("error", e => { if (net !== clanNet) return; if (e && e.type === "unavailable-id") { try { net.peer.destroy(); } catch (x) {} clanAsClient(); } else if (!net.hub) clanRetry(); });
+    net.peer.on("disconnected", () => { try { net.peer.reconnect(); } catch (e) {} });
+  }).catch(() => { clanT = setTimeout(clanConnect, 30000); });
+}
+function clanAsClient() {
+  const net = clanNet = { peer: new Peer(), hub: false, conns: [] };
+  net.peer.on("open", () => {
+    const c = net.peer.connect(CLAN_PREFIX + S.clan.code, { reliable: true }); net.hubConn = c;
+    c.on("open", () => { clanSelf(); arSend(c, { t: "hello", id: acctCode(), clan: clanPack() }); });
+    c.on("data", m => { if (m && m.t === "state") clanOnState(m.st); else if (m && m.t === "kicked") { clanQuit(); modal("🛡️ Clan", "Tu as été exclu du clan.", [{ t: "OK" }]); } });
+    c.on("close", () => { if (net === clanNet) clanRetry(); });
+  });
+  net.peer.on("error", () => { if (net === clanNet) clanRetry(); });
+}
+setInterval(() => { if (!S.clan || !clanNet) return; clanSelf(); clanSend(); save(); }, 20000); // ma fiche (points, niveau) toutes les 20 s
+// ---- créer / rejoindre / quitter ----
+function clanCreate(name, tag, emb, col) {
+  const code = Array.from({ length: 6 }, () => ACCT_ABC[Math.floor(Math.random() * 32)]).join("");
+  S.clan = { code, info: { name, tag, emb, col, chief: acctCode(), t: Date.now() }, roster: {}, chat: [] }; S.clanC = 0;
+  clanSelf(); save(); clanConnect(); sfx("rare"); clanUI(); toast("🛡️ Clan créé ! Partage le code " + code);
+}
+function clanJoin(code, st) {
+  code = (code || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); if (code.length !== 6) { st("<span class='worse'>Le code fait 6 caractères.</span>"); return; }
+  st("Recherche du clan…");
+  loadPeer().then(() => {
+    try { clanJoinNet && clanJoinNet.destroy(); } catch (e) {}
+    const peer = clanJoinNet = new Peer(), to = setTimeout(() => { st("<span class='worse'>Aucun membre de ce clan n'est connecté. Demande à un membre d'ouvrir le jeu, puis réessaie.</span>"); try { peer.destroy(); } catch (e) {} }, 12000);
+    peer.on("open", () => {
+      const c = peer.connect(CLAN_PREFIX + code, { reliable: true });
+      c.on("open", () => arSend(c, { t: "hello", id: acctCode(), me: clanMe() }));
+      c.on("data", m => {
+        clearTimeout(to);
+        if (m && m.t === "full") { st("<span class='worse'>Ce clan est complet (" + CLAN_MAX + " membres).</span>"); }
+        else if (m && m.t === "kicked") { st("<span class='worse'>Tu as été exclu de ce clan.</span>"); }
+        else if (m && m.t === "state" && m.st && m.st.code === code) {
+          S.clan = { code, info: m.st.info, roster: m.st.roster || {}, chat: m.st.chat || [] }; S.clanC = 0; clanSelf(); save();
+          sfx("rare"); toast("🛡️ Bienvenue dans « " + S.clan.info.name + " » !");
+          try { peer.destroy(); } catch (e) {} clanConnect(); clanUI(); return;
+        }
+        try { peer.destroy(); } catch (e) {}
+      });
+    });
+    peer.on("error", e => { clearTimeout(to); st("<span class='worse'>" + (e && e.type === "peer-unavailable" ? "Aucun membre de ce clan n'est connecté (ou le code est faux). Demande à un membre d'ouvrir le jeu, puis réessaie." : "Connexion impossible. Vérifie internet.") + "</span>"); });
+  }).catch(() => st("<span class='worse'>Il faut internet pour rejoindre un clan.</span>"));
+}
+function clanQuit() { S.clan = null; S.clanC = 0; clanStop(); statF++; save(); clanUI(); }
+function clanLeave() {
+  modal("🛡️ Quitter le clan ?", "Tu perds les bonus du clan et tes points de clan.", [{ t: "Annuler", alt: true }, { t: "Quitter", f: () => {
+    const me = acctCode(); S.clan.roster[me] = Object.assign({}, S.clan.roster[me], { left: true, t: Date.now() });
+    if (clanNet && clanNet.hub) clanBroadcast(); else clanSend({ t: "upd", clan: clanPack() });
+    setTimeout(clanQuit, 900); } }]);
+}
+function clanSay(txt) {
+  txt = (txt || "").replace(/[<>]/g, "").trim().slice(0, 120); if (!txt || !S.clan) return;
+  const msg = { id: acctCode() + Date.now().toString(36), n: (S.pseudo || "Chasseur").slice(0, 14), m: txt, t: Date.now() };
+  S.clan.chat = (S.clan.chat || []).concat(msg).slice(-40);
+  if (clanNet && clanNet.hub) clanBroadcast(); else clanSend({ t: "chat", msg });
+  clanUI(); save();
+}
+// ---- interface ----
+const clanBadge = () => S.clan ? '<span class="clanTag" style="color:' + (CLAN_COL[S.clan.info.col] || "#ffd166") + '">' + S.clan.info.emb + " [" + S.clan.info.tag + "]</span>" : "";
+let clanDraft = { emb: 0, col: 0 };
+function openClan() { $("clanPanel").classList.add("show"); document.body.classList.add("custOn"); clanUI(); if (S.clan && !clanNet) clanConnect(); }
+function closeClan() { $("clanPanel").classList.remove("show"); document.body.classList.remove("custOn"); }
+const esc = t => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+function clanUI() {
+  const tb = $("clanTitleTag"); if (tb) tb.innerHTML = clanBadge();
+  if (!$("clanPanel") || !$("clanPanel").classList.contains("show")) return;
+  const chatEl = $("clanChat"), keepIn = $("clanMsg") && document.activeElement === $("clanMsg") ? $("clanMsg").value : null;
+  let h = "";
+  if (!S.clan) {
+    h += '<div class="hint">Un clan regroupe jusqu\'à ' + CLAN_MAX + ' joueurs. Chaque membre gagne des <b>points de clan</b> en jouant (boss et monstres). Plus le clan monte de niveau, plus <b>tout le monde</b> a de bonus (attaque, vie, or, XP).</div>';
+    h += '<div class="secTitle"><span>➕ Créer un clan</span></div>';
+    h += '<div class="cuRow"><div class="cuLbl">Nom du clan</div><input id="clName" class="cuIn" maxlength="20" placeholder="Les Chasseurs de Brume"></div>';
+    h += '<div class="cuRow"><div class="cuLbl">Tag (2 à 4 lettres)</div><input id="clTag" class="cuIn" maxlength="4" placeholder="CDB" autocapitalize="characters"></div>';
+    h += '<div class="cuRow"><div class="cuLbl">Blason</div><div class="cuChips">' + CLAN_EMB.map((e, i) => '<button data-cemb="' + i + '" class="clEmb' + (clanDraft.emb === i ? " on" : "") + '">' + e + "</button>").join("") + "</div></div>";
+    h += '<div class="cuRow"><div class="cuLbl">Couleur</div><div class="cuSw">' + CLAN_COL.map((c, i) => '<button data-ccol="' + i + '" class="' + (clanDraft.col === i ? "on" : "") + '" style="background:' + c + '"></button>').join("") + "</div></div>";
+    h += '<button class="buy" id="clCreate" style="width:100%;margin:8px 0">Créer le clan</button>';
+    h += '<div class="secTitle"><span>🔑 Rejoindre un clan</span></div><div class="cuRow"><input id="clJoin" class="cuIn acctIn" maxlength="6" placeholder="CODE" autocapitalize="characters"></div><button class="buy" id="clJoinBtn" style="width:100%;margin:6px 0">Rejoindre</button><div id="clSt" style="font-size:12px;color:#9fd0ff;min-height:16px"></div>';
+    h += '<div class="hint" style="margin-top:8px">Pour rejoindre, il faut qu\'<b>un membre du clan ait le jeu ouvert</b> avec internet.</div>';
+  } else {
+    const I = S.clan.info, l = clanLvl(), x = clanXP(), nx = l < CLAN_LMAX ? clanNeed(l + 1) : null, pc = nx ? Math.min(100, (x - clanNeed(l)) / (nx - clanNeed(l)) * 100) : 100;
+    const chief = clanChief(), me = acctCode(), on = Object.keys(clanOnline).length, mem = clanMembers().sort((a, b) => (b[1].c || 0) - (a[1].c || 0));
+    h += '<div class="clHead" style="border-color:' + (CLAN_COL[I.col] || "#ffd166") + '"><div class="clEmbBig">' + I.emb + '</div><div><div class="clName" style="color:' + (CLAN_COL[I.col] || "#ffd166") + '">' + esc(I.name) + ' <small>[' + esc(I.tag) + ']</small></div><div class="clLvl">Niveau ' + l + (nx ? " · " + fmt(x) + " / " + fmt(nx) + " points" : " · MAX") + '</div><div class="xpBarIn"><i style="width:' + pc + '%"></i></div></div></div>';
+    h += '<div class="clBonus">Bonus de clan pour tous : <b>attaque, vie et or +' + (2 * l) + ' %</b>, <b>XP +' + l + ' %</b></div>';
+    h += '<div class="clCode">Code du clan : <b class="acctCode">' + S.clan.code + '</b> <button class="smallBtn" id="clCopy">Copier</button></div>';
+    h += '<div class="clOn">' + (clanNet ? (on ? "🟢 " + on + " membre" + (on > 1 ? "s" : "") + " connecté" + (on > 1 ? "s" : "") : "🟡 Connexion…") : "⚪ Hors ligne") + ' · ' + mem.length + " / " + CLAN_MAX + " membres</div>";
+    h += '<div class="secTitle"><span>👥 Membres</span><span style="font-size:11px;color:#9a98ad">tes points : ' + fmt(Math.floor(S.clanC || 0)) + "</span></div>";
+    for (const [id, m] of mem) h += '<div class="clMem' + (id === me ? " me" : "") + '"><span class="clDot' + (clanOnline[id] ? " on" : "") + '"></span><span class="clMN">' + (id === chief ? "👑 " : "") + ((RACES[m.r] || RACES.humain).ic) + " " + esc(m.n) + '<small>chasseur niv. ' + (m.lv || 1) + " · record " + fmt(m.b || 1) + (Date.now() - (m.t || 0) > 2592e6 ? " · inactif" : "") + '</small></span><b>' + fmt(m.c || 0) + " pts</b>" + (me === chief && id !== me ? '<button class="smallBtn" data-ckick="' + id + '">Exclure</button>' : "") + "</div>";
+    h += '<div class="secTitle"><span>💬 Chat du clan</span><span style="font-size:11px;color:#9a98ad">les membres connectés le voient tout de suite</span></div>';
+    h += '<div id="clanChat" class="clChat">' + ((S.clan.chat || []).map(m => '<div><b>' + esc(m.n) + "</b> " + esc(m.m) + "</div>").join("") || "<div style='color:#777'>Aucun message pour l'instant.</div>") + "</div>";
+    h += '<div class="clSay"><input id="clanMsg" class="cuIn" maxlength="120" placeholder="Écris un message…"><button class="buy" id="clanSend">Envoyer</button></div>';
+    h += '<button class="smallBtn" id="clLeave" style="width:100%;margin:12px 0 4px;color:#ff8a8a">Quitter le clan</button>';
+  }
+  $("clanBody").innerHTML = h;
+  if (!S.clan) {
+    $("clanBody").querySelectorAll("[data-cemb]").forEach(b => b.onclick = () => { clanDraft.emb = +b.dataset.cemb; const n = $("clName").value, t = $("clTag").value; clanUI(); $("clName").value = n; $("clTag").value = t; });
+    $("clanBody").querySelectorAll("[data-ccol]").forEach(b => b.onclick = () => { clanDraft.col = +b.dataset.ccol; const n = $("clName").value, t = $("clTag").value; clanUI(); $("clName").value = n; $("clTag").value = t; });
+    $("clCreate").onclick = () => {
+      const name = ($("clName").value || "").replace(/[<>"]/g, "").trim().slice(0, 20), tag = ($("clTag").value || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4);
+      if (name.length < 3) { toast("Le nom doit faire au moins 3 caractères"); return; }
+      if (tag.length < 2) { toast("Le tag doit faire 2 à 4 lettres"); return; }
+      clanCreate(name, tag, CLAN_EMB[clanDraft.emb], clanDraft.col);
+    };
+    $("clJoinBtn").onclick = () => clanJoin($("clJoin").value, t => { const e = $("clSt"); if (e) e.innerHTML = t; });
+  } else {
+    $("clCopy").onclick = () => { try { navigator.clipboard.writeText(S.clan.code).then(() => toast("Code copié !")); } catch (e) {} };
+    const send = () => { clanSay($("clanMsg").value); $("clanMsg").value = ""; $("clanMsg").focus(); };
+    $("clanSend").onclick = send; $("clanMsg").onkeydown = e => { if (e.key === "Enter") send(); };
+    if (keepIn !== null) { $("clanMsg").value = keepIn; $("clanMsg").focus(); }
+    $("clLeave").onclick = clanLeave;
+    $("clanBody").querySelectorAll("[data-ckick]").forEach(b => b.onclick = () => { const id = b.dataset.ckick, m = S.clan.roster[id];
+      modal("Exclure " + esc(m.n) + " ?", "Il ne fera plus partie du clan et ne pourra plus le rejoindre.", [{ t: "Annuler", alt: true }, { t: "Exclure", f: () => clanSend({ t: "kick", id, from: acctCode() }) }]); });
+    const ch = $("clanChat"); if (ch) ch.scrollTop = ch.scrollHeight;
+  }
+}
+$("clanBtn").onclick = e => { e.stopPropagation(); openClan(); };
+$("clanClose").onclick = closeClan; $("clanPanel").onclick = e => { if (e.target.id === "clanPanel") closeClan(); };
+
 $("custClose").onclick = closeCust; $("custDone").onclick = closeCust;
 $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 53, d: "Clans et personnalisation", l: [
+    "Nouveau : les <b>🛡️ Clans</b> (écran d'accueil) ! Crée ton clan (nom, tag, blason, couleur) ou rejoins celui de tes potes avec un <b>code à 6 caractères</b>. Jusqu'à " + CLAN_MAX + " membres.",
+    "En jouant, chaque membre gagne des <b>points de clan</b>. Le clan monte jusqu'au niveau " + CLAN_LMAX + " et donne des bonus à tout le monde : attaque, vie et or jusqu'à +40 %, XP jusqu'à +20 %.",
+    "Liste des membres (en ligne ou non), <b>chat du clan</b>, et le chef 👑 peut exclure un membre. Les infos se synchronisent quand vous jouez en même temps.",
+    "Personnalisation : <b>coiffures différentes</b> pour les hommes (crête, rasés, chignon samouraï…) et les femmes (couettes, tresse, carré…), <b>barbes</b>, <b>visage</b> (cicatrice, peinture de guerre, taches de rousseur, tatouage, maquillage), <b>accessoires</b> (bandeau, cache-œil, lunettes, boucles d'oreilles, couronne de fleurs, bandana), <b>écharpe</b> qui flotte au vent, et ton <b>pseudo</b>."] },
   { v: 52, d: "Les races et le reroll !", l: [
     "Nouveau : <b>13 races</b> avec leurs propres <b>pouvoirs</b> et leur apparence (oreilles, cornes, ailes, auréole…) : Humain, Nain, Elfe, Orc, Félin, Fée, Lycan, Golem, Ondin, Vampire, Céleste, Draconien… et le mythique <span class='c7'>Enfant du Néant</span>.",
     "Change de race avec un <b>🎲 reroll</b> dans <b>👤 Personnaliser · 🧬 Race</b> (écran d'accueil). Après chaque tirage, tu choisis de garder l'ancienne ou de prendre la nouvelle.",
@@ -5450,7 +5725,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 52, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 53, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -5474,6 +5749,7 @@ setTimeout(() => checkUpdate(false), 4000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastUpdCheck > 3e5) checkUpdate(false); });
 load();
 $("acctCode").textContent = acctCode();
+setTimeout(() => { clanUI(); if (S.clan) clanConnect(); }, 2500);
 if (!S.rr39) { // v39 : nouvelles raretés. Les objets Mythiques et Divins redeviennent Légendaires (sans être supprimés)
   S.rr39 = true; S.fz38 = true;
   const OLD = [1, 2, 3, 5, 8, 14]; let n = 0;
