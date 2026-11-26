@@ -156,6 +156,12 @@
   .empty { color: #777; font-size: 13px; text-align: center; padding: 14px; }
 
   /* Options */
+  .optSec { font-size: 12px; font-weight: 900; color: #9a98ad; letter-spacing: .5px; margin: 14px 4px 6px; text-transform: uppercase; }
+  .optCard { background: #1f2338; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; }
+  .volRow { display: grid; grid-template-columns: 130px 1fr 46px; align-items: center; gap: 8px; padding: 7px 0; font-size: 14px; } .volRow b { text-align: right; font-size: 13px; color: #ffd166; }
+  .vol { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 6px; background: linear-gradient(90deg, #8a6cff var(--v, 50%), #343a5c var(--v, 50%)); outline: none; }
+  .vol::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 3px solid #8a6cff; box-shadow: 0 2px 6px rgba(0,0,0,.4); }
+  .vol::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 3px solid #8a6cff; }
   .opt { display: flex; justify-content: space-between; align-items: center; background: #1f2338; border-radius: 10px; padding: 12px; margin-bottom: 8px; font-size: 14px; }
   .danger { background: #8d2a2a; }
 
@@ -600,19 +606,28 @@
       <div class="subPage" data-g="b" id="sGems"></div>
     </div>
     <div class="page" id="pOpt">
-      <div class="opt"><span>🔊 Sons</span><button class="smallBtn" id="soundBtn">Activés</button></div>
-      <div class="opt"><span>📳 Vibrations</span><button class="smallBtn" id="vibBtn">Activées</button></div>
-      <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
-      <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
+      <div class="optSec">🔊 Son</div>
+      <div class="optCard">
+        <div class="volRow"><span>🔈 Volume général</span><input type="range" min="0" max="100" step="1" id="volMaster" class="vol"><b id="volMasterTxt"></b></div>
+        <div class="volRow"><span>🎵 Musique</span><input type="range" min="0" max="100" step="1" id="volMusic" class="vol"><b id="volMusicTxt"></b></div>
+        <div class="volRow"><span>💥 Effets</span><input type="range" min="0" max="100" step="1" id="volSfx" class="vol"><b id="volSfxTxt"></b></div>
+        <div class="volRow"><span>📳 Vibrations</span><span></span><button class="smallBtn" id="vibBtn">Activées</button></div>
+        <button class="smallBtn" id="volTest" style="width:100%;margin-top:6px">▶ Tester les effets</button>
+      </div>
+      <div class="optSec">🖥️ Affichage</div>
+      <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
+      <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v55</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v56</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
+      <div class="optSec">📊 Statistiques</div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
+      <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v55 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v56 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -629,7 +644,7 @@
   <button id="playBtn">JOUER</button>
   <div class="tsRow"><button id="custBtn">👤 Personnaliser · 🧬 Race</button></div><div class="tsRow"><button id="clanBtn">🛡️ Clan</button><button id="arenaBtn">⚔️ Arène co-op</button></div><div id="clanTitleTag"></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v55</div></div>
+  <div class="tsVer">v56</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -861,8 +876,34 @@ function load() {
     if (raw) backupRaw(raw);
     if (raw) { const d = JSON.parse(raw); S = Object.assign(newState(), d); S.upg = Object.assign(newState().upg, d.upg || {}); S.equip = Object.assign(newState().equip, d.equip || {}); S.pupg = Object.assign(newState().pupg, d.pupg || {}); S.tree = d.tree || {}; S.stats = Object.assign(newState().stats, d.stats || {}); S.ach = d.ach || {}; S.bestiary = d.bestiary || {}; S.pets = d.pets || {}; S.look = Object.assign(newState().look, d.look || {}); S.autoSell = Object.assign(newState().autoSell, d.autoSell || {}); S.autoFuse = Object.assign(newState().autoFuse, d.autoFuse || {}); if (!d.q26) { S.quality = "normale"; S.q26 = true; } S.gems = d.gems || {}; S.login = Object.assign(newState().login, d.login || {}); S.exp = d.exp || {}; S.owned = d.owned || {}; S.tower = Object.assign({ best: 0 }, d.tower || {}); S.best = Math.max(S.best || 1, S.maxLevel); if (!Array.isArray(d.petsOn)) S.petsOn = d.pet ? [d.pet] : []; if (!Array.isArray(d.accOn)) S.accOn = []; migrate(d.ver || 0); }
   } catch (e) {}
+  sanitize();
   loadedOK = true;
 }
+// ---- solidité : répare les valeurs abîmées (NaN, négatifs, objets cassés) sans rien effacer ----
+let sanT = 0;
+const okNum = v => typeof v === "number" && isFinite(v);
+function sanitize() {
+  try {
+    const N = newState();
+    for (const k of ["gold", "perles", "totalPerles", "kills", "totalKills", "rebirths", "hxp", "rerolls", "ecus", "clanC", "bagBuy", "rrPity"]) if (!okNum(S[k]) || S[k] < 0) S[k] = okNum(N[k]) ? N[k] : 0;
+    for (const k of ["level", "maxLevel", "best", "hlv"]) if (!okNum(S[k]) || S[k] < 1) S[k] = 1;
+    S.level = Math.min(Math.floor(S.level), MAX_LEVEL); S.maxLevel = Math.min(Math.max(Math.floor(S.maxLevel), S.level), MAX_LEVEL); S.best = Math.max(S.best, S.maxLevel); S.hlv = Math.min(Math.floor(S.hlv), HLV_MAX);
+    for (const o of ["upg", "pupg"]) { if (!S[o] || typeof S[o] !== "object") S[o] = N[o]; for (const k in S[o]) if (!okNum(S[o][k]) || S[o][k] < 0) S[o][k] = 0; }
+    const okIt = it => it && typeof it === "object" && SLOTS[it.slot] && okNum(it.val) && RARITY[it.rar];
+    if (!Array.isArray(S.inv)) S.inv = []; S.inv = S.inv.filter(okIt);
+    if (!S.equip || typeof S.equip !== "object") S.equip = N.equip; for (const k in N.equip) if (S.equip[k] && !okIt(S.equip[k])) S.equip[k] = null;
+    if (!S.pets || typeof S.pets !== "object") S.pets = {}; if (!Array.isArray(S.petsOn)) S.petsOn = []; S.petsOn = S.petsOn.filter(id => PETS[id]);
+    if (!S.exp || typeof S.exp !== "object") S.exp = {}; if (!S.gems || typeof S.gems !== "object") S.gems = {}; if (!S.owned || typeof S.owned !== "object") S.owned = {};
+    if (!S.look || typeof S.look !== "object") S.look = N.look; if (!RACES[S.race]) S.race = "humain";
+    if (S.clan && (!S.clan.info || !S.clan.roster || !/^[A-Z2-9]{6}$/.test(S.clan.code || ""))) S.clan = null;
+    if (typeof hero !== "undefined" && !okNum(hero.hp)) hero.hp = P.maxHp();
+  } catch (e) {}
+}
+function recoverState() { // appelé si le jeu enchaîne les erreurs : on répare et on relance le combat
+  try { sanitize(); statF++; if (tower) exitTower(); hero.dead = 0; hero.hp = P.maxHp(); respawn = 0; spawnMonster(); refreshAll(); } catch (e) {}
+}
+window.addEventListener("error", e => { try { console.warn("Brumeria:", e.message); } catch (x) {} });
+window.addEventListener("unhandledrejection", e => { try { e.preventDefault(); } catch (x) {} });
 // Remet les anciens objets aux valeurs actuelles (rééquilibrage v7)
 function migrate(v) {
   if (v >= 7) return;
@@ -876,8 +917,13 @@ function save() {
   if (saveLock || !loadedOK) return;
   S.lastSeen = Date.now();
   const snap = tower ? Object.assign({}, S, { level: tower.saved.level, kills: tower.saved.kills, auto: tower.saved.auto }) : S;
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify(snap)); } catch (e) {}
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(snap)); }
+  catch (e) { // stockage plein : on libère les copies de secours les plus anciennes puis on réessaie
+    try { const l = JSON.parse(localStorage.getItem(BAK()) || "[]"); localStorage.setItem(BAK(), JSON.stringify(l.slice(0, 1))); localStorage.setItem(SAVE_KEY, JSON.stringify(snap)); }
+    catch (x) { if (!saveWarned) { saveWarned = true; toast("⚠️ Le stockage du téléphone est plein : la partie ne peut pas être sauvegardée"); } }
+  }
 }
+let saveWarned = false;
 
 /* ================== STATS DU CHASSEUR ================== */
 function eqBonus(stat) {
@@ -2510,13 +2556,12 @@ function schedMusic() {
   }
 }
 function startMusic() {
-  if (!S.music || music || document.hidden) return;
+  if (!(vols().music > 0) || music || document.hidden) return;
   try {
-    if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
-    if (AC.state === "suspended") AC.resume();
-    const out = AC.createGain(); out.gain.value = 0.7; out.connect(AC.destination);
+    ensureAC();
+    const out = AC.createGain(); out.gain.value = 0.7; out.connect(musicBus);
     const dl = AC.createDelay(); dl.delayTime.value = 0.33; const fb = AC.createGain(); fb.gain.value = 0.32; const lp = AC.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1800;
-    out.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(AC.destination);
+    out.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(musicBus);
     music = { next: AC.currentTime + 0.15, step: 0, out, timer: setInterval(schedMusic, 120) };
   } catch (e) {}
 }
@@ -4383,7 +4428,13 @@ function drawFx(dt) {
 
 /* ================== BOUCLE ================== */
 let last = performance.now(), saveT = 0, uiT = 0, fps = 60, fpsN = 0, fpsT = 0;
+let loopErr = 0;
 function loop(now) {
+  requestAnimationFrame(loop); // on prévoit l'image suivante d'abord : une erreur ne peut plus figer le jeu
+  try { loopBody(now); loopErr = Math.max(0, loopErr - 0.02); }
+  catch (e) { loopErr++; try { console.error(e); ctx.restore(); } catch (x) {} if (loopErr > 5) { loopErr = 0; recoverState(); } }
+}
+function loopBody(now) {
   frameN++; statF++;
   const raw = (now - last) / 1000, dt = Math.min(0.1, raw) * devSpeed * gameSpeed(); last = now;
   fpsN++; fpsT += raw; if (fpsT >= 1) { fps = Math.round(fpsN / fpsT); fpsN = 0; fpsT = 0; }
@@ -4395,7 +4446,7 @@ function loop(now) {
   if (sh) ctx.restore();
   saveT += dt; if (saveT > 5) { saveT = 0; save(); }
   uiT += dt; if (uiT > 0.25) { uiT = 0; refreshUpgButtons(); refreshSkill(); updateSkillBar(); refreshLive(); }
-  requestAnimationFrame(loop);
+  sanT += raw; if (sanT > 10) { sanT = 0; sanitize(); }
 }
 
 function update(dt) {
@@ -4702,51 +4753,81 @@ function modal(title, text, btns) {
 }
 
 /* ================== SONS (générés, aucun fichier) ================== */
-let AC = null, sfxOut = null, noiseBuf = null;
+let AC = null, sfxOut = null, noiseBuf = null, masterBus = null, musicBus = null, sfxK = 1, sfxP = 1;
 const sfxLast = {};
+// Volumes réglables (0 à 1) : général, musique, effets
+function vols() {
+  if (!S.vol || typeof S.vol !== "object") S.vol = { master: 1, music: S.music === false ? 0 : 0.6, sfx: S.sound === false ? 0 : 0.75 };
+  for (const k of ["master", "music", "sfx"]) if (!okNum(S.vol[k])) S.vol[k] = 0.7;
+  return S.vol;
+}
+function applyVol() {
+  const v = vols(); S.sound = v.sfx > 0; S.music = v.music > 0;
+  if (!AC || !masterBus) return;
+  const t = AC.currentTime, cv = x => Math.pow(x, 1.6); // courbe douce : le curseur suit l'oreille
+  masterBus.gain.setTargetAtTime(cv(v.master), t, 0.05); musicBus.gain.setTargetAtTime(cv(v.music) * 1.2, t, 0.05); sfxOut.gain.setTargetAtTime(cv(v.sfx), t, 0.05);
+}
 function ensureAC() {
   if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
   if (AC.state === "suspended") AC.resume();
   if (!sfxOut) {
-    const comp = AC.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 6; comp.connect(AC.destination);
-    sfxOut = AC.createGain(); sfxOut.gain.value = 0.9; sfxOut.connect(comp);
+    const comp = AC.createDynamicsCompressor(); comp.threshold.value = -18; comp.knee.value = 12; comp.ratio.value = 4; comp.attack.value = 0.005; comp.release.value = 0.2;
+    const soft = AC.createBiquadFilter(); soft.type = "lowpass"; soft.frequency.value = 7500; soft.Q.value = 0.5; // adoucit les aigus
+    masterBus = AC.createGain(); masterBus.connect(comp); comp.connect(soft); soft.connect(AC.destination);
+    musicBus = AC.createGain(); musicBus.connect(masterBus);
+    sfxOut = AC.createGain(); sfxOut.connect(masterBus);
     noiseBuf = AC.createBuffer(1, AC.sampleRate, AC.sampleRate); const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    applyVol();
   }
 }
 function tone(f1, f2, dur, type, vol, delay = 0) {
   const t = AC.currentTime + delay, o = AC.createOscillator(), g = AC.createGain();
+  vol *= sfxK; f1 *= sfxP; f2 *= sfxP;
   o.type = type; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(Math.max(20, f2), t + dur);
-  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(0.0002, vol), t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
   o.connect(g); g.connect(sfxOut); o.start(t); o.stop(t + dur + 0.03);
 }
 function nz(dur, vol, freq, q, ftype = "bandpass", delay = 0, sweep = 0) {
   const t = AC.currentTime + delay, s = AC.createBufferSource(), f = AC.createBiquadFilter(), g = AC.createGain();
+  vol *= sfxK; s.playbackRate.value = sfxP;
   s.buffer = noiseBuf; f.type = ftype; f.frequency.setValueAtTime(freq, t); if (sweep) f.frequency.exponentialRampToValueAtTime(sweep, t + dur); f.Q.value = q;
-  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(0.0002, vol), t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
   s.connect(f); f.connect(g); g.connect(sfxOut); s.start(t); s.stop(t + dur + 0.03);
 }
 // Bruitages fabriqués par le jeu (synthèse), aucun fichier son
+// note de la gamme de la zone (les bruitages restent en accord avec la musique)
+const zoneNote = (k = 0) => { const M = MUSIC[zoneIdx(S.level)] || MUSIC[0], n = M.scale[((k % M.scale.length) + M.scale.length) % M.scale.length]; return 440 * Math.pow(2, (M.root + 12 + n - 69) / 12); };
 const SFX = {
-  slash: () => nz(0.13, 0.16, 1500, 0.8, "bandpass", 0, 6500),
-  hit:   () => { nz(0.07, 0.22, 2200, 1.2); tone(190, 90, 0.08, "triangle", 0.14); },
-  crit:  () => { nz(0.1, 0.3, 3200, 1.4); tone(880, 1760, 0.1, "square", 0.04); tone(1320, 2640, 0.12, "sine", 0.07, 0.03); },
-  arrow: () => { nz(0.09, 0.14, 5000, 2, "highpass"); tone(1200, 600, 0.05, "triangle", 0.04); },
-  orb:   () => { tone(500, 1100, 0.18, "sine", 0.07); tone(750, 1650, 0.18, "triangle", 0.03, 0.02); },
-  kill:  () => { tone(420, 900, 0.09, "sine", 0.12); tone(1318, 1318, 0.1, "triangle", 0.05, 0.05); tone(1760, 1760, 0.14, "triangle", 0.05, 0.1); },
-  loot:  () => [880, 1108, 1318].forEach((f, i) => tone(f, f, 0.16, "triangle", 0.06, i * 0.06)),
-  rare:  () => { [784, 988, 1175, 1568, 1976].forEach((f, i) => tone(f, f, 0.22, "triangle", 0.06, i * 0.06)); nz(0.5, 0.06, 7000, 1, "highpass", 0.1); },
-  hurt:  () => { tone(150, 70, 0.14, "sawtooth", 0.06); nz(0.1, 0.18, 500, 1, "lowpass"); },
-  buy:   () => { tone(660, 990, 0.06, "square", 0.035); tone(990, 1320, 0.08, "sine", 0.06, 0.05); },
-  coin:  () => { tone(1568, 1568, 0.08, "triangle", 0.06); tone(2093, 2093, 0.14, "triangle", 0.06, 0.06); },
-  skill: () => { nz(0.45, 0.22, 600, 0.8, "bandpass", 0, 5000); tone(220, 880, 0.35, "sawtooth", 0.04); tone(440, 1760, 0.4, "sine", 0.05, 0.05); },
-  lose:  () => { tone(392, 98, 0.7, "triangle", 0.1); tone(294, 74, 0.7, "sine", 0.06, 0.1); },
-  boss:  () => { tone(70, 48, 0.9, "sawtooth", 0.07); nz(0.7, 0.2, 180, 1, "lowpass"); tone(110, 55, 0.6, "triangle", 0.06, 0.2); },
-  tower: () => [523, 659, 784, 1046].forEach((f, i) => tone(f, f, 0.25, "triangle", 0.07, i * 0.09))
+  slash: () => nz(0.11, 0.07, 900, 0.7, "bandpass", 0, 2400),
+  hit:   () => { tone(210, 105, 0.07, "sine", 0.11); nz(0.045, 0.05, 1300, 1); },
+  crit:  () => { tone(300, 150, 0.1, "triangle", 0.1); tone(zoneNote(4) * 2, zoneNote(4) * 2, 0.14, "sine", 0.045, 0.02); nz(0.07, 0.06, 1900, 1); },
+  arrow: () => { nz(0.08, 0.06, 2400, 1.4, "bandpass", 0, 1200); tone(640, 400, 0.05, "sine", 0.035); },
+  orb:   () => { tone(480, 820, 0.15, "sine", 0.055); tone(720, 1230, 0.12, "sine", 0.018, 0.02); },
+  kill:  () => { const f = zoneNote(Math.floor(Math.random() * 5)); tone(340, 620, 0.05, "sine", 0.05); tone(f, f, 0.16, "sine", 0.06, 0.03); tone(f * 2, f * 2, 0.1, "triangle", 0.015, 0.05); },
+  loot:  () => [0, 2, 4].forEach((k, i) => { const f = zoneNote(k) * 2; tone(f, f, 0.18, "sine", 0.05, i * 0.06); }),
+  rare:  () => { [0, 1, 2, 3, 4].forEach((k, i) => { const f = zoneNote(k) * 2; tone(f, f, 0.26, "triangle", 0.045, i * 0.07); }); nz(0.5, 0.025, 6000, 1, "highpass", 0.1); },
+  hurt:  () => { tone(160, 85, 0.13, "triangle", 0.07); nz(0.09, 0.07, 420, 1, "lowpass"); },
+  buy:   () => { tone(660, 880, 0.06, "sine", 0.05); tone(990, 990, 0.09, "sine", 0.04, 0.05); },
+  coin:  () => { tone(1318, 1318, 0.07, "sine", 0.035); tone(1760, 1760, 0.12, "sine", 0.03, 0.05); },
+  skill: () => { nz(0.4, 0.1, 500, 0.8, "bandpass", 0, 3200); tone(220, 660, 0.32, "sine", 0.06); tone(440, 1320, 0.36, "triangle", 0.025, 0.05); },
+  lose:  () => { tone(392, 110, 0.7, "triangle", 0.08); tone(294, 82, 0.7, "sine", 0.05, 0.1); },
+  boss:  () => { tone(80, 50, 0.9, "triangle", 0.1); nz(0.7, 0.1, 160, 1, "lowpass"); tone(120, 60, 0.6, "sine", 0.07, 0.2); },
+  tower: () => [0, 2, 4, 7].forEach((k, i) => { const f = zoneNote(k) * 2; tone(f, f, 0.26, "sine", 0.06, i * 0.09); })
 };
+// Limiteur : chaque son a un délai minimum, et plus il y a de sons en même temps, plus chacun est discret (pratique en ×2 / ×3)
+const SFX_GAP = { hit: 75, slash: 75, arrow: 75, orb: 85, crit: 110, kill: 110, coin: 150, loot: 220, hurt: 170 };
+const SFX_KEY = { rare: 1, boss: 1, lose: 1, tower: 1, buy: 1, skill: 1 };
+let sfxRecent = [];
 function sfx(type) {
-  if (!S.sound) return;
-  const now = performance.now(); if (now - (sfxLast[type] || 0) < 45) return; sfxLast[type] = now;
+  const v = vols(); if (!(v.sfx > 0 && v.master > 0)) return;
+  const now = performance.now(), sp = typeof gameSpeed === "function" ? gameSpeed() : 1, gap = (SFX_GAP[type] || 45) * (sp > 1 ? 1 + 0.35 * sp : 1);
+  if (now - (sfxLast[type] || 0) < gap) return;
+  sfxRecent = sfxRecent.filter(t => now - t < 400);
+  if (sfxRecent.length >= 6 && !SFX_KEY[type]) return;
+  sfxLast[type] = now; sfxRecent.push(now);
+  sfxK = SFX_KEY[type] ? 1 : 1 / Math.sqrt(1 + sfxRecent.length * 0.45); sfxP = 0.96 + Math.random() * 0.08;
   try { ensureAC(); (SFX[type] || SFX.hit)(); } catch (e) {}
+  sfxK = 1; sfxP = 1;
 }
 function vib(ms) { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} }
 
@@ -4813,7 +4894,17 @@ $("gearBtn").onclick = () => {
   document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
   $("pOpt").classList.add("active"); $("gearBtn").classList.add("on");
 };
-$("musicBtn").onclick = () => { S.music = !S.music; $("musicBtn").textContent = S.music ? "Activée" : "Coupée"; if (S.music) startMusic(); else stopMusic(); save(); };
+function syncVolUI() {
+  const v = vols();
+  for (const [id, k] of [["volMaster", "master"], ["volMusic", "music"], ["volSfx", "sfx"]]) { const el = $(id), pc = Math.round(v[k] * 100); el.value = pc; el.style.setProperty("--v", pc + "%"); $(id + "Txt").textContent = pc ? pc + " %" : "Coupé"; }
+}
+for (const [id, k] of [["volMaster", "master"], ["volMusic", "music"], ["volSfx", "sfx"]]) $(id).oninput = () => {
+  vols()[k] = Math.max(0, Math.min(1, +$(id).value / 100)); applyVol(); syncVolUI();
+  if (k !== "sfx") { if (vols().music > 0 && vols().master > 0) startMusic(); else if (vols().music <= 0) stopMusic(); }
+  clearTimeout(window._volSave); window._volSave = setTimeout(save, 400);
+};
+$("volSfx").onchange = () => sfx("loot");
+$("volTest").onclick = () => { sfx("hit"); setTimeout(() => sfx("kill"), 180); setTimeout(() => sfx("coin"), 380); setTimeout(() => sfx("rare"), 620); };
 
 $("sendBtn").onclick = sendAccount; $("recvBtn").onclick = recvAccount; $("bakBtn").onclick = showBackups;
 const setQualBtns = () => document.querySelectorAll("[data-q2]").forEach(b => b.classList.toggle("qOn", (S.quality || "normale") === b.dataset.q2));
@@ -4823,7 +4914,7 @@ document.addEventListener("pointerdown", () => startMusic());
 $("bestBtn").onclick = equipBest;
 $("bestBtn").innerHTML = ic("bolt") + " Équiper le meilleur"; $("sellAll").innerHTML = ic("coins") + " Vendre les moins bons";
 $("modal").addEventListener("click", e => { if (e.target === $("modal")) closeModal(); });
-$("soundBtn").onclick = () => { S.sound = !S.sound; $("soundBtn").textContent = S.sound ? "Activés" : "Coupés"; save(); };
+
 $("vibBtn").onclick = () => { S.vib = !S.vib; $("vibBtn").textContent = S.vib ? "Activées" : "Coupées"; save(); };
 $("resetBtn").onclick = () => modal("Tout effacer ?", "Ta progression, ton or et ton équipement seront perdus pour de bon.", [
   { t: "Annuler", alt: true },
@@ -4840,9 +4931,7 @@ $("upBtn").innerHTML = ic("swords"); $("upBtn").onclick = () => scroller.scrollT
 
 function refreshAll() {
   refreshTop(); refreshUpg(); refreshBag(); updateBagTab(); refreshSkills(); refreshReb(); buildSkillBar(); refreshXp();
-  $("soundBtn").textContent = S.sound ? "Activés" : "Coupés";
-  $("vibBtn").textContent = S.vib ? "Activées" : "Coupées";
-  $("musicBtn").textContent = S.music ? "Activée" : "Coupée";
+  $("vibBtn").textContent = S.vib ? "Activées" : "Coupées"; syncVolUI();
   ensureDaily(); updateJournalDot();
   if ($("pBag").classList.contains("active")) setSub("b", curSub("b"));
   if ($("pUpg").classList.contains("active") && curSub("c") === "cHero") refreshHero();
@@ -5783,6 +5872,10 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 56, d: "Son plus doux et jeu plus solide", l: [
+    "🔊 <b>Nouveaux bruitages</b>, plus doux et accordés à la musique de chaque zone. En ×2 et ×3, le jeu <b>limite les sons</b> qui s'enchaînent et baisse leur volume : fini les oreilles qui saignent !",
+    "🎚️ <b>Options refaites</b> : des <b>curseurs</b> pour le volume général, la musique et les effets, un bouton pour tester les sons, et des rubriques plus claires.",
+    "🛡️ <b>Jeu plus solide</b> : une erreur ne peut plus figer le jeu, les valeurs abîmées de la sauvegarde sont réparées automatiquement, et si le stockage du téléphone est plein le jeu libère de la place pour continuer à sauvegarder."] },
   { v: 55, d: "Grosse mise à jour des clans et des races", l: [
     "🐲 <b>Boss de clan</b> : chaque semaine, un boss géant avec une <b>barre de vie partagée</b> par tout le clan. 3 essais de " + CB_TIME + " s par jour, et 4 paliers de récompenses (jusqu'à un objet Diamant ou Émeraude).",
     "📜 <b>Quêtes de clan</b> : 3 objectifs communs par semaine (boss, monstres, Arène, expéditions…). Chaque quête rapporte des écus, des Cristaux et des points de clan.",
@@ -5930,7 +6023,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 55, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 56, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
