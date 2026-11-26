@@ -159,13 +159,16 @@
   .newsV { margin: 10px 0 4px; font-weight: 900; color: #9fd0ff; font-size: 15px; } .newsV small { color: #8a88a0; font-weight: 600; font-size: 11px; margin-left: 6px; }
   .newsV.cur { color: #ffd166; }
   #newsBody ul { margin: 0; padding-left: 18px; } #newsBody li { margin: 3px 0; line-height: 1.35; }
-  #sceneWrap { transition: flex-basis .25s ease, min-height .25s ease; }
-  #sceneWrap.sm { flex-basis: 26%; min-height: 190px; } #sceneWrap.lg { flex-basis: 54%; }
-  #sceneWrap.drag { transition: none; }
-  #grip { flex: none; height: 16px; display: flex; align-items: center; justify-content: center; background: #181b2b; touch-action: none; cursor: ns-resize; position: relative; z-index: 3; }
-  #grip::before { content: ""; position: absolute; left: 0; right: 0; top: -10px; bottom: -6px; }
-  #grip i { width: 44px; height: 5px; border-radius: 3px; background: #4a5080; box-shadow: 0 0 6px rgba(111,168,255,.35); }
-  #grip.on i { background: #6fa8ff; }
+  #sceneWrap::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 46px rgba(10,6,30,.38), inset 0 -18px 24px -12px rgba(10,6,30,.35); }
+  #homeBtn { position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255,255,255,.18); background: rgba(0,0,0,.28); opacity: .45; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; z-index: 2; }
+  #homeBtn:active { opacity: .9; }
+  #scroller { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; position: relative; }
+  #scroller #sceneWrap { flex: none; height: max(230px, 40vh); }
+  #scroller #tabs { position: sticky; top: 0; z-index: 6; }
+  #scroller #panel { flex: none; overflow: visible; min-height: calc(100% - 52px); }
+  #upBtn { position: absolute; right: 12px; bottom: 16px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid #3a4070; background: rgba(38,43,72,.92); box-shadow: 0 4px 14px rgba(0,0,0,.5); font-size: 20px; display: none; align-items: center; justify-content: center; z-index: 8; padding: 0; }
+  #upBtn.show { display: flex; }
+  #app { position: relative; }
   #xpBar { position: relative; height: 15px; background: #12152a; border-bottom: 1px solid #262a44; overflow: hidden; cursor: pointer; flex: none; }
   #xpFill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, #3d5bd9, #6fa8ff 70%, #bfe2ff); box-shadow: 0 0 8px #6fa8ff; transition: width .35s; }
   #xpTxt { position: relative; display: block; text-align: center; font-size: 10px; font-weight: 800; line-height: 15px; color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; letter-spacing: .3px; }
@@ -404,11 +407,13 @@
     <button id="gearBtn" class="topBtn" aria-label="Options"></button>
   </div>
   <div id="xpBar"><i id="xpFill"></i><span id="xpTxt">Niv. 1</span></div>
+  <div id="scroller">
 
   <div id="sceneWrap">
     <canvas id="scene"></canvas>
     <div id="progress">0 / 10</div>
     <button id="speedBtn">×1</button>
+    <button id="homeBtn" aria-label="Écran d'accueil"></button>
     <button id="towerExit">Quitter la Tour</button>
     <button id="bossBtn">⚔ Défier le boss</button>
     <div id="skillBar"></div>
@@ -417,7 +422,6 @@
     <button id="skillBtn"><span class="in">FRAPPE<br>BRUME</span></button>
   </div>
 
-  <div id="grip" aria-label="Glisser pour agrandir ou réduire le combat"><i></i></div>
   <div id="tabs">
     <button class="tab active" data-p="pUpg"><span class="ti">⚔️</span>Chasseur</button>
     <button class="tab" data-p="pSk"><span class="ti">✨</span>Compétences</button>
@@ -467,15 +471,17 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v36</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v37</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v36 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v37 — sauvegarde automatique</p>
     </div>
   </div>
+  </div>
+  <button id="upBtn" aria-label="Revenir au combat"></button>
 </div>
 
 <div id="modal"><div id="modalBox"><h3 id="mTitle"></h3><p id="mText"></p><div id="modalBtns"></div></div></div>
@@ -487,7 +493,7 @@
   <button id="newsBtn">📜 Nouveautés<span class="dot" id="newsDot"></span></button>
   <button id="playBtn">JOUER</button>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v36</div></div>
+  <div class="tsVer">v37</div></div>
 <div id="newsPanel"><div id="newsBox"><div id="newsHead">📜 Nouveautés</div><button id="newsClose" aria-label="Fermer">✕</button><div id="newsBody"></div></div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
@@ -809,7 +815,8 @@ function hitMon(amount, kind) {
   if (amount > (S.stats.bestHit || 0)) S.stats.bestHit = amount;
   const ls = affSum("vol"); if (ls && (kind === "auto" || kind === "tap" || kind === "pet")) hero.hp = Math.min(P.maxHp(), hero.hp + Math.min(amount, P.maxHp()) * ls / 100);
   mon.flash = 0.12; mon.shake = crit ? 0.25 : 0.12; mon.squash = 0.15;
-  addFloat(fmt(amount) + (crit ? "!" : ""), kind === "skill" ? "#8ecae6" : crit ? "#ffd166" : "#fff", crit || kind === "skill" ? 26 : 18);
+  if (kind === "pet" && !crit) { if (Math.random() < 0.6) addFloat(fmt(amount), "#cfe4ff", 13); }
+  else addFloat(fmt(amount) + (crit ? "!" : ""), kind === "skill" ? "#8ecae6" : crit ? "#ffd166" : "#fff", crit || kind === "skill" ? 26 : 18);
   for (let i = 0; i < (crit ? 10 : 4); i++) particles.push({ x: monX(), y: monY() - 30, vx: rand(-120, 120), vy: rand(-180, -40), life: 0.5, c: mon.color, r: rand(2, 5) });
   sfx(kind === "skill" ? "skill" : crit ? "crit" : "hit");
   if (kind === "auto" || kind === "tap") skill = Math.min(100, skill + (kind === "tap" ? 1.2 : 4) * (1 + 0.05 * S.pupg.pskill) * (1 + 0.2 * T("g4")) * (setOn("arcaniste", 4) ? 1.5 : 1));
@@ -1175,6 +1182,7 @@ const ICONS = {
   book: () => '<path d="M3 5q4.5-2 9 0v15q-4.5-2-9 0Z" fill="#4ea8de"/><path d="M21 5q-4.5-2-9 0v15q4.5-2 9 0Z" fill="#3a8cc4"/><path d="M5.4 8.6q2.6-.8 4.4 0M5.4 11.6q2.6-.8 4.4 0M14.2 8.6q2.6-.8 4.4 0" stroke="#bfe4ff" stroke-width="1.1"/>',
   scroll: () => '<path d="M6 4h11q2 0 2 2v12q0 2-2 2H8q-2 0-2-2Z" fill="#f3e6cf"/><path d="M4 5.6q0-1.6 2-1.6t2 1.6V8H4Z" fill="#e0cfa8"/><path d="M9.4 8.6h6.2M9.4 11.6h6.2M9.4 14.6h4" stroke="#a88a5a" stroke-width="1.2"/><circle cx="16.4" cy="17.4" r="2" fill="#e63946" stroke-width="1"/>',
   music: () => '<path d="M9 17.6V5.4l10-2v12" fill="none" stroke="' + OL + '" stroke-width="3.6"/><path d="M9 17.6V5.4l10-2v12" fill="none" stroke="#c9a2ff" stroke-width="1.6"/><ellipse cx="6.6" cy="17.8" rx="3" ry="2.4" fill="#c9a2ff"/><ellipse cx="16.6" cy="15.6" rx="3" ry="2.4" fill="#c9a2ff"/>',
+  home: () => '<path d="M3.5 11.5 12 4l8.5 7.5" fill="none" stroke-width="2.2"/><path d="M6 10.5V20h12v-9.5L12 5.5Z" fill="#c8d2e8"/><path d="M10 20v-5h4v5" fill="#6a5a90"/>',
   tower: () => '<path d="M6 21V9h12v12Z" fill="#8e7ab8"/><path d="M5 9V5h2.4v2h2.2V5h2.8v2h2.2V5H17v4Z" fill="#a896d0"/><path d="M10 21v-5a2 2 0 0 1 4 0v5" fill="#2a2240"/><rect x="11" y="10.4" width="2" height="2.6" rx="1" fill="#ffd166" stroke-width="1"/><path d="M8.4 16h.01M15.6 13h.01" stroke-width="2"/>',
   bow: () => line2("M7 3q12 9 0 18", "#a86c40", 2.6) + '<path d="M7 3V21" stroke="#e8e0d0" stroke-width="1"/>' + line2("M5 12h14", "#d8c8a8", 1.4) + '<path d="M21 12l-3.6-2.2v4.4Z" fill="#5ce1ff"/>',
   staff: () => line2("M8 22L15 7", "#7a5a3a", 2.4) + '<circle cx="16.4" cy="5" r="3.6" fill="#c07cff"/><circle cx="15.4" cy="4" r="1.1" fill="#fff" stroke="none"/>',
@@ -1700,9 +1708,12 @@ function petPositions(t) { // position de chaque familier actif, derrière le ch
   });
   return out;
 }
+const PK = 0.78;
 function drawPet(t) {
   if (hero.dead > 0) return;
-  for (const [id, x, y] of petPositions(t).reverse()) { ctx.save(); ctx.translate(x, y); ctx.scale(0.78, 0.78); drawPetShape(id, t); ctx.restore(); }
+  const gy = groundY(), list = petPositions(t).reverse();
+  for (const [id, x] of list) { const gr = PETS[id].ground; ctx.fillStyle = gr ? "rgba(0,0,0,.26)" : "rgba(0,0,0,.13)"; ctx.beginPath(); ctx.ellipse(x, gy + 2, gr ? 14 : 9, gr ? 4 : 3, 0, 0, Math.PI * 2); ctx.fill(); }
+  for (const [id, x, y] of list) { ctx.save(); ctx.translate(x, y); ctx.scale(PK, PK); drawPetShape(id, t); ctx.restore(); }
   for (const s of petShots) {
     const k = Math.min(1, s.t), px = s.x + (monX() - s.x) * k, py = s.y + (monY() - 40 - s.y) * k - Math.sin(k * Math.PI) * 30;
     ctx.globalAlpha = 0.5; ctx.drawImage(glowSprite(), px - 10, py - 10, 20, 20); ctx.globalAlpha = 1;
@@ -2570,15 +2581,21 @@ const LORE = [
   ["Astuce", "Quand un boss devient rouge, tape-le vite pour contrer son attaque et l'étourdir."],
   ["Astuce", "Si le jeu rame, passe les Graphismes en « Économie » dans les Options."]
 ];
-function showTitle(then) {
-  const t = $("titleScreen"); t.style.display = "flex"; $("playBtn").style.display = "none";
+function backToTitle() { // petit bouton maison : retour à l'écran d'accueil (la partie est sauvegardée)
+  save(); stopMusic(); $("newsPanel").classList.remove("show");
+  if ((S.seenVer || 0) < NEWS[0].v) $("newsDot").style.display = "";
+  showTitle(null, true);
+}
+function showTitle(then, quick) {
+  const t = $("titleScreen"); t.classList.remove("out"); t.style.display = "flex"; $("playBtn").style.display = "none";
+  $("tsLoad").style.opacity = quick ? 0 : 1; $("tsLoadTxt").style.opacity = quick ? 0 : 1;
   try { const c = $("titleHero"); drawHeroPreview(c); } catch (e) {}
   let li = Math.floor(Math.random() * LORE.length);
   const showLore = () => { const el = $("tsLore"); el.classList.remove("in"); setTimeout(() => { $("tsLoreTitle").textContent = LORE[li][0]; $("tsLoreTxt").textContent = LORE[li][1]; el.classList.add("in"); li = (li + 1) % LORE.length; }, 250); };
   showLore(); const loreTimer = setInterval(showLore, 5000);
   // chargement : on prépare le décor, les images et les sons pendant que la barre avance
   const steps = [() => { resize(); }, () => { try { buildLayers(); layerKey = layerLevel(S.level) + "|" + W + "|" + H + "|" + DPR; } catch (e) {} }, () => { glowSprite(); ensureOff(); }, () => { HC = heroColors(); }, () => {}];
-  let k = 0; const total = 2200, t0 = performance.now();
+  let k = quick ? 99 : 0; const total = quick ? 1 : 2200, t0 = performance.now();
   const tick = () => {
     const p = Math.min(1, (performance.now() - t0) / total);
     while (k < steps.length && k / steps.length <= p) { try { steps[k](); } catch (e) {} k++; }
@@ -2936,7 +2953,7 @@ const RCOL = ["#cfd8e3", "#7cc4ff", "#c9a2ff", "#ffd166", "#ff5a6a", "#fff2b0"];
 /* --- rendu « autocollant » : contour sombre + ombrage, pour le chasseur et les monstres --- */
 const OFF = 300, HOFF = 170;
 // Qualité graphique : résolution, finesse du contour et fréquence de redessin des monstres
-const QUALS = { haute: { pr: 2, o8: true, skip: [1, 1] }, normale: { pr: 2, o8: true, skip: [1, 2] }, eco: { pr: 1.5, o8: true, skip: [2, 3] } };
+const QUALS = { haute: { pr: 2, o8: true, skip: [1, 1], hs: 1 }, normale: { pr: 2, o8: true, skip: [2, 3], hs: 1 }, eco: { pr: 1.5, o8: true, skip: [3, 4], hs: 2 } };
 const QUAL = () => QUALS[S.quality] || QUALS.normale;
 let frameN = 0;
 let offM = null, offMT = null, offH = null, offHT = null;
@@ -2968,7 +2985,7 @@ function sticker(src, tint, sz, x, y, alpha = 1, tintOver = null, prepared = fal
 }
 
 // Version « pré-assemblée » : le contour est collé une seule fois dans une image, puis on ne dessine plus qu'une image par monstre
-function stickerCached(src, tint, out, sz, x, y, alpha, redraw, tintOver = null) {
+function stickerCached(src, tint, out, sz, x, y, alpha, redraw, tintOver = null, kx = 1, ky = 1, ax = 0, ay = 0) {
   if (redraw) {
     sticker(src, tint, sz, 0, 0, 1, tintOver, false, true);
     const oc = out.getContext("2d"), px = out.width, pr = out._pr || DPR, o = 2.4 * pr;
@@ -2976,7 +2993,9 @@ function stickerCached(src, tint, out, sz, x, y, alpha, redraw, tintOver = null)
     for (const [dx, dy] of (QUAL().o8 ? OFF8 : OFF4)) oc.drawImage(tint, dx * o, dy * o);
     oc.drawImage(src, 0, 0);
   }
-  ctx.save(); ctx.globalAlpha = alpha; ctx.drawImage(out, x, y, sz, sz); ctx.restore();
+  ctx.save(); ctx.globalAlpha = alpha;
+  if (kx !== 1 || ky !== 1) { ctx.translate(ax, ay); ctx.scale(kx, ky); ctx.translate(-ax, -ay); }
+  ctx.drawImage(out, x, y, sz, sz); ctx.restore();
 }
 const OFF8 = [[1, 0], [-1, 0], [0, 1], [0, -1], [0.7, 0.7], [-0.7, 0.7], [0.7, -0.7], [-0.7, -0.7]], OFF4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 /* --- le chasseur (style animé : « le Spectre ») --- */
@@ -3090,7 +3109,7 @@ function drawHero(t) {
   if (buffOn("pluie") && Math.random() < 0.3) particles.push({ x: x + rand(-30, 30), y: y - 100, vx: rand(-20, 20), vy: 60, life: 0.8, c: "#ffd166", r: 3 });
   // le chasseur, dessiné à part puis collé avec un contour
   const cast = hero.cast > 0 ? Math.sin(hero.cast / 0.25 * Math.PI) : 0;
-  const hurtNow = hero.hurt > 0, hSkip = QUAL().skip[0];
+  const hurtNow = hero.hurt > 0, hSkip = QUAL().hs || 1;
   const hRedraw = frameN % hSkip === 0 || hurtNow !== heroHurtWas || hero.lunge > 0 || hero.cast > 0 || walking;
   heroHurtWas = hurtNow;
   if (hRedraw) drawOff(offH, HOFF, HOFF / 2, HOFF - 15, () => { heroArt(t, walking, bob, lg); heroWeapon(t, bob, swing, cast); });
@@ -3588,11 +3607,11 @@ function drawOneMonster(t) {
   const q = QUAL(), skip = pack.length >= 4 ? q.skip[1] : q.skip[0];
   const redraw = (frameN + m._ph) % skip === 0 || m.flash > 0 || m.dying > 0 || !m._drawn;
   if (redraw) {
-    m._top = drawOff(m._c, SZ, SZ / 2, BY, () => { ctx.scale(sx, sy); const tp = BODY[m.type](m, m.flash > 0 ? shade(m.color, 0.6) : m.color, t); if (m.hat) drawHat(m, tp, t); return tp; });
+    m._top = drawOff(m._c, SZ, SZ / 2, BY, () => { ctx.scale(sc, sc); const tp = BODY[m.type](m, m.flash > 0 ? shade(m.color, 0.6) : m.color, t); if (m.hat) drawHat(m, tp, t); return tp; });
     m._drawn = true;
   }
   const top = m._top;
-  stickerCached(m._c, m._t, m._o, SZ, x - SZ / 2, monY() - BY, die, redraw);
+  stickerCached(m._c, m._t, m._o, SZ, x - SZ / 2, monY() - BY, die, redraw, null, sx / sc, sy / sc, x, monY());
   ctx.globalAlpha = 1;
   if (m.charge && m.dying <= 0) {
     const hy = monY() + top * sc - 30, pu = 0.5 + 0.5 * Math.sin(t * 14);
@@ -3634,7 +3653,16 @@ function drawFx(dt) {
   particles = particles.filter(p => p.life > 0);
   if (particles.length > 160) particles.splice(0, particles.length - 160);
   ctx.textAlign = "center";
-  for (const f of floats) { f.y -= 40 * dt; f.life -= dt * 0.9; ctx.globalAlpha = Math.max(0, f.life); ctx.font = "bold " + f.size + "px system-ui"; ctx.fillStyle = "rgba(0,0,0,.5)"; ctx.fillText(f.txt, f.x + 1.5, f.y + 1.5); ctx.fillStyle = f.c; ctx.fillText(f.txt, f.x, f.y); }
+  if (floats.length > 18) floats.splice(0, floats.length - 18);
+  ctx.lineJoin = "round";
+  for (const f of floats) {
+    f.age = (f.age || 0) + dt; f.y -= (70 * Math.max(0, 1 - f.age * 1.4) + 14) * dt; f.life -= dt * 0.9;
+    const pop = f.age < 0.1 ? 0.55 + f.age / 0.1 * 0.6 : f.age < 0.2 ? 1.15 - (f.age - 0.1) * 1.5 : 1;
+    ctx.globalAlpha = Math.max(0, Math.min(1, f.life * 1.8));
+    ctx.font = "900 " + Math.round(f.size * pop) + "px system-ui";
+    ctx.lineWidth = Math.max(3, f.size * 0.2); ctx.strokeStyle = "rgba(18,12,36,.85)"; ctx.strokeText(f.txt, f.x, f.y);
+    ctx.fillStyle = f.c; ctx.fillText(f.txt, f.x, f.y);
+  }
   floats = floats.filter(f => f.life > 0);
   ctx.globalAlpha = 1;
 }
@@ -3648,7 +3676,8 @@ function loop(now) {
   const t = now / 1000;
   update(dt); S.stats.time = (S.stats.time || 0) + Math.min(raw, 1);
   const sh = shakeT > 0; if (sh) { shakeT -= raw; ctx.save(); ctx.translate(rand(-5, 5), rand(-4, 4)); }
-  drawBackground(t); drawHero(t); drawPet(t); drawMonster(t); drawForeground(t, dt); drawFx(dt);
+  if (!sceneHidden()) { drawBackground(t); drawHero(t); drawPet(t); drawMonster(t); drawForeground(t, dt); drawFx(dt); }
+  else { if (floats.length) floats.length = 0; if (particles.length > 40) particles.length = 40; }
   if (sh) ctx.restore();
   saveT += dt; if (saveT > 5) { saveT = 0; save(); }
   uiT += dt; if (uiT > 0.25) { uiT = 0; refreshUpgButtons(); refreshSkill(); updateSkillBar(); refreshLive(); }
@@ -3699,6 +3728,7 @@ const goldTxt = () => '<span class="cur">' + COIN + fmt(S.gold) + '</span>' + (S
 const setHtml = (el, h) => { if (el._h !== h) { el._h = h; el.innerHTML = h; } };
 function refreshTop() {
   setHtml($("gold"), goldTxt());
+  const bbb = $("bagBuyBtn"); if (bbb) bbb.disabled = S.gold < bagCost(S.bagBuy || 0);
   $("towerExit").style.display = tower ? "block" : "none"; $("towerBtn").classList.toggle("on", !!tower);
   if (tower) {
     $("zoneName").textContent = tower.inv ? "Invasion de Brume" : "Tour de la Brume"; $("lvlTxt").textContent = tower.inv ? "Boss d'événement" : "Étage " + tower.floor;
@@ -3840,7 +3870,7 @@ function refreshBag() {
   $("setSummary").innerHTML = sb;
   const grid = $("invList"); grid.innerHTML = "";
   const sorted = [...S.inv].sort((a, b) => b.rar - a.rar || a.slot.localeCompare(b.slot) || b.val - a.val);
-  const shown = Math.min(bagMax(), Math.max(60, Math.ceil((S.inv.length + 1) / 5) * 5 + 10)); // on n'affiche que les cases utiles
+  const shown = Math.max(S.inv.length, Math.min(bagMax(), Math.max(60, Math.ceil((S.inv.length + 1) / 5) * 5 + 10))); // on n'affiche que les cases utiles
   for (let i = 0; i < shown; i++) {
     const it = sorted[i], d = document.createElement("button");
     if (!it) { d.className = "cell vide"; d.disabled = true; grid.appendChild(d); continue; }
@@ -4077,29 +4107,11 @@ $("resetBtn").onclick = () => modal("Tout effacer ?", "Ta progression, ton or et
 document.addEventListener("visibilitychange", () => { if (document.hidden) { save(); stopMusic(); } else { offlineGains(); refreshAll(); } });
 window.addEventListener("pagehide", save);
 window.addEventListener("resize", resize);
-/* ---- poignée : glisse vers le haut pour réduire le combat (plus de place pour les menus), vers le bas pour l'agrandir ---- */
-const SCENE_MODES = ["sm", "", "lg"];
-function setSceneMode(m, anim = true) {
-  S.sceneMode = Math.max(0, Math.min(2, m)); const w = $("sceneWrap");
-  w.classList.remove("sm", "lg", "drag"); w.style.flexBasis = ""; w.style.minHeight = "";
-  if (SCENE_MODES[S.sceneMode]) w.classList.add(SCENE_MODES[S.sceneMode]);
-  setTimeout(resize, anim ? 270 : 0); save();
-}
-(() => {
-  const g = $("grip"), w = $("sceneWrap"); let y0 = null, h0 = 0, moved = false;
-  g.addEventListener("pointerdown", e => { y0 = e.clientY; h0 = w.getBoundingClientRect().height; moved = false; g.classList.add("on"); g.setPointerCapture(e.pointerId); });
-  g.addEventListener("pointermove", e => {
-    if (y0 === null) return; const dy = e.clientY - y0; if (Math.abs(dy) > 6) moved = true; if (!moved) return;
-    w.classList.add("drag"); w.style.minHeight = "150px"; w.style.flexBasis = Math.max(150, Math.min(window.innerHeight * 0.62, h0 + dy)) + "px";
-  });
-  const end = e => {
-    if (y0 === null) return; const dy = e.clientY - y0; y0 = null; g.classList.remove("on");
-    if (!moved) { setSceneMode(S.sceneMode === 0 ? 1 : 0); return; }               // simple appui : réduit / remet normal
-    const hh = w.getBoundingClientRect().height / ((($("app").getBoundingClientRect().height) || window.innerHeight));
-    setSceneMode(hh < 0.34 ? 0 : hh < 0.48 ? 1 : 2);                              // se cale sur la taille la plus proche
-  };
-  g.addEventListener("pointerup", end); g.addEventListener("pointercancel", end);
-})();
+/* ---- défilement libre : en descendant dans les menus, le combat remonte et les onglets restent collés en haut ---- */
+const scroller = $("scroller");
+const sceneHidden = () => scroller.scrollTop >= $("sceneWrap").offsetHeight - 4;
+scroller.addEventListener("scroll", () => { $("upBtn").classList.toggle("show", scroller.scrollTop > $("sceneWrap").offsetHeight * 0.6); }, { passive: true });
+$("upBtn").innerHTML = ic("swords"); $("upBtn").onclick = () => scroller.scrollTo({ top: 0, behavior: "smooth" });
 
 function refreshAll() {
   refreshTop(); refreshUpg(); refreshBag(); updateBagTab(); refreshSkills(); refreshReb(); buildSkillBar(); refreshXp();
@@ -4118,6 +4130,17 @@ function refreshAll() {
 // Appli installable : enregistre le service worker (seulement quand le jeu est en ligne, ex. GitHub Pages)
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 37, d: "Plus fluide, plus beau", l: [
+    "Le jeu est <b>plus fluide</b> : les monstres et les familiers demandent beaucoup moins de calculs, tout en gardant des mouvements doux.",
+    "<b>Chiffres de dégâts</b> plus lisibles : contour, petit effet « pop », et moins d'embouteillage à l'écran.",
+    "Les dégâts des familiers sont plus discrets, pour ne pas cacher ceux de ton chasseur.",
+    "Les familiers ont maintenant une <b>ombre</b> au sol.",
+    "Léger effet de profondeur sur les bords de l'écran de combat.",
+    "Petit bouton <b>maison</b> en haut à droite du combat pour revenir à l'écran d'accueil.",
+    "<b>Défilement libre</b> : en descendant dans les menus, le combat remonte tout en haut et les onglets restent collés. Plus besoin de tenir la poignée (supprimée). Un bouton ⚔ te ramène au combat.",
+    "Quand le combat est caché, il n'est plus dessiné : moins de batterie, mais ton chasseur continue de farmer.",
+    "Corrigé : des objets pouvaient être cachés quand le sac dépassait sa taille.",
+    "Corrigé : le bouton « Agrandir le sac » ne se mettait pas à jour quand ton or changeait."] },
   { v: 36, d: "Écran réglable", l: [
     "Une <b>poignée</b> sous le combat : glisse-la vers le <b>haut</b> pour réduire le combat et avoir plus de place dans les menus, vers le <b>bas</b> pour l'agrandir.",
     "Un simple appui sur la poignée réduit le combat ou le remet à sa taille normale. Ton choix est gardé."] },
@@ -4147,6 +4170,7 @@ function openNews() {
   $("newsPanel").classList.add("show"); $("newsBody").scrollTop = 0;
   S.seenVer = NEWS[0].v; $("newsDot").style.display = "none"; save();
 }
+$("homeBtn").innerHTML = ic("home"); $("homeBtn").onclick = e => { e.stopPropagation(); backToTitle(); };
 $("newsBtn").onclick = e => { e.stopPropagation(); openNews(); };
 $("newsOpt").onclick = openNews;
 $("newsClose").onclick = () => $("newsPanel").classList.remove("show");
@@ -4154,7 +4178,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 36, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 37, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -4177,8 +4201,6 @@ $("xpBar").onclick = () => { document.querySelector('.tab[data-p="pUpg"]').click
 setTimeout(() => checkUpdate(false), 4000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastUpdCheck > 3e5) checkUpdate(false); });
 load();
-if (S.sceneMode == null) S.sceneMode = 1;
-if (S.sceneMode !== 1) { $("sceneWrap").classList.add(SCENE_MODES[S.sceneMode]); }
 resize();
 hero.hp = P.maxHp();
 spawnMonster();
