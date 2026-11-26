@@ -446,7 +446,7 @@
       <div class="invTitle"><span id="invCount">Sac (0/60)</span></div>
       <div class="bagBtns"><button class="smallBtn" id="bestBtn">Équiper le meilleur</button><button class="smallBtn" id="sellAll">Vendre les moins bons</button></div>
       <div id="autoSell"></div>
-      <div class="invGrid" id="invList"></div>
+      <div class="invGrid" id="invList"></div><div id="bagBuy"></div>
       <p style="font-size:12px;color:#777;text-align:center;margin-top:8px">Touche un objet pour l'équiper, le vendre ou le retirer. ▲ = meilleur que ton équipement.</p>
       </div>
       <div class="subPage" data-g="b" id="sForge"></div>
@@ -459,13 +459,13 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v34</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v35</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v34 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v35 — sauvegarde automatique</p>
     </div>
   </div>
 </div>
@@ -479,7 +479,7 @@
   <button id="newsBtn">📜 Nouveautés<span class="dot" id="newsDot"></span></button>
   <button id="playBtn">JOUER</button>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v34</div></div>
+  <div class="tsVer">v35</div></div>
 <div id="newsPanel"><div id="newsBox"><div id="newsHead">📜 Nouveautés</div><button id="newsClose" aria-label="Fermer">✕</button><div id="newsBody"></div></div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
@@ -674,7 +674,7 @@ function newState() {
     tree: {}, bonusPts: 0, music: true,
     stats: { bossKills: 0, taps: 0, legend: 0, items: 0, forges: 0, rares: 0, skills: 0, quests: 0, time: 0, bestHit: 0, goldTotal: 0 },
     ach: {}, daily: null, bestiary: {}, pets: {}, pet: null,
-    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, seenVer: 0 };
+    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, seenVer: 0 };
 }
 let S = newState();
 function load() {
@@ -706,12 +706,12 @@ function eqBonus(stat) {
   return b;
 }
 const P = {
-  atk:  () => atkFrom(S.upg.atk) * (1 + eqBonus("atk") / 100) * (1 + 0.25 * S.pupg.patk) * (1 + 0.15 * T("g1")) * (1 + petPv("atk") / 100) * (1 + bestStars() / 100) * CL().atk * (setOn("spectre", 2) ? 1.2 : 1) * (setOn("rodeur", 4) ? 1.25 : 1) * (setOn("arcaniste", 2) ? 1.2 : 1) * (setOn("arcaniste", 6) ? 1.4 : 1) * (1 + gemSum("atk") / 100) * (frenzyT > 0 ? 3 : 1) * (buffOn("rage") ? SKILLS.rage.power(T("rage")) : 1) * hlvB() * (1 + accSum("atk") / 100),
-  maxHp:() => hpFrom(S.upg.hp) * (1 + eqBonus("hp") / 100) * (1 + 0.25 * S.pupg.php) * (1 + 0.15 * T("d1")) * (1 + petPv("hp") / 100) * (1 + gemSum("hp") / 100) * hlvB() * (1 + accSum("hp") / 100),
+  atk:  () => atkFrom(S.upg.atk) * (1 + eqBonus("atk") / 100) * (1 + 0.25 * S.pupg.patk) * (1 + 0.15 * T("g1")) * (1 + 0.2 * T("g5")) * (1 + petPv("atk") / 100) * (1 + bestStars() / 100) * CL().atk * (setOn("spectre", 2) ? 1.2 : 1) * (setOn("rodeur", 4) ? 1.25 : 1) * (setOn("arcaniste", 2) ? 1.2 : 1) * (setOn("arcaniste", 6) ? 1.4 : 1) * (1 + gemSum("atk") / 100) * (frenzyT > 0 ? 3 : 1) * (buffOn("rage") ? SKILLS.rage.power(T("rage")) : 1) * hlvB() * (1 + accSum("atk") / 100),
+  maxHp:() => hpFrom(S.upg.hp) * (1 + eqBonus("hp") / 100) * (1 + 0.25 * S.pupg.php) * (1 + 0.15 * T("d1")) * (1 + 0.2 * T("d6")) * (1 + petPv("hp") / 100) * (1 + gemSum("hp") / 100) * hlvB() * (1 + accSum("hp") / 100),
   spd:  () => spdFrom(S.upg.spd) * (1 + eqBonus("spd") / 100) * (1 + petPv("spd") / 100) * CL().spd * (setOn("rodeur", 2) ? 1.2 : 1) * (setOn("spectre", 6) ? 1.25 : 1) * (1 + affSum("spd") / 100) * (1 + gemSum("spd") / 100) * (buffOn("eclair") ? 2 : 1) * (1 + accSum("spd") / 100),
   crit: () => { const sc = (setOn("spectre", 4) ? 10 : 0) + affSum("crit") + accSum("crit") + petPv("crit"); return Math.min(60 + 3 * T("g2") + CL().crit + sc, critFrom(S.upg.crit) + eqBonus("crit") + 3 * T("g2") + CL().crit + sc); },
   tap:  () => P.atk() * tapFrom(S.upg.tap) * (1 + (accSum("tap") + petPv("tap")) / 100),
-  goldMult: () => (1 + S.upg.gold * 0.1) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1) * (1 + accSum("gold") / 100)
+  goldMult: () => (1 + S.upg.gold * 0.1) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + 0.2 * T("p6")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1) * (1 + accSum("gold") / 100)
 };
 
 // Les stats du héros sont recalculées une seule fois par image (au lieu de des dizaines de fois)
@@ -795,7 +795,7 @@ function dealDamage(amount, kind, target) {
 function hitMon(amount, kind) {
   let crit = Math.random() * 100 < P.crit();
   if (crit) amount *= critMult();
-  if (mon.boss) amount *= 1 + affSum("boss") / 100;
+  if (mon.boss) amount *= (1 + affSum("boss") / 100) * (1 + 0.15 * T("g6"));
   if (devOneShot) amount = Math.max(amount, mon.hp);
   mon.hp -= amount;
   if (amount > (S.stats.bestHit || 0)) S.stats.bestHit = amount;
@@ -813,6 +813,7 @@ function killMonster() {
   const g = mon.gold * P.goldMult();
   S.gold += g; S.totalKills++; S.stats.goldTotal = (S.stats.goldTotal || 0) + g;
   gainXp(xpKill(S.level, mon.boss));
+  if (T("d7") && hero.dead <= 0) hero.hp = Math.min(P.maxHp(), hero.hp + P.maxHp() * 0.02 * T("d7"));
   if (mon.boss) $("bossAlert").classList.remove("show");
   addFloat("+" + fmt(g), "#ffd166", 18, -40);
   sfx("kill"); vib(15);
@@ -822,7 +823,7 @@ function killMonster() {
   rollLoot(wasBoss || mon.rare, mon.rare); if (wasBoss && T("p5")) rollLoot(true);
   const bk = mon.zb ? "zb" + zoneIdx(S.level) : mon.type; S.bestiary[bk] = (S.bestiary[bk] || 0) + 1;
   if (mon.rare) { S.bestiary["or_" + bk] = (S.bestiary["or_" + bk] || 0) + 1; S.stats.rares++; }
-  qProg("kill"); if (wasBoss) { S.stats.bossKills++; qProg("boss"); dropPet(mon.zb); if (Math.random() < 0.3 || mon.zb) { const gt = randGem(); addGem(gt); setTimeout(() => toast(gemIcon(gt, 16) + " " + GEMS[gt].name + " trouvé !"), 1300); } }
+  qProg("kill"); if (wasBoss) { S.stats.bossKills++; qProg("boss"); dropPet(mon.zb); if (Math.random() < 0.3 + 0.1 * T("p9") || mon.zb) { const gt = randGem(); addGem(gt); setTimeout(() => toast(gemIcon(gt, 16) + " " + GEMS[gt].name + " trouvé !"), 1300); } }
   if (wasBoss && S.level >= MAX_LEVEL) {
     bossTimer = 0; S.kills = 0; S.auto = true;
     if (!S.won) { S.won = true; modal("🏆 Palier atteint !", "Tu as vaincu le <b>Dévoreur d'Étoiles</b> et atteint le niveau 1000 !<br><br>La Brume recule… mais quelque chose remue au-delà de l'horizon. <b>De nouvelles zones arrivent bientôt.</b><br><br>En attendant, continue à farmer ce boss, la Tour et les Renaissances !", [{ t: "Génial !" }]); }
@@ -870,7 +871,7 @@ function useSkill() {
 
 /* ================== BUTIN ================== */
 function rollLoot(boss, rareMon) {
-  if (!boss && Math.random() > 0.04 * (1 + 0.1 * S.pupg.ploot) * (1 + 0.15 * T("p2")) * (1 + affSum("loot") / 100) * (1 + (accSum("loot") + petPv("luck")) / 100)) return;
+  if (!boss && Math.random() > 0.04 * (1 + 0.1 * S.pupg.ploot) * (1 + 0.15 * T("p2")) * (1 + affSum("loot") / 100) * (1 + (accSum("loot") + petPv("luck")) / 100) * (buffOn("tresor") ? SKILLS.tresor.power(T("tresor")) : 1)) return;
   let roll = Math.random() * 100, ri = 0;
   if (boss) roll *= rareMon ? 0.3 : 0.55;
   roll *= 1 - 0.1 * T("p4");           // les boss lâchent de meilleurs objets
@@ -883,7 +884,7 @@ function rollLoot(boss, rareMon) {
   S.stats.items++; if (ri === 3) S.stats.legend++; if (ri === 4) S.stats.mythic = (S.stats.mythic || 0) + 1; if (ri === 5) S.stats.divine = (S.stats.divine || 0) + 1; qProg("loot");
   if (ri >= 4) setTimeout(() => announceItem(it), 400);
   if (autoSellIt(it)) return;
-  if (S.inv.length >= BAG_MAX) { const price = sellPrice(it); S.gold += price; toast("Sac plein : objet vendu +" + fmt(price) + " " + COIN); return; }
+  if (S.inv.length >= bagMax()) { const price = sellPrice(it); S.gold += price; toast("Sac plein : objet vendu +" + fmt(price) + " " + COIN); return; }
   S.inv.push(it); autoFuse();
   addFloat("★ " + RARITY[ri].name, RTXT[ri], ri >= 4 ? 24 : 18, -70);
   sfx(ri >= 2 ? "rare" : "loot");
@@ -905,7 +906,10 @@ const SKILLS = {
   rage:   { icon: "🔥", name: "Rage",           cd: 60, dur: l => 10,     power: l => 2 + 0.5 * (l - 1), desc: l => "Dégâts ×" + (2 + 0.5 * (l - 1)) + " pendant 10 s" },
   soin:   { icon: "💚", name: "Second souffle", cd: 45, dur: l => 2 + l,  desc: l => "Soigne toute ta vie + invincible " + (2 + l) + " s" },
   eclair: { icon: "⚡", name: "Éclair",          cd: 60, dur: l => 6 + 3 * l, desc: l => "Vitesse d'attaque ×2 pendant " + (6 + 3 * l) + " s" },
-  pluie:  { icon: "💰", name: "Pluie d'or",     cd: 90, dur: l => 15,     power: l => 3 + (l - 1), desc: l => "Or ×" + (3 + (l - 1)) + " pendant 15 s" }
+  pluie:  { icon: "💰", name: "Pluie d'or",     cd: 90, dur: l => 15,     power: l => 3 + (l - 1), desc: l => "Or ×" + (3 + (l - 1)) + " pendant 15 s" },
+  execution: { icon: "🪓", name: "Exécution",     cd: 75, dur: l => 0.5,    power: l => 25 * l, desc: l => "Un coup énorme : " + 25 * l + " fois ton attaque sur la cible" },
+  rempart: { icon: "🏰", name: "Rempart",         cd: 80, dur: l => 8 + 4 * l, desc: l => "Dégâts subis -80 % pendant " + (8 + 4 * l) + " s" },
+  tresor: { icon: "🗝️", name: "Chasse au trésor", cd: 120, dur: l => 20,   power: l => 2 + l, desc: l => "Chance de butin ×" + (2 + l) + " pendant 20 s" }
 };
 const BRANCHES = [
   { id: "g", name: "Guerrier", icon: "⚔️", color: "#e76f51", nodes: [
@@ -914,22 +918,36 @@ const BRANCHES = [
     { id: "rage", icon: "🔥", name: "Rage", max: 3, skill: true, desc: r => "Compétence : " + SKILLS.rage.desc(Math.max(1, r)) },
     { id: "g3", icon: "💥", name: "Coup fatal", max: 3, desc: r => "Dégâts critiques ×" + (2.5 + 0.5 * r) },
     { id: "g4", icon: "🌀", name: "Frénésie", max: 2, desc: r => "Frappe Brume se charge " + 20 * r + "% plus vite et frappe " + 30 * r + "% plus fort" },
-    { id: "eclair", icon: "⚡", name: "Éclair", max: 3, skill: true, desc: r => "Compétence : " + SKILLS.eclair.desc(Math.max(1, r)) }] },
+    { id: "eclair", icon: "⚡", name: "Éclair", max: 3, skill: true, desc: r => "Compétence : " + SKILLS.eclair.desc(Math.max(1, r)) },
+    { id: "g5", icon: "⚔️", name: "Maître d'armes", max: 5, desc: r => "Attaque +" + 20 * r + "%" },
+    { id: "g6", icon: "👑", name: "Tueur de boss", max: 5, desc: r => "Dégâts contre les boss +" + 15 * r + "%" },
+    { id: "execution", icon: "🪓", name: "Exécution", max: 3, skill: true, desc: r => "Compétence : " + SKILLS.execution.desc(Math.max(1, r)) },
+    { id: "g7", icon: "☄️", name: "Coups dévastateurs", max: 5, desc: r => "Dégâts critiques +" + (0.3 * r).toFixed(1).replace(".", ",") + " (multiplicateur)" }] },
   { id: "d", name: "Gardien", icon: "🛡️", color: "#4ea8de", nodes: [
     { id: "d1", icon: "🛡️", name: "Peau dure", max: 3, desc: r => "Vie +" + 15 * r + "%" },
     { id: "d2", icon: "💗", name: "Récupération", max: 3, desc: r => "Régénération " + (2.5 + r).toFixed(1) + "% de vie par seconde" },
     { id: "soin", icon: "💚", name: "Second souffle", max: 3, skill: true, desc: r => "Compétence : " + SKILLS.soin.desc(Math.max(1, r)) },
     { id: "d3", icon: "🧱", name: "Armure de brume", max: 3, desc: r => "Dégâts subis -" + 8 * r + "%" },
     { id: "d4", icon: "🌵", name: "Épines", max: 3, desc: r => "Quand un monstre te frappe, il subit " + 50 * r + "% de ton attaque" },
-    { id: "d5", icon: "⏳", name: "Sang-froid", max: 2, desc: r => "Chrono des boss +" + 5 * r + " s" }] },
+    { id: "d5", icon: "⏳", name: "Sang-froid", max: 2, desc: r => "Chrono des boss +" + 5 * r + " s" },
+    { id: "d6", icon: "🗿", name: "Colosse", max: 5, desc: r => "Vie +" + 20 * r + "%" },
+    { id: "d7", icon: "🩸", name: "Vampirisme", max: 5, desc: r => "Chaque monstre vaincu te soigne de " + 2 * r + "% de ta vie" },
+    { id: "rempart", icon: "🏰", name: "Rempart", max: 3, skill: true, desc: r => "Compétence : " + SKILLS.rempart.desc(Math.max(1, r)) },
+    { id: "d8", icon: "🪨", name: "Inébranlable", max: 5, desc: r => "Dégâts subis encore -" + 4 * r + "%" }] },
   { id: "p", name: "Pillard", icon: "💰", color: "#ffd166", nodes: [
     { id: "p1", icon: "👝", name: "Poches profondes", max: 3, desc: r => "Or +" + 15 * r + "%" },
     { id: "p2", icon: "🔍", name: "Fouineur", max: 3, desc: r => "Chance de butin +" + 15 * r + "%" },
     { id: "pluie", icon: "💰", name: "Pluie d'or", max: 3, skill: true, desc: r => "Compétence : " + SKILLS.pluie.desc(Math.max(1, r)) },
     { id: "p3", icon: "🏷️", name: "Marchand", max: 2, desc: r => "Objets vendus +" + 50 * r + "%" },
     { id: "p4", icon: "💎", name: "Œil d'expert", max: 2, desc: r => "Meilleures raretés : +" + 10 * r + "%" },
-    { id: "p5", icon: "🎁", name: "Trésor des boss", max: 1, desc: r => "Les boss lâchent 2 objets au lieu d'1" }] }
+    { id: "p5", icon: "🎁", name: "Trésor des boss", max: 1, desc: r => "Les boss lâchent 2 objets au lieu d'1" },
+    { id: "p6", icon: "🪙", name: "Avarice", max: 5, desc: r => "Or +" + 20 * r + "%" },
+    { id: "p7", icon: "🐾", name: "Dresseur", max: 5, desc: r => "Chance de familier sur les boss +" + 4 * r + " pts (25 % de base)" },
+    { id: "tresor", icon: "🗝️", name: "Chasse au trésor", max: 3, skill: true, desc: r => "Compétence : " + SKILLS.tresor.desc(Math.max(1, r)) },
+    { id: "p8", icon: "📚", name: "Érudit", max: 5, desc: r => "Expérience +" + 5 * r + "%" },
+    { id: "p9", icon: "💠", name: "Gemmologue", max: 3, desc: r => "Chance de gemme sur les boss +" + 10 * r + " pts (30 % de base)" }] }
 ];
+const TREE_TOTAL = BRANCHES.reduce((a, b) => a + b.nodes.reduce((x, n) => x + n.max, 0), 0);
 const NODE = {}; BRANCHES.forEach(b => b.nodes.forEach((n, i) => { n.branch = b; n.tier = i; NODE[n.id] = n; }));
 const T = id => S.tree[id] || 0;
 const ptsEarned = () => Math.floor((S.maxLevel - 1) / 10) + (S.bonusPts || 0);
@@ -937,7 +955,8 @@ const ptsSpent = () => Object.values(S.tree).reduce((a, b) => a + b, 0);
 const ptsFree = () => ptsEarned() - ptsSpent();
 const nodeOpen = n => n.tier === 0 || T(n.branch.nodes[n.tier - 1].id) > 0;
 const cdMult = () => 1 - 0.05 * S.pupg.pskill;
-const critMult = () => 2.5 + 0.5 * T("g3") + (setOn("spectre", 4) ? 0.5 : 0);
+const critMult = () => 2.5 + 0.5 * T("g3") + 0.3 * T("g7") + (setOn("spectre", 4) ? 0.5 : 0);
+const dmgTaken = () => Math.max(0.1, (1 - 0.08 * T("d3")) * (1 - 0.04 * T("d8")) * (buffOn("rempart") ? 0.2 : 1));
 const setFb = () => (setOn("spectre", 6) ? 2 : 1) * (setOn("arcaniste", 6) ? 1.5 : 1) * (1 + affSum("fb") / 100) * (1 + gemSum("fb") / 100);
 
 let gameT = 0, buffs = {}, cds = {};
@@ -949,6 +968,7 @@ function useSk(id) {
   cds[id] = gameT + s.cd * cdMult();
   buffs[id] = gameT + s.dur(l);
   if (id === "soin") { hero.hp = P.maxHp(); buffs.inv = gameT + s.dur(l); }
+  if (id === "execution" && mon && mon.dying <= 0) { dealDamage(P.atk() * s.power(l), "skill"); addFloat("EXÉCUTION !", "#ff8a3a", 26, -30); vib(60); }
   sfx("skill"); vib(20); toast(s.icon + " " + s.name + " !"); qProg("skill"); S.stats.skills++;
   refreshStats(); updateSkillBar();
 }
@@ -977,7 +997,7 @@ function updateSkillBar() {
 function refreshSkills() {
   const box = $("skList"), free = ptsFree();
   let h = '<div class="treeHead"><div><b style="font-size:22px;color:#ffd166">' + free + '</b> point' + (free > 1 ? "s" : "") + ' à placer<br><span style="font-size:11px;color:#9a98ad">' +
-    ptsEarned() + ' gagnés · 1 point par boss vaincu · l\'arbre repart à zéro à la Renaissance</span></div><button class="smallBtn" id="treeReset">↺ Réinitialiser</button></div><div class="tree">';
+    ptsEarned() + ' gagnés · 1 point tous les 10 niveaux · ' + TREE_TOTAL + ' points pour tout remplir · l\'arbre repart à zéro à la Renaissance</span></div><button class="smallBtn" id="treeReset">↺ Réinitialiser</button></div><div class="tree">';
   for (const b of BRANCHES) {
     h += '<div class="branch"><div class="bTitle" style="color:' + b.color + '">' + b.icon + " " + b.name + '</div>';
     b.nodes.forEach((n, i) => {
@@ -1186,7 +1206,7 @@ const COIN = ic("coin"), PERLE = ic("perle");
   for (const [k, v] of Object.entries({ arme: "sword", casque: "helmet", armure: "armor", gants: "glove", ceinture: "belt", bottes: "boot", amulette: "amulet" })) SLOTS[k].icon = ic(v);
   set(UPGRADES, { atk: "sword", hp: "heart", spd: "wind", crit: "target", tap: "pointer", gold: "coins" });
   set(PUPG, { patk: "swordP", php: "heartP", pgold: "chest", pstart: "rocket", ploot: "clover", pskill: "spiralP", poff: "moon" });
-  const nm = { g1: "sword", g2: "target", rage: "flame", g3: "burst", g4: "spiral", eclair: "bolt", d1: "shield", d2: "heartPlus", soin: "heartLeaf", d3: "wall", d4: "cactus", d5: "hourglass", p1: "pouch", p2: "magnifier", pluie: "coinRain", p3: "tag", p4: "gem", p5: "gift" };
+  const nm = { g1: "sword", g2: "target", rage: "flame", g3: "burst", g4: "spiral", eclair: "bolt", d1: "shield", d2: "heartPlus", soin: "heartLeaf", d3: "wall", d4: "cactus", d5: "hourglass", p1: "pouch", p2: "magnifier", pluie: "coinRain", p3: "tag", p4: "gem", p5: "gift", g5: "swordP", g6: "crown", execution: "anvil", g7: "star", d6: "heart", d7: "heartP", rempart: "tower", d8: "lock", p6: "coins", p7: "paw", tresor: "chest", p8: "book", p9: "medal" };
   for (const id in NODE) NODE[id].icon = ic(nm[id]);
   for (const id in SKILLS) SKILLS[id].icon = ic(nm[id]);
   BRANCHES[0].icon = ic("swords"); BRANCHES[1].icon = ic("shield"); BRANCHES[2].icon = ic("coins");
@@ -1698,7 +1718,7 @@ function rollPetRar(zb) {
   return 0;
 }
 function dropPet(zb) {
-  if (!zb && Math.random() > 0.25) return;
+  if (!zb && Math.random() > 0.25 + 0.04 * T("p7")) return;
   const zi = zoneIdx(S.level); let r = rollPetRar(zb), pool = [];
   for (; r >= 0; r--) { pool = Object.keys(PETS).filter(id => PETS[id].zone <= zi && PETS[id].rar === r); if (pool.length) break; }
   if (!pool.length) return;
@@ -1756,7 +1776,7 @@ function refreshPets() {
 const fmtDec = v => String(Math.round(v * 10) / 10).replace(".", ",");
 const HLV_MAX = 200;
 const xpNeed = l => Math.round(15 * l * l * Math.pow(1.016, l) + 10); // niveau 200 : ~500 millions d'XP au total, il faut s'accrocher !
-const xpMult = () => 1 + (accSum("xp") + petPv("xp")) / 100;
+const xpMult = () => 1 + (accSum("xp") + petPv("xp") + 5 * T("p8")) / 100;
 const xpKill = (lvl, boss) => Math.max(1, Math.round((3 + lvl * 0.2) * (boss ? 8 : 1) * xpMult()));
 const hlvB = () => 1 + 0.015 * ((S.hlv || 1) - 1);
 const ACC_SLOT_LV = [5, 60, 150];
@@ -2420,7 +2440,7 @@ function bossSmash(m) {
   m.charge = null; m.nextSp = 7 + Math.random() * 3; m.bite = 0.25; $("bossAlert").classList.remove("show");
   shakeT = 0.4; sfx("lose"); vib(120);
   for (let i = 0; i < 24; i++) particles.push({ x: heroX() + rand(-30, 30), y: groundY() - rand(0, 60), vx: rand(-180, 180), vy: rand(-260, -60), life: 0.7, c: "#ff4d5e", r: rand(2, 5) });
-  if (!devGod && !buffOn("inv")) { hero.hp -= m.dmg * 4 * (1 - 0.08 * T("d3")); hero.hurt = 0.3; addFloatAt(heroX(), groundY() - 110, "-" + fmt(m.dmg * 4), "#ff4d5e", 22); }
+  if (!devGod && !buffOn("inv")) { hero.hp -= m.dmg * 4 * dmgTaken(); hero.hurt = 0.3; addFloatAt(heroX(), groundY() - 110, "-" + fmt(m.dmg * 4), "#ff4d5e", 22); }
   if (hero.hp <= 0) { hero.hp = 0; heroDies(); }
 }
 function counterTap(m) {
@@ -2443,7 +2463,7 @@ const LOGIN = [
   { txt: "Beaucoup d'or", ic: () => ic("coins"), give: () => { const g = monGold(Math.max(1, S.maxLevel - 1)) * 100; S.gold += g; return "+" + fmt(g) + " " + COIN; } },
   { txt: "Gemme niv. 2", ic: () => gemIcon("amethyste", 22), give: () => { const a = randGem(); addGem(a, 2); return GEMS[a].name + " niv. 2"; } },
   { txt: "6 Cristaux", ic: () => PERLE, give: () => { S.perles += 6; return "+6 " + PERLE; } },
-  { txt: "Coffre", ic: () => ic("gift"), give: () => { S.perles += 10; const it = makeItem(3); if (S.inv.length < BAG_MAX) S.inv.push(it); else S.gold += sellPrice(it); return "+10 " + PERLE + " et " + it.name + " (Légendaire)"; } }
+  { txt: "Coffre", ic: () => ic("gift"), give: () => { S.perles += 10; const it = makeItem(3); if (S.inv.length < bagMax()) S.inv.push(it); else S.gold += sellPrice(it); return "+10 " + PERLE + " et " + it.name + " (Légendaire)"; } }
 ];
 const dayKeyOf = d => d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 function checkLogin() {
@@ -2494,7 +2514,7 @@ function startInvasion() {
 function invasionWin() {
   S.invDay = dayKey();
   const a = randGem(), b = randGem(); addGem(a, 2); addGem(b, 2); S.perles += 5;
-  const it = makeItem(3, S.maxLevel); if (S.inv.length < BAG_MAX) S.inv.push(it);
+  const it = makeItem(3, S.maxLevel); if (S.inv.length < bagMax()) S.inv.push(it);
   tower.done = "Tu as repoussé l'<b>Avatar de la Brume</b> !<br><br>+5 " + PERLE + "<br>" + GEMS[a].name + " et " + GEMS[b].name + " niv. 2<br>" + it.name + " (Légendaire)";
   sfx("rare"); save();
 }
@@ -2513,7 +2533,7 @@ function claimExp(id) {
   const ng = Math.floor(e.h / 2) + (Math.random() < 0.5 ? 1 : 0);
   for (let i = 0; i < ng; i++) addGem(randGem());
   if (ng) txt += " · " + ng + " gemme" + (ng > 1 ? "s" : "");
-  if (e.h >= 4) { const it = makeItem(Math.random() < 0.3 ? 3 : 2, S.maxLevel); if (S.inv.length < BAG_MAX) { S.inv.push(it); txt += " · 1 objet"; } }
+  if (e.h >= 4) { const it = makeItem(Math.random() < 0.3 ? 3 : 2, S.maxLevel); if (S.inv.length < bagMax()) { S.inv.push(it); txt += " · 1 objet"; } }
   if (e.h >= 8) { S.perles += 1; txt += " · +1 " + PERLE; }
   delete S.exp[id]; sfx("rare");
   modal(ic("paw") + " Retour d'expédition", "<b>" + PETS[id].name + "</b> est revenu avec :<br><br>" + txt, [{ t: "Super !" }]);
@@ -3656,7 +3676,7 @@ function update(dt) {
     m.atkTimer -= dt;
     if (m.atkTimer > 0) continue;
     m.atkTimer = m.boss ? 1.3 : 1.6 + Math.random() * 0.3; m.bite = 0.25;
-    if (!devGod && !buffOn("inv")) hero.hp -= m.dmg * (1 - 0.08 * T("d3"));
+    if (!devGod && !buffOn("inv")) hero.hp -= m.dmg * dmgTaken();
     if (T("d4")) { const keep = skill; dealDamage(P.atk() * 0.5 * T("d4"), "thorns", m); skill = keep; }
     hero.hurt = 0.15; sfx("hurt");
     if (hero.hp <= 0) { hero.hp = 0; heroDies(); return; }
@@ -3760,7 +3780,16 @@ function buyUpg(u) {
 }
 
 /* --- Inventaire --- */
-const BAG_MAX = 60;
+const BAG_BASE = 60, BAG_CAP = 1000, BAG_STEP = 50;
+const bagMax = () => Math.min(BAG_CAP, BAG_BASE + BAG_STEP * (S.bagBuy || 0));
+const bagCost = n => monGold(31 + 50 * n) * 500;   // chaque agrandissement demande d'être allé plus loin
+function buyBag() {
+  if (bagMax() >= BAG_CAP) return;
+  const c = bagCost(S.bagBuy || 0);
+  if (S.gold < c) { toast("Pas assez d'or : il te faut " + fmt(c) + " " + COIN); return; }
+  S.gold -= c; S.bagBuy = (S.bagBuy || 0) + 1; sfx("rare"); vib(30);
+  toast(ic("bag") + " Sac agrandi : " + bagMax() + " emplacements !"); refreshBag(); refreshTop(); save();
+}
 // Vente automatique : vend directement les objets trouvés selon les réglages du joueur
 function autoSellIt(it) {
   const a = S.autoSell; if (!a.on || it.rar > a.maxRar || it.set) return false;
@@ -3796,14 +3825,15 @@ function refreshBag() {
     if (it) d.onclick = () => showItem(it, true);
     sl.appendChild(d);
   }
-  $("invCount").textContent = "Sac (" + S.inv.length + "/" + BAG_MAX + ")";
+  $("invCount").textContent = "Sac (" + S.inv.length + "/" + bagMax() + ")";
   refreshAutoSell();
   const sb = Object.keys(SETS).filter(id => setCount(id) > 0).map(id => { const n = setCount(id), act = (S.cls || "spectre") === id, t = SETS[id].tiers.filter(x => n >= x[0]).length;
     return '<div class="setSum" style="border-color:' + SETS[id].color + '"><span style="color:' + SETS[id].color + '">◆ ' + SETS[id].name + "</span> " + n + " pièce" + (n > 1 ? "s" : "") + (act ? " · " + t + " bonus actif" + (t > 1 ? "s" : "") : ' · <span class="worse">classe ' + CLASSES[id].name + " requise</span>") + "</div>"; }).join("");
   $("setSummary").innerHTML = sb;
   const grid = $("invList"); grid.innerHTML = "";
   const sorted = [...S.inv].sort((a, b) => b.rar - a.rar || a.slot.localeCompare(b.slot) || b.val - a.val);
-  for (let i = 0; i < BAG_MAX; i++) {
+  const shown = Math.min(bagMax(), Math.max(60, Math.ceil((S.inv.length + 1) / 5) * 5 + 10)); // on n'affiche que les cases utiles
+  for (let i = 0; i < shown; i++) {
     const it = sorted[i], d = document.createElement("button");
     if (!it) { d.className = "cell vide"; d.disabled = true; grid.appendChild(d); continue; }
     const cur = S.equip[it.slot], better = !cur || it.val > cur.val;
@@ -3812,6 +3842,11 @@ function refreshBag() {
     d.onclick = () => showItem(it, false);
     grid.appendChild(d);
   }
+  const bb = $("bagBuy"), n = S.bagBuy || 0;
+  if (bagMax() >= BAG_CAP) bb.innerHTML = '<div class="hint" style="text-align:center">' + ic("bag") + " Sac au maximum : " + BAG_CAP + " emplacements</div>";
+  else { const c = bagCost(n), ok = S.gold >= c, add = Math.min(BAG_STEP, BAG_CAP - bagMax());
+    bb.innerHTML = '<div class="upg bagUp"><div class="accIc">' + ic("bag") + '</div><div class="upgTxt"><div class="upgName">Agrandir le sac</div><div class="upgDesc">+' + add + " emplacements (" + bagMax() + " → " + (bagMax() + add) + ") · max " + BAG_CAP + '</div></div><button class="buy" id="bagBuyBtn"' + (ok ? "" : " disabled") + ">" + COIN + " " + fmt(c) + "</button></div>";
+    $("bagBuyBtn").onclick = buyBag; }
   updateBagTab();
 }
 function setInfo(id) {
@@ -3869,7 +3904,7 @@ function equipBest() {
 }
 function unequip(slot) {
   const it = S.equip[slot]; if (!it) return;
-  if (S.inv.length >= BAG_MAX) { toast("Sac plein : vends un objet d'abord"); return; }
+  if (S.inv.length >= bagMax()) { toast("Sac plein : vends un objet d'abord"); return; }
   S.equip[slot] = null; S.inv.push(it);
   hero.hp = Math.min(hero.hp, P.maxHp());
   sfx("coin"); refreshBag(); refreshStats(); refreshUpgButtons(); save();
@@ -4052,6 +4087,13 @@ function refreshAll() {
 // Appli installable : enregistre le service worker (seulement quand le jeu est en ligne, ex. GitHub Pages)
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 35, d: "Grand sac et arbre géant", l: [
+    "Le sac peut maintenant aller jusqu'à <b>1 000 emplacements</b> : achète des agrandissements de <b>+50</b> avec ton or (Sac → Équipement, sous tes objets).",
+    "Chaque agrandissement coûte plus cher que le précédent : il faudra aller de plus en plus loin pour les payer.",
+    "<b>15 nouvelles compétences</b> dans l'arbre (105 points pour tout remplir au lieu de 48), pour que tes points servent jusqu'au niveau 1000 :",
+    "<b>Guerrier</b> : Maître d'armes, Tueur de boss, Coups dévastateurs et la compétence <b>Exécution</b> (un coup énorme).",
+    "<b>Gardien</b> : Colosse, Vampirisme, Inébranlable et la compétence <b>Rempart</b> (-80 % de dégâts subis).",
+    "<b>Pillard</b> : Avarice, Dresseur (plus de familiers), Érudit (plus d'XP), Gemmologue et la compétence <b>Chasse au trésor</b>."] },
   { v: 34, d: "Familiers de légende", l: [
     "<b>33 familiers</b> au lieu de 11 : renards, dragons, phénix, licorne, golem, titan mécanique, lion d'or…",
     "Les familiers ont maintenant une <b>rareté</b> : Commun, Rare, Épique, Légendaire, Mythique et <b>Divin</b>.",
@@ -4078,7 +4120,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 34, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 35, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
