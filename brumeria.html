@@ -490,13 +490,13 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v40</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v41</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v40 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v41 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -512,7 +512,7 @@
   <button id="newsBtn">📜 Nouveautés<span class="dot" id="newsDot"></span></button>
   <button id="playBtn">JOUER</button>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v40</div></div>
+  <div class="tsVer">v41</div></div>
 <div id="newsPanel"><div id="newsBox"><div id="newsHead">📜 Nouveautés</div><button id="newsClose" aria-label="Fermer">✕</button><div id="newsBody"></div></div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
@@ -1110,12 +1110,17 @@ function refreshLive() {
 /* ================== RENAISSANCE ================== */
 const REB_MIN = 60;
 // Plus tu vas loin avant de renaître, plus tu gagnes de Cristaux (ça grandit de plus en plus vite)
-const perlesFor = L => L < REB_MIN ? 0 : Math.floor(2 * Math.pow((L - 50) / 10, 2) * (1 + 0.02 * A2("a4")) * (1 + 0.1 * A2("a15")) * (S.diff ? HARD.perles : 1));
+// Cristaux : grandissent avec le niveau atteint, avec un bonus qui monte encore plus vite en fin de partie
+const rebLvlBonus = L => 1 + L / 500;     // ×1,2 au niveau 100 · ×2 au niveau 500 · ×3 au niveau 1000
+const perlesFor = L => L < REB_MIN ? 0 : Math.floor(2 * Math.pow((L - 50) / 10, 2) * rebLvlBonus(L) * (1 + 0.02 * A2("a4")) * (1 + 0.1 * A2("a15")) * (S.diff ? HARD.perles : 1));
+// Niveau de départ après une Renaissance : selon Départ rapide ET le niveau que tu avais atteint
+const startPct = () => 0.03 * S.pupg.pstart;           // jusqu'à 30 % du niveau atteint
+const rebStart = (L, modeChange) => Math.min(MAX_LEVEL - 1, Math.max(1 + 5 * S.pupg.pstart, modeChange ? 0 : Math.floor(L * startPct())) + 5 * A2("a13"));
 const PUPG = [
   { id: "patk",   icon: "🗡️", name: "Âme guerrière",     base: 1, grow: 1.45, desc: l => "Attaque +" + l * 25 + "% → +" + (l + 1) * 25 + "%" },
   { id: "php",    icon: "💖", name: "Cœur ancien",       base: 1, grow: 1.45, desc: l => "Vie +" + l * 25 + "% → +" + (l + 1) * 25 + "%" },
   { id: "pgold",  icon: "💰", name: "Fortune ancestrale", base: 2, grow: 1.5,  desc: l => "Or +" + l * 25 + "% → +" + (l + 1) * 25 + "%" },
-  { id: "pstart", icon: "🚀", name: "Départ rapide",     base: 3, grow: 1.8, max: 10, desc: l => "Après une renaissance, repars du niveau " + (1 + 5 * l) + " → " + (1 + 5 * (l + 1)) },
+  { id: "pstart", icon: "🚀", name: "Départ rapide",     base: 3, grow: 1.8, max: 10, desc: l => "Après une renaissance, repars à " + 3 * l + "% → " + 3 * (l + 1) + "% du niveau atteint (au moins niv. " + (1 + 5 * (l + 1)) + ")" },
   { id: "ploot",  icon: "🍀", name: "Chance",            base: 2, grow: 1.6, max: 20, desc: l => "Chance de butin +" + l * 10 + "% → +" + (l + 1) * 10 + "%" },
   { id: "pskill", icon: "✨", name: "Maîtrise",          base: 3, grow: 1.7, max: 10, desc: l => "Recharge des compétences -" + l * 5 + "% → -" + (l + 1) * 5 + "%" },
   { id: "poff",   icon: "🌙", name: "Rêveur",            base: 2, grow: 1.6, max: 8,  desc: l => "Hors ligne : " + (8 + l) + " h max et +" + l * 10 + "% → " + (9 + l) + " h et +" + (l + 1) * 10 + "%" }
@@ -1183,9 +1188,9 @@ function refreshReb() {
   box.innerHTML =
     '<div class="rebHead"><div class="rebOrb">' + PERLE + '</div><div><b style="font-size:20px">' + fmt(S.perles) + '</b> Cristaux de Renaissance<br><span style="color:#9a98ad;font-size:12px">Renaissances : ' + S.rebirths + ' · Cristaux gagnés au total : ' + fmt(S.totalPerles) + '</span></div></div>' +
     '<div class="statsBox">Niveau max de cette partie : <b>' + S.maxLevel + '</b><br>' +
-    (g > 0 ? 'Si tu renais maintenant : <b style="color:#c39bff">+' + fmt(g) + ' ' + PERLE + '</b><br>Au niveau ' + next + ' : <b style="color:#c39bff">+' + fmt(perlesFor(next)) + ' ' + PERLE + '</b>'
+    (g > 0 ? 'Si tu renais maintenant : <b style="color:#c39bff">+' + fmt(g) + ' ' + PERLE + '</b> <span style="color:#9a98ad;font-size:12px">(bonus de niveau ×' + fmtDec(rebLvlBonus(S.maxLevel)) + (S.diff ? " · Difficile ×" + HARD.perles : "") + ')</span><br>Au niveau ' + next + ' : <b style="color:#c39bff">+' + fmt(perlesFor(next)) + ' ' + PERLE + '</b>'
            : ic("lock") + ' Renaissance possible à partir du niveau <b>' + REB_MIN + '</b> (encore ' + (REB_MIN - S.maxLevel) + ' niveaux)') + '</div>' +
-    '<div class="statsBox" style="font-size:12px;line-height:1.6"><b style="color:#ff8fa3">Tu perds :</b> ton or, tes améliorations du Chasseur, ton niveau (tu repars du niveau ' + (1 + 5 * S.pupg.pstart) + ').<br>' +
+    '<div class="statsBox" style="font-size:12px;line-height:1.6"><b style="color:#ff8fa3">Tu perds :</b> ton or, tes améliorations du Chasseur, ton niveau (tu repars du niveau ' + rebStart(S.maxLevel) + ').<br>' +
     '<b style="color:#52d17c">Tu gardes :</b> ton équipement, ton sac et tes Cristaux.<br>' +
     '<b style="color:#ffd166">Ton arbre de compétences</b> repart à zéro : tes points reviennent en battant les boss, à toi de tester un autre style !<br>' +
     'Plus tu vas loin avant de renaître, plus tu gagnes de Cristaux. Dépense-les dans l\'onglet Chasseur.</div>';
@@ -1203,14 +1208,14 @@ function refreshReb() {
 function askRebirth() {
   if (tower) { toast("Quitte d'abord la Tour"); return; }
   const g = perlesFor(S.maxLevel); if (g <= 0) return;
-  modal(PERLE + " Renaître ?", "Tu vas gagner <b style='color:#c39bff'>+" + fmt(g) + " Cristaux de Renaissance</b>.<br><br>Ton or, tes améliorations, ton niveau et ton arbre de compétences repartent à zéro. Tu gardes ton équipement et ton sac.",
+  modal(PERLE + " Renaître ?", "Tu vas gagner <b style='color:#c39bff'>+" + fmt(g) + " Cristaux de Renaissance</b>.<br><br>Ton or, tes améliorations et ton arbre de compétences repartent à zéro, et tu repars du <b>niveau " + rebStart(S.maxLevel) + "</b>. Tu gardes ton équipement et ton sac.",
     [{ t: "Annuler", alt: true }, { t: "Renaître !", f: () => doRebirth(g) }]);
 }
 let modeMsg = false;
 function doRebirth(g, mode) {
   S.perles += g; S.totalPerles += g; S.rebirths++;
   if (mode !== undefined && mode !== S.diff) { S.diff = mode; modeMsg = true; }
-  const st = Math.min(MAX_LEVEL - 1, 1 + 5 * S.pupg.pstart + 5 * A2("a13"));
+  const st = rebStart(S.maxLevel, modeMsg);
   S.gold = 0; S.upg = newState().upg; S.level = st; S.maxLevel = st; S.kills = 0; S.auto = true;
   S.tree = {}; buffs = {}; cds = {}; skill = 0; respawn = 0; bossTimer = 0; hero.dead = 0; hero.hp = P.maxHp();
   spawnMonster(); refreshAll(); save(); sfx("rare"); vib(60);
@@ -4399,6 +4404,11 @@ function refreshAll() {
 // Appli installable : enregistre le service worker (seulement quand le jeu est en ligne, ex. GitHub Pages)
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 41, d: "Renaissances rééquilibrées", l: [
+    "Les <b>Cristaux</b> gagnés en renaissant suivent mieux ton niveau : un bonus s'ajoute selon le niveau atteint (×1,2 au niveau 100, ×2 au niveau 500, ×3 au niveau 1000).",
+    "<b>Départ rapide</b> te fait maintenant repartir à un pourcentage du niveau que tu avais atteint (3 % par niveau, jusqu'à 30 %), au lieu d'un petit nombre fixe. Exemple : niveau 800 atteint avec Départ rapide niv. 10 → tu repars du niveau 240.",
+    "Quand tu changes de mode (Normal ↔ Difficile), tu repars toujours du début du mode.",
+    "L'onglet Renaissance affiche le bonus de niveau et le niveau où tu vas repartir."] },
   { v: 40, d: "Le Seigneur du Néant", l: [
     "Nouveau boss : <b style='color:#c77dff'>le Seigneur du Néant</b>, débloqué au <b>niveau 500</b> (Journal → Événements).",
     "Une apparition spectaculaire, une grande barre de vie avec son nom et son niveau, et une arène du Néant violette.",
@@ -4471,7 +4481,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 40, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 41, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
