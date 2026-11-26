@@ -432,7 +432,7 @@
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v29 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v30 — sauvegarde automatique</p>
     </div>
   </div>
 </div>
@@ -445,7 +445,7 @@
   <div id="tsLoad"><i id="tsLoadFill"></i></div><div id="tsLoadTxt">Chargement…</div>
   <button id="playBtn">JOUER</button>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v29</div></div>
+  <div class="tsVer">v30</div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
 <script>
@@ -656,7 +656,9 @@ function migrate(v) {
   S.inv.forEach(fix);
   S.ver = 7;
 }
+let saveLock = false; // bloque toute sauvegarde pendant un import (sinon la partie actuelle écrase celle importée)
 function save() {
+  if (saveLock) return;
   S.lastSeen = Date.now();
   const snap = tower ? Object.assign({}, S, { level: tower.saved.level, kills: tower.saved.kills, auto: tower.saved.auto }) : S;
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(snap)); } catch (e) {}
@@ -1480,7 +1482,7 @@ function importSave() {
       try {
         const d = JSON.parse(decodeURIComponent(escape(atob(code))));
         if (!d || typeof d.level !== "number") throw 0;
-        localStorage.setItem(SAVE_KEY, JSON.stringify(d)); window.removeEventListener("pagehide", save); location.reload();
+        saveLock = true; localStorage.setItem(SAVE_KEY, JSON.stringify(d)); location.reload();
       } catch (e) { toast("Code invalide"); }
     } }]);
 }
