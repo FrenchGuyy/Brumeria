@@ -464,6 +464,11 @@
   .evRow { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: rgba(0,0,0,.2); border-radius: 10px; padding: 7px 8px; margin-bottom: 6px; font-size: 13px; }
   .evRow small { color: #9a98ad; font-size: 11px; } .evRow em { font-style: normal; font-size: 11px; font-weight: 800; color: #9a98ad; white-space: nowrap; }
   .evRow.on em { color: #52d17c; } .evRow.on { border: 1px solid rgba(82,209,124,.4); }
+  .petBest { width: 100%; margin: 6px 0 8px; padding: 11px; font-size: 14px; }
+  .expBox { background: #1a1d2e; border: 1px solid #2c3150; border-radius: 12px; padding: 9px 10px; margin-bottom: 10px; }
+  .expInfo { font-size: 12px; color: #9a98ad; margin: 2px 0 6px; }
+  .expBtns { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px; color: #c9c7d8; }
+  .expBtns span { flex: 1; } .expBtns .smallBtn.on { background: #3a8a5a; color: #fff; }
   .expRow { display: flex; align-items: center; gap: 6px; margin: -4px 0 10px; padding: 6px 8px; background: #1a1d2e; border-radius: 0 0 10px 10px; font-size: 12px; color: #9a98ad; }
   .expRow span { flex: 1; } .expLeft { font-size: 11px; color: #8ecae6; text-align: right; font-weight: 700; }
   .statTable { background: #1f2338; border: 1px solid #2c3050; border-radius: 12px; overflow: hidden; }
@@ -575,7 +580,7 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v48</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v49</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="opt"><span>💾 Sauvegarde (code long, de secours)</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
@@ -583,7 +588,7 @@
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v48 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v49 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -600,7 +605,7 @@
   <button id="playBtn">JOUER</button>
   <div class="tsRow"><button id="custBtn">👤 Personnaliser</button><button id="arenaBtn">⚔️ Arène co-op</button></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v48</div></div>
+  <div class="tsVer">v49</div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
 <div id="arField"><canvas id="arCv"></canvas><div id="arTop"></div><button id="arQuit" aria-label="Quitter">✕</button><button id="arSk"><span>FRAPPE<br>BRUME</span></button><div id="arPick"></div><div id="arEnd"></div></div>
@@ -809,7 +814,7 @@ function newState() {
     tree: {}, bonusPts: 0, music: true,
     stats: { bossKills: 0, taps: 0, legend: 0, items: 0, forges: 0, rares: 0, skills: 0, quests: 0, time: 0, bestHit: 0, goldTotal: 0 },
     ach: {}, daily: null, bestiary: {}, pets: {}, pet: null,
-    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0, sex: "h", hs: 0, skin: 1, eye: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, seenVer: 0 };
+    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0, sex: "h", hs: 0, skin: 1, eye: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, autoExp: { on: false, h: 4 }, seenVer: 0 };
 }
 let S = newState();
 let loadedOK = false; // tant que la sauvegarde n'est pas chargée, on n'écrit JAMAIS dessus
@@ -1982,6 +1987,13 @@ function animPetThumbs(dt) { // fait bouger les familiers dans les menus
 function refreshPets() {
   const act = activePets(), sl = petSlots(), nextSl = PET_SLOT_LV.find(l => l > S.hlv);
   let h = '<div class="hint">' + ic("paw") + " <b>Collection : " + petsOwned() + " / " + Object.keys(PETS).length + "</b> · <b>actifs : " + act.length + " / " + sl + "</b>" + (nextSl ? " · prochain emplacement au <b>niveau " + nextSl + "</b> du chasseur" : " · tous les emplacements sont débloqués") + ".<br>Ils se trouvent sur les boss (25 % de chance, garanti et plus rare sur les boss de zone). Plus un familier est rare, plus il est fort. Un doublon le fait monter de niveau (max " + PET_MAX + "). Leurs bonus s'additionnent et ils restent après une Renaissance.</div>";
+  const ae = S.autoExp || { on: false, h: 4 }, nOut = Object.keys(S.exp).filter(id => PETS[id]).length, nDone = Object.keys(S.exp).filter(id => PETS[id] && expDone(id)).length, nFree = freePets().length;
+  h += '<button class="buy petBest" id="petBestBtn">⭐ Équiper les meilleurs familiers</button>';
+  h += '<div class="expBox"><div class="evTitle">' + ic("rocket") + ' Expéditions</div><div class="expInfo">En expédition : <b>' + nOut + "</b> · terminées : <b>" + nDone + "</b> · libres : <b>" + nFree + "</b></div>" +
+    '<div class="expBtns"><span>Envoyer tous les libres :</span>' + EXP_H.map(x => '<button class="smallBtn" data-expall="' + x + '">' + x + " h</button>").join("") + "</div>" +
+    (nDone ? '<button class="buy" id="claimAllBtn" style="width:100%;margin-top:6px">Tout récupérer (' + nDone + ")</button>" : "") +
+    '<div class="expBtns"><span>🔁 Auto (récupère et renvoie tout seul)</span><button class="smallBtn' + (ae.on ? " on" : "") + '" id="autoExpBtn">' + (ae.on ? "ACTIVÉ" : "Désactivé") + "</button></div>" +
+    '<div class="expBtns"><span>Durée en auto :</span>' + EXP_H.map(x => '<button class="smallBtn' + (ae.h === x ? " on" : "") + '" data-exph="' + x + '">' + x + " h</button>").join("") + "</div></div>";
   for (const id in PETS) {
     const p = PETS[id], l = S.pets[id] || 0, on = act.includes(id);
     h += '<div class="upg petCard r' + p.rk + (on ? " act" : "") + '">' + (l ? '<canvas data-pet="' + id + '"></canvas>' : '<div class="q">?</div>') + '<div class="upgTxt"><div class="upgName">' + (l ? '<span class="c' + p.rk + '">' + p.name + '</span> <span class="lv">niv. ' + l + "/" + PET_MAX + "</span>" : "???") + '</div><div class="petRar c' + p.rk + '">' + RARITY[p.rk].name + (on ? ' · <span class="petOn">ACTIF</span>' : "") + '</div><div class="upgDesc">' +
@@ -1992,6 +2004,11 @@ function refreshPets() {
   h += '<div class="hint" style="margin-top:6px">' + ic("rocket") + " Un familier en expédition ne combat pas, mais revient avec de l'or, des gemmes (et des objets dès 4 h). Retire-le d'abord des familiers actifs.</div>";
   $("sPets").innerHTML = h;
   $("sPets").querySelectorAll("[data-exp]").forEach(b => b.onclick = () => sendExp(b.dataset.exp, +b.dataset.h));
+  $("petBestBtn").onclick = equipBestPets;
+  $("sPets").querySelectorAll("[data-expall]").forEach(b => b.onclick = () => { sendAllExp(+b.dataset.expall); refreshPets(); save(); });
+  if ($("claimAllBtn")) $("claimAllBtn").onclick = () => { claimAllExp(); refreshPets(); save(); };
+  $("autoExpBtn").onclick = () => { S.autoExp = Object.assign({ on: false, h: 4 }, S.autoExp); S.autoExp.on = !S.autoExp.on; if (S.autoExp.on) { autoExpTick(); toast("🔁 Expéditions auto activées : les familiers non actifs partent tout seuls"); } refreshPets(); save(); };
+  $("sPets").querySelectorAll("[data-exph]").forEach(b => b.onclick = () => { S.autoExp = Object.assign({ on: false, h: 4 }, S.autoExp); S.autoExp.h = +b.dataset.exph; refreshPets(); save(); });
   $("sPets").querySelectorAll("[data-claim]").forEach(b => b.onclick = () => claimExp(b.dataset.claim));
   $("sPets").querySelectorAll("[data-tog]").forEach(b => b.onclick = () => {
     const id = b.dataset.tog, cur = activePets();
@@ -2879,18 +2896,50 @@ function sendExp(id, h) {
   if (activePets().includes(id)) { toast("Retire d'abord " + PETS[id].name + " des familiers actifs"); return; }
   S.exp[id] = { end: Date.now() + h * 3600e3, h }; sfx("buy"); refreshPets(); save();
 }
-function claimExp(id) {
-  const e = S.exp[id]; if (!e || !expDone(id)) return;
-  const l = S.pets[id] || 1, g = monGold(Math.max(1, S.maxLevel - 1)) * 25 * e.h * (1 + 0.1 * l);
-  S.gold += g; let txt = "+" + fmt(g) + " " + COIN;
+function expLoot(id, tot) { // donne la récompense d'une expédition terminée et l'ajoute au total
+  const e = S.exp[id], l = S.pets[id] || 1, g = monGold(Math.max(1, S.maxLevel - 1)) * 25 * e.h * (1 + 0.1 * l);
+  S.gold += g; tot.g += g;
   const ng = Math.floor(e.h / 2) + (Math.random() < 0.5 ? 1 : 0);
-  for (let i = 0; i < ng; i++) addGem(randGem());
-  if (ng) txt += " · " + ng + " gemme" + (ng > 1 ? "s" : "");
-  if (e.h >= 4) { const it = makeItem(Math.random() < 0.3 ? 3 : 2, S.maxLevel); if (S.inv.length < bagMax()) { S.inv.push(it); txt += " · 1 objet"; autoFuse(); } }
-  if (e.h >= 8) { S.perles += 1; txt += " · +1 " + PERLE; }
-  delete S.exp[id]; sfx("rare");
-  modal(ic("paw") + " Retour d'expédition", "<b>" + PETS[id].name + "</b> est revenu avec :<br><br>" + txt, [{ t: "Super !" }]);
+  for (let i = 0; i < ng; i++) addGem(randGem()); tot.gems += ng;
+  if (e.h >= 4) { const it = makeItem(Math.random() < 0.3 ? 3 : 2, S.maxLevel); if (S.inv.length < bagMax()) { S.inv.push(it); tot.items++; } }
+  if (e.h >= 8) { S.perles += 1; S.totalPerles += 1; tot.cr++; }
+  delete S.exp[id]; tot.n++;
+}
+const lootTxt = t => "+" + fmt(t.g) + " " + COIN + (t.gems ? " · " + t.gems + " gemme" + (t.gems > 1 ? "s" : "") : "") + (t.items ? " · " + t.items + " objet" + (t.items > 1 ? "s" : "") : "") + (t.cr ? " · +" + t.cr + " " + PERLE : "");
+const newTot = () => ({ g: 0, gems: 0, items: 0, cr: 0, n: 0 });
+function claimExp(id) {
+  if (!S.exp[id] || !expDone(id)) return;
+  const t = newTot(); expLoot(id, t); if (t.items) autoFuse(); sfx("rare");
+  modal(ic("paw") + " Retour d'expédition", "<b>" + PETS[id].name + "</b> est revenu avec :<br><br>" + lootTxt(t), [{ t: "Super !" }]);
   refreshPets(); refreshTop(); updateBagTab(); save();
+}
+const freePets = () => { const act = activePets(); return Object.keys(PETS).filter(id => S.pets[id] && !act.includes(id) && !S.exp[id]); };
+const petScore = id => PETS[id].rk * 1000 + (S.pets[id] || 0) * 10 + PETS[id].atk(S.pets[id] || 1); // rareté d'abord, puis niveau
+function claimAllExp(silent) {
+  const t = newTot(); for (const id of Object.keys(S.exp)) if (PETS[id] && expDone(id)) expLoot(id, t);
+  if (!t.n) { if (!silent) toast("Aucune expédition terminée"); return t; }
+  if (t.items) autoFuse(); if (!silent) { sfx("rare"); modal(ic("paw") + " Retour d'expédition", "<b>" + t.n + " familier" + (t.n > 1 ? "s sont revenus" : " est revenu") + "</b> avec :<br><br>" + lootTxt(t), [{ t: "Super !" }]); }
+  refreshTop(); updateBagTab(); return t;
+}
+function sendAllExp(h, silent) {
+  const ids = freePets(); for (const id of ids) S.exp[id] = { end: Date.now() + h * 3600e3, h };
+  if (!silent) { if (ids.length) { sfx("buy"); toast(ic("rocket") + " " + ids.length + " familier" + (ids.length > 1 ? "s partent" : " part") + " en expédition (" + h + " h)"); } else toast("Aucun familier libre : ils sont tous actifs ou déjà partis"); }
+  return ids.length;
+}
+function equipBestPets() {
+  const ready = Object.keys(S.exp).filter(id => PETS[id] && expDone(id)); if (ready.length) claimAllExp(true);
+  const cand = Object.keys(PETS).filter(id => S.pets[id] && !S.exp[id]).sort((a, b) => petScore(b) - petScore(a));
+  const before = activePets().join(); S.petsOn = cand.slice(0, petSlots());
+  for (const id in petTimers) delete petTimers[id];
+  if (S.autoExp && S.autoExp.on) sendAllExp(S.autoExp.h, true);
+  sfx("buy"); statF++; refreshPets(); refreshStats(); save();
+  toast(before === activePets().join() ? "Tu as déjà tes meilleurs familiers 👍" : ic("paw") + " Meilleurs familiers équipés !" + (Object.keys(S.exp).length ? " (ceux en expédition restent partis)" : ""));
+}
+function autoExpTick() { // mode auto : récupère les expéditions finies et renvoie les familiers libres
+  if (!S.autoExp || !S.autoExp.on || arenaOn) return;
+  const t = claimAllExp(true), n = sendAllExp(S.autoExp.h, true);
+  if (t.n) toast(ic("rocket") + " Expéditions auto : " + lootTxt(t));
+  if (t.n || n) { if ($("pBag").classList.contains("active") && curSub("b") === "sPets") refreshPets(); save(); }
 }
 const fmtLeft = ms => { const m = Math.ceil(ms / 6e4); return m >= 60 ? Math.floor(m / 60) + " h " + (m % 60) + " min" : m + " min"; };
 
@@ -5220,6 +5269,10 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 49, d: "Familiers plus pratiques", l: [
+    "Nouveau bouton <b>⭐ Équiper les meilleurs familiers</b> : il met les plus rares et les plus forts dans tes emplacements.",
+    "Nouveau bloc <b>Expéditions</b> : envoie tous tes familiers libres d'un coup (1 h, 4 h ou 8 h) et récupère tout en un clic.",
+    "Mode <b>🔁 Auto</b> : les familiers non actifs partent tout seuls en expédition, et les récompenses sont récupérées automatiquement (même au retour dans le jeu)."] },
   { v: 48, d: "Rattrapage pour les parties perdues", l: [
     "Tu as perdu ta partie avec la v46 ? Au lancement, choisis <b>à peu près où tu en étais</b> : le jeu te rend ton niveau, tes renaissances, du stuff, des familiers, des gemmes, de l'or et des Cristaux.",
     "Rien perdu ? Un petit cadeau t'attend quand même.",
@@ -5336,7 +5389,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 48, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 49, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -5382,6 +5435,7 @@ refreshAll();
 offlineGains();
 save();
 requestAnimationFrame(loop);
+setInterval(autoExpTick, 5000);
 showTitle(() => { offerComp(); checkLogin(); if (!S.tutoDone && S.totalKills < 5) setTimeout(startTuto, 500); });
 </script>
 </body>
