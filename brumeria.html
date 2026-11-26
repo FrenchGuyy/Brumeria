@@ -145,6 +145,20 @@
   #modalBtns button.alt { background: #333648; }
 
   /* --- style graphique v12 --- */
+  .petRar { font-size: 11px; font-weight: 800; margin: 1px 0 2px; } .petOn { color: #52d17c; }
+  .petCard.act { box-shadow: 0 0 12px -2px #52d17c !important; }
+  .afChips { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; } .afChips .smallBtn { flex: 1; font-weight: 800; } .afChips .smallBtn.on { background: #3a3f66; outline: 2px solid currentColor; }
+  #newsBtn { position: absolute; top: 14px; right: 14px; border: 1px solid #5a4a8a; background: rgba(30,22,60,.75); color: #ffd166; font-weight: 800; font-size: 13px; padding: 8px 12px; border-radius: 12px; z-index: 2; }
+  #newsBtn .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff4d5e; margin-left: 6px; vertical-align: 1px; box-shadow: 0 0 6px #ff4d5e; }
+  #newsPanel { position: fixed; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center; background: rgba(8,8,20,.7); padding: 16px; }
+  #newsPanel.show { display: flex; }
+  #newsBox { position: relative; width: 100%; max-width: 440px; max-height: 82vh; display: flex; flex-direction: column; background: linear-gradient(180deg, #262b48, #1b1e33); border: 1px solid #3a4070; border-radius: 18px; box-shadow: 0 10px 40px rgba(0,0,0,.6); overflow: hidden; }
+  #newsHead { padding: 14px 48px 10px 16px; font-weight: 900; font-size: 18px; color: #ffd166; border-bottom: 1px solid #343a5c; }
+  #newsClose { position: absolute; top: 9px; right: 10px; width: 34px; height: 34px; border-radius: 50%; border: none; background: #343a5c; color: #fff; font-size: 18px; font-weight: 900; }
+  #newsBody { overflow-y: auto; padding: 10px 16px 16px; font-size: 13px; color: #d4d2e4; }
+  .newsV { margin: 10px 0 4px; font-weight: 900; color: #9fd0ff; font-size: 15px; } .newsV small { color: #8a88a0; font-weight: 600; font-size: 11px; margin-left: 6px; }
+  .newsV.cur { color: #ffd166; }
+  #newsBody ul { margin: 0; padding-left: 18px; } #newsBody li { margin: 3px 0; line-height: 1.35; }
   #xpBar { position: relative; height: 15px; background: #12152a; border-bottom: 1px solid #262a44; overflow: hidden; cursor: pointer; flex: none; }
   #xpFill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, #3d5bd9, #6fa8ff 70%, #bfe2ff); box-shadow: 0 0 8px #6fa8ff; transition: width .35s; }
   #xpTxt { position: relative; display: block; text-align: center; font-size: 10px; font-weight: 800; line-height: 15px; color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; letter-spacing: .3px; }
@@ -444,13 +458,14 @@
       <div class="opt"><span>📳 Vibrations</span><button class="smallBtn" id="vibBtn">Activées</button></div>
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
-      <div class="opt"><span>🔄 Version <b>v33</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
+      <div class="opt"><span>🔄 Version <b>v34</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v33 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v34 — sauvegarde automatique</p>
     </div>
   </div>
 </div>
@@ -461,9 +476,11 @@
   <div class="tsLogo">BRUMERIA</div><div class="tsSub">La chasse dans la brume</div>
   <canvas id="titleHero"></canvas>
   <div id="tsLoad"><i id="tsLoadFill"></i></div><div id="tsLoadTxt">Chargement…</div>
+  <button id="newsBtn">📜 Nouveautés<span class="dot" id="newsDot"></span></button>
   <button id="playBtn">JOUER</button>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v33</div></div>
+  <div class="tsVer">v34</div></div>
+<div id="newsPanel"><div id="newsBox"><div id="newsHead">📜 Nouveautés</div><button id="newsClose" aria-label="Fermer">✕</button><div id="newsBody"></div></div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
 <script>
@@ -657,13 +674,13 @@ function newState() {
     tree: {}, bonusPts: 0, music: true,
     stats: { bossKills: 0, taps: 0, legend: 0, items: 0, forges: 0, rares: 0, skills: 0, quests: 0, time: 0, bestHit: 0, goldTotal: 0 },
     ach: {}, daily: null, bestiary: {}, pets: {}, pet: null,
-    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, hlv: 1, hxp: 0, petsOn: [], accOn: [] };
+    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, seenVer: 0 };
 }
 let S = newState();
 function load() {
   try {
     const raw = localStorage.getItem(SAVE_KEY);
-    if (raw) { const d = JSON.parse(raw); S = Object.assign(newState(), d); S.upg = Object.assign(newState().upg, d.upg || {}); S.equip = Object.assign(newState().equip, d.equip || {}); S.pupg = Object.assign(newState().pupg, d.pupg || {}); S.tree = d.tree || {}; S.stats = Object.assign(newState().stats, d.stats || {}); S.ach = d.ach || {}; S.bestiary = d.bestiary || {}; S.pets = d.pets || {}; S.look = Object.assign(newState().look, d.look || {}); S.autoSell = Object.assign(newState().autoSell, d.autoSell || {}); if (!d.q26) { S.quality = "normale"; S.q26 = true; } S.gems = d.gems || {}; S.login = Object.assign(newState().login, d.login || {}); S.exp = d.exp || {}; S.owned = d.owned || {}; S.tower = Object.assign({ best: 0 }, d.tower || {}); S.best = Math.max(S.best || 1, S.maxLevel); if (!Array.isArray(d.petsOn)) S.petsOn = d.pet ? [d.pet] : []; if (!Array.isArray(d.accOn)) S.accOn = []; migrate(d.ver || 0); }
+    if (raw) { const d = JSON.parse(raw); S = Object.assign(newState(), d); S.upg = Object.assign(newState().upg, d.upg || {}); S.equip = Object.assign(newState().equip, d.equip || {}); S.pupg = Object.assign(newState().pupg, d.pupg || {}); S.tree = d.tree || {}; S.stats = Object.assign(newState().stats, d.stats || {}); S.ach = d.ach || {}; S.bestiary = d.bestiary || {}; S.pets = d.pets || {}; S.look = Object.assign(newState().look, d.look || {}); S.autoSell = Object.assign(newState().autoSell, d.autoSell || {}); S.autoFuse = Object.assign(newState().autoFuse, d.autoFuse || {}); if (!d.q26) { S.quality = "normale"; S.q26 = true; } S.gems = d.gems || {}; S.login = Object.assign(newState().login, d.login || {}); S.exp = d.exp || {}; S.owned = d.owned || {}; S.tower = Object.assign({ best: 0 }, d.tower || {}); S.best = Math.max(S.best || 1, S.maxLevel); if (!Array.isArray(d.petsOn)) S.petsOn = d.pet ? [d.pet] : []; if (!Array.isArray(d.accOn)) S.accOn = []; migrate(d.ver || 0); }
   } catch (e) {}
 }
 // Remet les anciens objets aux valeurs actuelles (rééquilibrage v7)
@@ -867,7 +884,7 @@ function rollLoot(boss, rareMon) {
   if (ri >= 4) setTimeout(() => announceItem(it), 400);
   if (autoSellIt(it)) return;
   if (S.inv.length >= BAG_MAX) { const price = sellPrice(it); S.gold += price; toast("Sac plein : objet vendu +" + fmt(price) + " " + COIN); return; }
-  S.inv.push(it);
+  S.inv.push(it); autoFuse();
   addFloat("★ " + RARITY[ri].name, RTXT[ri], ri >= 4 ? 24 : 18, -70);
   sfx(ri >= 2 ? "rare" : "loot");
   if ($("pBag").classList.contains("active")) refreshBag();
@@ -1178,110 +1195,486 @@ const COIN = ic("coin"), PERLE = ic("perle");
 })();
 
 /* ================== FAMILIERS ================== */
+// 33 familiers, tous dessinés par le jeu (100 % originaux), avec une rareté comme l'équipement.
+// rar : 0 Commun · 1 Rare · 2 Épique · 3 Légendaire · 4 Mythique · 5 Divin
 const PETS = {
-  lumio:     { name: "Lumio",     zone: 0, color: "#e8f06a", info: "Une luciole qui attire l'or",            atk: l => 0.25 + 0.1 * l,  pas: "gold", pv: l => 8 * l,   pasTxt: "Or" },
-  bloblo:    { name: "Bloblo",    zone: 0, color: "#7cc4ff", info: "Un mini slime très résistant",           atk: l => 0.2 + 0.08 * l,  pas: "hp",   pv: l => 8 * l,   pasTxt: "Vie", ground: true },
-  plumet:    { name: "Plumet",    zone: 1, color: "#8ecae6", info: "Un petit oiseau des neiges très vif",    atk: l => 0.35 + 0.14 * l, pas: "spd",  pv: l => 3 * l,   pasTxt: "Vitesse" },
-  etincelle: { name: "Étincelle", zone: 2, color: "#ff8a3a", info: "Un esprit de feu qui frappe fort",       atk: l => 0.6 + 0.22 * l,  pas: "atk",  pv: l => 5 * l,   pasTxt: "Attaque" },
-  nacrelle:  { name: "Nacrelle",  zone: 3, color: "#ff9ad5", info: "Une méduse qui vise les points faibles", atk: l => 0.5 + 0.2 * l,   pas: "crit", pv: l => 0.5 * l, pasTxt: "Critique", flat: true },
-  spectrin:  { name: "Spectrin",  zone: 4, color: "#c9b8ff", info: "Un petit fantôme qui apprend vite",      atk: l => 0.6 + 0.22 * l,  pas: "xp",   pv: l => 3 * l,   pasTxt: "Expérience" },
-  croa:      { name: "Croâ",      zone: 5, color: "#8fd14f", info: "Une grenouille qui flaire les trésors",  atk: l => 0.7 + 0.25 * l,  pas: "luck", pv: l => 4 * l,   pasTxt: "Chance de butin", ground: true },
-  scarabor:  { name: "Scarabor",  zone: 6, color: "#ffcf4a", info: "Un scarabée doré qui adore les pièces",  atk: l => 0.8 + 0.28 * l,  pas: "gold", pv: l => 12 * l,  pasTxt: "Or", ground: true },
-  boulon:    { name: "Boulon",    zone: 7, color: "#9fb4c8", info: "Un mini robot qui renforce tes coups",   atk: l => 0.9 + 0.3 * l,   pas: "tap",  pv: l => 15 * l,  pasTxt: "Dégâts au toucher" },
-  gelou:     { name: "Gélou",     zone: 8, color: "#ff7aa8", info: "Un ourson en gélatine qui rebondit",     atk: l => 1 + 0.33 * l,    pas: "spd",  pv: l => 4 * l,   pasTxt: "Vitesse", ground: true },
-  astrea:    { name: "Astréa",    zone: 9, color: "#fff2b0", info: "Une étoile tombée du Néant",             atk: l => 1.2 + 0.4 * l,   pas: "atk",  pv: l => 8 * l,   pasTxt: "Attaque" }
+  lumio:      { name: "Lumio",      rar: 0, zone: 0, sp: "firefly",  c: "#e8f06a", c2: "#5a4430", eye: "#6a4a2a", pas: "gold", info: "Une luciole qui attire l'or" },
+  bloblo:     { name: "Bloblo",     rar: 0, zone: 0, sp: "blob",     c: "#7cc4ff", c2: "#bfe6ff", eye: "#2a5a9a", pas: "hp",   info: "Un mini slime très résistant" },
+  champinou:  { name: "Champinou",  rar: 0, zone: 0, sp: "mushroom", c: "#e4574e", c2: "#f6ead2", eye: "#6a3a2a", pas: "luck", info: "Un champignon qui sent les trésors" },
+  pipou:      { name: "Pipou",      rar: 1, zone: 0, sp: "owl",      c: "#a0785a", c2: "#f0dcb8", eye: "#ffb03a", pas: "crit", info: "Une chouette qui repère les points faibles" },
+  plumet:     { name: "Plumet",     rar: 0, zone: 1, sp: "bird",     c: "#8ecae6", c2: "#f4f8ff", eye: "#2a4a6a", pas: "spd",  info: "Un petit oiseau des neiges très vif" },
+  givrette:   { name: "Givrette",   rar: 1, zone: 1, sp: "fox",      c: "#e8f2ff", c2: "#8ecae6", eye: "#3a8ad0", pas: "atk",  info: "Une renarde des glaces au regard perçant", tails: 1 },
+  cristallin: { name: "Cristallin", rar: 2, zone: 1, sp: "golem",    c: "#8fd8ff", c2: "#3a6a9a", eye: "#e8fbff", pas: "hp",   info: "Un petit golem de cristal indestructible" },
+  etincelle:  { name: "Étincelle",  rar: 1, zone: 2, sp: "flame",    c: "#ff8a3a", c2: "#ffd166", eye: "#7a2a10", pas: "atk",  info: "Un esprit de feu qui frappe fort" },
+  braisou:    { name: "Braisou",    rar: 2, zone: 2, sp: "dragon",   c: "#e0503a", c2: "#ffc97a", eye: "#ffd166", pas: "atk",  info: "Un bébé dragon qui crache des braises" },
+  phenixia:   { name: "Phénixia",   rar: 3, zone: 2, sp: "phoenix",  c: "#ff6a2a", c2: "#ffd166", eye: "#fff3c4", pas: "atk",  info: "Un oiseau de feu qui renaît de ses cendres" },
+  poissonnet: { name: "Poissonnet", rar: 0, zone: 3, sp: "fish",     c: "#ffa04a", c2: "#fff2e0", eye: "#2a3a5a", pas: "gold", info: "Un poisson qui ramène des pièces du fond" },
+  nacrelle:   { name: "Nacrelle",   rar: 1, zone: 3, sp: "jelly",    c: "#ff9ad5", c2: "#ffd6ee", eye: "#9a2a6a", pas: "crit", info: "Une méduse qui vise les points faibles" },
+  tortilou:   { name: "Tortilou",   rar: 1, zone: 3, sp: "turtle",   c: "#6ac48a", c2: "#3a8a7a", eye: "#2a4a3a", pas: "hp",   info: "Une tortue à la carapace de corail" },
+  hydrelle:   { name: "Hydrelle",   rar: 4, zone: 3, sp: "serpent",  c: "#2ec4c4", c2: "#c4fff4", eye: "#ff4d6a", pas: "gold", info: "Un serpent des abysses qui garde les trésors engloutis" },
+  spectrin:   { name: "Spectrin",   rar: 1, zone: 4, sp: "ghost",    c: "#c9b8ff", c2: "#efe8ff", eye: "#5a3aa0", pas: "xp",   info: "Un petit fantôme qui apprend vite" },
+  oeillou:    { name: "Œillou",     rar: 2, zone: 4, sp: "eye",      c: "#7a5ac8", c2: "#c39bff", eye: "#ffd166", pas: "luck", info: "Un orbe qui voit les trésors cachés" },
+  brumelin:   { name: "Brumelin",   rar: 3, zone: 4, sp: "fox",      c: "#8a6ad8", c2: "#e0d4ff", eye: "#ff8ad8", pas: "crit", info: "Un renard-esprit aux cinq queues de brume", tails: 5 },
+  seraphin:   { name: "Séraphin",   rar: 5, zone: 4, sp: "angel",    c: "#fff8e0", c2: "#ffe8a0", eye: "#5ce1ff", pas: "all",  info: "Un esprit de lumière venu d'au-delà de la Brume" },
+  croa:       { name: "Croâ",       rar: 0, zone: 5, sp: "frog",     c: "#8fd14f", c2: "#e6f7c0", eye: "#1a1a2a", pas: "luck", info: "Une grenouille qui flaire les trésors" },
+  limacon:    { name: "Limaçon",    rar: 0, zone: 5, sp: "snail",    c: "#c8b4e8", c2: "#7a5aa0", eye: "#2a1a3a", pas: "hp",   info: "Un escargot lent mais très solide" },
+  toxine:     { name: "Toxine",     rar: 2, zone: 5, sp: "dragon",   c: "#5ab84a", c2: "#d8f07a", eye: "#e8ff5a", pas: "tap",  info: "Un dragon des marais au souffle toxique" },
+  scarabor:   { name: "Scarabor",   rar: 1, zone: 6, sp: "beetle",   c: "#ffcf4a", c2: "#5a4010", eye: "#111", pas: "gold", info: "Un scarabée doré qui adore les pièces" },
+  sablou:     { name: "Sablou",     rar: 1, zone: 6, sp: "fox",      c: "#f0c878", c2: "#fff4dc", eye: "#3a2a1a", pas: "spd",  info: "Un fennec du désert, rapide comme le vent", tails: 1, bigEars: true },
+  pharaon:    { name: "Pharaon",    rar: 3, zone: 6, sp: "cat",      c: "#3a3448", c2: "#ffd166", eye: "#52ffa0", pas: "gold", info: "Un chat royal des sables, couvert d'or" },
+  boulon:     { name: "Boulon",     rar: 1, zone: 7, sp: "robot",    c: "#9fb4c8", c2: "#1c2433", eye: "#5ce1ff", pas: "tap",  info: "Un mini robot qui renforce tes coups" },
+  rouage:     { name: "Rouage",     rar: 2, zone: 7, sp: "drone",    c: "#c8a050", c2: "#6a5030", eye: "#ff5a3a", pas: "spd",  info: "Un drone à engrenages ultra rapide" },
+  titan:      { name: "Titan",      rar: 4, zone: 7, sp: "titan",    c: "#5a6a8a", c2: "#ff5a3a", eye: "#ff5a3a", pas: "hp",   info: "Un colosse mécanique miniature au cœur de lave" },
+  gelou:      { name: "Gélou",      rar: 0, zone: 8, sp: "bear",     c: "#ff7aa8", c2: "#ffd0e0", eye: "#5a1a3a", pas: "spd",  info: "Un ourson en gélatine qui rebondit" },
+  sucrette:   { name: "Sucrette",   rar: 1, zone: 8, sp: "bunny",    c: "#fff0f6", c2: "#ff9ac8", eye: "#c0306a", pas: "gold", info: "Une lapine en barbe à papa" },
+  licornette: { name: "Licornette", rar: 3, zone: 8, sp: "unicorn",  c: "#fff4fb", c2: "#ffd166", eye: "#8a4ad8", pas: "luck", info: "Une petite licorne qui porte chance" },
+  astrea:     { name: "Astréa",     rar: 2, zone: 9, sp: "star",     c: "#fff2b0", c2: "#ffd166", eye: "#3a2a6a", pas: "atk",  info: "Une étoile tombée du Néant" },
+  nebula:     { name: "Nébula",     rar: 4, zone: 9, sp: "dragon",   c: "#3a2a7a", c2: "#c39bff", eye: "#5ce1ff", pas: "atk",  info: "Un dragon cosmique fait de poussière d'étoiles", cosmic: true },
+  aurelion:   { name: "Aurélion",   rar: 5, zone: 9, sp: "lion",     c: "#ffd166", c2: "#fff3c4", eye: "#ff8a3a", pas: "all",  info: "Le lion d'or qui fit reculer la toute première Brume" }
 };
+const PET_RAR = [55, 28, 12, 4, 0.9, 0.1];            // chances (en %) de chaque rareté quand un boss lâche un familier
+const PET_RM = [1, 1.5, 2.2, 3.2, 4.5, 6.5];           // force selon la rareté
+const PET_ATK = [0.3, 0.5, 0.8, 1.2, 1.8, 2.8];
+const PET_PB = { gold: 4, hp: 4, spd: 1.2, atk: 3, crit: 0.25, xp: 1, luck: 2, tap: 6, all: 2 };
+const PET_PTXT = { gold: "Or", hp: "Vie", spd: "Vitesse", atk: "Attaque", crit: "Critique", xp: "Expérience", luck: "Chance de butin", tap: "Dégâts au toucher", all: "Attaque, Vie et Or" };
+const GROUND_SP = ["blob", "mushroom", "fox", "golem", "turtle", "frog", "snail", "beetle", "cat", "titan", "bear", "bunny", "unicorn", "lion"];
+for (const id in PETS) {
+  const p = PETS[id];
+  p.color = p.c; p.ground = GROUND_SP.includes(p.sp); p.flat = p.pas === "crit"; p.pasTxt = PET_PTXT[p.pas];
+  p.atk = l => PET_ATK[p.rar] * (1 + 0.18 * (l - 1));
+  p.pv = l => Math.round(PET_PB[p.pas] * PET_RM[p.rar] * l * 10) / 10;
+}
 const PET_MAX = 20, PET_RATE = 1.2;
 const PET_SLOT_LV = [1, 15, 40, 80, 130];
 const petSlots = () => PET_SLOT_LV.filter(l => S.hlv >= l).length;
 const activePets = () => (S.petsOn || []).filter(id => PETS[id] && S.pets[id] && !S.exp[id]).slice(0, petSlots());
-const petPv = stat => { let v = 0; for (const id of activePets()) if (PETS[id].pas === stat) v += PETS[id].pv(S.pets[id]); return v; };
+const petPv = stat => { let v = 0; for (const id of activePets()) { const p = PETS[id]; if (p.pas === stat || (p.pas === "all" && (stat === "atk" || stat === "hp" || stat === "gold"))) v += p.pv(S.pets[id]); } return v; };
 const petsOwned = () => Object.values(S.pets).filter(l => l > 0).length;
-const PETFACE = { eyes: 2, mouth: "sourire", blush: true, wobble: 1, blinkEvery: 4, flash: 0, boss: false };
-function drawPetShape(id, t) { // dessin centré sur (0,0), taille ~ 24px
-  const c = PETS[id].color;
-  if (id === "lumio") {
-    ctx.drawImage(glowSprite(), -16, -16, 32, 32);
-    ctx.fillStyle = "rgba(255,255,255,.7)"; const f = Math.sin(t * 30) * 0.5;
-    ctx.beginPath(); ctx.ellipse(-4, -7, 6, 3, -0.6 + f, 0, Math.PI * 2); ctx.ellipse(4, -7, 6, 3, 0.6 - f, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "#4a3a2a"; circ(0, -1, 6); ctx.fillStyle = c; circ(0, 5, 5);
-    drawFace(PETFACE, 0, -2, 0.32, t);
-  } else if (id === "bloblo") {
-    ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-14, 0); ctx.bezierCurveTo(-16, -20, 16, -20, 14, 0); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = "rgba(255,255,255,.35)"; ctx.beginPath(); ctx.ellipse(-6, -10, 3, 2, -0.5, 0, Math.PI * 2); ctx.fill();
-    drawFace(PETFACE, 0, -8, 0.42, t);
-  } else if (id === "plumet") {
-    const f = Math.sin(t * 18) * 0.6;
-    ctx.fillStyle = shade(c, -0.25); ctx.beginPath(); ctx.ellipse(-6, -2, 8, 4, -0.5 + f, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = c; circ(0, 0, 10); ctx.fillStyle = "#f4f8ff"; ctx.beginPath(); ctx.ellipse(2, 4, 6, 5, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "#ffb03a"; ctx.beginPath(); ctx.moveTo(9, -2); ctx.lineTo(15, 0); ctx.lineTo(9, 2); ctx.fill();
-    ctx.fillStyle = "#1a1a2a"; circ(5, -3, 1.8); ctx.fillStyle = "#fff"; circ(5.6, -3.6, 0.6);
-  } else if (id === "etincelle") {
-    const fl = Math.sin(t * 12) * 1.5;
-    ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(0, -18 - fl); ctx.bezierCurveTo(9, -9, 12, 1, 10, 5); ctx.bezierCurveTo(8, 12, -8, 12, -10, 5); ctx.bezierCurveTo(-12, 1, -9, -9, 0, -18 - fl); ctx.fill();
-    ctx.fillStyle = "#ffd166"; ctx.beginPath(); ctx.moveTo(0, -7); ctx.bezierCurveTo(5, -2, 6, 4, 4, 7); ctx.bezierCurveTo(2, 10, -2, 10, -4, 7); ctx.bezierCurveTo(-6, 4, -5, -2, 0, -7); ctx.fill();
-    drawFace(PETFACE, 0, 1, 0.32, t);
-  } else if (id === "nacrelle") { // petite méduse
-    ctx.strokeStyle = shade(c, -0.15); ctx.lineWidth = 2.4; ctx.lineCap = "round";
-    for (let i = -1; i <= 1; i++) { ctx.beginPath(); ctx.moveTo(i * 6, -2); ctx.quadraticCurveTo(i * 6 + Math.sin(t * 5 + i * 2) * 4, 5, i * 6 + Math.sin(t * 5 + i) * 2, 12); ctx.stroke(); }
-    ctx.fillStyle = c; ctx.beginPath(); ctx.arc(0, -4, 12, Math.PI, 0); ctx.quadraticCurveTo(6, 0, 0, -2); ctx.quadraticCurveTo(-6, 0, -12, -4); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = "rgba(255,255,255,.45)"; ctx.beginPath(); ctx.ellipse(-5, -11, 3.5, 2, -0.5, 0, Math.PI * 2); ctx.fill();
-    drawFace(PETFACE, 0, -6, 0.34, t);
-  } else if (id === "spectrin") { // petit fantôme
-    ctx.globalAlpha = 0.9; ctx.fillStyle = c; ctx.beginPath(); ctx.arc(0, -5, 11, Math.PI, 0); ctx.lineTo(11, 9);
-    for (let i = 0; i < 4; i++) { const x0 = 11 - i * 5.5, w = Math.sin(t * 6 + i) * 2; ctx.quadraticCurveTo(x0 - 2.75, 13 + w, x0 - 5.5, 9); }
-    ctx.closePath(); ctx.fill(); ctx.globalAlpha = 1;
-    ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.ellipse(-5, -10, 3, 2, -0.5, 0, Math.PI * 2); ctx.fill();
-    drawFace(PETFACE, 0, -3, 0.36, t);
-  } else if (id === "croa") { // grenouille
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, -6, 13, 9, 0, 0, Math.PI * 2); ctx.fill(); circ(-6, -14, 5); circ(6, -14, 5);
-    ctx.fillStyle = "#e6f7c0"; ctx.beginPath(); ctx.ellipse(0, -3, 8, 5, 0, 0, Math.PI * 2); ctx.fill();
-    const bl = (t % 4) < 0.15 ? 0.3 : 1;
-    ctx.fillStyle = "#fff"; circ(-6, -14, 3.2); circ(6, -14, 3.2); ctx.fillStyle = "#1a1a2a"; ctx.beginPath(); ctx.ellipse(-6, -14, 1.8, 1.8 * bl, 0, 0, Math.PI * 2); ctx.ellipse(6, -14, 1.8, 1.8 * bl, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = "#2e5a1a"; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(0, -8, 4, 0.2, Math.PI - 0.2); ctx.stroke();
-    ctx.fillStyle = "rgba(255,120,150,.5)"; circ(-9, -7, 1.8); circ(9, -7, 1.8);
-  } else if (id === "scarabor") { // scarabée doré
-    ctx.strokeStyle = "#5a4010"; ctx.lineWidth = 1.8; ctx.lineCap = "round";
-    for (let i = -1; i <= 1; i++) { const w = Math.sin(t * 14 + i * 2) * 1.5; ctx.beginPath(); ctx.moveTo(i * 5, -3); ctx.lineTo(i * 5 + w - 2, 1); ctx.stroke(); }
-    ctx.fillStyle = "#4a3410"; circ(11, -6, 5);
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(-1, -8, 12, 8, 0, Math.PI, 0); ctx.lineTo(11, -4); ctx.lineTo(-13, -4); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = shade(c, -0.35); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-1, -16); ctx.lineTo(-1, -4); ctx.stroke();
-    ctx.fillStyle = "rgba(255,255,255,.6)"; ctx.beginPath(); ctx.ellipse(-6, -12, 3, 1.6, -0.4, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "#fff"; circ(13, -7, 1.6); ctx.fillStyle = "#111"; circ(13.4, -7, 0.9);
-  } else if (id === "boulon") { // mini robot
-    ctx.strokeStyle = "#6a7a8c"; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(0, -12); ctx.lineTo(0, -18); ctx.stroke();
-    ctx.globalAlpha = 0.5 + 0.5 * Math.abs(Math.sin(t * 3)); ctx.drawImage(glowSprite(), -7, -26, 14, 14); ctx.globalAlpha = 1;
-    ctx.fillStyle = "#ff5a6a"; circ(0, -19, 2.4);
-    ctx.fillStyle = c; rr(-11, -12, 22, 18, 5); ctx.fill();
-    ctx.fillStyle = "#1c2433"; rr(-8, -9, 16, 10, 3); ctx.fill();
-    const bl = (t % 3.5) < 0.15 ? 0.6 : 3;
-    ctx.fillStyle = "#5ce1ff"; ctx.fillRect(-5.5, -5.5 - bl / 2 + 0.5, 3, bl); ctx.fillRect(2.5, -5.5 - bl / 2 + 0.5, 3, bl);
-    ctx.fillStyle = "rgba(120,200,255,.55)"; ctx.beginPath(); ctx.moveTo(-5, 6); ctx.lineTo(5, 6); ctx.lineTo(0, 10 + Math.sin(t * 20) * 2); ctx.fill();
-  } else if (id === "gelou") { // ourson en gélatine
-    ctx.globalAlpha = 0.92; ctx.fillStyle = c; circ(-7, -17, 4.5); circ(7, -17, 4.5);
-    ctx.beginPath(); ctx.ellipse(0, -8, 11, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
-    ctx.fillStyle = "rgba(255,255,255,.45)"; ctx.beginPath(); ctx.ellipse(-5, -13, 3.5, 2, -0.5, 0, Math.PI * 2); ctx.fill();
-    drawFace(PETFACE, 0, -8, 0.36, t);
-  } else if (id === "astrea") { // étoile tombée
-    ctx.globalAlpha = 0.7; ctx.drawImage(glowSprite(), -22, -24, 44, 44); ctx.globalAlpha = 1;
-    ctx.fillStyle = c; ctx.fill(new Path2D(starPts(0, -2, 14, 7, 5, -Math.PI / 2 + Math.sin(t * 2) * 0.15)));
-    ctx.fillStyle = "#ffd166"; ctx.fill(new Path2D(starPts(0, -1, 7, 3.6, 5, -Math.PI / 2 + Math.sin(t * 2) * 0.15)));
-    drawFace(PETFACE, 0, -2, 0.3, t);
+
+/* ---- outils de dessin des familiers (contour sombre + volume, comme des autocollants) ---- */
+const PO = "#1b1e33", TAU = Math.PI * 2;
+function pf(f, lw = 1.5) { ctx.fillStyle = f; ctx.fill(); ctx.lineWidth = lw; ctx.strokeStyle = PO; ctx.lineJoin = "round"; ctx.stroke(); }
+function pgr(c, r, cy = 0, cx = 0) { const g = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.45, r * 0.05, cx, cy, r * 1.15); g.addColorStop(0, shade(c, 0.45)); g.addColorStop(0.5, c); g.addColorStop(1, shade(c, -0.32)); return g; }
+function pel(x, y, rx, ry, rot = 0) { ctx.beginPath(); ctx.ellipse(x, y, rx, ry, rot, 0, TAU); }
+function shine(x, y, rx = 3, ry = 1.7) { ctx.fillStyle = "rgba(255,255,255,.6)"; pel(x, y, rx, ry, -0.5); ctx.fill(); }
+function peyes(x, y, sep, r, iris, t, sharp) { // grands yeux brillants
+  const bl = (t % 4.3) < 0.12 ? 0.15 : 1;
+  for (const s of [-1, 1]) {
+    ctx.save(); ctx.translate(x + s * sep, y); ctx.scale(1, bl);
+    pel(0, 0, r, r * (sharp ? 0.8 : 1.08)); pf("#fff", 1);
+    ctx.fillStyle = iris; pel(0, r * 0.1, r * 0.7, r * (sharp ? 0.66 : 0.8)); ctx.fill();
+    ctx.fillStyle = shade(iris, -0.5); pel(0, r * 0.18, r * 0.36, r * (sharp ? 0.4 : 0.46)); ctx.fill();
+    ctx.fillStyle = "#fff"; pel(-r * 0.28, -r * 0.3, r * 0.27, r * 0.27); ctx.fill(); pel(r * 0.25, r * 0.35, r * 0.12, r * 0.12); ctx.fill();
+    ctx.restore();
   }
+  if (sharp) { ctx.strokeStyle = PO; ctx.lineWidth = 1.5; ctx.lineCap = "round"; for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(x + s * (sep + r * 1.05), y - r * 0.95); ctx.lineTo(x + s * (sep - r * 0.7), y - r * 0.55); ctx.stroke(); } }
 }
+function pmouth(x, y, w = 2.4) { ctx.strokeStyle = PO; ctx.lineWidth = 1.2; ctx.lineCap = "round"; ctx.beginPath(); ctx.arc(x, y - w * 0.4, w, 0.2 * Math.PI, 0.8 * Math.PI); ctx.stroke(); }
+function pblush(x, y, sep) { ctx.fillStyle = "rgba(255,110,140,.45)"; pel(x - sep, y, 2.3, 1.3); ctx.fill(); pel(x + sep, y, 2.3, 1.3); ctx.fill(); }
+function ptri(a, b, c) { ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.lineTo(c[0], c[1]); ctx.closePath(); }
+function sparkle(x, y, r, col) { ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(x, y - r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.quadraticCurveTo(x, y, x, y + r); ctx.quadraticCurveTo(x, y, x - r, y); ctx.quadraticCurveTo(x, y, x, y - r); ctx.fill(); }
+const _gc = {};
+function glowC(col) { // halo coloré mis en cache
+  if (_gc[col]) return _gc[col];
+  const c = document.createElement("canvas"); c.width = c.height = 64; const g = c.getContext("2d"), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, col); gr.addColorStop(0.35, rgba(col, 0.45)); gr.addColorStop(1, rgba(col, 0)); g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+  return (_gc[col] = c);
+}
+function wingF(x, y, s, flap, c) { // aile de plume
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, 1); ctx.rotate(-0.3 - flap * 0.5);
+  ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(4, -10, 16, -14, 20, -8); ctx.bezierCurveTo(17, -6, 18, -3, 15, -2); ctx.bezierCurveTo(13, 0, 13, 2, 10, 2); ctx.bezierCurveTo(7, 3, 3, 3, 0, 0); pf(c);
+  ctx.strokeStyle = rgba(PO, 0.35); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(4, -2); ctx.lineTo(15, -7); ctx.moveTo(5, 0); ctx.lineTo(12, -1); ctx.stroke();
+  ctx.restore();
+}
+function wingB(x, y, s, flap, c, c2) { // aile de dragon
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, 1); ctx.rotate(-0.2 - flap * 0.45);
+  ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(6, -13); ctx.lineTo(18, -15); ctx.quadraticCurveTo(15, -10, 17, -6); ctx.quadraticCurveTo(12, -6, 12, -2); ctx.quadraticCurveTo(7, -3, 6, 1); ctx.closePath(); pf(c2);
+  ctx.strokeStyle = c; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(6, -13); ctx.lineTo(18, -15); ctx.stroke();
+  ctx.restore();
+}
+
+const PET_DRAW = {
+  firefly(p, t) {
+    const f = Math.sin(t * 30) * 0.5;
+    ctx.globalAlpha = 0.8; ctx.drawImage(glowC("#f4ff8a"), -18, -12, 36, 36); ctx.globalAlpha = 1;
+    pel(-5, -9, 7, 3.5, -0.7 + f); pf("rgba(230,245,255,.8)", 1); pel(5, -9, 7, 3.5, 0.7 - f); pf("rgba(230,245,255,.8)", 1);
+    pel(0, 6, 6, 6.5); pf(pgr(p.c, 6, 6));
+    ctx.strokeStyle = rgba(PO, 0.4); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-5, 7); ctx.lineTo(5, 7); ctx.stroke();
+    pel(0, -2, 7.5, 7); pf(pgr(p.c2, 7.5, -2));
+    ctx.strokeStyle = PO; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-2, -8); ctx.quadraticCurveTo(-5, -14, -8, -14); ctx.moveTo(2, -8); ctx.quadraticCurveTo(5, -14, 8, -14); ctx.stroke();
+    ctx.fillStyle = p.c; circ(-8, -14, 1.8); circ(8, -14, 1.8);
+    peyes(0, -2, 3.2, 2.5, p.eye, t); pblush(0, 1.5, 5);
+  },
+  blob(p, t) {
+    const sq = Math.sin(t * 4) * 0.06;
+    ctx.save(); ctx.scale(1 + sq, 1 - sq);
+    ctx.beginPath(); ctx.moveTo(-15, 0); ctx.bezierCurveTo(-17, -24, 17, -24, 15, 0); ctx.quadraticCurveTo(0, 3, -15, 0); pf(pgr(p.c, 16, -9));
+    ctx.fillStyle = rgba(p.c2, 0.5); pel(0, -2, 9, 2.5); ctx.fill();
+    shine(-7, -13, 4, 2.2); ctx.fillStyle = "rgba(255,255,255,.6)"; circ(-2, -16, 1.1);
+    peyes(0, -9, 5, 3, p.eye, t); pmouth(0, -3.5, 2); pblush(0, -5, 9);
+    ctx.restore();
+  },
+  mushroom(p, t) {
+    rr(-7, -14, 14, 14, 5); pf(pgr(p.c2, 9, -7));
+    ctx.beginPath(); ctx.moveTo(-15, -12); ctx.bezierCurveTo(-16, -30, 16, -30, 15, -12); ctx.quadraticCurveTo(0, -8, -15, -12); pf(pgr(p.c, 15, -20));
+    ctx.fillStyle = "#fff8ec"; for (const [x, y, r] of [[-7, -19, 2.6], [3, -23, 2.2], [9, -15, 1.8], [-1, -15, 1.4]]) { pel(x, y, r, r * 0.85); ctx.fill(); }
+    peyes(0, -6, 3.5, 2.3, p.eye, t); pmouth(0, -2, 1.6); pblush(0, -3.5, 5.5);
+  },
+  owl(p, t) {
+    const f = Math.sin(t * 16) * 0.6;
+    wingF(-8, -2, -0.8, f, shade(p.c, -0.15)); wingF(8, -2, 0.8, f, shade(p.c, -0.15));
+    ptri([-11, -12], [-6, -12], [-10, -20]); pf(p.c); ptri([11, -12], [6, -12], [10, -20]); pf(p.c);
+    pel(0, -2, 12, 13); pf(pgr(p.c, 13, -3));
+    pel(0, 3, 7.5, 7); pf(p.c2, 1);
+    ctx.strokeStyle = rgba(PO, 0.3); ctx.lineWidth = 1; for (const y of [1, 4, 7]) { ctx.beginPath(); ctx.arc(0, y, 3, 0.2, Math.PI - 0.2); ctx.stroke(); }
+    pel(-4.6, -5, 4.8, 4.8); pf(p.c2, 1); pel(4.6, -5, 4.8, 4.8); pf(p.c2, 1);
+    peyes(0, -5, 4.6, 3, p.eye, t);
+    ptri([-1.6, -1.5], [1.6, -1.5], [0, 1.5]); pf("#ffb03a", 1);
+  },
+  bird(p, t) {
+    const f = Math.sin(t * 18) * 0.6;
+    ctx.beginPath(); ctx.moveTo(-9, 2); ctx.lineTo(-17, -1); ctx.lineTo(-16, 4); ctx.lineTo(-18, 7); ctx.lineTo(-9, 6); pf(shade(p.c, -0.2));
+    pel(0, 0, 11, 10); pf(pgr(p.c, 11));
+    pel(2, 4, 7, 5.5); pf(p.c2, 1);
+    ctx.beginPath(); ctx.moveTo(-2, -9); ctx.quadraticCurveTo(-1, -15, 3, -13); ctx.quadraticCurveTo(1, -11, 2, -9); pf(p.c, 1.2);
+    wingF(-2, 0, -0.9, f, shade(p.c, -0.12));
+    ptri([9, -3], [16, -0.5], [9, 2]); pf("#ffb03a", 1.2);
+    peyes(4.5, -3, 0.01, 2.6, p.eye, t); pblush(4, 1, 0.01);
+  },
+  phoenix(p, t) {
+    const f = Math.sin(t * 10) * 0.7, fl = Math.sin(t * 14);
+    ctx.globalAlpha = 0.8; ctx.drawImage(glowC("#ffb03a"), -26, -24, 52, 52); ctx.globalAlpha = 1;
+    for (let i = 0; i < 3; i++) { const a = 0.35 + i * 0.28, w = Math.sin(t * 8 + i) * 2; ctx.beginPath(); ctx.moveTo(-7, 3); ctx.quadraticCurveTo(-16, 4 + i * 4 + w, -26 - i * 2, 6 + i * 6 + w); ctx.quadraticCurveTo(-17, 2 + i * 3, -7, 0); pf(i % 2 ? p.c2 : p.c, 1.2); }
+    for (const s of [-1, 1]) { ctx.save(); ctx.translate(-1, -2); ctx.scale(s, 1); ctx.rotate(-0.5 - f * 0.4 * s);
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(6, -12, 16, -20, 24, -18); ctx.lineTo(19, -13); ctx.lineTo(25, -10); ctx.lineTo(17, -7); ctx.lineTo(21, -3); ctx.quadraticCurveTo(10, 1, 0, 2); pf(s > 0 ? p.c : shade(p.c, -0.15));
+      ctx.fillStyle = p.c2; ctx.beginPath(); ctx.moveTo(3, -1); ctx.bezierCurveTo(8, -9, 14, -14, 20, -15); ctx.quadraticCurveTo(12, -8, 3, 1); ctx.fill(); ctx.restore(); }
+    pel(0, 0, 9, 9.5); pf(pgr(p.c, 10));
+    for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(-3 + i * 2, -8); ctx.quadraticCurveTo(-6 + i * 3 + fl, -16 - i * 2, -1 + i * 3, -19 - i * 2); ctx.quadraticCurveTo(i * 2, -13, 1 + i * 2, -8); pf(i === 1 ? p.c2 : p.c, 1); }
+    pel(1, 3, 5.5, 4.5); pf(p.c2, 1);
+    ptri([7, -3], [13, -1], [7, 1]); pf("#fff3c4", 1.1);
+    peyes(2.5, -3, 0.01, 2.6, p.eye, t, true);
+  },
+  fox(p, t) {
+    const n = p.tails || 1, sw = Math.sin(t * 3);
+    for (let i = 0; i < n; i++) {
+      const a = n === 1 ? 0 : (i - (n - 1) / 2) * 0.38, ws = sw * 0.15 + a;
+      ctx.save(); ctx.translate(-8, -5); ctx.rotate(-0.9 + ws);
+      ctx.beginPath(); ctx.moveTo(0, 2); ctx.bezierCurveTo(-4, -8, -2, -18, 4, -22); ctx.bezierCurveTo(8, -16, 7, -6, 4, 2); ctx.closePath(); pf(pgr(p.c, 10, -10));
+      ctx.beginPath(); ctx.moveTo(1.2, -16); ctx.bezierCurveTo(1.6, -19, 2.6, -21, 4, -22); ctx.bezierCurveTo(6, -19, 6.4, -17, 6, -15); ctx.quadraticCurveTo(3.5, -14, 1.2, -16); pf(p.c2, 1);
+      ctx.restore();
+    }
+    ctx.beginPath(); ctx.moveTo(-8, 0); ctx.bezierCurveTo(-10, -12, 8, -14, 7, 0); ctx.closePath(); pf(pgr(p.c, 10, -6));
+    pel(-3, 0, 3, 2); pf(p.c, 1.1); pel(3, 0, 3, 2); pf(p.c, 1.1);
+    const eh = p.bigEars ? 13 : 8, ew = p.bigEars ? 6 : 4.5;
+    for (const s of [-1, 1]) { ptri([s * 3, -20], [s * 10, -18], [s * (7 + (p.bigEars ? 3 : 0)), -20 - eh]); pf(p.c); ptri([s * 4.5, -20], [s * 8.6, -19], [s * (7 + (p.bigEars ? 3 : 0)), -18 - eh * 0.8]); pf(p.c2, 1); }
+    pel(0, -15, 10, 8.5); pf(pgr(p.c, 10, -16));
+    pel(0, -11.5, 5.5, 3.8); pf(p.c2 === "#8ecae6" ? "#ffffff" : p.c2, 1);
+    ctx.fillStyle = PO; pel(0, -13, 1.6, 1.1); ctx.fill();
+    peyes(0, -17, 4.4, 2.5, p.eye, t, p.rar >= 3); pblush(0, -13, 7.5);
+    if (p.rar >= 3) { ctx.fillStyle = p.c2; for (const s of [-1, 1]) { ptri([s * 2, -22], [s * 4, -22], [s * 3, -25]); ctx.fill(); } sparkle(0, -24, 2.5, "#fff"); }
+  },
+  golem(p, t) {
+    const pulse = 0.6 + 0.4 * Math.sin(t * 3);
+    ctx.beginPath(); ctx.moveTo(-12, 0); ctx.lineTo(-14, -10); ctx.lineTo(-8, -20); ctx.lineTo(0, -23); ctx.lineTo(8, -20); ctx.lineTo(14, -10); ctx.lineTo(12, 0); ctx.closePath(); pf(pgr(p.c, 14, -12));
+    ctx.fillStyle = "rgba(255,255,255,.35)"; ptri([-8, -20], [0, -23], [-4, -12]); ctx.fill(); ptri([-14, -10], [-8, -20], [-6, -8]); ctx.fill();
+    ctx.strokeStyle = rgba(PO, 0.35); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-4, -12); ctx.lineTo(0, -23); ctx.moveTo(-4, -12); ctx.lineTo(6, -6); ctx.lineTo(12, 0); ctx.moveTo(-4, -12); ctx.lineTo(-12, 0); ctx.stroke();
+    for (const [x, y, h] of [[-12, -18, 9], [11, -17, 8], [0, -24, 7]]) { ptri([x - 2.5, y], [x + 2.5, y], [x, y - h]); pf(shade(p.c, 0.25), 1.2); }
+    ctx.globalAlpha = pulse; ctx.drawImage(glowC("#bff4ff"), -9, -15, 18, 18); ctx.globalAlpha = 1;
+    peyes(0, -13, 4, 2.4, "#2a7ab0", t);
+    pel(-15, -6, 3.5, 4.5); pf(p.c, 1.2); pel(15, -6, 3.5, 4.5); pf(p.c, 1.2);
+  },
+  flame(p, t) {
+    const fl = Math.sin(t * 12) * 1.6;
+    ctx.globalAlpha = 0.7; ctx.drawImage(glowC("#ffb03a"), -20, -22, 40, 40); ctx.globalAlpha = 1;
+    ctx.beginPath(); ctx.moveTo(0, -20 - fl); ctx.bezierCurveTo(6, -14, 13, -6, 11, 3); ctx.bezierCurveTo(9, 11, -9, 11, -11, 3); ctx.bezierCurveTo(-13, -4, -7, -8, -4, -14); ctx.quadraticCurveTo(-2, -10, 0, -20 - fl); pf(pgr(p.c, 12, -2));
+    ctx.fillStyle = p.c2; ctx.beginPath(); ctx.moveTo(1, -8 - fl * 0.5); ctx.bezierCurveTo(6, -3, 7, 3, 5, 6); ctx.bezierCurveTo(3, 9, -3, 9, -5, 6); ctx.bezierCurveTo(-7, 2, -3, -3, 1, -8 - fl * 0.5); ctx.fill();
+    peyes(0, 1, 3.6, 2.4, p.eye, t, true); pmouth(0, 5.5, 1.5);
+  },
+  dragon(p, t) {
+    const f = Math.sin(t * 9) * 0.8, cos = !!p.cosmic;
+    if (cos) { ctx.globalAlpha = 0.7; ctx.drawImage(glowC("#8a5ad8"), -26, -24, 52, 52); ctx.globalAlpha = 1; }
+    ctx.beginPath(); ctx.moveTo(-7, 4); ctx.quadraticCurveTo(-16, 8, -19, 2 + Math.sin(t * 3) * 2); ctx.quadraticCurveTo(-15, 4, -8, 0); pf(p.c, 1.3);
+    ptri([-19, 2 + Math.sin(t * 3) * 2], [-24, -1], [-22, 6]); pf(p.c2, 1.1);
+    wingB(-3, -3, -1, f, p.c, p.c2); wingB(3, -3, 1, f, p.c, p.c2);
+    pel(0, 2, 9, 8); pf(pgr(p.c, 9, 1));
+    pel(1, 4, 5, 5); pf(p.c2, 1);
+    ctx.strokeStyle = rgba(PO, 0.35); ctx.lineWidth = 1; for (const y of [1.5, 4, 6.5]) { ctx.beginPath(); ctx.moveTo(-2, y); ctx.lineTo(4, y); ctx.stroke(); }
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(s * 4, -13); ctx.quadraticCurveTo(s * 7, -19, s * 10, -21); ctx.quadraticCurveTo(s * 7, -16, s * 7.5, -12); pf(p.c2, 1.1); }
+    pel(1, -9, 10, 8.5); pf(pgr(p.c, 10, -10));
+    pel(7, -6, 4.5, 3.5); pf(shade(p.c, 0.15), 1.1); ctx.fillStyle = PO; circ(8.5, -7, 0.7); circ(10, -6, 0.7);
+    if (cos) for (let i = 0; i < 6; i++) { const a = i * 1.7 + t * 0.4; sparkle(Math.cos(a) * 6, -5 + Math.sin(a * 1.3) * 7, 1.3 + (i % 2), "#fff"); }
+    peyes(0, -10, 3.8, 2.5, p.eye, t, p.rar >= 3);
+    if (Math.sin(t * 2.2) > 0.85) { ctx.globalAlpha = 0.8; ctx.drawImage(glowC(cos ? "#9fd0ff" : p.c2), 10, -12, 14, 14); ctx.globalAlpha = 1; }
+  },
+  serpent(p, t) {
+    ctx.globalAlpha = 0.6; ctx.drawImage(glowC("#5ce1ff"), -28, -26, 56, 56); ctx.globalAlpha = 1;
+    const pts = []; for (let i = 0; i <= 14; i++) { const k = i / 14; pts.push([-18 + k * 26, 8 - k * 14 + Math.sin(t * 3 + k * 7) * 5 * (1 - k * 0.6)]); }
+    ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.strokeStyle = PO; ctx.lineWidth = 10; ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke();
+    ctx.strokeStyle = p.c; ctx.lineWidth = 7.4; ctx.stroke();
+    ctx.strokeStyle = p.c2; ctx.lineWidth = 2.4; ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y + 2) : ctx.moveTo(x, y + 2)); ctx.stroke();
+    for (let i = 2; i < 13; i += 3) { const [x, y] = pts[i]; ptri([x - 2, y - 3], [x + 2, y - 3], [x - 1, y - 8]); pf(p.c2, 1); }
+    const [hx, hy] = pts[14];
+    ctx.save(); ctx.translate(hx, hy);
+    ctx.beginPath(); ctx.moveTo(-4, -5); ctx.quadraticCurveTo(-8, -15, 0, -17); ctx.quadraticCurveTo(-1, -11, 2, -7); pf(p.c2, 1.2);
+    pel(2, -1, 8, 6.5, 0.15); pf(pgr(p.c, 8, -2, 2));
+    pel(8, 1, 4, 3); pf(shade(p.c, 0.2), 1.1);
+    peyes(2, -2, 2.8, 2, p.eye, t, true);
+    ctx.restore();
+  },
+  jelly(p, t) {
+    ctx.lineCap = "round";
+    for (let i = -1; i <= 1; i++) { ctx.beginPath(); ctx.moveTo(i * 6, -2); ctx.quadraticCurveTo(i * 6 + Math.sin(t * 5 + i * 2) * 4, 5, i * 6 + Math.sin(t * 5 + i) * 2, 13); ctx.strokeStyle = PO; ctx.lineWidth = 4.4; ctx.stroke(); ctx.strokeStyle = shade(p.c, -0.1); ctx.lineWidth = 2.4; ctx.stroke(); }
+    ctx.globalAlpha = 0.95; ctx.beginPath(); ctx.arc(0, -4, 12.5, Math.PI, 0); ctx.quadraticCurveTo(6, 0, 0, -2); ctx.quadraticCurveTo(-6, 0, -12.5, -4); ctx.closePath(); pf(pgr(p.c, 13, -8)); ctx.globalAlpha = 1;
+    ctx.fillStyle = rgba(p.c2, 0.7); for (let i = -2; i <= 2; i++) circ(i * 4.5, -3 + Math.abs(i) * 0.5, 1.5);
+    shine(-5, -11, 3.5, 2);
+    peyes(0, -7, 4, 2.5, p.eye, t); pblush(0, -4, 7.5);
+  },
+  fish(p, t) {
+    const w = Math.sin(t * 8) * 0.35;
+    ctx.save(); ctx.translate(-9, 0); ctx.rotate(w); ptri([0, 0], [-9, -7], [-9, 7]); pf(p.c, 1.4); ctx.restore();
+    ctx.beginPath(); ctx.moveTo(-2, -8); ctx.quadraticCurveTo(2, -14, 6, -8); pf(p.c, 1.2);
+    pel(0, 0, 11, 8.5); pf(pgr(p.c, 11));
+    ctx.fillStyle = p.c2; ctx.beginPath(); ctx.moveTo(-3, -7.8); ctx.quadraticCurveTo(-6, 0, -3, 7.8); ctx.lineTo(-0.5, 8); ctx.quadraticCurveTo(-3.5, 0, -0.5, -8); ctx.fill();
+    pel(2, 4, 3.5, 2, 0.4); pf(shade(p.c, -0.15), 1);
+    peyes(5, -1.5, 0.01, 2.8, p.eye, t); pmouth(9, 2.5, 1.2);
+    const b = (t * 0.8) % 1; ctx.globalAlpha = 1 - b; ctx.strokeStyle = "rgba(200,240,255,.9)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(13, -6 - b * 14, 1.6 + b, 0, TAU); ctx.stroke(); ctx.globalAlpha = 1;
+  },
+  turtle(p, t) {
+    const lg = Math.sin(t * 5) * 1.2;
+    pel(-9, -1 + lg * 0.3, 3, 2.5); pf(p.c, 1.2); pel(8, -1 - lg * 0.3, 3, 2.5); pf(p.c, 1.2);
+    pel(14, -8, 5.5, 5); pf(pgr(p.c, 6, -9, 14));
+    peyes(15, -9, 0.01, 2.2, p.eye, t); pmouth(16.5, -5.5, 1.3);
+    ctx.beginPath(); ctx.moveTo(-14, -3); ctx.bezierCurveTo(-14, -22, 12, -22, 12, -3); ctx.closePath(); pf(pgr(p.c2, 14, -12));
+    ctx.strokeStyle = rgba("#ffffff", 0.35); ctx.lineWidth = 1.3;
+    ctx.beginPath(); ctx.moveTo(-6, -13); ctx.lineTo(4, -13); ctx.lineTo(7, -7); ctx.lineTo(-1, -4); ctx.lineTo(-9, -7); ctx.closePath(); ctx.stroke();
+    ctx.fillStyle = "#ff8aa8"; circ(-8, -11, 1.6); circ(5, -16, 1.3); ctx.fillStyle = "#ffd166"; circ(2, -9, 1.2);
+    ctx.fillStyle = shade(p.c2, -0.25); rr(-15, -4, 28, 3, 1.5); ctx.fill();
+    shine(-6, -16, 3, 1.5);
+  },
+  ghost(p, t) {
+    ctx.globalAlpha = 0.5; ctx.drawImage(glowC(p.c), -20, -20, 40, 40); ctx.globalAlpha = 0.95;
+    ctx.beginPath(); ctx.arc(0, -5, 11.5, Math.PI, 0); ctx.lineTo(11.5, 9);
+    for (let i = 0; i < 4; i++) { const x0 = 11.5 - i * 5.75, w = Math.sin(t * 6 + i) * 2; ctx.quadraticCurveTo(x0 - 2.9, 13.5 + w, x0 - 5.75, 9); }
+    ctx.closePath(); pf(pgr(p.c, 12, -5)); ctx.globalAlpha = 1;
+    ctx.beginPath(); ctx.moveTo(-11, 1); ctx.quadraticCurveTo(-17, -1 + Math.sin(t * 4) * 2, -15, -6); pf(p.c, 1.2);
+    shine(-5, -10, 3.2, 1.8);
+    peyes(0, -4, 4, 2.6, p.eye, t); pblush(0, -0.5, 7.5);
+    ctx.strokeStyle = PO; ctx.lineWidth = 1.2; pel(0, 1.5, 1.4, 1.8); ctx.stroke();
+  },
+  eye(p, t) {
+    const lx = Math.sin(t * 0.9) * 2.2, ly = Math.cos(t * 1.3) * 1.2;
+    ctx.globalAlpha = 0.7; ctx.drawImage(glowC(p.c2), -22, -22, 44, 44); ctx.globalAlpha = 1;
+    ctx.strokeStyle = rgba(p.c2, 0.8); ctx.lineWidth = 1.4; ctx.save(); ctx.rotate(t * 0.8); pel(0, 0, 16, 5); ctx.stroke(); ctx.restore();
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(s * 9, -2); ctx.quadraticCurveTo(s * 18, -10 + Math.sin(t * 5) * 2, s * 15, 2); ctx.quadraticCurveTo(s * 13, 0, s * 9, 3); pf(p.c2, 1.2); }
+    pel(0, 0, 10.5, 10.5); pf(pgr(p.c, 11));
+    const bl = (t % 3.7) < 0.14 ? 0.1 : 1;
+    ctx.save(); ctx.scale(1, bl); pel(0, 0, 7.5, 5.8); pf("#fff", 1.1);
+    ctx.fillStyle = p.eye; circ(lx, ly, 4.2); ctx.fillStyle = PO; pel(lx, ly, 1.4, 3.4); ctx.fill(); ctx.fillStyle = "#fff"; circ(lx - 1.5, ly - 1.6, 1.2); ctx.restore();
+    shine(-5, -6, 2.6, 1.4);
+  },
+  angel(p, t) {
+    const f = Math.sin(t * 4) * 0.6;
+    ctx.save(); ctx.rotate(t * 0.25); ctx.globalAlpha = 0.25; ctx.fillStyle = "#fff3c4";
+    for (let i = 0; i < 8; i++) { ctx.rotate(TAU / 8); ptri([0, 0], [-3, -30], [3, -30]); ctx.fill(); } ctx.restore(); ctx.globalAlpha = 1;
+    ctx.drawImage(glowC("#fff3c4"), -26, -26, 52, 52);
+    for (const [y, k] of [[-3, 1], [4, 0.75]]) { wingF(-7, y, -1.05 * k, f, "#ffffff"); wingF(7, y, 1.05 * k, f, "#ffffff"); }
+    pel(0, 0, 10, 10); pf(pgr(p.c, 10, -1));
+    ctx.save(); ctx.translate(0, -16 + Math.sin(t * 2) * 1.2); ctx.strokeStyle = PO; ctx.lineWidth = 4.2; pel(0, 0, 8, 2.6); ctx.stroke(); ctx.strokeStyle = "#ffd166"; ctx.lineWidth = 2.4; ctx.stroke(); ctx.restore();
+    ctx.fillStyle = p.c2; for (const s of [-1, 1]) { ptri([s * 2, 7], [s * 6, 6], [s * 3, 11]); ctx.fill(); }
+    peyes(0, -1, 3.8, 2.6, p.eye, t); pmouth(0, 4, 1.6); pblush(0, 2.5, 6.5);
+    for (let i = 0; i < 3; i++) { const a = t * 1.2 + i * 2.1; sparkle(Math.cos(a) * 15, Math.sin(a) * 12, 2.2, "#fff"); }
+  },
+  frog(p, t) {
+    const j = Math.max(0, Math.sin(t * 3)) * 4;
+    ctx.save(); ctx.translate(0, -j);
+    pel(-9, -1, 4, 2.2); pf(shade(p.c, -0.1), 1.2); pel(9, -1, 4, 2.2); pf(shade(p.c, -0.1), 1.2);
+    pel(0, -8, 13.5, 9.5); pf(pgr(p.c, 14, -9));
+    pel(0, -5, 8.5, 5); pf(p.c2, 1);
+    pel(-6, -16, 5.2, 5); pf(pgr(p.c, 5, -17, -6)); pel(6, -16, 5.2, 5); pf(pgr(p.c, 5, -17, 6));
+    peyes(0, -16, 6, 3.2, "#3a2a1a", t);
+    ctx.strokeStyle = PO; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.arc(0, -10, 4.5, 0.25, Math.PI - 0.25); ctx.stroke();
+    pblush(0, -8, 9.5);
+    ctx.restore();
+  },
+  snail(p, t) {
+    const s = Math.sin(t * 2) * 1;
+    ctx.beginPath(); ctx.moveTo(-14, 0); ctx.quadraticCurveTo(-15, -6, -6, -5); ctx.lineTo(10, -5); ctx.quadraticCurveTo(14, -14, 16, -13); ctx.quadraticCurveTo(19, -8, 15, 0); ctx.closePath(); pf(pgr(p.c, 12, -5));
+    ctx.strokeStyle = PO; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(14, -12); ctx.lineTo(12 + s, -20); ctx.moveTo(17, -12); ctx.lineTo(19 + s, -19); ctx.stroke();
+    ctx.fillStyle = p.c; circ(12 + s, -20, 1.8); circ(19 + s, -19, 1.8);
+    peyes(15.5, -9, 2.2, 1.7, p.eye, t); pblush(15.5, -6.5, 3);
+    pel(-2, -12, 10, 10); pf(pgr(p.c2, 10, -13, -2));
+    ctx.strokeStyle = shade(p.c2, 0.45); ctx.lineWidth = 2; ctx.beginPath();
+    for (let a = 0; a < 11; a += 0.3) { const r = 8 - a * 0.68, x = -2 + Math.cos(a) * r, y = -12 + Math.sin(a) * r; a ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+    shine(-6, -18, 2.5, 1.4);
+  },
+  beetle(p, t) {
+    ctx.strokeStyle = PO; ctx.lineWidth = 1.8; ctx.lineCap = "round";
+    for (let i = -1; i <= 1; i++) { const w = Math.sin(t * 14 + i * 2) * 1.5; ctx.beginPath(); ctx.moveTo(i * 5, -3); ctx.lineTo(i * 5 + w - 2, 1); ctx.stroke(); }
+    ctx.beginPath(); ctx.moveTo(14, -10); ctx.quadraticCurveTo(18, -16, 20, -14); ctx.stroke();
+    pel(12, -6, 5.5, 5); pf(p.c2);
+    peyes(13.5, -7, 0.01, 2, "#ffd166", t);
+    ctx.beginPath(); ctx.ellipse(-1, -5, 13, 10, 0, Math.PI, 0); ctx.closePath(); pf(pgr(p.c, 13, -9));
+    ctx.strokeStyle = shade(p.c, -0.4); ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(-1, -15); ctx.lineTo(-1, -5); ctx.stroke();
+    ctx.fillStyle = shade(p.c, -0.25); circ(-6, -9, 1.5); circ(4, -9, 1.5); circ(-4, -12.5, 1); circ(2, -12.5, 1);
+    shine(-7, -12, 3.5, 1.8); sparkle(6, -13, 2.2, "#fff");
+  },
+  cat(p, t) {
+    const tw = Math.sin(t * 2.5) * 0.3;
+    ctx.save(); ctx.translate(-8, -3); ctx.rotate(-0.6 + tw); ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-10, -4, -8, -16); ctx.quadraticCurveTo(-6, -18, -5, -16); ctx.quadraticCurveTo(-6, -6, 2, -2); pf(p.c, 1.3); ctx.restore();
+    ctx.beginPath(); ctx.moveTo(-8, 0); ctx.bezierCurveTo(-10, -14, 9, -14, 8, 0); ctx.closePath(); pf(pgr(p.c, 10, -6));
+    ctx.beginPath(); ctx.moveTo(-6, -9); ctx.quadraticCurveTo(0, -5, 6, -9); ctx.lineTo(5, -6); ctx.quadraticCurveTo(0, -2, -5, -6); ctx.closePath(); pf(p.c2, 1.1);
+    ctx.fillStyle = "#3a8ad0"; circ(0, -4.5, 1.6);
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(s * 3, -26); ctx.lineTo(s * 12, -16); ctx.lineTo(s * 11, -8); ctx.lineTo(s * 7, -10); ctx.closePath(); pf(p.c2, 1.2);
+      ctx.strokeStyle = "#3a8ad0"; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(s * 9, -18); ctx.lineTo(s * 8.5, -10); ctx.moveTo(s * 11, -15); ctx.lineTo(s * 10.5, -9); ctx.stroke(); }
+    for (const s of [-1, 1]) { ptri([s * 3, -21], [s * 10, -19], [s * 9, -28]); pf(p.c); }
+    pel(0, -16, 9.5, 8); pf(pgr(p.c, 10, -17));
+    ctx.beginPath(); ctx.moveTo(-8, -20); ctx.quadraticCurveTo(0, -27, 8, -20); ctx.lineTo(6, -22); ctx.quadraticCurveTo(0, -25, -6, -22); ctx.closePath(); pf(p.c2, 1);
+    ctx.fillStyle = "#3a8ad0"; ptri([-1.5, -25.5], [1.5, -25.5], [0, -22]); ctx.fill();
+    peyes(0, -16, 4, 2.6, p.eye, t, true);
+    ctx.fillStyle = "#ff8aa8"; ptri([-1, -12.5], [1, -12.5], [0, -11]); ctx.fill();
+  },
+  robot(p, t) {
+    ctx.strokeStyle = PO; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(0, -12); ctx.lineTo(0, -18); ctx.stroke();
+    ctx.globalAlpha = 0.5 + 0.5 * Math.abs(Math.sin(t * 3)); ctx.drawImage(glowC("#ff5a6a"), -8, -27, 16, 16); ctx.globalAlpha = 1;
+    pel(0, -19, 2.5, 2.5); pf("#ff5a6a", 1.1);
+    rr(-15, -6, 4, 7, 2); pf(shade(p.c, -0.15), 1.2); rr(11, -6, 4, 7, 2); pf(shade(p.c, -0.15), 1.2);
+    rr(-11, -12, 22, 18, 5); pf(pgr(p.c, 12, -5));
+    rr(-8, -9, 16, 10, 3); pf(p.c2, 1.1);
+    const bl = (t % 3.5) < 0.15 ? 0.6 : 3.4;
+    ctx.globalAlpha = 0.5; ctx.drawImage(glowC(p.eye), -10, -12, 20, 12); ctx.globalAlpha = 1;
+    ctx.fillStyle = p.eye; ctx.fillRect(-5.5, -4.5 - bl / 2, 3, bl); ctx.fillRect(2.5, -4.5 - bl / 2, 3, bl);
+    shine(-6, -10, 2.5, 1.2);
+    ctx.fillStyle = "rgba(120,200,255,.6)"; ctx.beginPath(); ctx.moveTo(-5, 7); ctx.lineTo(5, 7); ctx.lineTo(0, 11 + Math.sin(t * 20) * 2); ctx.fill();
+  },
+  drone(p, t) {
+    const sp = t * 25;
+    for (const s of [-1, 1]) { ctx.strokeStyle = PO; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(s * 7, -6); ctx.lineTo(s * 13, -12); ctx.stroke();
+      ctx.save(); ctx.translate(s * 13, -13); ctx.scale(1, 0.3); ctx.rotate(sp * s); ctx.fillStyle = "rgba(220,230,245,.7)"; rr(-8, -1.5, 16, 3, 1.5); ctx.fill(); ctx.restore(); }
+    ctx.save(); ctx.rotate(t * 1.5); ctx.beginPath(); ctx.moveTo(...gearPt(0)); for (let i = 1; i <= 64; i++) ctx.lineTo(...gearPt(i / 64 * TAU)); ctx.closePath(); pf(pgr(p.c, 12)); ctx.restore();
+    pel(0, 0, 7, 7); pf(p.c2, 1.2);
+    ctx.globalAlpha = 0.7; ctx.drawImage(glowC(p.eye), -9, -9, 18, 18); ctx.globalAlpha = 1;
+    pel(0, 0, 4.4, 4.4); pf("#fff", 1); ctx.fillStyle = p.eye; circ(Math.sin(t) * 1.2, 0.5, 2.8); ctx.fillStyle = PO; circ(Math.sin(t) * 1.2, 0.5, 1.2); ctx.fillStyle = "#fff"; circ(-1.2, -1.4, 0.9);
+    shine(-5, -7, 2.2, 1.1);
+  },
+  titan(p, t) {
+    const pulse = 0.55 + 0.45 * Math.sin(t * 4);
+    rr(-9, -6, 7, 7, 2); pf(shade(p.c, -0.25), 1.3); rr(2, -6, 7, 7, 2); pf(shade(p.c, -0.25), 1.3);
+    rr(-12, -26, 24, 21, 6); pf(pgr(p.c, 14, -16));
+    for (const s of [-1, 1]) { pel(s * 14, -21, 6, 5); pf(pgr(shade(p.c, 0.15), 6, -22, s * 14)); rr(s * 14 - 3.5, -18, 7, 12, 3); pf(p.c, 1.3);
+      ctx.fillStyle = "#ffd166"; circ(s * 14, -22, 1.4); }
+    ctx.globalAlpha = pulse; ctx.drawImage(glowC(p.c2), -10, -22, 20, 20); ctx.globalAlpha = 1;
+    pel(0, -12, 4, 4); pf(p.c2, 1.1); ctx.fillStyle = "#ffe08a"; circ(0, -12, 1.8);
+    rr(-8, -36, 16, 12, 4); pf(pgr(p.c, 9, -31));
+    rr(-6.5, -32, 13, 4.5, 2); pf("#141826", 1);
+    ctx.globalAlpha = 0.8; ctx.drawImage(glowC(p.eye), -10, -36, 20, 12); ctx.globalAlpha = 1;
+    ctx.fillStyle = p.eye; const sc = Math.sin(t * 1.5) * 3; ctx.fillRect(-4 + sc, -30.6, 3, 1.8); ctx.fillRect(1 + sc, -30.6, 3, 1.8);
+    ptri([-3, -36], [3, -36], [0, -42]); pf("#ffd166", 1.1);
+    shine(-5, -24, 3, 1.4);
+  },
+  bear(p, t) {
+    const b = Math.abs(Math.sin(t * 4)) * 2;
+    ctx.save(); ctx.translate(0, -b); ctx.globalAlpha = 0.95;
+    pel(-8, -19, 4.6, 4.6); pf(pgr(p.c, 5, -20, -8)); pel(8, -19, 4.6, 4.6); pf(pgr(p.c, 5, -20, 8));
+    ctx.fillStyle = p.c2; circ(-8, -19, 2.2); circ(8, -19, 2.2);
+    pel(0, -9, 11.5, 10.5); pf(pgr(p.c, 12, -10)); ctx.globalAlpha = 1;
+    pel(0, -5, 5, 3.6); pf(p.c2, 1); ctx.fillStyle = PO; pel(0, -6.5, 1.6, 1.1); ctx.fill();
+    shine(-5, -14, 3.5, 2);
+    peyes(0, -11, 4.6, 2.5, p.eye, t); pblush(0, -7, 8);
+    ctx.restore();
+  },
+  bunny(p, t) {
+    const e = Math.sin(t * 2.4) * 0.12;
+    for (const s of [-1, 1]) { ctx.save(); ctx.translate(s * 4, -18); ctx.rotate(s * (0.18 + e)); pel(0, -9, 3.6, 10); pf(pgr(p.c, 10, -10)); pel(0, -8, 1.8, 7); ctx.fillStyle = p.c2; ctx.fill(); ctx.restore(); }
+    pel(0, -9, 12, 10.5); pf(pgr(p.c, 12, -10));
+    pel(9, -3, 4, 4); pf("#fff", 1.1);
+    ctx.fillStyle = p.c2; ctx.beginPath(); ctx.moveTo(-1.2, -7); ctx.lineTo(1.2, -7); ctx.lineTo(0, -5.5); ctx.fill();
+    peyes(0, -11, 4.5, 2.6, p.eye, t); pblush(0, -6.5, 7.5);
+    ctx.fillStyle = "#ff9ac8"; circ(-7, -17, 1); ctx.fillStyle = "#9fd0ff"; circ(6, -2, 1); ctx.fillStyle = "#ffd166"; circ(-3, -1, 0.9);
+  },
+  unicorn(p, t) {
+    const sw = Math.sin(t * 3) * 0.2;
+    const mane = ["#ff9ac8", "#c39bff", "#8ecae6", "#a8f0c0"];
+    ctx.save(); ctx.translate(-10, -10); ctx.rotate(-0.4 + sw); mane.forEach((c, i) => { pel(-2 - i * 1.5, 2 + i * 2.5, 3.5, 2.4, 0.6); pf(c, 1.1); }); ctx.restore();
+    for (const x of [-7, -2, 3, 8]) { rr(x - 1.8, -6, 3.6, 6, 1.5); pf(p.c, 1.2); ctx.fillStyle = "#c39bff"; ctx.fillRect(x - 1.8, -1.5, 3.6, 1.5); }
+    pel(0, -8, 11, 6.5); pf(pgr(p.c, 11, -9));
+    pel(7, -19, 7, 7.5); pf(pgr(p.c, 8, -20, 7));
+    pel(12, -15, 4, 3.4); pf("#ffe0f0", 1.1); ctx.fillStyle = PO; circ(13.5, -15.5, 0.6);
+    ptri([3, -24], [7, -24], [4, -30]); pf(p.c, 1.2);
+    ptri([7, -25], [10, -25], [9.5, -36]); pf(p.c2, 1.2);
+    ctx.strokeStyle = rgba(PO, 0.5); ctx.lineWidth = 0.8; ctx.beginPath(); ctx.moveTo(7.6, -27.5); ctx.lineTo(10, -28.5); ctx.moveTo(8.3, -31); ctx.lineTo(9.9, -31.7); ctx.stroke();
+    mane.forEach((c, i) => { pel(2 - i * 0.5, -24 + i * 3.2, 3.2, 2.4, -0.4); pf(c, 1.1); });
+    peyes(7.5, -19, 0.01, 2.6, p.eye, t); pblush(9, -16, 0.01);
+    sparkle(-14, -22, 2, "#ffd166"); sparkle(16, -28, 1.6, "#fff");
+  },
+  star(p, t) {
+    const r = -Math.PI / 2 + Math.sin(t * 2) * 0.15;
+    ctx.globalAlpha = 0.7; ctx.drawImage(glowC("#fff3a0"), -24, -26, 48, 48); ctx.globalAlpha = 1;
+    const outer = new Path2D(starPts(0, -2, 15, 7.5, 5, r)); ctx.fillStyle = pgr(p.c, 14, -3); ctx.fill(outer); ctx.lineWidth = 1.6; ctx.strokeStyle = PO; ctx.lineJoin = "round"; ctx.stroke(outer);
+    ctx.fillStyle = rgba(p.c2, 0.7); ctx.fill(new Path2D(starPts(0, -1, 7, 3.6, 5, r)));
+    peyes(0, -2, 3.6, 2.4, p.eye, t); pmouth(0, 2, 1.5); pblush(0, 0.5, 6);
+    for (let i = 0; i < 3; i++) { const a = t * 0.6 + i * 2.1; sparkle(Math.cos(a) * 17, -2 + Math.sin(a) * 13, 1.8, "#fff"); }
+  },
+  lion(p, t) {
+    const br = Math.sin(t * 2) * 0.05;
+    ctx.save(); ctx.rotate(t * 0.15); ctx.globalAlpha = 0.25; ctx.fillStyle = "#fff3c4";
+    ctx.translate(0, -16); for (let i = 0; i < 10; i++) { ctx.rotate(TAU / 10); ptri([0, 0], [-3, -34], [3, -34]); ctx.fill(); } ctx.restore(); ctx.globalAlpha = 1;
+    ctx.drawImage(glowC("#ffd166"), -30, -46, 60, 60);
+    ctx.save(); ctx.translate(-10, -6); ctx.rotate(-0.8 + Math.sin(t * 2.5) * 0.2); ctx.strokeStyle = PO; ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-8, -4, -8, -12); ctx.stroke(); ctx.strokeStyle = p.c; ctx.lineWidth = 2; ctx.stroke(); pel(-8, -13, 3, 3.6); pf("#e0902a", 1.1); ctx.restore();
+    ctx.beginPath(); ctx.moveTo(-9, 0); ctx.bezierCurveTo(-11, -14, 10, -14, 9, 0); ctx.closePath(); pf(pgr(p.c, 11, -6));
+    pel(-4, 0, 3.4, 2.2); pf(p.c, 1.1); pel(4, 0, 3.4, 2.2); pf(p.c, 1.1);
+    ctx.save(); ctx.translate(0, -17); ctx.scale(1 + br, 1 + br);
+    ctx.beginPath(); for (let i = 0; i <= 28; i++) { const a = i / 28 * TAU, r = i % 2 ? 11 : 15.5; const x = Math.cos(a) * r, y = Math.sin(a) * r; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.closePath(); pf(pgr("#e0902a", 15));
+    ctx.beginPath(); for (let i = 0; i <= 28; i++) { const a = i / 28 * TAU + 0.11, r = i % 2 ? 9 : 12; const x = Math.cos(a) * r, y = Math.sin(a) * r; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.closePath(); ctx.fillStyle = "#ffb03a"; ctx.fill();
+    ctx.restore();
+    for (const s of [-1, 1]) { pel(s * 6.5, -24, 2.8, 2.8); pf(p.c, 1.1); }
+    pel(0, -16, 8.5, 8); pf(pgr(p.c, 9, -17));
+    pel(0, -12.5, 4.5, 3.2); pf(p.c2, 1); ctx.fillStyle = PO; ptri([-1.6, -14.5], [1.6, -14.5], [0, -12.6]); ctx.fill();
+    peyes(0, -18, 3.8, 2.4, p.eye, t, true);
+    ctx.save(); ctx.translate(0, -36 + Math.sin(t * 2) * 1.2); ctx.strokeStyle = PO; ctx.lineWidth = 4.2; pel(0, 0, 8, 2.4); ctx.stroke(); ctx.strokeStyle = "#fff3c4"; ctx.lineWidth = 2.4; ctx.stroke(); ctx.restore();
+    ctx.beginPath(); ctx.moveTo(-5, -26); ctx.lineTo(-5, -30); ctx.lineTo(-2.5, -28); ctx.lineTo(0, -32); ctx.lineTo(2.5, -28); ctx.lineTo(5, -30); ctx.lineTo(5, -26); ctx.closePath(); pf("#ffd166", 1.2);
+    ctx.fillStyle = "#ff4d6a"; circ(0, -28, 1);
+  }
+};
+function gearPt(a) { const r = 11 + (Math.cos(a * 8) > 0.3 ? 3 : 0); return [Math.cos(a) * r, Math.sin(a) * r]; }
+
+const RAR_AURA = ["", "#6cc0f5", "#c39bff", "#ffc93c", "#ff5a6a"], DIV_COL = ["#ffe08a", "#ff9ad5", "#c39bff", "#8ecae6", "#a8f0c0"];
+function petAura(p, t) { // effets selon la rareté : plus c'est rare, plus c'est spectaculaire
+  const r = p.rar; if (!r) return;
+  const cy = p.ground ? -12 : -2, col = r === 5 ? DIV_COL[Math.floor(t * 1.5) % DIV_COL.length] : RAR_AURA[r];
+  const sz = 30 + r * 7, pul = 0.75 + 0.25 * Math.sin(t * 3);
+  ctx.globalAlpha = (0.25 + r * 0.08) * pul; ctx.drawImage(glowC(col), -sz / 2, cy - sz / 2, sz, sz); ctx.globalAlpha = 1;
+  if (r >= 4) { ctx.save(); ctx.translate(0, p.ground ? 1 : cy); ctx.rotate(t * 0.7 * (r === 5 ? -1 : 1)); ctx.scale(1, p.ground ? 0.32 : 1);
+    ctx.strokeStyle = rgba(r === 5 ? "#fff3c4" : "#ff5a6a", 0.7); ctx.lineWidth = 1.4; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.arc(0, 0, 20, 0, TAU); ctx.stroke(); ctx.setLineDash([]);
+    for (let i = 0; i < 6; i++) { const a = i / 6 * TAU; ctx.fillStyle = r === 5 ? "#fff3c4" : "#ff8a9a"; ctx.fillRect(Math.cos(a) * 20 - 1.2, Math.sin(a) * 20 - 1.2, 2.4, 2.4); }
+    ctx.restore(); }
+}
+function petSparks(p, t) { // étincelles qui tournent autour (devant le familier)
+  const r = p.rar; if (r < 2) return;
+  const cy = p.ground ? -12 : -2, n = r, col = r === 5 ? "#ffffff" : RAR_AURA[r];
+  for (let i = 0; i < n; i++) { const a = t * (1.2 + r * 0.15) + i / n * TAU, s = Math.sin(a); if (s < -0.2) continue;
+    sparkle(Math.cos(a) * (17 + r * 2), cy + s * 6 - 4, 1.4 + r * 0.25 + 0.6 * Math.sin(t * 6 + i), col); }
+}
+function drawPetShape(id, t) {
+  const p = PETS[id];
+  ctx.save(); const k = 1 + p.rar * 0.05; ctx.scale(k, k);
+  petAura(p, t); PET_DRAW[p.sp](p, t); petSparks(p, t);
+  ctx.restore();
+}
+
 let petTimers = {}, petShots = [];
-const PET_FLY = [[-36, -80], [-66, -108], [-14, -122], [-92, -76], [-96, -132]];
-function petPositions(t) { // position de chaque familier actif
+const PET_FLY = [[-30, -88], [-58, -112], [2, -124], [-84, -82], [-86, -136]];
+function petPositions(t) { // position de chaque familier actif, derrière le chasseur
   const hx = heroX(), gy = groundY(), out = []; let f = 0, g = 0;
   activePets().forEach((id, i) => {
-    if (PETS[id].ground) { const k = g++; out.push([id, hx - 42 - 28 * k, gy - Math.abs(Math.sin(t * 4 + k * 1.3)) * 8]); }
-    else { const [ox, oy] = PET_FLY[f++ % PET_FLY.length]; out.push([id, hx + ox + Math.sin(t * 1.3 + i) * 6, gy + oy + Math.sin(t * 2.6 + i * 1.7) * 6]); }
+    if (PETS[id].ground) { const k = g++; out.push([id, Math.max(12, hx - 28 - 21 * k), gy - (k % 2) * 3 - Math.abs(Math.sin(t * 4 + k * 1.3)) * 6]); }
+    else { const [ox, oy] = PET_FLY[f++]; out.push([id, Math.max(14, hx + ox) + Math.sin(t * 1.3 + i) * 5, gy + oy + Math.sin(t * 2.6 + i * 1.7) * 6]); }
   });
   return out;
 }
 function drawPet(t) {
   if (hero.dead > 0) return;
-  for (const [id, x, y] of petPositions(t)) { ctx.save(); ctx.translate(x, y); drawPetShape(id, t); ctx.restore(); }
+  for (const [id, x, y] of petPositions(t).reverse()) { ctx.save(); ctx.translate(x, y); ctx.scale(0.78, 0.78); drawPetShape(id, t); ctx.restore(); }
   for (const s of petShots) {
     const k = Math.min(1, s.t), px = s.x + (monX() - s.x) * k, py = s.y + (monY() - 40 - s.y) * k - Math.sin(k * Math.PI) * 30;
     ctx.globalAlpha = 0.5; ctx.drawImage(glowSprite(), px - 10, py - 10, 20, 20); ctx.globalAlpha = 1;
@@ -1299,32 +1692,48 @@ function updatePet(dt, t) {
     if (petTimers[id] <= 0) { petTimers[id] = PET_RATE; petShots.push({ x, y, t: 0, id }); }
   });
 }
+function rollPetRar(zb) {
+  let roll = Math.random() * 100 * (zb ? 0.5 : 1) / (1 + petPv("luck") / 200), acc = 0;
+  for (let i = PET_RAR.length - 1; i >= 0; i--) { acc += PET_RAR[i]; if (roll < acc) return i; }
+  return 0;
+}
 function dropPet(zb) {
   if (!zb && Math.random() > 0.25) return;
-  const pool = Object.keys(PETS).filter(id => PETS[id].zone <= zoneIdx(S.level));
-  const id = pick(pool), p = PETS[id], l = S.pets[id] || 0;
+  const zi = zoneIdx(S.level); let r = rollPetRar(zb), pool = [];
+  for (; r >= 0; r--) { pool = Object.keys(PETS).filter(id => PETS[id].zone <= zi && PETS[id].rar === r); if (pool.length) break; }
+  if (!pool.length) return;
+  const id = pick(pool), p = PETS[id], l = S.pets[id] || 0, rn = '<span class="c' + p.rar + '">' + RARITY[p.rar].name + "</span>";
   if (!l) {
     S.pets[id] = 1; const free = activePets().length < petSlots(); if (free) S.petsOn = activePets().concat(id);
-    setTimeout(() => modal("Nouveau familier !", '<canvas class="petBig" data-pet="' + id + '"></canvas><br><b>' + p.name + "</b><br>" + p.info + "<br><br>" + (free ? "Il t'aide déjà au combat !" : "Tous tes emplacements sont pris : active-le dans Sac → Familiers.") , [{ t: "Trop mignon !" }]) || drawPetThumbs(), 900);
+    setTimeout(() => modal("Nouveau familier " + rn + " !", '<canvas class="petBig" data-pet="' + id + '"></canvas><br><b class="c' + p.rar + '" style="font-size:18px">' + p.name + "</b><br>" + p.info + "<br><br>" + (free ? "Il t'aide déjà au combat !" : "Tous tes emplacements sont pris : active-le dans Sac → Familiers."), [{ t: p.rar >= 3 ? "Incroyable !" : "Trop mignon !" }]) || drawPetThumbs(), 900);
+    if (p.rar >= 3) { vib(80); for (let i = 0; i < 40; i++) particles.push({ x: heroX(), y: groundY() - 60, vx: rand(-220, 220), vy: rand(-300, -40), life: 1.3, c: pick([RTXT[p.rar], "#ffffff"]), r: rand(3, 6), star: true }); }
   }
   else if (l < PET_MAX) { S.pets[id] = l + 1; setTimeout(() => toast(ic("paw") + " " + p.name + " passe niveau " + (l + 1) + " !"), 900); }
-  else { const g = mon.gold * 5; S.gold += g; setTimeout(() => toast(ic("paw") + " " + p.name + " est déjà au max : +" + fmt(g) + " " + COIN), 900); }
+  else { const g = mon.gold * 5 * (1 + p.rar); S.gold += g; setTimeout(() => toast(ic("paw") + " " + p.name + " est déjà au max : +" + fmt(g) + " " + COIN), 900); }
   sfx("rare"); save();
 }
 function drawPetThumbs() {
   document.querySelectorAll("canvas[data-pet]").forEach(c => {
-    const big = c.classList.contains("petBig"), sz = big ? 90 : 56, id = c.dataset.pet;
-    c.width = sz * DPR; c.height = sz * DPR; c.style.width = c.style.height = sz + "px";
-    const x = c.getContext("2d"); x.setTransform(DPR, 0, 0, DPR, 0, 0);
-    withCtx(x, () => { ctx.translate(sz / 2, sz / 2 + (PETS[id].ground ? 10 : 2) * sz / 56); ctx.scale(sz / 40, sz / 40); drawPetShape(id, 1); });
+    const big = c.classList.contains("petBig"), sz = big ? 100 : 56, id = c.dataset.pet;
+    if (c.width !== Math.round(sz * DPR)) { c.width = sz * DPR; c.height = sz * DPR; c.style.width = c.style.height = sz + "px"; }
+    const x = c.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height); x.setTransform(DPR, 0, 0, DPR, 0, 0);
+    withCtx(x, () => { const big2 = PETS[id].sp === "titan" || PETS[id].sp === "lion" || PETS[id].sp === "unicorn"; ctx.translate(sz / 2, sz / 2 + (PETS[id].ground ? (big2 ? 17 : 12) : 1) * sz / 56); ctx.scale(sz / (big2 ? 54 : 46), sz / (big2 ? 54 : 46)); drawPetShape(id, c._t || 1); });
   });
+}
+let petAnimT = 0;
+function animPetThumbs(dt) { // fait bouger les familiers dans les menus
+  petAnimT += dt; if (petAnimT < 0.066) return; const tt = performance.now() / 1000; petAnimT = 0;
+  const vis = $("pBag").classList.contains("active") && curSub("b") === "sPets", mo = $("modal") && $("modal").style.display !== "none";
+  if (!vis && !mo) return;
+  document.querySelectorAll("canvas[data-pet]").forEach(c => { c._t = tt; });
+  drawPetThumbs();
 }
 function refreshPets() {
   const act = activePets(), sl = petSlots(), nextSl = PET_SLOT_LV.find(l => l > S.hlv);
-  let h = '<div class="hint">' + ic("paw") + " <b>Familiers actifs : " + act.length + " / " + sl + "</b>" + (nextSl ? " · prochain emplacement au <b>niveau " + nextSl + "</b> du chasseur" : " · tous les emplacements sont débloqués") + ".<br>Ils se trouvent sur les boss (25 % de chance, garanti sur les boss de zone). Un doublon le fait monter de niveau (max " + PET_MAX + "). Leurs bonus s'additionnent et ils restent après une Renaissance.</div>";
+  let h = '<div class="hint">' + ic("paw") + " <b>Collection : " + petsOwned() + " / " + Object.keys(PETS).length + "</b> · <b>actifs : " + act.length + " / " + sl + "</b>" + (nextSl ? " · prochain emplacement au <b>niveau " + nextSl + "</b> du chasseur" : " · tous les emplacements sont débloqués") + ".<br>Ils se trouvent sur les boss (25 % de chance, garanti et plus rare sur les boss de zone). Plus un familier est rare, plus il est fort. Un doublon le fait monter de niveau (max " + PET_MAX + "). Leurs bonus s'additionnent et ils restent après une Renaissance.</div>";
   for (const id in PETS) {
     const p = PETS[id], l = S.pets[id] || 0, on = act.includes(id);
-    h += '<div class="upg petCard' + (on ? " act" : "") + '">' + (l ? '<canvas data-pet="' + id + '"></canvas>' : '<div class="q">?</div>') + '<div class="upgTxt"><div class="upgName">' + (l ? p.name + ' <span class="lv">niv. ' + l + "/" + PET_MAX + "</span>" : "???") + '</div><div class="upgDesc">' +
+    h += '<div class="upg petCard r' + p.rar + (on ? " act" : "") + '">' + (l ? '<canvas data-pet="' + id + '"></canvas>' : '<div class="q">?</div>') + '<div class="upgTxt"><div class="upgName">' + (l ? '<span class="c' + p.rar + '">' + p.name + '</span> <span class="lv">niv. ' + l + "/" + PET_MAX + "</span>" : "???") + '</div><div class="petRar c' + p.rar + '">' + RARITY[p.rar].name + (on ? ' · <span class="petOn">ACTIF</span>' : "") + '</div><div class="upgDesc">' +
       (l ? p.info + "<br>Attaque : " + Math.round(p.atk(l) * 100) + "% de la tienne · " + p.pasTxt + " +" + (p.flat ? fmtDec(p.pv(l)) : p.pv(l) + "%") : "Se trouve à partir de : " + ZONES[p.zone].name) + "</div></div>" +
       (l ? (S.exp[id] ? (expDone(id) ? '<button class="buy" data-claim="' + id + '">Récupérer</button>' : '<span class="expLeft">En expédition<br>' + fmtLeft(S.exp[id].end - Date.now()) + "</span>") : '<button class="buy' + (on ? " alt" : "") + '" data-tog="' + id + '">' + (on ? "Retirer" : "Activer") + "</button>") : "") + "</div>";
     if (l && !on && !S.exp[id]) h += '<div class="expRow"><span>' + ic("rocket") + " Envoyer " + p.name + " en expédition :</span>" + EXP_H.map(x => '<button class="smallBtn" data-exp="' + id + '" data-h="' + x + '">' + x + " h</button>").join("") + "</div>";
@@ -1452,14 +1861,29 @@ function upgradeItem(it) {
   S.stats.forges++; qProg("forge"); sfx("rare"); toast(ic("anvil") + " " + itemName(it) + " : " + itemLine(it));
   refreshBag(); refreshStats(); refreshTop(); save();
 }
-function fuse(rar) {
-  const list = S.inv.filter(i => i.rar === rar).sort((a, b) => a.val - b.val).slice(0, 3);
+function fuseOk(i) { return !i.set && !(i.plus > 0) && !(i.gems && i.gems.some(Boolean)); }
+function autoFuse() { // fusion automatique (option de la Forge)
+  const a = S.autoFuse; if (!a || !a.on) return;
+  let made = [];
+  for (let r = 0; r <= Math.min(3, a.maxRar); r++) {
+    let list;
+    while ((list = S.inv.filter(i => i.rar === r && fuseOk(i))).length >= 3) {
+      const use = list.sort((x, y) => x.val - y.val).slice(0, 3);
+      made.push(fuse(r, use, true));
+    }
+  }
+  if (made.length) { const best = made.reduce((x, y) => y.rar > x.rar ? y : x); toast(ic("anvil") + " Fusion auto : " + made.length + " objet" + (made.length > 1 ? "s" : "") + " créé" + (made.length > 1 ? "s" : "") + ' (meilleur : <span class="c' + best.rar + '">' + RARITY[best.rar].name + "</span>)"); if (curSub("b") === "sForge") refreshForge(); }
+}
+function fuse(rar, forced, silent) {
+  const list = forced || S.inv.filter(i => i.rar === rar).sort((a, b) => a.val - b.val).slice(0, 3);
   if (list.length < 3 || rar >= 4) return;
   S.inv = S.inv.filter(i => !list.includes(i));
   const src = pick(list), sl = SLOTS[src.slot], lvl = Math.max(...list.map(i => i.lvl)), nr = rar + 1;
   const it = { id: S.itemId++, set: src.set, slot: src.slot, stat: sl.stat, rar: nr, val: Math.max(1, Math.round(itemBase(sl.stat, lvl) * RARITY[nr].mult * rand(0.95, 1.15))), lvl, name: pick(sl.names) + " " + (src.set ? SETS[src.set].suffix : pick(ADJ)) };
   genAff(it); S.inv.push(it); if (nr === 3) S.stats.legend++; if (nr === 4) S.stats.mythic = (S.stats.mythic || 0) + 1;
-  S.stats.forges++; qProg("forge"); sfx("rare"); vib(30);
+  S.stats.forges++; qProg("forge");
+  if (silent) return it;
+  sfx("rare"); vib(30);
   modal("", '<span style="font-size:13px;color:#9a98ad">Fusion réussie !</span><br><br><span style="font-size:34px">' + sl.icon + '</span><br><b class="c' + nr + '">' + it.name + "</b><br>" + RARITY[nr].name + " · " + itemLine(it), [{ t: "Super !" }]);
   refreshForge(); refreshBag(); save();
 }
@@ -1469,9 +1893,15 @@ function refreshForge() {
     const n = S.inv.filter(i => i.rar === r).length;
     h += '<div class="upg"><div class="fuseRow"><span class="c' + r + '">3 ' + RARITY[r].name + "</span> → <span class=\"c" + (r + 1) + '">1 ' + RARITY[r + 1].name + '</span><br><span class="upgDesc">Dans ton sac : ' + n + '</span></div><button class="buy" data-fuse="' + r + '"' + (n < 3 ? " disabled" : "") + ">Fusionner</button></div>";
   }
+  const af = S.autoFuse;
+  h += '<div class="upg" style="display:block"><div style="display:flex;align-items:center;gap:8px"><b style="flex:1">' + ic("bolt") + ' Fusion automatique</b><button class="buy' + (af.on ? "" : " alt") + '" id="afTog">' + (af.on ? "Activée" : "Désactivée") + '</button></div>' +
+    '<div class="upgDesc" style="margin:6px 0">Dès que tu as 3 objets de la même rareté, ils fusionnent tout seuls. Les objets de panoplie, améliorés (+) ou avec des gemmes ne sont jamais fusionnés.</div><div class="upgDesc">Fusionner jusqu\'à :</div><div class="afChips">' +
+    [0, 1, 2, 3].map(r => '<button class="smallBtn c' + r + (af.maxRar === r ? " on" : "") + '" data-afr="' + r + '">' + RARITY[r].name + "</button>").join("") + "</div></div>";
   h += '<div class="secTitle"><span>' + ic("anvil") + ' Amélioration</span></div><div class="hint">Touche un objet (dans Équipement) puis « Améliorer » : +15 % de bonus par niveau, jusqu\'à +' + UPG_MAX + ". Coûte de l'or.</div>";
   $("sForge").innerHTML = h;
   $("sForge").querySelectorAll("[data-fuse]").forEach(b => b.onclick = () => fuse(+b.dataset.fuse));
+  $("afTog").onclick = () => { af.on = !af.on; sfx("buy"); if (af.on) autoFuse(); refreshForge(); refreshBag(); save(); };
+  $("sForge").querySelectorAll("[data-afr]").forEach(b => b.onclick = () => { af.maxRar = +b.dataset.afr; sfx("buy"); if (af.on) autoFuse(); refreshForge(); refreshBag(); save(); });
 }
 
 /* ================== BESTIAIRE ================== */
@@ -3198,7 +3628,7 @@ function loop(now) {
 }
 
 function update(dt) {
-  gameT += dt; updatePet(dt, gameT); updateShots(dt); updateFrenzy(dt); hero.cast = Math.max(0, (hero.cast || 0) - dt);
+  gameT += dt; updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); hero.cast = Math.max(0, (hero.cast || 0) - dt);
   hero.lunge = Math.max(0, hero.lunge - dt);
   hero.hurt = Math.max(0, hero.hurt - dt);
   const maxHp = P.maxHp();
@@ -3620,8 +4050,35 @@ function refreshAll() {
 
 /* ================== DÉMARRAGE ================== */
 // Appli installable : enregistre le service worker (seulement quand le jeu est en ligne, ex. GitHub Pages)
+/* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
+const NEWS = [
+  { v: 34, d: "Familiers de légende", l: [
+    "<b>33 familiers</b> au lieu de 11 : renards, dragons, phénix, licorne, golem, titan mécanique, lion d'or…",
+    "Les familiers ont maintenant une <b>rareté</b> : Commun, Rare, Épique, Légendaire, Mythique et <b>Divin</b>.",
+    "Tous les familiers ont été <b>redessinés</b> : contours, volume, grands yeux brillants.",
+    "Plus un familier est rare, plus il est <b>fort</b> et plus il <b>brille</b> : halo, étincelles, cercle de runes, rayons de lumière…",
+    "Les boss de zone donnent des familiers plus rares.",
+    "<b>Forge : fusion automatique</b> (option) : 3 objets de la même rareté fusionnent tout seuls, jusqu'à la rareté que tu choisis.",
+    "Ce panneau des <b>Nouveautés</b> (écran d'accueil et Options)."] },
+  { v: 33, d: "Équilibrage", l: ["Le niveau 200 du chasseur est beaucoup plus dur à atteindre.", "Bonus d'expérience réduits."] },
+  { v: 32, d: "Niveau du chasseur", l: ["<b>Niveau du chasseur</b> de 1 à 200, avec une barre d'XP et des récompenses.", "<b>11 accessoires</b> à débloquer et équiper.", "Jusqu'à <b>5 familiers actifs</b> en même temps."] },
+  { v: 31, d: "Mises à jour", l: ["Le jeu se met à jour tout seul, et un bouton « Mettre à jour » dans les Options."] },
+  { v: 30, d: "Correctif", l: ["L'import de sauvegarde fonctionne correctement."] },
+  { v: 29, d: "Icônes", l: ["Nouvelles icônes plus belles.", "Vitesse ×1 / ×2 / ×4.", "Objets Mythiques et Divins un peu plus faciles à trouver."] }
+];
+function openNews() {
+  $("newsBody").innerHTML = NEWS.map((n, i) => '<div class="newsV' + (i ? "" : " cur") + '">v' + n.v + " · " + n.d + (i ? "" : "<small>dernière version</small>") + "</div><ul>" + n.l.map(x => "<li>" + x + "</li>").join("") + "</ul>").join("");
+  $("newsPanel").classList.add("show"); $("newsBody").scrollTop = 0;
+  S.seenVer = NEWS[0].v; $("newsDot").style.display = "none"; save();
+}
+$("newsBtn").onclick = e => { e.stopPropagation(); openNews(); };
+$("newsOpt").onclick = openNews;
+$("newsClose").onclick = () => $("newsPanel").classList.remove("show");
+$("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").classList.remove("show"); };
+if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
+
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 33, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 34, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
