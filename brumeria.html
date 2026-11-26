@@ -33,6 +33,9 @@
   #skillBtn { position: absolute; bottom: 10px; right: 10px; width: 64px; height: 64px; border-radius: 50%; border: 3px solid #8ecae6; background: #23304a; color: #fff; font-size: 11px; font-weight: 700; overflow: hidden; }
   #skillFill { position: absolute; left: 0; bottom: 0; width: 100%; background: rgba(142,202,230,.45); height: 0%; }
   #skillBtn span { position: relative; }
+  #rpowBtn { position: absolute; bottom: 90px; right: 18px; width: 52px; height: 52px; border-radius: 50%; border: none; padding: 0; background: conic-gradient(var(--c, #c07cff) calc(var(--s, 0) * 1%), rgba(20,24,40,.85) 0); box-shadow: 0 4px 12px rgba(0,0,0,.45); z-index: 3; }
+  #rpowBtn .in { position: absolute; inset: 4px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 35% 30%, #3a3462, #1b1a36); font-size: 24px; }
+  #rpowBtn.ready { box-shadow: 0 0 16px var(--c, #c07cff); animation: pulse 1.2s infinite; } #rpowBtn.on .in { background: radial-gradient(circle at 35% 30%, #6a4aa0, #3a1e60); }
   #skillBtn.ready { border-color: #ffd166; box-shadow: 0 0 14px #ffd166; animation: pulse 1s infinite; }
   @keyframes pulse { 50% { transform: scale(1.06); } }
 
@@ -245,6 +248,8 @@
   .clMem { display: flex; align-items: center; gap: 8px; padding: 7px 8px; background: #1a1d2e; border-radius: 10px; margin: 5px 0; font-size: 13px; } .clMem.me { border: 1px solid #5a4a8a; }
   .clMN { flex: 1; } .clMN small { display: block; color: #9a98ad; font-size: 11px; } .clDot { width: 9px; height: 9px; border-radius: 50%; background: #555; } .clDot.on { background: #52d17c; box-shadow: 0 0 6px #52d17c; }
   .clChat { background: #11131f; border-radius: 10px; padding: 8px; height: 150px; overflow-y: auto; font-size: 13px; line-height: 1.45; color: #ddd; } .clChat b { color: #ffd166; }
+  .clTabs { display: flex; gap: 4px; margin: 2px 0 10px; overflow-x: auto; } .clTabs button { flex: 1 0 auto; border: 1px solid #343a5c; background: #1d2034; color: #c8c6d8; font-weight: 800; font-size: 12px; padding: 7px 8px; border-radius: 10px; white-space: nowrap; }
+  .clTabs button.on { border-color: #ffd166; color: #ffd166; } .clMem .buy { padding: 7px 10px; font-size: 12px; }
   .clSay { display: flex; gap: 6px; margin-top: 6px; } .clSay .buy { padding: 8px 12px; } .clEmb { font-size: 18px !important; }
   #custPanel { position: fixed; inset: 0; z-index: 45; display: none; align-items: center; justify-content: center; background: rgba(8,8,20,.78); padding: 12px; }
   #custPanel.show { display: flex; }
@@ -544,6 +549,7 @@
     <div id="frenzyBar"><i id="frenzyFill"></i></div>
     <div id="bossAlert">TAPE LE BOSS POUR CONTRER !</div>
     <button id="skillBtn"><span class="in">FRAPPE<br>BRUME</span></button>
+    <button id="rpowBtn" aria-label="Pouvoir de race"><span class="in" id="rpowIc">🧑</span></button>
   </div>
 
   <div id="tabs">
@@ -599,14 +605,14 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v54</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v55</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v54 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v55 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -623,7 +629,7 @@
   <button id="playBtn">JOUER</button>
   <div class="tsRow"><button id="custBtn">👤 Personnaliser · 🧬 Race</button></div><div class="tsRow"><button id="clanBtn">🛡️ Clan</button><button id="arenaBtn">⚔️ Arène co-op</button></div><div id="clanTitleTag"></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v54</div></div>
+  <div class="tsVer">v55</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -833,7 +839,7 @@ function newState() {
     tree: {}, bonusPts: 0, music: true,
     stats: { bossKills: 0, taps: 0, legend: 0, items: 0, forges: 0, rares: 0, skills: 0, quests: 0, time: 0, bestHit: 0, goldTotal: 0 },
     ach: {}, daily: null, bestiary: {}, pets: {}, pet: null,
-    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0, sex: "h", hs: 0, skin: 1, eye: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, autoExp: { on: false, h: 4 }, race: "humain", rerolls: 0, rrPity: 0, rrPack: false, raceSeen: { humain: 1 }, clan: null, clanC: 0, seenVer: 0 };
+    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0, sex: "h", hs: 0, skin: 1, eye: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, autoExp: { on: false, h: 4 }, race: "humain", rerolls: 0, rrPity: 0, rrPack: false, raceSeen: { humain: 1 }, clan: null, clanC: 0, autoPow: true, ecus: 0, wkd: null, seenVer: 0 };
 }
 let S = newState();
 let loadedOK = false; // tant que la sauvegarde n'est pas chargée, on n'écrit JAMAIS dessus
@@ -880,12 +886,12 @@ function eqBonus(stat) {
   return b;
 }
 const P = {
-  atk:  () => atkFrom(S.upg.atk) * (1 + eqBonus("atk") / 100) * (1 + 0.25 * S.pupg.patk) * (1 + 0.15 * T("g1")) * (1 + 0.2 * T("g5")) * (1 + petPv("atk") / 100) * (1 + bestStars() / 100) * CL().atk * (setOn("spectre", 2) ? 1.2 : 1) * (setOn("rodeur", 4) ? 1.25 : 1) * (setOn("arcaniste", 2) ? 1.2 : 1) * (setOn("arcaniste", 6) ? 1.4 : 1) * (1 + gemSum("atk") / 100) * (frenzyT > 0 ? 3 : 1) * (buffOn("rage") ? SKILLS.rage.power(T("rage")) : 1) * hlvB() * (1 + accSum("atk") / 100),
+  atk:  () => atkFrom(S.upg.atk) * (1 + eqBonus("atk") / 100) * (1 + 0.25 * S.pupg.patk) * (1 + 0.15 * T("g1")) * (1 + 0.2 * T("g5")) * (1 + petPv("atk") / 100) * (1 + bestStars() / 100) * CL().atk * (setOn("spectre", 2) ? 1.2 : 1) * (setOn("rodeur", 4) ? 1.25 : 1) * (setOn("arcaniste", 2) ? 1.2 : 1) * (setOn("arcaniste", 6) ? 1.4 : 1) * (1 + gemSum("atk") / 100) * (frenzyT > 0 ? 3 : 1) * (buffOn("rage") ? SKILLS.rage.power(T("rage")) : 1) * hlvB() * (1 + accSum("atk") / 100) * rPow("atk"),
   maxHp:() => hpFrom(S.upg.hp) * (1 + 0.1 * A2("a5")) * (1 + eqBonus("hp") / 100) * (1 + 0.25 * S.pupg.php) * (1 + 0.15 * T("d1")) * (1 + 0.2 * T("d6")) * (1 + petPv("hp") / 100) * (1 + gemSum("hp") / 100) * hlvB() * (1 + accSum("hp") / 100),
-  spd:  () => spdFrom(S.upg.spd) * (1 + eqBonus("spd") / 100) * (1 + petPv("spd") / 100) * CL().spd * (setOn("rodeur", 2) ? 1.2 : 1) * (setOn("spectre", 6) ? 1.25 : 1) * (1 + affSum("spd") / 100) * (1 + gemSum("spd") / 100) * (buffOn("eclair") ? 2 : 1) * (1 + accSum("spd") / 100),
-  crit: () => { const sc = (setOn("spectre", 4) ? 10 : 0) + affSum("crit") + accSum("crit") + petPv("crit"); return Math.min(60 + 3 * T("g2") + CL().crit + sc, critFrom(S.upg.crit) + eqBonus("crit") + 3 * T("g2") + CL().crit + sc); },
-  tap:  () => P.atk() * tapFrom(S.upg.tap) * (1 + (accSum("tap") + petPv("tap")) / 100) * (1 + 0.05 * A2("a6")),
-  goldMult: () => (1 + S.upg.gold * 0.1) * (1 + 0.05 * A2("a3")) * (1 + 0.1 * A2("a15")) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + 0.2 * T("p6")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1) * (1 + accSum("gold") / 100)
+  spd:  () => spdFrom(S.upg.spd) * (1 + eqBonus("spd") / 100) * (1 + petPv("spd") / 100) * CL().spd * (setOn("rodeur", 2) ? 1.2 : 1) * (setOn("spectre", 6) ? 1.25 : 1) * (1 + affSum("spd") / 100) * (1 + gemSum("spd") / 100) * (buffOn("eclair") ? 2 : 1) * (1 + accSum("spd") / 100) * rPow("spd"),
+  crit: () => { if (rCrit()) return 100; const sc = (setOn("spectre", 4) ? 10 : 0) + affSum("crit") + accSum("crit") + petPv("crit"); return Math.min(60 + 3 * T("g2") + CL().crit + sc, critFrom(S.upg.crit) + eqBonus("crit") + 3 * T("g2") + CL().crit + sc); },
+  tap:  () => P.atk() * tapFrom(S.upg.tap) * (1 + (accSum("tap") + petPv("tap")) / 100) * (1 + 0.05 * A2("a6")) * rPow("tap"),
+  goldMult: () => (1 + S.upg.gold * 0.1) * (1 + 0.05 * A2("a3")) * (1 + 0.1 * A2("a15")) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + 0.2 * T("p6")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1) * (1 + accSum("gold") / 100) * rPow("gold")
 };
 
 // Les stats du héros sont recalculées une seule fois par image (au lieu de des dizaines de fois)
@@ -1012,12 +1018,13 @@ function killMonster() {
   addFloat("+" + fmt(g), "#ffd166", 18, -40);
   sfx("kill"); vib(15);
   for (let i = 0; i < 16; i++) particles.push({ x: monX(), y: monY() - 40 * mon.scale, vx: rand(-200, 200), vy: rand(-320, -80), life: 0.9, c: pick([mon.color, "#ffd166", "#ffffff"]), r: rand(3, 6), star: true });
+  if (mon.tower && tower.cb) { cbEnd(); return; }
   if (mon.tower) { if (tower.vb) vbWin(); else if (tower.inv) invasionWin(); else towerClear(); respawn = tower.vb ? 2.2 : 0.6; refreshTop(); refreshUpgButtons(); return; }
   const wasBoss = mon.boss;
   rollLoot(wasBoss || mon.rare, mon.rare); if (wasBoss && T("p5")) rollLoot(true);
   const bk = mon.zb ? "zb" + zoneIdx(S.level) : mon.type; S.bestiary[bk] = (S.bestiary[bk] || 0) + 1;
   if (mon.rare) { S.bestiary["or_" + bk] = (S.bestiary["or_" + bk] || 0) + 1; S.stats.rares++; }
-  qProg("kill"); clanAddPts(wasBoss ? 3 : 0.05); if (wasBoss) { S.stats.bossKills++; qProg("boss"); dropPet(mon.zb); if (Math.random() < 0.3 + 0.1 * T("p9") || mon.zb) { const gt = randGem(); addGem(gt); setTimeout(() => toast(gemIcon(gt, 16) + " " + GEMS[gt].name + " trouvé !"), 1300); } }
+  qProg("kill"); clanAddPts(wasBoss ? 3 : 0.05); clanWeek(wasBoss ? "b" : "m", 1); if (wasBoss) { S.stats.bossKills++; qProg("boss"); dropPet(mon.zb); if (Math.random() < 0.3 + 0.1 * T("p9") || mon.zb) { const gt = randGem(); addGem(gt); setTimeout(() => toast(gemIcon(gt, 16) + " " + GEMS[gt].name + " trouvé !"), 1300); } }
   if (wasBoss && S.level >= MAX_LEVEL) {
     bossTimer = 0; S.kills = 0; S.auto = true;
     if (S.diff && !S.wonH) { S.wonH = true; modal("💀 Mode Difficile terminé !", "Tu as vaincu le <b>Dévoreur d'Étoiles</b> en mode <b>Difficile</b> !<br><br>Tu fais partie des plus grands chasseurs de Brumeria. D'autres défis arrivent bientôt…", [{ t: "Légendaire !" }]); }
@@ -1047,6 +1054,7 @@ function heroDies() {
   else { toast("Ton chasseur se relève… Améliore-le si ça bloque !"); for (const m of packAlive()) m.hp = m.max; }
 }
 function failBoss(msg) {
+  if (tower && tower.cb) { cbEnd(); return; }
   if (tower && tower.vb) { exitTower("Le <b>Seigneur du Néant</b> t'a vaincu…<br><br>Renforce-toi et reviens l'affronter : il t'attend dans l'onglet Journal → Événements."); return; }
   if (tower && tower.inv) { exitTower("L'Avatar de la Brume t'a repoussé… Améliore-toi et réessaie, l'invasion dure toute la journée."); return; }
   if (tower) { const f = tower.floor; exitTower((msg.includes("Temps") ? "Temps écoulé" : "Ton chasseur est tombé") + " à l'étage <b>" + f + "</b>."); return; }
@@ -1958,7 +1966,7 @@ function drawPet(t) {
 }
 function updatePet(dt, t) {
   for (const s of petShots) s.t += dt / 0.35;
-  for (const s of petShots) if (s.t >= 1 && !s.done) { s.done = true; if (mon && mon.dying <= 0 && respawn <= 0 && S.pets[s.id]) dealDamage(P.atk() * PETS[s.id].atk(S.pets[s.id]) * (1 + accSum("pet") / 100), "pet"); }
+  for (const s of petShots) if (s.t >= 1 && !s.done) { s.done = true; if (mon && mon.dying <= 0 && respawn <= 0 && S.pets[s.id]) dealDamage(P.atk() * PETS[s.id].atk(S.pets[s.id]) * (1 + accSum("pet") / 100) * rPow("pet"), "pet"); }
   petShots = petShots.filter(s => !s.done);
   if (!mon || mon.dying > 0 || respawn > 0 || hero.dead > 0) return;
   petPositions(t).forEach(([id, x, y], i) => {
@@ -2080,9 +2088,54 @@ const RACES = {
   neant:   { name: "Enfant du Néant",   r: 7, w: 0.5,  ic: "🌑", b: { atk: 100, hp: 60, spd: 15, crit: 10, gold: 50 }, info: "Né du vide lui-même. Presque personne ne l'a jamais vu.", skin: "#7a68a6", eye: "#e07cff", horn: "#2a1840" }
 };
 const RACE_PITY = 40, REROLL_PRICE = 30, RR_PACK = 100;
+// Pouvoir actif de chaque race (bouton au-dessus de Frappe Brume, ou automatique)
+const RPOW = {
+  humain:  { n: "Fièvre de l'or",        cd: 50, d: 10, txt: "Or ×3 pendant 10 s", b: { gold: 3 }, col: "#ffd166" },
+  nain:    { n: "Peau de roche",         cd: 50, d: 8,  txt: "Soigne toute ta vie et te rend invulnérable 8 s", heal: 1, inv: 1, col: "#c8b89a" },
+  elfe:    { n: "Pluie de flèches",      cd: 45, d: 8,  txt: "Vitesse d'attaque ×2 pendant 8 s", b: { spd: 2 }, col: "#9fe0a0" },
+  orc:     { n: "Cri de guerre",         cd: 45, d: 8,  txt: "Attaque ×2 pendant 8 s", b: { atk: 2 }, col: "#ff6a3a" },
+  felin:   { n: "Pas de l'ombre",        cd: 45, d: 8,  txt: "Tous tes coups sont critiques pendant 8 s", crit: 1, col: "#9cff5a" },
+  fee:     { n: "Poussière de fée",      cd: 45, d: 10, txt: "Dégâts des familiers ×3 pendant 10 s", b: { pet: 3 }, col: "#aaf0ff" },
+  lycan:   { n: "Hurlement lunaire",     cd: 45, d: 8,  txt: "Taps ×4 et attaque ×1,5 pendant 8 s", b: { tap: 4, atk: 1.5 }, col: "#ffd23a" },
+  golem:   { n: "Séisme",                cd: 40,        txt: "Inflige 25× ton attaque à tous les monstres", hit: 25, col: "#a3a6b0" },
+  ondin:   { n: "Raz-de-marée",          cd: 50, d: 10, txt: "Inflige 15× ton attaque à tous les monstres, puis or ×2 pendant 10 s", hit: 15, b: { gold: 2 }, col: "#5ab8ff" },
+  vampire: { n: "Nuée de chauves-souris", cd: 45, d: 8, txt: "Attaque ×2 et soin continu pendant 8 s", b: { atk: 2 }, leech: 1, col: "#ff3a4a" },
+  celeste: { n: "Bénédiction",           cd: 50, d: 10, txt: "Soigne toute ta vie et attaque ×2 pendant 10 s", heal: 1, b: { atk: 2 }, col: "#ffe58a" },
+  dragon:  { n: "Souffle du dragon",     cd: 45,        txt: "Inflige 50× ton attaque à tous les monstres", hit: 50, col: "#ff8a3a" },
+  neant:   { n: "Déchirure du Néant",    cd: 45, d: 10, txt: "Inflige 100× ton attaque à tous, puis attaque ×2 pendant 10 s", hit: 100, b: { atk: 2 }, col: "#b04cff" }
+};
+const RPW = () => RPOW[S.race] || RPOW.humain;
+const rPow = st => (buffOn("rpow") && RPW().b && RPW().b[st]) || 1;
+const rCrit = () => buffOn("rpow") && RPW().crit;
+let rpowWas = false;
+function racePowTick(dt) {
+  const rp = RPW(), on = buffOn("rpow");
+  if (on !== rpowWas) { rpowWas = on; statF++; }
+  if (on && rp.leech && hero.dead <= 0) hero.hp = Math.min(P.maxHp(), hero.hp + P.maxHp() * 0.04 * dt);
+  if ((cds.rpow || 0) <= gameT && S.autoPow !== false && !arenaOn && mon && mon.dying <= 0 && respawn <= 0 && hero.dead <= 0 && !(mon.vb && mon.intro > 0)) useRacePower();
+}
+function useRacePower() {
+  const rp = RPW();
+  if (hero.dead > 0 || arenaOn || (cds.rpow || 0) > gameT || !mon) return;
+  cds.rpow = gameT + rp.cd * cdMult();
+  if (rp.d) buffs.rpow = gameT + rp.d;
+  if (rp.heal) hero.hp = P.maxHp();
+  if (rp.inv) buffs.inv = gameT + rp.d;
+  if (rp.hit && respawn <= 0) for (const m of packAlive()) {
+    for (let i = 0; i < 22; i++) particles.push({ x: m.px + rand(-40, 40), y: groundY() + m.py - rand(0, 80), vx: rand(-90, 90), vy: rand(-200, 20), life: 0.9, c: pick([rp.col, "#ffffff"]), r: rand(3, 7), star: Math.random() < 0.3 });
+    dealDamage(P.atk() * rp.hit, "skill", m);
+  }
+  for (let i = 0; i < 26; i++) particles.push({ x: heroX() + rand(-24, 24), y: groundY() - rand(10, 100), vx: rand(-80, 80), vy: rand(-220, -40), life: 1, c: pick([rp.col, "#ffffff"]), r: rand(3, 6), star: true });
+  addFloatAt(heroX(), groundY() - 140, rp.n + " !", rp.col, 20);
+  shakeT = Math.max(shakeT || 0, rp.hit ? 0.35 : 0.15); sfx("rare"); vib(50); statF++; clanWeek("p", 1);
+}
+// Collection : chaque race obtenue au moins une fois donne un bonus permanent (attaque, vie, or)
+const COLL_PCT = { 0: 1, 1: 2, 2: 3, 3: 5, 4: 8, 7: 12 };
+const raceColl = () => Object.keys(RACES).filter(id => (S.raceSeen && S.raceSeen[id]) || id === (S.race || "humain"));
+const collPct = () => raceColl().reduce((a, id) => a + COLL_PCT[RACES[id].r], 0);
 const RR_PACK_END = Date.UTC(2026, 10, 28, 23, 0, 0); // dimanche 29 novembre 2026 à 00h00 (heure de Paris)
 const RACE = () => RACES[S.race] || RACES.humain;
-const raceB = st => RACE().b[st] || 0;
+const raceB = st => (RACE().b[st] || 0) + (st === "atk" || st === "hp" || st === "gold" ? collPct() : 0);
 const RB_TXT = { atk: "Attaque +X %", hp: "Vie +X %", spd: "Vitesse d'attaque +X %", crit: "Critique +X pts", gold: "Or +X %", xp: "XP +X %", tap: "Dégâts des taps +X %", pet: "Dégâts des familiers +X %", loot: "Butin +X %" };
 const raceTxt = id => Object.entries(RACES[id].b).map(([k, v]) => RB_TXT[k].replace("X", v)).join(" · ");
 const raceName = id => '<span class="c' + RACES[id].r + '">' + RACES[id].ic + " " + RACES[id].name + "</span>";
@@ -2120,12 +2173,14 @@ function offerRerollPack() {
 function raceHtml() {
   const id = S.race || "humain", R = RACES[id], left = RACE_PITY - (S.rrPity || 0);
   let h = '<div class="raceBox r' + R.r + '"><div class="cuLbl"><span>🧬 Race</span><span>' + RARITY[R.r].name + '</span></div><div class="raceCur">' + raceName(id) + '</div><div class="raceInfo">' + R.info + '<br><b>' + raceTxt(id) + "</b></div>" +
+    '<div class="raceInfo" style="margin-top:6px">✨ Pouvoir : <b style="color:' + RPOW[id].col + '">' + RPOW[id].n + "</b> (recharge " + RPOW[id].cd + " s)<br>" + RPOW[id].txt + '</div><div class="raceSub"><label><input type="checkbox" id="autoPow"' + (S.autoPow !== false ? " checked" : "") + "> Lancer le pouvoir automatiquement</label></div>" +
+    '<div class="raceInfo" style="margin-top:6px">📚 Collection : <b>' + raceColl().length + " / " + Object.keys(RACES).length + "</b> races · bonus permanent <b>+" + collPct() + " %</b> attaque, vie et or</div>" +
     '<div class="raceBtns"><button class="buy" id="rr1">🎲 Reroll</button><button class="buy" id="rr10">🎲 ×10</button></div>' +
     '<div class="raceSub">Rerolls : <b>' + (S.rerolls || 0) + "</b> · Légendaire ou mieux garanti dans <b>" + left + "</b> tirage" + (left > 1 ? "s" : "") + '<br><button class="smallBtn" id="rrBuy">Acheter 1 reroll (' + REROLL_PRICE + " " + PERLE + ')</button> <button class="smallBtn" id="rrAll">Toutes les races</button></div></div>';
   return h;
 }
 function showRaces() {
-  modal("🧬 Les races", "<div class='rrList'>" + Object.keys(RACES).map(id => (S.raceSeen && S.raceSeen[id] || id === (S.race || "humain") ? raceName(id) : "<span style='color:#777'>❔ ???</span>") + " <small>(" + RARITY[RACES[id].r].name + ", " + String(RACES[id].w).replace(".", ",") + " %)</small><br><small>" + raceTxt(id) + "</small>").join("<br>") + "</div><small>Tu gagnes 1 reroll tous les 10 niveaux du chasseur. Tous les " + RACE_PITY + " tirages sans Légendaire, le suivant est garanti Légendaire ou mieux.</small>", [{ t: "OK" }]);
+  modal("🧬 Les races", "<div class='rrList'>" + Object.keys(RACES).map(id => (S.raceSeen && S.raceSeen[id] || id === (S.race || "humain") ? raceName(id) : "<span style='color:#777'>❔ ???</span>") + " <small>(" + RARITY[RACES[id].r].name + ", " + String(RACES[id].w).replace(".", ",") + " %)</small><br><small>" + raceTxt(id) + "<br>✨ " + RPOW[id].n + " : " + RPOW[id].txt + " · collection +" + COLL_PCT[RACES[id].r] + " %</small>").join("<br>") + "</div><small>Tu gagnes 1 reroll tous les 10 niveaux du chasseur. Tous les " + RACE_PITY + " tirages sans Légendaire, le suivant est garanti Légendaire ou mieux. Chaque race obtenue au moins une fois donne un bonus permanent (collection).</small>", [{ t: "OK" }]);
 }
 function accSum(st) {
   let v = raceB(st) + clanB(st);
@@ -2550,7 +2605,8 @@ const HS_F = [["auto", "Selon la classe"], ["longf", "Longs"], ["couettes", "Cou
 const BEARDS = ["Aucune", "Courte", "Bouc", "Longue", "Moustache"];
 const MARKS = ["Aucune", "Cicatrice", "Peinture de guerre", "Taches de rousseur", "Tatouage de brume", "Maquillage"];
 const HACC = ["Aucun", "Bandeau", "Cache-œil", "Lunettes", "Boucles d'oreilles", "Couronne de fleurs", "Bandana"];
-const SCARVES = [["Aucune", null], ["Rouge", "#d23a48"], ["Bleue", "#3a7ad2"], ["Verte", "#3aa86a"], ["Dorée", "#e0b040"], ["Violette", "#8a4ad2"], ["Blanche", "#e8ecf4"], ["Noire", "#22242e"]];
+const SCARVES = [["Aucune", null], ["Rouge", "#d23a48"], ["Bleue", "#3a7ad2"], ["Verte", "#3aa86a"], ["Dorée", "#e0b040"], ["Violette", "#8a4ad2"], ["Blanche", "#e8ecf4"], ["Noire", "#22242e"], ["Du clan", "clan"], ["Royale", "#6a2ab0"], ["Flammes", "#ff6a1a"]];
+const scarfOwned = i => i < 8 || S.owned["sc" + i];
 const hsKey = L => L.hk || (HSTYLES[L.hs] || HSTYLES[0])[0];
 const LOOK_PRICE = 4;
 const lookOwned = (k, i) => i < 2 || S.owned[k + i];
@@ -2558,7 +2614,7 @@ function heroColors() {
   const L = S.look, c = LOOKS.coat.list[L.coat] || LOOKS.coat.list[0], tr = (LOOKS.trim.list[L.trim] || LOOKS.trim.list[0])[1], h = LOOKS.hair.list[L.hair] || LOOKS.hair.list[0];
   const sk = (SKINS[L.skin] || SKINS[1])[1], ey = (EYES[L.eye] || EYES[0])[1] || tr, hs = hsKey(L);
   const R = RACES[L.race] || RACE();
-  return { coat: c[1], coatD: c[2], trim: tr, shirt: "#2c3344", skin: R.skin || sk, hair: h[1], hairD: h[2], eye: R.eye || ey, sex: L.sex === "f" ? "f" : "h", hs: hs === "auto" ? null : hs, R, beard: L.sex === "f" ? 0 : (L.beard || 0), mark: L.mark || 0, hacc: L.hacc || 0, scarf: (SCARVES[L.scarf] || SCARVES[0])[1] };
+  return { coat: c[1], coatD: c[2], trim: tr, shirt: "#2c3344", skin: R.skin || sk, hair: h[1], hairD: h[2], eye: R.eye || ey, sex: L.sex === "f" ? "f" : "h", hs: hs === "auto" ? null : hs, R, beard: L.sex === "f" ? 0 : (L.beard || 0), mark: L.mark || 0, hacc: L.hacc || 0, scarf: (() => { const sc = (scarfOwned(L.scarf || 0) && SCARVES[L.scarf]) || SCARVES[0]; return sc[1] === "clan" ? (S.clan ? CLAN_COL[S.clan.info.col] : "#ffd166") : sc[1]; })() };
 }
 const rgba = (hex, a) => { const [r, g, b] = hexRgb(hex); return "rgba(" + r + "," + g + "," + b + "," + a + ")"; };
 const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
@@ -2574,6 +2630,8 @@ const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
     { id: "hl150", name: "Héros de Brumeria", ok: () => S.hlv >= 150 },
     { id: "hl200", name: "Légende vivante", ok: () => S.hlv >= 200 },
     { id: "vb1", name: "Fléau du Néant", ok: () => (S.vbKills || 0) >= 1 },
+    { id: "t_pil", name: "Pilier du clan", ok: () => !!(S.owned && S.owned.t_pil) },
+    { id: "t_leg", name: "Légende du clan", ok: () => !!(S.owned && S.owned.t_leg) },
     { id: "ar25", name: "Champion de l'Arène", ok: () => (S.arenaBest || 0) >= 25 },
     { id: "ard30", name: "Roi du Cauchemar", ok: () => (arBestD()[3] || 0) >= 30 },
     { id: "arc25", name: "Âme de la meute", ok: () => (S.arenaCoop || 0) >= 25 }
@@ -2690,6 +2748,7 @@ function enterTower() {
 }
 function spawnTowerMonster() {
   if (tower.vb) return spawnVoidBoss();
+  if (tower.cb) return spawnClanBoss();
   if (tower.inv) return spawnInvasionBoss();
   const f = tower.floor; let L = Math.min(MAX_LEVEL, towerL(f)); if (isBossLvl(L)) L--;
   S.level = L; spawnMonster();
@@ -2712,11 +2771,11 @@ function towerClear() {
 }
 function exitTower(msg) {
   if (!tower) return;
-  const wasInv = tower.inv, wasVb = tower.vb; $("bossAlert").classList.remove("show"); $("towerExit").classList.remove("vbx"); vbFx = null;
+  const wasInv = tower.inv || tower.cb, wasVb = tower.vb, wasCb = tower.cb; $("bossAlert").classList.remove("show"); $("towerExit").classList.remove("vbx"); vbFx = null;
   S.level = tower.saved.level; S.kills = tower.saved.kills; S.auto = tower.saved.auto;
   tower = null; bossTimer = 0; respawn = 0; hero.dead = 0; hero.hp = P.maxHp(); heroShots = [];
   spawnMonster(); refreshTop(); save();
-  if (msg) modal(wasVb ? "🌑 Le Seigneur du Néant" : wasInv ? ic("crown") + " Invasion de Brume" : ic("tower") + " Tour de la Brume", msg + (wasInv || wasVb ? "" : "<br><br>Record : étage <b>" + S.tower.best + "</b>"), [{ t: "OK" }]);
+  if (msg) modal(wasCb ? "🐲 Boss de clan" : wasVb ? "🌑 Le Seigneur du Néant" : wasInv ? ic("crown") + " Invasion de Brume" : ic("tower") + " Tour de la Brume", msg + (wasInv || wasVb ? "" : "<br><br>Record : étage <b>" + S.tower.best + "</b>"), [{ t: "OK" }]);
 }
 
 /* ================== TUTORIEL ================== */
@@ -2935,7 +2994,7 @@ const EXP_H = [1, 4, 8];
 function expDone(id) { const e = S.exp[id]; return e && Date.now() >= e.end; }
 function sendExp(id, h) {
   if (activePets().includes(id)) { toast("Retire d'abord " + PETS[id].name + " des familiers actifs"); return; }
-  S.exp[id] = { end: Date.now() + h * 3600e3, h }; sfx("buy"); refreshPets(); save();
+  S.exp[id] = { end: Date.now() + h * 3600e3, h }; clanWeek("e", 1); sfx("buy"); refreshPets(); save();
 }
 function expLoot(id, tot) { // donne la récompense d'une expédition terminée et l'ajoute au total
   const e = S.exp[id], l = S.pets[id] || 1, g = monGold(Math.max(1, S.maxLevel - 1)) * 25 * e.h * (1 + 0.1 * l);
@@ -2963,7 +3022,7 @@ function claimAllExp(silent) {
   refreshTop(); updateBagTab(); return t;
 }
 function sendAllExp(h, silent) {
-  const ids = freePets(); for (const id of ids) S.exp[id] = { end: Date.now() + h * 3600e3, h };
+  const ids = freePets(); for (const id of ids) S.exp[id] = { end: Date.now() + h * 3600e3, h }; clanWeek("e", ids.length);
   if (!silent) { if (ids.length) { sfx("buy"); toast(ic("rocket") + " " + ids.length + " familier" + (ids.length > 1 ? "s partent" : " part") + " en expédition (" + h + " h)"); } else toast("Aucun familier libre : ils sont tous actifs ou déjà partis"); }
   return ids.length;
 }
@@ -4341,7 +4400,7 @@ function loop(now) {
 
 function update(dt) {
   if (comboT > 0) { comboT -= dt; if (comboT <= 0) comboN = 0; }
-  gameT += dt; updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); hero.cast = Math.max(0, (hero.cast || 0) - dt);
+  gameT += dt; racePowTick(dt); updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); hero.cast = Math.max(0, (hero.cast || 0) - dt);
   hero.lunge = Math.max(0, hero.lunge - dt);
   hero.hurt = Math.max(0, hero.hurt - dt);
   const maxHp = P.maxHp();
@@ -4388,9 +4447,9 @@ function refreshTop() {
   const bbb = $("bagBuyBtn"); if (bbb) bbb.disabled = S.gold < bagCost(S.bagBuy || 0);
   $("towerExit").style.display = tower ? "block" : "none"; $("towerBtn").classList.toggle("on", !!tower); $("sceneWrap").classList.toggle("vbMode", !!(tower && tower.vb));
   if (tower) {
-    $("zoneName").textContent = tower.vb ? "Le Néant" : tower.inv ? "Invasion de Brume" : "Tour de la Brume"; $("lvlTxt").textContent = tower.vb ? "Boss · Niv. " + vbLevel() : tower.inv ? "Boss d'événement" : "Étage " + tower.floor;
-    $("prevLvl").disabled = $("nextLvl").disabled = true; $("towerExit").classList.toggle("vbx", !!tower.vb); $("towerExit").textContent = tower.vb ? "Fuir le combat" : "Quitter la Tour";
-    $("progress").innerHTML = tower.vb ? "🌑 Boss du Néant" : ic("tower") + " Record : étage " + S.tower.best; $("bossBtn").style.display = "none";
+    $("zoneName").textContent = tower.cb ? "Boss de clan" : tower.vb ? "Le Néant" : tower.inv ? "Invasion de Brume" : "Tour de la Brume"; $("lvlTxt").textContent = tower.cb ? CB_TIME + " secondes : frappe fort !" : tower.vb ? "Boss · Niv. " + vbLevel() : tower.inv ? "Boss d'événement" : "Étage " + tower.floor;
+    $("prevLvl").disabled = $("nextLvl").disabled = true; $("towerExit").classList.toggle("vbx", !!tower.vb); $("towerExit").textContent = tower.vb || tower.cb ? "Fuir le combat" : "Quitter la Tour";
+    $("progress").innerHTML = tower.cb ? "🛡️ Boss de clan" : tower.vb ? "🌑 Boss du Néant" : ic("tower") + " Record : étage " + S.tower.best; $("bossBtn").style.display = "none";
     $("totalKills").textContent = fmt(S.totalKills); $("maxLvlTxt").textContent = S.maxLevel; return;
   }
   const z = zoneOf(S.level);
@@ -4407,6 +4466,10 @@ function refreshTop() {
 }
 function refreshSkill() {
   $("skillBtn").style.setProperty("--s", skill.toFixed(1));
+  { const rp = RPW(), left = Math.max(0, (cds.rpow || 0) - gameT), pct = 100 - left / (rp.cd * cdMult()) * 100, b = $("rpowBtn"), on = buffOn("rpow");
+    b.style.setProperty("--s", Math.max(0, Math.min(100, pct)).toFixed(1)); b.style.setProperty("--c", rp.col); b.classList.toggle("ready", left <= 0); b.classList.toggle("on", on);
+    const ri = RACE().ic; if ($("rpowIc").textContent !== ri) $("rpowIc").textContent = ri;
+  }
   $("skillBtn").classList.toggle("ready", skill >= 100);
   setHtml($("gold"), goldTxt());
 }
@@ -4714,7 +4777,7 @@ cv.addEventListener("pointerdown", e => {
     for (let i = 0; i < 3; i++) particles.push({ x, y: e.clientY - r.top, vx: rand(-80, 80), vy: rand(-120, -20), life: 0.35, c: "#fff", r: 2.5 });
   }
 });
-$("skillBtn").onclick = useSkill;
+$("skillBtn").onclick = useSkill; $("rpowBtn").onclick = () => { if ((cds.rpow || 0) > gameT) toast(RPW().n + " : encore " + Math.ceil(cds.rpow - gameT) + " s"); else useRacePower(); };
 $("bossBtn").onclick = () => { S.auto = true; S.level = S.maxLevel; S.kills = 0; spawnMonster(); refreshTop(); };
 $("prevLvl").onclick = () => { if (!tower && S.level > 1) { S.level--; S.kills = 0; S.auto = false; spawnMonster(); refreshTop(); } };
 $("nextLvl").onclick = () => { if (!tower && S.level < S.maxLevel) { S.level++; S.kills = 0; S.auto = S.level === S.maxLevel; spawnMonster(); refreshTop(); } };
@@ -4741,7 +4804,7 @@ $("speedBtn").onclick = () => {
   setSpeedBtn(); sfx("buy"); toast(S.speed > 1 ? "Vitesse ×" + S.speed : "Vitesse normale"); save();
 };
 setSpeedBtn(); $("towerBtn").onclick = askTower;
-$("towerExit").onclick = () => tower && tower.vb ? modal("🌑 Fuir le combat ?", "Le Seigneur du Néant restera là. Tu pourras revenir l'affronter quand tu veux.", [{ t: "Rester", alt: true }, { t: "Fuir", f: () => exitTower() }]) : modal(ic("tower") + " Quitter la Tour ?", "Tu reviendras à ton farm. Ton record (étage " + S.tower.best + ") est gardé.", [{ t: "Rester", alt: true }, { t: "Quitter", f: () => exitTower() }]);
+$("towerExit").onclick = () => tower && tower.cb ? modal("🐲 Arrêter le combat ?", "Tes dégâts déjà infligés seront comptés.", [{ t: "Continuer", alt: true }, { t: "Arrêter", f: () => cbEnd() }]) : tower && tower.vb ? modal("🌑 Fuir le combat ?", "Le Seigneur du Néant restera là. Tu pourras revenir l'affronter quand tu veux.", [{ t: "Rester", alt: true }, { t: "Fuir", f: () => exitTower() }]) : modal(ic("tower") + " Quitter la Tour ?", "Tu reviendras à ton farm. Ton record (étage " + S.tower.best + ") est gardé.", [{ t: "Rester", alt: true }, { t: "Quitter", f: () => exitTower() }]);
 $("tutoNext").onclick = () => { tutoStep++; showTuto(); };
 $("tutoSkip").onclick = endTuto;
 $("tutoAgain").onclick = () => { document.querySelector('.tab[data-p="pUpg"]').click(); setTimeout(startTuto, 200); };
@@ -4819,7 +4882,7 @@ function arName() { return (S.pseudo || "Chasseur").slice(0, 14); }
 // mes stats du jeu principal (équipement, améliorations, familiers, arbre, renaissance…)
 function arMyStats() {
   statF++;
-  return { atk: P.atk(), hp: P.maxHp(), rate: Math.max(2.4, Math.min(9, P.spd() * 1.6)), crit: Math.min(0.75, P.crit() / 100), cm: critMult(), lvl: Math.max(1, S.maxLevel), hard: S.diff ? 1 : 0, cls: S.cls || "spectre" };
+  return { atk: P.atk(), hp: P.maxHp(), rate: Math.max(2.4, Math.min(9, P.spd() * 1.6)), crit: Math.min(0.75, P.crit() / 100), cm: critMult(), lvl: Math.max(1, S.maxLevel), hard: S.diff ? 1 : 0, cls: S.cls || "spectre", pets: activePets().map(id => [id, Math.round(PETS[id].atk(S.pets[id]) * (1 + accSum("pet") / 100) * 0.6 * 100) / 100]) };
 }
 const arBaseHp = (l, h) => 30 * Math.pow(1.2, l - 1) * (1 + 0.6 * Math.min(1, l / 300)) * (h ? HARD.hp : 1);
 const arBaseDmg = (l, h) => 8 * Math.pow(1.15, l - 1) * (h ? HARD.dmg : 1);
@@ -4871,8 +4934,9 @@ function arFloorImg(k) {
 function arNewPlayer(id, name, look, st) {
   st = st || arMyStats(); const C = AR_CLS[st.cls] || AR_CLS.spectre;
   return { id, name, look, cls: st.cls, x: AW / 2 + arRnd(-60, 60), y: AH * 0.62 + arRnd(-30, 30), hp: st.hp, maxhp: st.hp, dmg: st.atk * C.mult, rate: st.rate * C.rate, crit: st.crit, cm: st.cm, lvl: st.lvl, hard: st.hard,
-    spd: 165, multi: C.multi, pierce: C.pierce, splash: C.splash, cd: 0, inv: 0, alive: true, face: 1, mv: 0, kills: 0, charge: 0 };
+    spd: 165, multi: C.multi, pierce: C.pierce, splash: C.splash, cd: 0, inv: 0, alive: true, face: 1, mv: 0, kills: 0, charge: 0, pets: (st.pets || []).filter(x => PETS[x[0]]).slice(0, 6), pcd: 1, pi: 0 };
 }
+function arPetPos(p, i, t) { const f = p.face || 1; return { x: p.x - f * (16 + 11 * i), y: p.y - 34 - (i % 2) * 10 + Math.sin(t * 3 + i * 1.7) * 4 }; }
 function arZone(w) { return Math.min(ZONES.length - 1, Math.floor((w - 1) / 3)); }
 function arSetBase(A) {
   // Les monstres suivent le niveau des joueurs, mais restent entre 1,5 et 6 tirs pour tuer un monstre de base
@@ -4934,6 +4998,10 @@ function arStep(A, dt) {
     p.inv = Math.max(0, p.inv - dt); p.cd -= dt;
     if (!p.alive) continue;
     p.charge = Math.min(100, p.charge + dt * 4);
+    if (p.pets && p.pets.length) { p.pcd -= dt; if (p.pcd <= 0) { // les familiers tirent aussi
+      let tg = null, bd = 1e9; for (const e of A.enemies) if (e.tele <= 0) { const d = arDist(p, e); if (d < bd) { bd = d; tg = e; } }
+      if (tg) { p.pcd = PET_RATE / p.pets.length; p.pi = (p.pi + 1) % p.pets.length; const [pid, pm] = p.pets[p.pi], pp = arPetPos(p, p.pi, A.t), a = Math.atan2(tg.y - 8 - pp.y, tg.x - pp.x);
+        A.bullets.push({ x: pp.x, y: pp.y, vx: Math.cos(a) * 300, vy: Math.sin(a) * 300, o: p.id, pierce: 0, splash: 0, hit: [], life: 1.5, c: "pet:" + pid, pm }); } } }
     if (p.cd > 0) continue;
     let tg = null, bd = 1e9; for (const e of A.enemies) if (e.tele <= 0) { const d = arDist(p, e); if (d < bd) { bd = d; tg = e; } }
     if (!tg) continue;
@@ -4965,7 +5033,7 @@ function arStep(A, dt) {
     if (b.x < 0 || b.x > AW || b.y < 0 || b.y > AH) b.life = 0;
     for (const e of A.enemies) if (b.life > 0 && e.tele <= 0 && e.hp > 0 && !b.hit.includes(e.id) && Math.hypot(b.x - e.x, b.y - (e.y - 8)) < e.r + 6) {
       const own = A.players.find(p => p.id === b.o); if (!own) { b.life = 0; break; }
-      const cr = Math.random() < own.crit, dm = own.dmg * (cr ? own.cm : 1);
+      const cr = Math.random() < own.crit, dm = own.dmg * (b.pm || 1) * (cr ? own.cm : 1);
       arDamage(A, e, own, dm, cr); b.hit.push(e.id);
       if (b.splash) { arFx(A, b.x, b.y, 7); for (const o of A.enemies) if (o !== e && o.hp > 0 && o.tele <= 0 && Math.hypot(o.x - b.x, o.y - b.y) < b.splash) arDamage(A, o, own, dm * 0.5, false); }
       if (b.pierce > 0) b.pierce--; else b.life = 0;
@@ -5109,7 +5177,7 @@ function arTick(dt, now) {
 }
 function arSnap(A) {
   return { t: "s", w: A.wave, N: A.N, ph: A.phase, q: A.queue.length + A.enemies.length, msg: A.msg ? A.msg.txt : "",
-    p: A.players.map(p => [p.id, Math.round(p.x), Math.round(p.y), p.hp, p.maxhp, p.alive ? 1 : 0, p.face, p.kills, Math.round(p.spd), p.mv, p.name, p.look, p.cls, Math.floor(p.charge)]),
+    p: A.players.map(p => [p.id, Math.round(p.x), Math.round(p.y), p.hp, p.maxhp, p.alive ? 1 : 0, p.face, p.kills, Math.round(p.spd), p.mv, p.name, p.look, p.cls, Math.floor(p.charge), (p.pets || []).map(x => x[0])]),
     e: A.enemies.map(e => [e.id, e.key, Math.round(e.x), Math.round(e.y), e.hp, e.max, e.r, e.tele > 0 ? 1 : 0, e.boss ? 1 : 0, e.fl > 0 ? 1 : 0]),
     b: A.bullets.map(b => [Math.round(b.x), Math.round(b.y), 0, b.c]).concat(A.ebullets.map(b => [Math.round(b.x), Math.round(b.y), 1])), fx: A.fx };
 }
@@ -5119,9 +5187,9 @@ function arApplySnap(m) {
   m._t = now; A.snaps.push(m); if (A.snaps.length > 6) A.snaps.shift();
   const seen = {};
   for (const r of m.p) {
-    const [id, x, y, hp, maxhp, alive, face, kills, spd, mv, name, look, cls, charge] = r; seen[id] = 1;
+    const [id, x, y, hp, maxhp, alive, face, kills, spd, mv, name, look, cls, charge, pids] = r; seen[id] = 1;
     let p = V.p[id]; if (!p) p = V.p[id] = { id, x, y };
-    Object.assign(p, { hp, maxhp, alive: !!alive, kills, spd, name, look, cls, charge });
+    Object.assign(p, { hp, maxhp, alive: !!alive, kills, spd, name, look, cls, charge, pids: pids || [] });
     if (id !== A.me) Object.assign(p, { face, mv }); else if (!p.init || !alive || (alive && !p.wasAlive)) { p.x = x; p.y = y; p.init = true; }
     p.wasAlive = p.alive;
   }
@@ -5193,6 +5261,7 @@ function arDraw(t) {
     const k = 0.48, bob = p.alive && !walk ? Math.sin(t * 3 + p.id) * 0.8 : 0;
     g.save(); g.globalAlpha = p.alive ? ((p.inv || 0) > 0 && Math.floor(t * 20) % 2 ? 0.5 : 1) : 0.35;
     g.translate(p.x, p.y + bob); g.scale((p.face || 1) * k, k); g.drawImage(img, -HOFF / 2, -(HOFF - 15), HOFF, HOFF); g.restore();
+    if (p.alive) { const ids = p.pids || (p.pets || []).map(x => x[0]); ids.forEach((id, i) => { if (!PETS[id]) return; const pp = arPetPos(p, i, t); withCtx(g, () => { ctx.save(); ctx.translate(pp.x, pp.y + 12); ctx.scale(0.42 * (p.face || 1), 0.42); drawPetShape(id, t + i); ctx.restore(); }); }); }
     g.font = "800 9px system-ui"; g.textAlign = "center"; g.lineWidth = 3; g.strokeStyle = "rgba(0,0,0,.7)"; g.strokeText(p.name || "", p.x, p.y - 76); g.fillStyle = me ? "#ffd166" : "#e6e2ff"; g.fillText(p.name || "", p.x, p.y - 76);
     g.fillStyle = "rgba(10,8,20,.8)"; g.fillRect(p.x - 16, p.y - 72, 32, 4); g.fillStyle = "#52d17c"; g.fillRect(p.x - 16, p.y - 72, 32 * Math.max(0, p.hp / (p.maxhp || 1)), 4);
     if (!p.alive) { g.fillStyle = "#ff8a8a"; g.font = "900 9px system-ui"; g.fillText("K.O.", p.x, p.y - 84); }
@@ -5202,6 +5271,7 @@ function arDraw(t) {
   const B = host ? A.bullets.map(b => [b.x, b.y, 0, b.c, b.vx, b.vy]).concat(A.ebullets.map(b => [b.x, b.y, 1])) : (A.vb || []);
   for (const b of B) {
     if (b[2]) { g.drawImage(glowC("#ff4dd2"), b[0] - 8, b[1] - 8, 16, 16); g.fillStyle = "#ff9ae8"; g.beginPath(); g.arc(b[0], b[1], 4, 0, Math.PI * 2); g.fill(); continue; }
+    if (typeof b[3] === "string" && b[3].startsWith("pet:")) { const pc = (PETS[b[3].slice(4)] || {}).color || "#ffd166"; g.drawImage(glowC(pc), b[0] - 7, b[1] - 7, 14, 14); g.fillStyle = pc; g.beginPath(); g.arc(b[0], b[1], 2.6, 0, Math.PI * 2); g.fill(); continue; }
     const C = AR_CLS[b[3]] || AR_CLS.spectre;
     g.drawImage(glowC(C.col), b[0] - 9, b[1] - 9, 18, 18);
     g.fillStyle = "#fff"; g.beginPath(); g.arc(b[0], b[1], b[3] === "arcaniste" ? 4.5 : 3, 0, Math.PI * 2); g.fill();
@@ -5261,6 +5331,7 @@ function arRewards(W, np, di) {
 function arShowEnd() {
   const A = arena, W = A.cleared || 0, P = A.host ? A.players : Object.values(A.view.p), me = arMe(), D = AR_DIFF[A.diff] || AR_DIFF[1];
   if (me) S.arenaKills = (S.arenaKills || 0) + (me.kills || 0);
+  clanWeek("a", W);
   const R = arRewards(W, Math.max(1, P.length), A.diff), rew = R.html;
   $("arEnd").innerHTML = '<div class="arPickBox"><b style="font-size:20px">' + (A.win ? "🏆 Victoire !" : "💀 Fin de la partie") + "</b><br>Vagues réussies : <b>" + W + "</b>" + (A.N ? " / " + A.N : "") + ' · <span style="color:' + D.col + '">' + D.ic + " " + D.name + "</span><br><small style='color:#9a98ad'>Récompenses ×" + fmtDec(R.k) + (P.length > 1 ? " (bonus à " + P.length + " joueurs)" : "") + " · record " + D.name + " : " + arBestD()[A.diff] + "</small>" +
     '<div class="arRes">' + P.map(p => "<span>" + (p.name || "") + " : " + (p.kills || 0) + " monstres</span>").join("") + '</div><div class="arRew">' + rew + "</div>" +
@@ -5377,15 +5448,16 @@ function refreshCust() {
   h += sw("eye", EYES, L.eye || 0, false, "Yeux");
   h += sw("coat", LOOKS.coat.list, L.coat, true, "Manteau");
   h += sw("trim", LOOKS.trim.list, L.trim, true, "Énergie (bordures, regard, sabre)");
-  h += '<div class="cuRow"><div class="cuLbl">Écharpe</div><div class="cuSw">' + SCARVES.map((c, i) => '<button data-sc="' + i + '" title="' + c[0] + '" class="' + ((L.scarf || 0) === i ? "on" : "") + '" style="background:' + (c[1] || "repeating-linear-gradient(45deg,#333 0 4px,#555 4px 8px)") + '"></button>').join("") + "</div></div>";
+  h += '<div class="cuRow"><div class="cuLbl"><span>Écharpe</span><span>🔒 = boutique de clan</span></div><div class="cuSw">' + SCARVES.map((c, i) => '<button data-sc="' + i + '" title="' + c[0] + '" class="' + ((L.scarf || 0) === i ? "on" : "") + (scarfOwned(i) ? "" : " lockd") + '" style="background:' + (c[1] === "clan" ? "conic-gradient(#5ce1ff,#ffd166,#ff4d5e,#52ffa0,#5ce1ff)" : i === 10 ? "linear-gradient(0deg,#ff3a1a,#ffb040)" : i === 9 ? "linear-gradient(135deg,#6a2ab0 50%,#e0b040 50%)" : c[1] || "repeating-linear-gradient(45deg,#333 0 4px,#555 4px 8px)") + '">' + (scarfOwned(i) ? "" : '<span class="pp">🔒</span>') + "</button>").join("") + "</div></div>";
   $("custBody").innerHTML = h;
+  $("autoPow").onchange = () => { S.autoPow = $("autoPow").checked; save(); };
   $("rr1").onclick = () => doReroll(1); $("rr10").onclick = () => doReroll(10); $("rrBuy").onclick = buyReroll; $("rrAll").onclick = showRaces;
   $("custBody").querySelectorAll("[data-sex]").forEach(b => b.onclick = () => { L.sex = b.dataset.sex; { const ok = (L.sex === "f" ? HS_F : HS_M).some(x => x[0] === hsKey(L)); if (!ok) L.hk = "auto"; } sfx("buy"); refreshCust(); });
   $("custBody").querySelectorAll("[data-hk]").forEach(b => b.onclick = () => { L.hk = b.dataset.hk; sfx("buy"); refreshCust(); });
   $("custBody").querySelectorAll("[data-bd]").forEach(b => b.onclick = () => { L.beard = +b.dataset.bd; sfx("buy"); refreshCust(); });
   $("custBody").querySelectorAll("[data-mk]").forEach(b => b.onclick = () => { L.mark = +b.dataset.mk; sfx("buy"); refreshCust(); });
   $("custBody").querySelectorAll("[data-ha]").forEach(b => b.onclick = () => { L.hacc = +b.dataset.ha; sfx("buy"); refreshCust(); });
-  $("custBody").querySelectorAll("[data-sc]").forEach(b => b.onclick = () => { L.scarf = +b.dataset.sc; sfx("buy"); refreshCust(); });
+  $("custBody").querySelectorAll("[data-sc]").forEach(b => b.onclick = () => { const i = +b.dataset.sc; if (!scarfOwned(i)) { toast("Écharpe à acheter dans 🛡️ Clan → Boutique (écus de clan)"); return; } L.scarf = i; sfx("buy"); refreshCust(); });
   $("cuPseudo").onchange = () => { S.pseudo = ($("cuPseudo").value || "").replace(/[<>"]/g, "").trim().slice(0, 14) || "Chasseur"; save(); };
   $("custBody").querySelectorAll("[data-k]").forEach(b => b.onclick = () => {
     const k = b.dataset.k, i = +b.dataset.i;
@@ -5414,10 +5486,15 @@ function clanLvl() { const x = clanXP(); let l = 1; while (l < CLAN_LMAX && x >=
 const clanPct = l => 2 * Math.min(l, 20) + Math.max(0, l - 20), clanXpPct = l => Math.min(l, 20) + Math.max(0, l - 20) * 0.5;
 function clanB(st) { if (!S.clan) return 0; const l = clanLvl(); return st === "atk" || st === "hp" || st === "gold" ? clanPct(l) : st === "xp" ? clanXpPct(l) : 0; }
 function clanChief() { const c = S.clan.info.chief, m = S.clan.roster[c]; if (m && !m.left && !m.kick) return c; const ms = clanMembers().sort((a, b) => (b[1].c || 0) - (a[1].c || 0)); return ms.length ? ms[0][0] : c; }
-const clanMe = () => ({ n: (S.pseudo || "Chasseur").slice(0, 14), lv: S.hlv || 1, b: S.best || 1, c: Math.floor(S.clanC || 0), r: S.race || "humain", t: Date.now() });
+// ---- semaine de clan (remise à zéro chaque lundi) ----
+const weekKey = () => Math.floor((Date.now() / 864e5 + 3) / 7);
+function wk() { if (!S.wkd || S.wkd.k !== weekKey()) S.wkd = { k: weekKey(), b: 0, m: 0, a: 0, e: 0, p: 0, cbd: 0 }; return S.wkd; }
+function clanWeek(f, n) { if (S.clan) wk()[f] = (wk()[f] || 0) + n; }
+function clanWeekSum(f) { if (!S.clan) return 0; clanSelf(); const k = weekKey(); return clanMembers().reduce((a, [, m]) => a + (m.w && m.w.k === k ? m.w[f] || 0 : 0), 0); }
+const clanMe = () => ({ n: (S.pseudo || "Chasseur").slice(0, 14), lv: S.hlv || 1, b: S.best || 1, c: Math.floor(S.clanC || 0), r: S.race || "humain", w: Object.assign({}, wk()), t: Date.now() });
 function clanSelf() { if (S.clan) S.clan.roster[acctCode()] = Object.assign({}, S.clan.roster[acctCode()] || {}, clanMe(), { left: false }); }
 const clanPack = () => ({ code: S.clan.code, info: S.clan.info, roster: S.clan.roster, chat: S.clan.chat || [] });
-function clanAddPts(n) { if (S.clan) S.clanC = (S.clanC || 0) + n; }
+function clanAddPts(n) { if (!S.clan) return; S.clanC = (S.clanC || 0) + n; S.ecuF = (S.ecuF || 0) + n / 8; if (S.ecuF >= 1) { const k = Math.floor(S.ecuF); S.ecus = (S.ecus || 0) + k; S.ecuF -= k; } }
 // fusionne l'état reçu d'un autre membre (le plus récent gagne)
 function clanOnState(st) {
   if (!S.clan || !st || st.code !== S.clan.code) return;
@@ -5482,6 +5559,85 @@ function clanAsClient() {
   net.peer.on("error", () => { if (net === clanNet) clanRetry(); });
 }
 setInterval(() => { if (!S.clan || !clanNet) return; clanSelf(); clanSend(); save(); }, 20000); // ma fiche (points, niveau) toutes les 20 s
+// ---- boss de clan (une barre de vie partagée par semaine) ----
+const CB_NAMES = [["Hydre des Marais", "#3aa86a"], ["Colosse de Givre", "#7cc4ff"], ["Reine Araignée", "#c07cff"], ["Titan des Braises", "#ff6a3a"]];
+const CB_TRIES = 3, CB_TIME = 30, CB_TIERS = [25, 50, 75, 100];
+const CB_REW = [{ e: 10, c: 3, g: 0 }, { e: 20, c: 6, g: 1 }, { e: 30, c: 10, g: 2 }, { e: 60, c: 20, g: 3, item: 1 }];
+const cbInfo = () => CB_NAMES[weekKey() % CB_NAMES.length];
+const cbHP = () => 400 * Math.max(3, clanMembers().length);
+const cbTriesLeft = () => (S.cbDay && S.cbDay.d === dayKey() ? CB_TRIES - S.cbDay.n : CB_TRIES);
+function startClanBoss() {
+  if (!S.clan) return; if (tower) { toast("Quitte d'abord la Tour ou le combat en cours"); return; }
+  if (cbTriesLeft() <= 0) { toast("Plus d'essai aujourd'hui : reviens demain !"); return; }
+  if (clanWeekSum("cbd") >= cbHP()) { toast("Le boss de la semaine est déjà vaincu !"); return; }
+  S.cbDay = { d: dayKey(), n: (S.cbDay && S.cbDay.d === dayKey() ? S.cbDay.n : 0) + 1 }; save();
+  closeClan();
+  tower = { cb: true, floor: 0, saved: { level: S.level, kills: S.kills, auto: S.auto } };
+  respawn = 0; hero.dead = 0; hero.hp = P.maxHp(); heroShots = []; skill = 100;
+  spawnTowerMonster(); refreshTop(); sfx("tower");
+  document.querySelector('.tab[data-p="pUpg"]').click();
+}
+function spawnClanBoss() {
+  let L = Math.max(10, S.maxLevel); if (isBossLvl(L)) L--; S.level = L; spawnMonster();
+  const raw = 30 * Math.pow(1.2, L - 1) * (1 + 0.6 * Math.min(1, L / 300)) * (S.diff ? HARD.hp : 1), [nm, col] = cbInfo();
+  Object.assign(mon, { hp: raw * 400, max: raw * 400, dmg: 8 * Math.pow(1.15, L - 1) * 0.6 * (S.diff ? HARD.dmg : 1), gold: 0, boss: true, zb: true, rare: false, tower: true, cb: true, cbRaw: raw,
+    name: nm + " · boss de clan", hat: "couronne", scale: 2, color: col });
+  pack = [mon]; layoutPack(true);
+  bossTimer = CB_TIME; sfx("boss");
+}
+function cbEnd() {
+  const m = mon && mon.cb ? mon : null, dealt = m ? m.max - Math.max(0, m.hp) : 0, pts = m ? Math.max(1, Math.min(CB_CAP, Math.round(dealt / m.cbRaw * CB_K))) : 0;
+  wk().cbd += pts; clanAddPts(pts / 2); clanSelf(); clanSend(); save();
+  const sum = clanWeekSum("cbd"), hp = cbHP();
+  exitTower("Tu as infligé <b>" + fmt(pts) + (pts > 1 ? " points" : " point") + " de dégâts</b> au <b>" + cbInfo()[0] + "</b> !<br><br>Barre de vie du clan : <b>" + fmt(Math.min(sum, hp)) + " / " + fmt(hp) + "</b> (" + Math.min(100, Math.floor(sum / hp * 100)) + " %)<br>Essais restants aujourd'hui : " + cbTriesLeft() + "<br><br><small>Va dans 🛡️ Clan → Boss pour récupérer les récompenses des paliers atteints.</small>");
+}
+const CB_K = 2.5, CB_CAP = 150; // points = dégâts infligés / vie d'un monstre de ton niveau × 2,5 (150 max par essai)
+function cbClaim(i) {
+  const k = weekKey(); if (!S.cbClaim || S.cbClaim.k !== k) S.cbClaim = { k, t: [] };
+  if (S.cbClaim.t.includes(i) || !(wk().cbd > 0) || clanWeekSum("cbd") < cbHP() * CB_TIERS[i] / 100) return;
+  const r = CB_REW[i]; S.cbClaim.t.push(i); S.ecus = (S.ecus || 0) + r.e; S.perles += r.c; S.totalPerles += r.c;
+  for (let j = 0; j < r.g; j++) addGem(randGem(), 2);
+  let txt = "+" + r.e + " écus de clan · +" + r.c + " " + PERLE + (r.g ? " · " + r.g + " gemme" + (r.g > 1 ? "s" : "") + " niv. 2" : "");
+  if (r.item) { const it = makeItem(S.diff ? R_EMER : R_DIAM, S.maxLevel); S.inv.push(it); countRar(it.rar); txt += "<br>" + it.name + ' (<span class="c' + it.rar + '">' + RARITY[it.rar].name + "</span>)"; }
+  sfx("rare"); save(); clanUI(); modal("🐲 Palier " + CB_TIERS[i] + " %", txt, [{ t: "Super !" }]);
+}
+// ---- quêtes de clan (3 par semaine, objectif commun) ----
+const CQ = [
+  { f: "b", n: "Vaincre des boss", base: 60, ic: "👑" },
+  { f: "m", n: "Vaincre des monstres", base: 2500, ic: "⚔️" },
+  { f: "a", n: "Réussir des vagues d'Arène", base: 25, ic: "🏟️" },
+  { f: "e", n: "Envoyer des familiers en expédition", base: 20, ic: "🚀" },
+  { f: "p", n: "Utiliser son pouvoir de race", base: 60, ic: "✨" },
+  { f: "cbd", n: "Infliger des dégâts au boss de clan", base: 150, ic: "🐲" }
+];
+const CQ_REW = { e: 25, c: 5, pts: 50 };
+function clanQuests() { const k = weekKey(), n = Math.max(1, clanMembers().length); return [k % 6, (k + 1) % 6, (k + 3) % 6].map(i => Object.assign({ id: i, target: Math.round(CQ[i].base * Math.pow(n, 0.85)), prog: clanWeekSum(CQ[i].f) }, CQ[i])); }
+function cqClaim(id) {
+  const k = weekKey(); if (!S.cqClaim || S.cqClaim.k !== k) S.cqClaim = { k, ids: [] };
+  const q = clanQuests().find(x => x.id === id); if (!q || q.prog < q.target || S.cqClaim.ids.includes(id)) return;
+  S.cqClaim.ids.push(id); S.ecus = (S.ecus || 0) + CQ_REW.e; S.perles += CQ_REW.c; S.totalPerles += CQ_REW.c; S.clanC = (S.clanC || 0) + CQ_REW.pts;
+  clanSelf(); clanSend(); sfx("rare"); save(); clanUI(); toast("📜 Quête réussie : +" + CQ_REW.e + " écus, +" + CQ_REW.c + " Cristaux, +" + CQ_REW.pts + " points de clan");
+}
+// ---- boutique de clan (écus de clan) ----
+const CSHOP = [
+  { id: "rr", n: "🎲 1 reroll de race", p: 15, rep: 1, f: () => { S.rerolls = (S.rerolls || 0) + 1; } },
+  { id: "gem", n: "💎 1 gemme niv. 2", p: 12, rep: 1, f: () => addGem(randGem(), 2) },
+  { id: "cr", n: "🔮 10 Cristaux", p: 20, rep: 1, f: () => { S.perles += 10; S.totalPerles += 10; } },
+  { id: "chest", n: "📦 Coffre de clan (objet Légendaire)", p: 45, rep: 1, f: () => { const it = makeItem(3, S.maxLevel); S.inv.push(it); countRar(3); } },
+  { id: "sc8", n: "🧣 Écharpe du clan (couleur de ton clan)", p: 40 },
+  { id: "sc9", n: "🧣 Écharpe royale", p: 60 },
+  { id: "sc10", n: "🧣 Écharpe de flammes", p: 60 },
+  { id: "t_pil", n: "🏅 Titre « Pilier du clan »", p: 80 },
+  { id: "t_leg", n: "🏅 Titre « Légende du clan »", p: 200 }
+];
+function cshopBuy(id) {
+  const it = CSHOP.find(x => x.id === id); if (!it) return;
+  if (!it.rep && S.owned[id]) return;
+  if ((S.ecus || 0) < it.p) { toast("Il faut " + it.p + " écus de clan"); return; }
+  if (id === "chest" && S.inv.length >= bagMax()) { toast("Ton sac est plein"); return; }
+  S.ecus -= it.p; if (it.f) it.f(); else S.owned[id] = true;
+  sfx("buy"); save(); clanUI(); toast(it.n + " : acheté !" + (id.startsWith("sc") ? " (à mettre dans 👤 Personnaliser)" : id.startsWith("t_") ? " (à choisir dans Chasseur → Héros)" : ""));
+}
 // ---- créer / rejoindre / quitter ----
 function clanCreate(name, tag, emb, col) {
   const code = Array.from({ length: 6 }, () => ACCT_ABC[Math.floor(Math.random() * 32)]).join("");
@@ -5528,7 +5684,7 @@ function clanSay(txt) {
 }
 // ---- interface ----
 const clanBadge = () => S.clan ? '<span class="clanTag" style="color:' + (CLAN_COL[S.clan.info.col] || "#ffd166") + '">' + S.clan.info.emb + " [" + S.clan.info.tag + "]</span>" : "";
-let clanDraft = { emb: 0, col: 0 };
+let clanDraft = { emb: 0, col: 0 }, clanTab = "home";
 function openClan() { $("clanPanel").classList.add("show"); document.body.classList.add("custOn"); clanUI(); if (S.clan && !clanNet) clanConnect(); }
 function closeClan() { $("clanPanel").classList.remove("show"); document.body.classList.remove("custOn"); }
 const esc = t => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -5550,16 +5706,47 @@ function clanUI() {
   } else {
     const I = S.clan.info, l = clanLvl(), x = clanXP(), nx = l < CLAN_LMAX ? clanNeed(l + 1) : null, pc = nx ? Math.min(100, (x - clanNeed(l)) / (nx - clanNeed(l)) * 100) : 100;
     const chief = clanChief(), me = acctCode(), on = Object.keys(clanOnline).length, mem = clanMembers().sort((a, b) => (b[1].c || 0) - (a[1].c || 0));
+    const qs = clanQuests(), cqk = S.cqClaim && S.cqClaim.k === weekKey() ? S.cqClaim.ids : [], qReady = qs.some(q => q.prog >= q.target && !cqk.includes(q.id));
+    const cbSum = clanWeekSum("cbd"), cbH = cbHP(), cbk = S.cbClaim && S.cbClaim.k === weekKey() ? S.cbClaim.t : [], cbReady = wk().cbd > 0 && CB_TIERS.some((p, i) => cbSum >= cbH * p / 100 && !cbk.includes(i));
+    const tabs = [["home", "🛡️ Clan"], ["boss", "🐲 Boss" + (cbReady ? " •" : "")], ["quest", "📜 Quêtes" + (qReady ? " •" : "")], ["shop", "🛒 Boutique"], ["chat", "💬 Chat"]];
+    h += '<div class="clTabs">' + tabs.map(t => '<button data-ctab="' + t[0] + '" class="' + (clanTab === t[0] ? "on" : "") + '">' + t[1] + "</button>").join("") + "</div>";
+    if (clanTab === "home") {
     h += '<div class="clHead" style="border-color:' + (CLAN_COL[I.col] || "#ffd166") + '"><div class="clEmbBig">' + I.emb + '</div><div><div class="clName" style="color:' + (CLAN_COL[I.col] || "#ffd166") + '">' + esc(I.name) + ' <small>[' + esc(I.tag) + ']</small></div><div class="clLvl">Niveau ' + l + (nx ? " · " + fmt(x) + " / " + fmt(nx) + " points" : " · MAX") + '</div><div class="xpBarIn"><i style="width:' + pc + '%"></i></div></div></div>';
     h += '<div class="clBonus">Bonus de clan pour tous : <b>attaque, vie et or +' + clanPct(l) + ' %</b>, <b>XP +' + fmtDec(clanXpPct(l)) + ' %</b>' + (l < CLAN_LMAX ? '<br><small>Niveau suivant : +' + clanPct(l + 1) + ' % / XP +' + fmtDec(clanXpPct(l + 1)) + ' %</small>' : "") + '</div>';
     h += '<div class="clCode">Code du clan : <b class="acctCode">' + S.clan.code + '</b> <button class="smallBtn" id="clCopy">Copier</button></div>';
     h += '<div class="clOn">' + (clanNet ? (on ? "🟢 " + on + " membre" + (on > 1 ? "s" : "") + " connecté" + (on > 1 ? "s" : "") : "🟡 Connexion…") : "⚪ Hors ligne") + ' · ' + mem.length + " / " + CLAN_MAX + " membres</div>";
     h += '<div class="secTitle"><span>👥 Membres</span><span style="font-size:11px;color:#9a98ad">tes points : ' + fmt(Math.floor(S.clanC || 0)) + "</span></div>";
     for (const [id, m] of mem) h += '<div class="clMem' + (id === me ? " me" : "") + '"><span class="clDot' + (clanOnline[id] ? " on" : "") + '"></span><span class="clMN">' + (id === chief ? "👑 " : "") + ((RACES[m.r] || RACES.humain).ic) + " " + esc(m.n) + '<small>chasseur niv. ' + (m.lv || 1) + " · record " + fmt(m.b || 1) + (Date.now() - (m.t || 0) > 2592e6 ? " · inactif" : "") + '</small></span><b>' + fmt(m.c || 0) + " pts</b>" + (me === chief && id !== me ? '<button class="smallBtn" data-ckick="' + id + '">Exclure</button>' : "") + "</div>";
+    h += '<button class="smallBtn" id="clLeave" style="width:100%;margin:12px 0 4px;color:#ff8a8a">Quitter le clan</button>';
+    }
+    if (clanTab === "boss") {
+      const [bn, bc] = cbInfo(), pc = Math.min(100, cbSum / cbH * 100), left = cbTriesLeft();
+      h += '<div class="clHead" style="border-color:' + bc + '"><div class="clEmbBig">🐲</div><div style="flex:1"><div class="clName" style="color:' + bc + '">' + bn + '</div><div class="clLvl">Boss de la semaine · ' + fmt(Math.min(cbSum, cbH)) + " / " + fmt(cbH) + ' points</div><div class="xpBarIn" style="width:100%"><i style="width:' + pc + '%;background:linear-gradient(90deg,' + bc + ',#fff)"></i></div></div></div>';
+      h += '<div class="hint" style="margin-top:8px">Tout le clan tape sur le même boss. Chaque essai dure <b>' + CB_TIME + " secondes</b> : tes dégâts sont comptés selon ton niveau, donc tout le monde peut aider. <b>" + CB_TRIES + " essais par jour.</b> Nouveau boss chaque lundi.</div>";
+      h += '<button class="buy" id="cbGo" style="width:100%;margin:8px 0"' + (left > 0 && cbSum < cbH ? "" : " disabled") + ">" + (cbSum >= cbH ? "Boss vaincu cette semaine ✓" : "⚔️ Combattre (" + left + " essai" + (left > 1 ? "s" : "") + " aujourd'hui)") + "</button>";
+      h += '<div class="clBonus">Tes dégâts cette semaine : <b>' + fmt(wk().cbd) + " points</b>" + (wk().cbd > 0 ? "" : " · il faut avoir participé pour récupérer les paliers") + "</div>";
+      h += '<div class="secTitle"><span>🎁 Paliers</span></div>';
+      CB_TIERS.forEach((p, i) => { const r = CB_REW[i], ok = cbSum >= cbH * p / 100, got = cbk.includes(i);
+        h += '<div class="clMem"><span class="clMN"><b>' + p + " %</b><small>" + r.e + " écus · " + r.c + " Cristaux" + (r.g ? " · " + r.g + " gemme" + (r.g > 1 ? "s" : "") + " niv. 2" : "") + (r.item ? " · objet " + (S.diff ? "Émeraude" : "Diamant") : "") + "</small></span>" +
+          (got ? "<b>✓</b>" : '<button class="buy" data-cbc="' + i + '"' + (ok && wk().cbd > 0 ? "" : " disabled") + ">Récupérer</button>") + "</div>"; });
+    }
+    if (clanTab === "quest") {
+      h += '<div class="hint">3 quêtes par semaine, pour <b>tout le clan</b> : la progression de chaque membre s\'additionne. Récompense par quête : <b>' + CQ_REW.e + " écus</b>, <b>" + CQ_REW.c + " Cristaux</b> et <b>" + CQ_REW.pts + " points de clan</b>. Nouvelles quêtes chaque lundi.</div>";
+      for (const q of qs) { const got = cqk.includes(q.id), ok = q.prog >= q.target, pc = Math.min(100, q.prog / q.target * 100);
+        h += '<div class="clMem" style="flex-wrap:wrap"><span class="clMN">' + q.ic + " <b>" + q.n + "</b><small>" + fmt(Math.min(q.prog, q.target)) + " / " + fmt(q.target) + '</small><span class="xpBarIn" style="display:block;width:100%;margin-top:3px"><i style="width:' + pc + '%"></i></span></span>' +
+          (got ? "<b>✓</b>" : '<button class="buy" data-cqc="' + q.id + '"' + (ok ? "" : " disabled") + ">Récupérer</button>") + "</div>"; }
+      h += '<div class="clBonus"><small>Les progrès des autres membres arrivent quand vous êtes connectés en même temps.</small></div>';
+    }
+    if (clanTab === "shop") {
+      h += '<div class="clHead"><div class="clEmbBig">🪙</div><div><div class="clName" style="color:#ffd166">' + fmt(S.ecus || 0) + ' écus de clan</div><div class="clLvl">Gagnés en jouant (1 écu pour 8 points de clan), avec le boss et les quêtes.</div></div></div>';
+      for (const it of CSHOP) { const own = !it.rep && S.owned[it.id];
+        h += '<div class="clMem"><span class="clMN">' + it.n + "<small>" + (it.rep ? "achat illimité" : "exclusif, une seule fois") + "</small></span>" + (own ? "<b>✓ Acheté</b>" : '<button class="buy" data-csh="' + it.id + '"' + ((S.ecus || 0) >= it.p ? "" : " disabled") + ">🪙 " + it.p + "</button>") + "</div>"; }
+    }
+    if (clanTab === "chat") {
     h += '<div class="secTitle"><span>💬 Chat du clan</span><span style="font-size:11px;color:#9a98ad">les membres connectés le voient tout de suite</span></div>';
     h += '<div id="clanChat" class="clChat">' + ((S.clan.chat || []).map(m => '<div><b>' + esc(m.n) + "</b> " + esc(m.m) + "</div>").join("") || "<div style='color:#777'>Aucun message pour l'instant.</div>") + "</div>";
     h += '<div class="clSay"><input id="clanMsg" class="cuIn" maxlength="120" placeholder="Écris un message…"><button class="buy" id="clanSend">Envoyer</button></div>';
-    h += '<button class="smallBtn" id="clLeave" style="width:100%;margin:12px 0 4px;color:#ff8a8a">Quitter le clan</button>';
+    }
   }
   $("clanBody").innerHTML = h;
   if (!S.clan) {
@@ -5573,11 +5760,16 @@ function clanUI() {
     };
     $("clJoinBtn").onclick = () => clanJoin($("clJoin").value, t => { const e = $("clSt"); if (e) e.innerHTML = t; });
   } else {
-    $("clCopy").onclick = () => { try { navigator.clipboard.writeText(S.clan.code).then(() => toast("Code copié !")); } catch (e) {} };
-    const send = () => { clanSay($("clanMsg").value); $("clanMsg").value = ""; $("clanMsg").focus(); };
-    $("clanSend").onclick = send; $("clanMsg").onkeydown = e => { if (e.key === "Enter") send(); };
-    if (keepIn !== null) { $("clanMsg").value = keepIn; $("clanMsg").focus(); }
-    $("clLeave").onclick = clanLeave;
+    $("clanBody").querySelectorAll("[data-ctab]").forEach(b => b.onclick = () => { clanTab = b.dataset.ctab; clanUI(); });
+    if ($("clCopy")) $("clCopy").onclick = () => { try { navigator.clipboard.writeText(S.clan.code).then(() => toast("Code copié !")); } catch (e) {} };
+    if ($("clanSend")) { const send = () => { clanSay($("clanMsg").value); $("clanMsg").value = ""; $("clanMsg").focus(); };
+      $("clanSend").onclick = send; $("clanMsg").onkeydown = e => { if (e.key === "Enter") send(); };
+      if (keepIn !== null) { $("clanMsg").value = keepIn; $("clanMsg").focus(); } }
+    if ($("clLeave")) $("clLeave").onclick = clanLeave;
+    if ($("cbGo")) $("cbGo").onclick = startClanBoss;
+    $("clanBody").querySelectorAll("[data-cbc]").forEach(b => b.onclick = () => cbClaim(+b.dataset.cbc));
+    $("clanBody").querySelectorAll("[data-cqc]").forEach(b => b.onclick = () => cqClaim(+b.dataset.cqc));
+    $("clanBody").querySelectorAll("[data-csh]").forEach(b => b.onclick = () => cshopBuy(b.dataset.csh));
     $("clanBody").querySelectorAll("[data-ckick]").forEach(b => b.onclick = () => { const id = b.dataset.ckick, m = S.clan.roster[id];
       modal("Exclure " + esc(m.n) + " ?", "Il ne fera plus partie du clan et ne pourra plus le rejoindre.", [{ t: "Annuler", alt: true }, { t: "Exclure", f: () => clanSend({ t: "kick", id, from: acctCode() }) }]); });
     const ch = $("clanChat"); if (ch) ch.scrollTop = ch.scrollHeight;
@@ -5591,6 +5783,14 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 55, d: "Grosse mise à jour des clans et des races", l: [
+    "🐲 <b>Boss de clan</b> : chaque semaine, un boss géant avec une <b>barre de vie partagée</b> par tout le clan. 3 essais de " + CB_TIME + " s par jour, et 4 paliers de récompenses (jusqu'à un objet Diamant ou Émeraude).",
+    "📜 <b>Quêtes de clan</b> : 3 objectifs communs par semaine (boss, monstres, Arène, expéditions…). Chaque quête rapporte des écus, des Cristaux et des points de clan.",
+    "🛒 <b>Boutique de clan</b> : de nouveaux <b>écus de clan</b> à dépenser en rerolls, gemmes, Cristaux, coffres, <b>écharpes exclusives</b> (du clan, royale, de flammes) et <b>titres exclusifs</b>.",
+    "✨ <b>Pouvoirs de race</b> : chaque race a maintenant une capacité spéciale à recharge (bouton au-dessus de Frappe Brume, ou automatique). Souffle du dragon, Cri de guerre, Séisme, Déchirure du Néant…",
+    "📚 <b>Collection de races</b> : chaque race obtenue au moins une fois donne un bonus permanent d'attaque, de vie et d'or (jusqu'à +48 % avec les 13 races).",
+    "🐾 <b>Familiers dans l'Arène</b> : tes familiers actifs te suivent et tirent sur les monstres en co-op.",
+    "Petites corrections de textes."] },
   { v: 54, d: "Clans jusqu'au niveau 50", l: [
     "Les clans montent maintenant jusqu'au <b>niveau 50</b> (au lieu de 20). Ça demande beaucoup de points : il faudra jouer ensemble !",
     "Bonus : +2 % d'attaque, de vie et d'or (+1 % d'XP) par niveau jusqu'au 20, puis +1 % (+0,5 % d'XP) par niveau jusqu'au 50. Au niveau 50 : <b>+70 %</b> attaque, vie et or, <b>+35 %</b> XP."] },
@@ -5730,7 +5930,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 54, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 55, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
