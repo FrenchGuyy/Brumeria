@@ -226,6 +226,12 @@
   .arCards button span { font-size: 26px; } .arCards button b { font-size: 12px; } .arCards button small { font-size: 10px; color: #b8b6cc; }
   .arRes { display: flex; flex-direction: column; gap: 3px; margin: 10px 0; font-size: 13px; color: #c8c6d8; } .arRew { font-weight: 800; color: #ffd166; margin-bottom: 10px; }
   .arBtns { display: flex; gap: 8px; } .arBtns button { flex: 1; border: none; border-radius: 12px; padding: 11px; font-weight: 900; color: #fff; background: linear-gradient(180deg, #4a3f7a, #322a58); }
+  .raceBox { background: #1a1d2e; border: 1px solid #2c3150; border-radius: 12px; padding: 9px 10px; margin: 4px 0 10px; }
+  .raceBox.r3, .raceBox.r4 { border-color: #c8a040; box-shadow: 0 0 12px rgba(255,200,80,.25); } .raceBox.r7 { border-color: #c07cff; box-shadow: 0 0 16px rgba(190,110,255,.45); }
+  .raceCur { font-size: 18px; font-weight: 900; margin: 2px 0; } .raceInfo { font-size: 12px; color: #c9c7d8; line-height: 1.4; }
+  .raceBtns { display: flex; gap: 6px; margin-top: 8px; } .raceBtns .buy { flex: 1; padding: 9px; }
+  .raceSub { font-size: 11px; color: #9a98ad; margin-top: 6px; line-height: 1.7; }
+  .rrList { text-align: left; font-size: 13px; line-height: 1.5; margin-bottom: 8px; max-height: 45vh; overflow-y: auto; }
   #custBtn { margin-top: 12px; border: 1px solid #5a4a8a; background: rgba(30,22,60,.75); color: #e6e2ff; font-weight: 800; font-size: 14px; padding: 9px 18px; border-radius: 12px; z-index: 2; position: relative; animation: logoIn .4s ease-out; }
   .custOpen { width: 100%; border: 1px solid #5a4a8a; background: linear-gradient(180deg, #2e2850, #221d3c); color: #fff; font-weight: 900; font-size: 15px; padding: 12px; border-radius: 12px; margin-bottom: 6px; }
   #custPanel { position: fixed; inset: 0; z-index: 45; display: none; align-items: center; justify-content: center; background: rgba(8,8,20,.78); padding: 12px; }
@@ -580,14 +586,14 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v51</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v52</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v51 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v52 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -602,9 +608,9 @@
   <div id="tsLoad"><i id="tsLoadFill"></i></div><div id="tsLoadTxt">Chargement…</div>
   <button id="newsBtn">📜 Nouveautés<span class="dot" id="newsDot"></span></button>
   <button id="playBtn">JOUER</button>
-  <div class="tsRow"><button id="custBtn">👤 Personnaliser</button><button id="arenaBtn">⚔️ Arène co-op</button></div>
+  <div class="tsRow"><button id="custBtn">👤 Personnaliser · 🧬 Race</button><button id="arenaBtn">⚔️ Arène co-op</button></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v51</div></div>
+  <div class="tsVer">v52</div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
 <div id="arField"><canvas id="arCv"></canvas><div id="arTop"></div><button id="arQuit" aria-label="Quitter">✕</button><button id="arSk"><span>FRAPPE<br>BRUME</span></button><div id="arPick"></div><div id="arEnd"></div></div>
@@ -813,7 +819,7 @@ function newState() {
     tree: {}, bonusPts: 0, music: true,
     stats: { bossKills: 0, taps: 0, legend: 0, items: 0, forges: 0, rares: 0, skills: 0, quests: 0, time: 0, bestHit: 0, goldTotal: 0 },
     ach: {}, daily: null, bestiary: {}, pets: {}, pet: null,
-    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0, sex: "h", hs: 0, skin: 1, eye: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, autoExp: { on: false, h: 4 }, seenVer: 0 };
+    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0, sex: "h", hs: 0, skin: 1, eye: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, autoExp: { on: false, h: 4 }, race: "humain", rerolls: 0, rrPity: 0, rrPack: false, raceSeen: { humain: 1 }, seenVer: 0 };
 }
 let S = newState();
 let loadedOK = false; // tant que la sauvegarde n'est pas chargée, on n'écrit JAMAIS dessus
@@ -2042,8 +2048,73 @@ const ACCS = [
   { id: "a11", name: "Couronne d'Aube",    lvl: 200, ic: "crown",     st: "all",   v: 30,  txt: "Attaque, Vie et Or +30 %" }
 ];
 const accOn = () => (S.accOn || []).filter(id => ACCS.some(a => a.id === id && S.hlv >= a.lvl)).slice(0, accSlots());
+/* ================== RACES (reroll) ================== */
+// Chaque race donne des pouvoirs permanents. On en change avec un reroll (tirage au hasard).
+const RACES = {
+  humain:  { name: "Humain",            r: 0, w: 15,   ic: "🧑", b: { gold: 20, xp: 10 }, info: "Polyvalent, il trouve toujours un peu plus d'or." },
+  nain:    { name: "Nain des Cimes",    r: 0, w: 15,   ic: "🧔", b: { hp: 30 }, info: "Petit, barbu et solide comme la roche." },
+  elfe:    { name: "Elfe des Brumes",   r: 0, w: 15,   ic: "🧝", b: { spd: 12 }, info: "Rapide et agile, il frappe avant les autres.", ear: 1 },
+  orc:     { name: "Orc des Braises",   r: 1, w: 10,   ic: "👹", b: { atk: 25, hp: 10 }, info: "Une force brute, des crocs et la peau verte.", skin: "#86b06a", tusk: 1 },
+  felin:   { name: "Félin des Ombres",  r: 1, w: 10,   ic: "🐱", b: { crit: 6, spd: 8 }, info: "Silencieux, il vise les points faibles.", cat: 1, eye: "#9cff5a" },
+  fee:     { name: "Fée des Lucioles",  r: 1, w: 10,   ic: "🧚", b: { pet: 40, loot: 15 }, info: "Les familiers l'adorent et la suivent partout.", wing: "fee", ear: 1 },
+  lycan:   { name: "Lycan Lunaire",     r: 2, w: 5.4,  ic: "🐺", b: { atk: 30, tap: 40 }, info: "La pleine lune réveille la bête : tes taps cognent fort.", cat: 1, eye: "#ffd23a" },
+  golem:   { name: "Golem de Pierre",   r: 2, w: 5.3,  ic: "🗿", b: { hp: 60, atk: 15 }, info: "Un corps de pierre animé par la Brume.", skin: "#a3a6b0", crack: 1 },
+  ondin:   { name: "Ondin des Abysses", r: 2, w: 5.3,  ic: "🧜", b: { gold: 50, xp: 25 }, info: "Venu des grands fonds, il connaît les trésors engloutis.", skin: "#8cc8d6", ear: 2 },
+  vampire: { name: "Vampire Pourpre",   r: 3, w: 3.25, ic: "🧛", b: { atk: 45, crit: 8 }, info: "Élégant et mortel, ses coups critiques font très mal.", skin: "#efe3ea", eye: "#ff3a4a", fang: 1 },
+  celeste: { name: "Céleste",           r: 3, w: 3.25, ic: "😇", b: { atk: 30, hp: 30, gold: 30, xp: 20 }, info: "Béni par le ciel : un peu de tout, en mieux.", wing: "ange", halo: 1 },
+  dragon:  { name: "Draconien",         r: 4, w: 2,    ic: "🐲", b: { atk: 70, hp: 40, crit: 5 }, info: "Le sang des dragons coule dans ses veines.", horn: "#e8d6a8", eye: "#ffb020" },
+  neant:   { name: "Enfant du Néant",   r: 7, w: 0.5,  ic: "🌑", b: { atk: 100, hp: 60, spd: 15, crit: 10, gold: 50 }, info: "Né du vide lui-même. Presque personne ne l'a jamais vu.", skin: "#7a68a6", eye: "#e07cff", horn: "#2a1840" }
+};
+const RACE_PITY = 40, REROLL_PRICE = 30, RR_PACK = 100;
+const RR_PACK_END = Date.UTC(2026, 10, 28, 23, 0, 0); // dimanche 29 novembre 2026 à 00h00 (heure de Paris)
+const RACE = () => RACES[S.race] || RACES.humain;
+const raceB = st => RACE().b[st] || 0;
+const RB_TXT = { atk: "Attaque +X %", hp: "Vie +X %", spd: "Vitesse d'attaque +X %", crit: "Critique +X pts", gold: "Or +X %", xp: "XP +X %", tap: "Dégâts des taps +X %", pet: "Dégâts des familiers +X %", loot: "Butin +X %" };
+const raceTxt = id => Object.entries(RACES[id].b).map(([k, v]) => RB_TXT[k].replace("X", v)).join(" · ");
+const raceName = id => '<span class="c' + RACES[id].r + '">' + RACES[id].ic + " " + RACES[id].name + "</span>";
+function rollRace() {
+  S.rrPity = (S.rrPity || 0) + 1;
+  let pool = Object.keys(RACES); if (S.rrPity >= RACE_PITY) pool = pool.filter(id => RACES[id].r >= 3);
+  let x = Math.random() * pool.reduce((a, id) => a + RACES[id].w, 0), got = pool[pool.length - 1];
+  for (const id of pool) { x -= RACES[id].w; if (x <= 0) { got = id; break; } }
+  if (RACES[got].r >= 3) S.rrPity = 0;
+  S.raceSeen = S.raceSeen || {}; S.raceSeen[got] = 1; return got;
+}
+function setRace(id) { S.race = id; statF++; offH && (offH._k = ""); heroHurtWas = !heroHurtWas; sfx("rare"); vib(40); save(); if ($("custPanel").classList.contains("show")) refreshCust(); refreshStats(); }
+function doReroll(n) {
+  n = Math.min(n, S.rerolls || 0); if (n <= 0) { toast("Plus de reroll : achète-en avec des Cristaux, ou gagne-les tous les 10 niveaux du chasseur"); return; }
+  S.rerolls -= n; const got = []; for (let i = 0; i < n; i++) got.push(rollRace());
+  const best = got.reduce((a, b) => RACES[b].r > RACES[a].r ? b : a), cur = S.race || "humain"; save();
+  const list = n > 1 ? "<div class='rrList'>" + got.map(id => raceName(id)).join("<br>") + "</div>" : "";
+  const better = RACES[best].r > RACES[cur].r;
+  if (best === cur) { modal("🎲 Reroll", list + "Tu as eu : " + raceName(best) + "<br>C'est déjà ta race !", [{ t: "OK" }]); refreshCust(); return; }
+  sfx(RACES[best].r >= 3 ? "rare" : "buy");
+  modal(RACES[best].r >= 3 ? "✨ Reroll incroyable !" : "🎲 Reroll", list + (n > 1 ? "Meilleur tirage : " : "Tu as eu : ") + "<b>" + raceName(best) + "</b> (" + RARITY[RACES[best].r].name + ")<br><small>" + raceTxt(best) + "</small><br><br>Ta race actuelle : " + raceName(cur) + "<br><small>" + raceTxt(cur) + "</small>" + (better ? "" : "<br><br><b class='worse'>Elle n'est pas meilleure que la tienne.</b>"),
+    [{ t: "Garder " + RACES[cur].name, alt: true, f: () => refreshCust() }, { t: "Prendre " + RACES[best].name, f: () => setRace(best) }]);
+  refreshCust();
+}
+function buyReroll() {
+  if (S.perles < REROLL_PRICE) { toast("Il faut " + REROLL_PRICE + " " + PERLE + " pour un reroll"); return; }
+  S.perles -= REROLL_PRICE; S.rerolls = (S.rerolls || 0) + 1; sfx("buy"); refreshCust(); refreshTop(); save();
+}
+function offerRerollPack() {
+  if (S.rrPack || Date.now() >= RR_PACK_END) return;
+  S.rrPack = true; S.rerolls = (S.rerolls || 0) + RR_PACK; save();
+  modal("🎁 Pack de lancement : " + RR_PACK + " rerolls !", "Nouveau : les <b>races</b> ! Chacune donne des <b>pouvoirs</b> (attaque, vie, vitesse, or…) et change l'apparence de ton chasseur.<br><br>Tu reçois <b>" + RR_PACK + " rerolls gratuits</b> pour tenter ta chance : du <span class='c0'>Commun</span> jusqu'au très rare <span class='c7'>Enfant du Néant</span>.<br><br><small>Pack offert jusqu'au <b>dimanche 29 novembre à 00h00</b>.</small>",
+    [{ t: "Plus tard", alt: true }, { t: "🧬 Changer de race", f: () => openCust() }]);
+}
+function raceHtml() {
+  const id = S.race || "humain", R = RACES[id], left = RACE_PITY - (S.rrPity || 0);
+  let h = '<div class="raceBox r' + R.r + '"><div class="cuLbl"><span>🧬 Race</span><span>' + RARITY[R.r].name + '</span></div><div class="raceCur">' + raceName(id) + '</div><div class="raceInfo">' + R.info + '<br><b>' + raceTxt(id) + "</b></div>" +
+    '<div class="raceBtns"><button class="buy" id="rr1">🎲 Reroll</button><button class="buy" id="rr10">🎲 ×10</button></div>' +
+    '<div class="raceSub">Rerolls : <b>' + (S.rerolls || 0) + "</b> · Légendaire ou mieux garanti dans <b>" + left + "</b> tirage" + (left > 1 ? "s" : "") + '<br><button class="smallBtn" id="rrBuy">Acheter 1 reroll (' + REROLL_PRICE + " " + PERLE + ')</button> <button class="smallBtn" id="rrAll">Toutes les races</button></div></div>';
+  return h;
+}
+function showRaces() {
+  modal("🧬 Les races", "<div class='rrList'>" + Object.keys(RACES).map(id => (S.raceSeen && S.raceSeen[id] || id === (S.race || "humain") ? raceName(id) : "<span style='color:#777'>❔ ???</span>") + " <small>(" + RARITY[RACES[id].r].name + ", " + String(RACES[id].w).replace(".", ",") + " %)</small><br><small>" + raceTxt(id) + "</small>").join("<br>") + "</div><small>Tu gagnes 1 reroll tous les 10 niveaux du chasseur. Tous les " + RACE_PITY + " tirages sans Légendaire, le suivant est garanti Légendaire ou mieux.</small>", [{ t: "OK" }]);
+}
 function accSum(st) {
-  let v = 0;
+  let v = raceB(st);
   for (const id of accOn()) { const a = ACCS.find(x => x.id === id); if (a.st === st || (a.st === "atkhp" && (st === "atk" || st === "hp")) || (a.st === "all" && (st === "atk" || st === "hp" || st === "gold"))) v += a.v; }
   return v;
 }
@@ -2057,7 +2128,7 @@ function lvRewards(l) { // ce que rapporte le passage au niveau l
   for (const a of ACCS) if (a.lvl === l) r.push(ic(a.ic) + " Accessoire : <b>" + a.name + "</b>");
   if (LV_ITEM[l] != null) r.push(ic("chest") + ' Objet <span class="c' + LV_ITEM[l] + '">' + RARITY[LV_ITEM[l]].name + "</span> garanti");
   if (LV_TITLE[l]) r.push(ic("medal") + " Titre « " + LV_TITLE[l] + " »");
-  if (l % 10 === 0) r.push(PERLE + " " + Math.floor(l / 10) + " Cristaux");
+  if (l % 10 === 0) r.push(PERLE + " " + Math.floor(l / 10) + " Cristaux"); if (l % 10 === 0) r.push("🎲 1 reroll de race");
   if (l % 5 === 0) r.push(ic("gem") + " " + (1 + Math.floor(l / 50)) + " gemme" + (l >= 50 ? "s" : ""));
   r.push(COIN + " Bourse d'or");
   return r;
@@ -2065,7 +2136,7 @@ function lvRewards(l) { // ce que rapporte le passage au niveau l
 function giveLv(l) {
   S.gold += lvGold(l);
   if (l % 5 === 0) for (let i = 0; i < 1 + Math.floor(l / 50); i++) addGem(randGem());
-  if (l % 10 === 0) { S.perles += Math.floor(l / 10); S.totalPerles += Math.floor(l / 10); }
+  if (l % 10 === 0) { S.perles += Math.floor(l / 10); S.totalPerles += Math.floor(l / 10); S.rerolls = (S.rerolls || 0) + 1; }
   if (LV_ITEM[l] != null) S.inv.push(makeItem(LV_ITEM[l], S.maxLevel));
   const nw = ACCS.find(a => a.lvl === l); if (nw && accOn().length < accSlots()) S.accOn = accOn().concat(nw.id);
 }
@@ -2464,7 +2535,8 @@ const lookOwned = (k, i) => i < 2 || S.owned[k + i];
 function heroColors() {
   const L = S.look, c = LOOKS.coat.list[L.coat] || LOOKS.coat.list[0], tr = (LOOKS.trim.list[L.trim] || LOOKS.trim.list[0])[1], h = LOOKS.hair.list[L.hair] || LOOKS.hair.list[0];
   const sk = (SKINS[L.skin] || SKINS[1])[1], ey = (EYES[L.eye] || EYES[0])[1] || tr, hs = (HSTYLES[L.hs] || HSTYLES[0])[0];
-  return { coat: c[1], coatD: c[2], trim: tr, shirt: "#2c3344", skin: sk, hair: h[1], hairD: h[2], eye: ey, sex: L.sex === "f" ? "f" : "h", hs: hs === "auto" ? null : hs };
+  const R = RACE();
+  return { coat: c[1], coatD: c[2], trim: tr, shirt: "#2c3344", skin: R.skin || sk, hair: h[1], hairD: h[2], eye: R.eye || ey, sex: L.sex === "f" ? "f" : "h", hs: hs === "auto" ? null : hs, R };
 }
 const rgba = (hex, a) => { const [r, g, b] = hexRgb(hex); return "rgba(" + r + "," + g + "," + b + "," + a + ")"; };
 const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
@@ -3470,6 +3542,18 @@ let HC = { coat: "#1b2130", coatD: "#11151f", trim: "#5ce1ff", shirt: "#2c3344",
 function heroArt(t, walking, bob, lg) {
   const E = S.equip, w = Math.sin(t * (walking ? 11 : 2.2)), w2 = Math.sin(t * (walking ? 11 : 2.2) + 1.3);
   const fl = walking ? 1.8 : 1;
+  const RR = HC.R || {};
+  if (RR.wing) { // ailes (fée : translucides, céleste : plumes blanches)
+    const fa = Math.sin(t * (RR.wing === "fee" ? 14 : 3)) * 0.18, big = RR.wing === "ange";
+    for (const [dx, a0, al] of [[-4, -0.5, 0.55], [-8, -0.2, 0.8]]) {
+      ctx.save(); ctx.translate(dx, -66 + bob); ctx.rotate(a0 - fa); ctx.globalAlpha = al;
+      ctx.fillStyle = big ? "#f4f2ff" : "rgba(170,240,255,.75)"; ctx.beginPath(); ctx.ellipse(-12, -8, big ? 20 : 15, big ? 9 : 7, -0.5, 0, Math.PI * 2); ctx.fill();
+      if (big) { ctx.fillStyle = "#d8d2f0"; for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.ellipse(-20 + k * 7, -1 + k * 2, 8, 3, -0.3, 0, Math.PI * 2); ctx.fill(); } }
+      else { ctx.strokeStyle = "rgba(255,255,255,.8)"; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-24, -14); ctx.stroke(); }
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  }
   // pans du manteau (derrière)
   ctx.fillStyle = HC.coatD;
   ctx.beginPath(); ctx.moveTo(-8, -40); ctx.quadraticCurveTo(-18 - w * 3 * fl, -22, -26 - w * 5 * fl, -6); ctx.lineTo(-16 - w * 4 * fl, -4); ctx.quadraticCurveTo(-10, -18, -2, -36); ctx.closePath(); ctx.fill();
@@ -3547,8 +3631,27 @@ function heroArt(t, walking, bob, lg) {
   ctx.moveTo(-5, hy - 7); ctx.lineTo(-2, hy - 14); ctx.lineTo(6, hy - 15); ctx.lineTo(14, hy - 11); ctx.lineTo(15, hy - 3); ctx.lineTo(11.8, hy - 6); ctx.lineTo(10.6, hy - 1.5);
   ctx.lineTo(8, hy - 6); ctx.lineTo(5, hy - 1); ctx.lineTo(3.5, hy - 7); ctx.lineTo(0, hy - 2); ctx.lineTo(-1, hy - 7); ctx.closePath(); ctx.fill();
   ctx.fillStyle = "#ffffff"; ctx.globalAlpha = 0.7; ctx.beginPath(); ctx.moveTo(0, hy - 12); ctx.lineTo(7, hy - 13.5); ctx.lineTo(3, hy - 11); ctx.closePath(); ctx.fill(); ctx.globalAlpha = 1;
+  raceHead(RR, hy, ey, t);
   if (E.casque) { const c = RCOL[E.casque.rar]; ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-3, hy - 9); ctx.quadraticCurveTo(6, hy - 13, 14.5, hy - 8); ctx.lineTo(14, hy - 5.8); ctx.quadraticCurveTo(6, hy - 10, -3, hy - 6.6); ctx.closePath(); ctx.fill(); ctx.fillStyle = "#fff"; circ(9, hy - 9.6, 1.2); }
   ctx.restore();
+}
+function raceHead(R, hy, ey, t) {
+  ctx.lineWidth = 1; ctx.strokeStyle = "#141824";
+  if (R.ear === 1) { ctx.fillStyle = HC.skin; ctx.beginPath(); ctx.moveTo(-1.5, hy - 1); ctx.lineTo(-12, hy - 9); ctx.lineTo(-0.5, hy + 5); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.fillStyle = shade(HC.skin, -0.15); ctx.beginPath(); ctx.moveTo(-2, hy + 0.5); ctx.lineTo(-8.5, hy - 5.5); ctx.lineTo(-1.5, hy + 3); ctx.fill(); }
+  if (R.ear === 2) { ctx.fillStyle = "#4fb3c8"; ctx.beginPath(); ctx.moveTo(-1, hy - 3); ctx.lineTo(-11, hy - 8); ctx.lineTo(-9, hy - 2); ctx.lineTo(-12, hy + 2); ctx.lineTo(-1, hy + 5); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  if (R.cat) for (const [a, b, c] of [[[-7, hy - 9], [-5, hy - 23], [2, hy - 12]], [[4, hy - 13], [10, hy - 24], [13, hy - 9]]]) {
+    ctx.fillStyle = HC.hair; ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.lineTo(...c); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "#f0a0b0"; ctx.beginPath(); ctx.moveTo(a[0] * 0.6 + c[0] * 0.4, a[1] * 0.6 + c[1] * 0.4); ctx.lineTo(b[0], b[1] + 5); ctx.lineTo(a[0] * 0.25 + c[0] * 0.75, a[1] * 0.25 + c[1] * 0.75); ctx.fill();
+  }
+  if (R.horn) { ctx.fillStyle = R.horn; ctx.beginPath(); ctx.moveTo(-5, hy - 8); ctx.bezierCurveTo(-7, hy - 18, -11, hy - 23, -17, hy - 25); ctx.bezierCurveTo(-10, hy - 18, -2, hy - 15, 4, hy - 11); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(4, hy - 12); ctx.bezierCurveTo(4, hy - 21, 2, hy - 27, -1, hy - 31); ctx.bezierCurveTo(7, hy - 27, 12, hy - 20, 13, hy - 10); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = "rgba(255,255,255,.35)"; ctx.beginPath(); ctx.moveTo(-1, hy - 13); ctx.lineTo(-4, hy - 15); ctx.moveTo(6, hy - 17); ctx.lineTo(9, hy - 16); ctx.stroke(); ctx.strokeStyle = "#141824";
+    if (R.horn === "#2a1840") { ctx.globalAlpha = 0.5 + 0.3 * Math.sin(t * 3); ctx.fillStyle = "#c07cff"; circ(-17, hy - 25, 2); circ(-1, hy - 31, 2); ctx.globalAlpha = 1; } }
+  if (R.tusk) { ctx.fillStyle = "#fffbe8"; ctx.beginPath(); ctx.moveTo(8.4, ey + 7.6); ctx.lineTo(9.2, ey + 3.8); ctx.lineTo(10.4, ey + 7.3); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  if (R.fang) { ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.moveTo(9, ey + 6.6); ctx.lineTo(9.6, ey + 9); ctx.lineTo(10.3, ey + 6.6); ctx.fill(); }
+  if (R.crack) { ctx.strokeStyle = HC.trim; ctx.lineWidth = 0.9; ctx.globalAlpha = 0.85; ctx.beginPath(); ctx.moveTo(3, hy - 6); ctx.lineTo(5, hy - 2); ctx.lineTo(3.5, hy + 3); ctx.moveTo(11, hy + 3); ctx.lineTo(12.5, hy + 7); ctx.stroke(); ctx.globalAlpha = 1; }
+  if (RACE() === RACES.nain) { ctx.fillStyle = HC.hair; ctx.beginPath(); ctx.moveTo(1, hy + 4); ctx.quadraticCurveTo(2, hy + 19, 8, hy + 20); ctx.quadraticCurveTo(14, hy + 16, 13.5, hy + 5); ctx.quadraticCurveTo(8, hy + 11, 1, hy + 4); ctx.fill(); ctx.stroke(); }
+  if (R.halo) { ctx.strokeStyle = "#ffe58a"; ctx.lineWidth = 1.8; ctx.globalAlpha = 0.9; ctx.beginPath(); ctx.ellipse(3, hy - 21 + Math.sin(t * 2), 8.5, 2.4, -0.1, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1; }
 }
 function heroSword(t, bob, swing) {
   const E = S.equip, blade = E.arme ? RCOL[E.arme.rar] : "#e6edf7";
@@ -5186,7 +5289,7 @@ function closeCust() {
   if ($("pUpg").classList.contains("active") && curSub("c") === "cHero") refreshHero();
 }
 function refreshCust() {
-  const L = S.look; let h = "";
+  const L = S.look; let h = raceHtml();
   h += '<div class="cuRow"><div class="cuLbl">Personnage</div><div class="cuSex"><button data-sex="h" class="' + (L.sex !== "f" ? "on" : "") + '">♂ Homme</button><button data-sex="f" class="' + (L.sex === "f" ? "on" : "") + '">♀ Femme</button></div></div>';
   h += '<div class="cuRow"><div class="cuLbl">Coiffure</div><div class="cuChips">' + HSTYLES.map((x, i) => '<button data-hs="' + i + '" class="' + ((L.hs || 0) === i ? "on" : "") + '">' + x[1] + "</button>").join("") + "</div></div>";
   const sw = (key, list, cur, paid, lbl) => '<div class="cuRow"><div class="cuLbl"><span>' + lbl + "</span>" + (paid ? "<span>" + LOOK_PRICE + " " + PERLE + " par couleur bloquée</span>" : "") + '</div><div class="cuSw">' +
@@ -5197,6 +5300,7 @@ function refreshCust() {
   h += sw("coat", LOOKS.coat.list, L.coat, true, "Manteau");
   h += sw("trim", LOOKS.trim.list, L.trim, true, "Énergie (bordures, regard, sabre)");
   $("custBody").innerHTML = h;
+  $("rr1").onclick = () => doReroll(1); $("rr10").onclick = () => doReroll(10); $("rrBuy").onclick = buyReroll; $("rrAll").onclick = showRaces;
   $("custBody").querySelectorAll("[data-sex]").forEach(b => b.onclick = () => { L.sex = b.dataset.sex; sfx("buy"); refreshCust(); });
   $("custBody").querySelectorAll("[data-hs]").forEach(b => b.onclick = () => { L.hs = +b.dataset.hs; sfx("buy"); refreshCust(); });
   $("custBody").querySelectorAll("[data-k]").forEach(b => b.onclick = () => {
@@ -5215,6 +5319,11 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 52, d: "Les races et le reroll !", l: [
+    "Nouveau : <b>13 races</b> avec leurs propres <b>pouvoirs</b> et leur apparence (oreilles, cornes, ailes, auréole…) : Humain, Nain, Elfe, Orc, Félin, Fée, Lycan, Golem, Ondin, Vampire, Céleste, Draconien… et le mythique <span class='c7'>Enfant du Néant</span>.",
+    "Change de race avec un <b>🎲 reroll</b> dans <b>👤 Personnaliser · 🧬 Race</b> (écran d'accueil). Après chaque tirage, tu choisis de garder l'ancienne ou de prendre la nouvelle.",
+    "🎁 <b>Pack de lancement : 100 rerolls gratuits</b>, offert jusqu'au <b>dimanche 29 novembre à 00h00</b>.",
+    "Ensuite : 1 reroll tous les 10 niveaux du chasseur, ou " + REROLL_PRICE + " Cristaux le reroll. Tous les " + RACE_PITY + " tirages sans Légendaire, le suivant est garanti Légendaire ou mieux."] },
   { v: 51, d: "Sauvegardes de secours plus sûres", l: [
     "Choisir une sauvegarde de secours demande maintenant une <b>confirmation</b> : le jeu te montre ta partie actuelle et celle qui va la remplacer avant de changer quoi que ce soit."] },
   { v: 50, d: "Petit ménage", l: [
@@ -5341,7 +5450,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 51, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 52, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -5388,7 +5497,7 @@ offlineGains();
 save();
 requestAnimationFrame(loop);
 setInterval(autoExpTick, 5000);
-showTitle(() => { checkLogin(); if (!S.tutoDone && S.totalKills < 5) setTimeout(startTuto, 500); });
+showTitle(() => { offerRerollPack(); checkLogin(); if (!S.tutoDone && S.totalKills < 5) setTimeout(startTuto, 500); });
 </script>
 </body>
 </html>
