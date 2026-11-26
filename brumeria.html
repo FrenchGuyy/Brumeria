@@ -211,6 +211,7 @@
   #arSk span { display: flex; align-items: center; justify-content: center; position: absolute; inset: 6px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #34406a, #1a2036); }
   #arSk.ready { border-color: #ffd166; animation: pulse 1s infinite; box-shadow: 0 0 18px #ffd166; }
   #arSk:disabled { opacity: .85; }
+  .bakRow { display: block; width: 100%; margin: 4px 0; padding: 9px; text-align: left; }
   .acctCode { color: #ffd166; letter-spacing: 2px; margin-left: 4px; }
   .acctBig { display: inline-block; font-size: 34px; letter-spacing: 8px; color: #ffd166; background: #12152a; border: 1px dashed #6a5aa8; border-radius: 12px; padding: 6px 14px; }
   .acctIn { width: 70%; text-align: center; letter-spacing: 8px; font-size: 24px; font-weight: 900; background: #12152a; border: 1px solid #3a4070; color: #fff; border-radius: 10px; padding: 8px; text-transform: uppercase; }
@@ -574,14 +575,15 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v46</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v47</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
+      <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="opt"><span>💾 Sauvegarde (code long, de secours)</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v46 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v47 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -598,7 +600,7 @@
   <button id="playBtn">JOUER</button>
   <div class="tsRow"><button id="custBtn">👤 Personnaliser</button><button id="arenaBtn">⚔️ Arène co-op</button></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v46</div></div>
+  <div class="tsVer">v47</div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
 <div id="arField"><canvas id="arCv"></canvas><div id="arTop"></div><button id="arQuit" aria-label="Quitter">✕</button><button id="arSk"><span>FRAPPE<br>BRUME</span></button><div id="arPick"></div><div id="arEnd"></div></div>
@@ -810,11 +812,26 @@ function newState() {
     quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0, sex: "h", hs: 0, skin: 1, eye: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, bagBuy: 0, vbNext: 0, vbKills: 0, hlv: 1, hxp: 0, petsOn: [], accOn: [], autoFuse: { on: false, maxRar: 1 }, seenVer: 0 };
 }
 let S = newState();
+let loadedOK = false; // tant que la sauvegarde n'est pas chargée, on n'écrit JAMAIS dessus
+const BAK = () => SAVE_KEY + "_secours";
+function backupRaw(raw) { // garde des copies de secours : au lancement, et une plus ancienne par jour
+  try {
+    const d = JSON.parse(raw); if (!d || typeof d.level !== "number" || ((d.maxLevel || 1) <= 1 && !(d.rebirths > 0))) return;
+    const list = JSON.parse(localStorage.getItem(BAK()) || "[]"), day = new Date().toDateString();
+    const entry = { t: Date.now(), day, lvl: d.maxLevel || d.level, best: d.best || 1, reb: d.rebirths || 0, raw };
+    list.unshift(entry);
+    const keep = [list[0]], days = {}; days[day] = 1;
+    for (const e of list.slice(1)) if (!days[e.day] && keep.length < 4) { days[e.day] = 1; keep.push(e); }
+    localStorage.setItem(BAK(), JSON.stringify(keep));
+  } catch (e) {}
+}
 function load() {
   try {
     const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) backupRaw(raw);
     if (raw) { const d = JSON.parse(raw); S = Object.assign(newState(), d); S.upg = Object.assign(newState().upg, d.upg || {}); S.equip = Object.assign(newState().equip, d.equip || {}); S.pupg = Object.assign(newState().pupg, d.pupg || {}); S.tree = d.tree || {}; S.stats = Object.assign(newState().stats, d.stats || {}); S.ach = d.ach || {}; S.bestiary = d.bestiary || {}; S.pets = d.pets || {}; S.look = Object.assign(newState().look, d.look || {}); S.autoSell = Object.assign(newState().autoSell, d.autoSell || {}); S.autoFuse = Object.assign(newState().autoFuse, d.autoFuse || {}); if (!d.q26) { S.quality = "normale"; S.q26 = true; } S.gems = d.gems || {}; S.login = Object.assign(newState().login, d.login || {}); S.exp = d.exp || {}; S.owned = d.owned || {}; S.tower = Object.assign({ best: 0 }, d.tower || {}); S.best = Math.max(S.best || 1, S.maxLevel); if (!Array.isArray(d.petsOn)) S.petsOn = d.pet ? [d.pet] : []; if (!Array.isArray(d.accOn)) S.accOn = []; migrate(d.ver || 0); }
   } catch (e) {}
+  loadedOK = true;
 }
 // Remet les anciens objets aux valeurs actuelles (rééquilibrage v7)
 function migrate(v) {
@@ -826,7 +843,7 @@ function migrate(v) {
 }
 let saveLock = false; // bloque toute sauvegarde pendant un import (sinon la partie actuelle écrase celle importée)
 function save() {
-  if (saveLock) return;
+  if (saveLock || !loadedOK) return;
   S.lastSeen = Date.now();
   const snap = tower ? Object.assign({}, S, { level: tower.saved.level, kills: tower.saved.kills, auto: tower.saved.auto }) : S;
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(snap)); } catch (e) {}
@@ -2372,9 +2389,18 @@ function importSave() {
 // Chaque compte a son code. Sur l'ancien téléphone : « Envoyer ». Sur le nouveau : « Récupérer » + le code.
 // La partie passe directement d'un téléphone à l'autre (les deux doivent être ouverts en même temps, avec internet).
 const ACCT_ABC = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", ACCT_PREFIX = "brumeria-compte-";
-function acctCode() { if (!S.acct || !/^[A-Z2-9]{6}$/.test(S.acct)) { S.acct = Array.from({ length: 6 }, () => ACCT_ABC[Math.floor(Math.random() * 32)]).join(""); save(); } return S.acct; }
+function acctCode() { if (!S.acct || !/^[A-Z2-9]{6}$/.test(S.acct)) S.acct = Array.from({ length: 6 }, () => ACCT_ABC[Math.floor(Math.random() * 32)]).join(""); return S.acct; }
 let xfer = null;
 function xferStop() { try { if (xfer && xfer.peer) xfer.peer.destroy(); } catch (e) {} xfer = null; }
+function showBackups() {
+  let list = []; try { list = JSON.parse(localStorage.getItem(BAK()) || "[]"); } catch (e) {}
+  if (!list.length) { modal("🛟 Sauvegardes de secours", "Aucune sauvegarde de secours pour l'instant. Le jeu en garde une à chaque lancement (et une par jour sur les derniers jours).", [{ t: "OK" }]); return; }
+  modal("🛟 Sauvegardes de secours", "Le jeu garde une copie de ta partie à chaque lancement. Choisis celle à remettre :<br><br>" + list.map((e, i) => '<button class="smallBtn bakRow" data-bk="' + i + '">' + new Date(e.t).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) + " · niveau " + e.lvl + " · record " + e.best + (e.reb ? " · " + e.reb + " renaissance(s)" : "") + "</button>").join("") + "<br><b class='worse'>Ta partie actuelle sera remplacée.</b>", [{ t: "Fermer", alt: true }]);
+  document.querySelectorAll("[data-bk]").forEach(b => b.onclick = () => {
+    const e = list[+b.dataset.bk]; if (!e) return;
+    saveLock = true; localStorage.setItem(SAVE_KEY, e.raw); location.reload();
+  });
+}
 function sendAccount() {
   const code = acctCode();
   modalForce = true;
@@ -4517,7 +4543,7 @@ $("gearBtn").onclick = () => {
 };
 $("musicBtn").onclick = () => { S.music = !S.music; $("musicBtn").textContent = S.music ? "Activée" : "Coupée"; if (S.music) startMusic(); else stopMusic(); save(); };
 $("expBtn").onclick = exportSave;
-$("sendBtn").onclick = sendAccount; $("recvBtn").onclick = recvAccount; $("acctCode").textContent = acctCode();
+$("sendBtn").onclick = sendAccount; $("recvBtn").onclick = recvAccount; $("bakBtn").onclick = showBackups;
 const setQualBtns = () => document.querySelectorAll("[data-q2]").forEach(b => b.classList.toggle("qOn", (S.quality || "normale") === b.dataset.q2));
 document.querySelectorAll("[data-q2]").forEach(b => b.onclick = () => { S.quality = b.dataset.q2; setQualBtns(); resize(); layerKey = ""; for (const m of pack) m._c = null; toast("Graphismes : " + b.textContent); save(); });
 setQualBtns(); $("impBtn").onclick = importSave;
@@ -5155,6 +5181,10 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 47, d: "Correctif important des sauvegardes", l: [
+    "<b>Corrigé</b> : la v46 pouvait effacer la sauvegarde au lancement. Désolé ! C'est réparé.",
+    "Le jeu ne peut plus jamais écrire sur ta sauvegarde avant de l'avoir chargée.",
+    "Nouveau : <b>sauvegardes de secours</b> automatiques (⚙️ Options → Sauvegardes de secours). Le jeu garde une copie à chaque lancement et une par jour, pour pouvoir revenir en arrière."] },
   { v: 46, d: "Transfert de compte par code", l: [
     "Chaque compte a maintenant un <b>code à 6 caractères</b> (⚙️ Options → Code de compte).",
     "Pour changer de téléphone : sur l'ancien, appuie sur <b>Envoyer</b> ; sur le nouveau, <b>Récupérer</b> et tape le code. La partie passe directement d'un téléphone à l'autre (les deux ouverts en même temps, avec internet).",
@@ -5263,7 +5293,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 46, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 47, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -5286,6 +5316,7 @@ $("xpBar").onclick = () => { document.querySelector('.tab[data-p="pUpg"]').click
 setTimeout(() => checkUpdate(false), 4000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastUpdCheck > 3e5) checkUpdate(false); });
 load();
+$("acctCode").textContent = acctCode();
 if (!S.rr39) { // v39 : nouvelles raretés. Les objets Mythiques et Divins redeviennent Légendaires (sans être supprimés)
   S.rr39 = true; S.fz38 = true;
   const OLD = [1, 2, 3, 5, 8, 14]; let n = 0;
