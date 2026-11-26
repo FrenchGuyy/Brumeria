@@ -178,6 +178,38 @@
   .vbBtn { background: linear-gradient(180deg, #8a2ce0, #5a12b0) !important; box-shadow: 0 2px 0 #34096a !important; }
   .fuseLk { opacity: .55; } .afChips .smallBtn:disabled { opacity: .45; }
   .afChips { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; } .afChips .smallBtn { flex: 1; font-weight: 800; } .afChips .smallBtn.on { background: #3a3f66; outline: 2px solid currentColor; }
+  .tsRow { display: flex; gap: 8px; justify-content: center; position: relative; z-index: 2; }
+  #arenaBtn { margin-top: 12px; border: 1px solid #8a3a4a; background: rgba(60,18,30,.75); color: #ffd6dc; font-weight: 800; font-size: 14px; padding: 9px 14px; border-radius: 12px; animation: logoIn .4s ease-out; }
+  body.arOn #modal { z-index: 60; } body.arOn #toast { z-index: 61; }
+  #arMenu { position: fixed; inset: 0; z-index: 46; display: none; align-items: center; justify-content: center; background: rgba(8,8,20,.8); padding: 12px; }
+  #arMenu.show { display: flex; }
+  #arMenuBox { position: relative; width: 100%; max-width: 440px; max-height: 94vh; overflow-y: auto; background: linear-gradient(180deg, #2a2440, #1b1e33); border: 1px solid #5a3a6a; border-radius: 18px; padding: 0 14px 14px; box-shadow: 0 10px 40px rgba(0,0,0,.6); }
+  .arHead { padding: 14px 40px 8px 2px; font-weight: 900; font-size: 19px; color: #ffd166; }
+  #arMenuClose, #arQuit { position: absolute; top: 9px; right: 10px; width: 34px; height: 34px; border-radius: 50%; border: none; background: #343a5c; color: #fff; font-size: 18px; font-weight: 900; z-index: 3; }
+  #arMenuBox input { width: 100%; background: #12152a; border: 1px solid #3a4070; color: #fff; border-radius: 10px; padding: 9px 12px; font-size: 15px; font-weight: 700; }
+  .arBig { width: 100%; margin-top: 10px; border: none; border-radius: 12px; padding: 12px; font-weight: 900; font-size: 16px; color: #1a1230; background: linear-gradient(180deg, #ffe08a, #ffb84a); box-shadow: 0 4px 0 #a8742a; }
+  .arBig.alt { color: #fff; background: linear-gradient(180deg, #4a3f7a, #322a58); box-shadow: 0 4px 0 #1e1838; }
+  .arJoinRow { display: flex; gap: 8px; margin-top: 12px; } .arJoinRow input { flex: 1; text-align: center; letter-spacing: 6px; text-transform: uppercase; font-size: 18px !important; }
+  .arJoinRow button { border: none; border-radius: 12px; padding: 0 16px; font-weight: 900; color: #fff; background: linear-gradient(180deg, #3a8a62, #2a6a4a); }
+  .arMsg { min-height: 18px; margin: 10px 0 4px; font-size: 13px; font-weight: 700; color: #9fd0ff; text-align: center; } .arMsg.err { color: #ff8a8a; }
+  .arCode { text-align: center; background: #12152a; border: 1px dashed #6a5aa8; border-radius: 14px; padding: 12px; margin: 4px 0 10px; font-size: 12px; color: #9a98ad; }
+  .arCode b { display: block; font-size: 40px; letter-spacing: 10px; color: #ffd166; margin: 4px 0; } .arCode small { display: block; }
+  .arLob { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; } .arLob span { background: #1d2034; border-radius: 10px; padding: 8px 12px; font-weight: 800; }
+  .arW button { flex: 1; }
+  #arField { position: fixed; inset: 0; z-index: 47; display: none; background: #0b0a16; touch-action: none; }
+  #arField.show { display: block; }
+  #arCv { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+  #arTop { position: absolute; top: 8px; left: 10px; right: 54px; color: #fff; font-size: 13px; text-shadow: 0 1px 3px #000; pointer-events: none; }
+  .arPl { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; } .arPl span { background: rgba(20,16,40,.75); border-radius: 8px; padding: 2px 7px; font-size: 11px; font-weight: 800; color: #52d17c; }
+  .arPl span.me { outline: 1px solid #ffd166; } .arPl span.ko { color: #ff8a8a; text-decoration: line-through; }
+  .arKo { margin-top: 6px; color: #ff8a8a; font-weight: 800; }
+  #arPick, #arEnd { position: absolute; left: 0; right: 0; bottom: 0; top: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; padding: 16px; }
+  #arPick:empty, #arEnd:empty { display: none; }
+  .arPickBox { pointer-events: auto; width: 100%; max-width: 420px; background: rgba(27,30,51,.96); border: 1px solid #5a4a8a; border-radius: 16px; padding: 14px; text-align: center; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+  .arCards { display: flex; gap: 8px; margin-top: 10px; } .arCards button { flex: 1; border: 2px solid #5a4a8a; background: #232744; color: #fff; border-radius: 12px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .arCards button span { font-size: 26px; } .arCards button b { font-size: 12px; } .arCards button small { font-size: 10px; color: #b8b6cc; }
+  .arRes { display: flex; flex-direction: column; gap: 3px; margin: 10px 0; font-size: 13px; color: #c8c6d8; } .arRew { font-weight: 800; color: #ffd166; margin-bottom: 10px; }
+  .arBtns { display: flex; gap: 8px; } .arBtns button { flex: 1; border: none; border-radius: 12px; padding: 11px; font-weight: 900; color: #fff; background: linear-gradient(180deg, #4a3f7a, #322a58); }
   #custBtn { margin-top: 12px; border: 1px solid #5a4a8a; background: rgba(30,22,60,.75); color: #e6e2ff; font-weight: 800; font-size: 14px; padding: 9px 18px; border-radius: 12px; z-index: 2; position: relative; animation: logoIn .4s ease-out; }
   .custOpen { width: 100%; border: 1px solid #5a4a8a; background: linear-gradient(180deg, #2e2850, #221d3c); color: #fff; font-weight: 900; font-size: 15px; padding: 12px; border-radius: 12px; margin-bottom: 6px; }
   #custPanel { position: fixed; inset: 0; z-index: 45; display: none; align-items: center; justify-content: center; background: rgba(8,8,20,.78); padding: 12px; }
@@ -527,13 +559,13 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v42</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v43</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v42 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v43 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -548,10 +580,12 @@
   <div id="tsLoad"><i id="tsLoadFill"></i></div><div id="tsLoadTxt">Chargement…</div>
   <button id="newsBtn">📜 Nouveautés<span class="dot" id="newsDot"></span></button>
   <button id="playBtn">JOUER</button>
-  <button id="custBtn">👤 Personnaliser</button>
+  <div class="tsRow"><button id="custBtn">👤 Personnaliser</button><button id="arenaBtn">⚔️ Arène co-op</button></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v42</div></div>
+  <div class="tsVer">v43</div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
+<div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
+<div id="arField"><canvas id="arCv"></canvas><div id="arTop"></div><button id="arQuit" aria-label="Quitter">✕</button><div id="arPick"></div><div id="arEnd"></div></div>
 <div id="newsPanel"><div id="newsBox"><div id="newsHead">📜 Nouveautés</div><button id="newsClose" aria-label="Fermer">✕</button><div id="newsBody"></div></div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
@@ -2157,6 +2191,8 @@ const ACH = [
   ["my", "gem", "Mythe vivant", "Obtenir un objet Mythique", () => S.stats.mythic || 0, 1, 25],
   ["vb", "crown", "Briseur de Néant", "Vaincre le Seigneur du Néant", () => S.vbKills || 0, 1, 20],
   ["vb5", "crown", "Maître du Néant", "Vaincre le Seigneur du Néant 10 fois", () => S.vbKills || 0, 10, 50],
+  ["ar10", "swords", "Survivant", "Atteindre la vague 10 dans l'Arène", () => S.arenaBest || 0, 10, 10],
+  ["ar30", "swords", "Inarrêtable", "Atteindre la vague 30 dans l'Arène", () => S.arenaBest || 0, 30, 30],
   ["hd", "crown", "Chasseur de l'impossible", "Terminer les 1000 niveaux en mode Difficile", () => S.wonH ? 1 : 0, 1, 60],
   ["dv", "crown", "Élu des dieux", "Obtenir un objet divin", () => S.stats.divine || 0, 1, 40],
   ["g1", "coin", "Ruée vers l'or", "Vaincre un monstre doré", () => S.stats.rares, 1, 3],
@@ -2672,11 +2708,13 @@ function eventsHtml() {
   const vbLeft = (S.vbNext || 0) - Date.now();
   h += '<div class="evRow vbRow' + (vbReady() ? " on" : "") + '"><span>🌑 <b>Le Seigneur du Néant</b><br><small>Boss du Néant, dès le niveau ' + VB_MIN + '. Cristaux, 3 gemmes niv. 3 et un objet ' + (S.diff ? "Émeraude ou Saphir" : "Diamant") + ' garanti. Revient 3 h après sa défaite.</small></span>' +
     (vbReady() ? '<button class="buy vbBtn" id="vbBtn">Affronter</button>' : "<em>" + (!vbUnlocked() ? "niv. " + VB_MIN : "dans " + fmtLeft(vbLeft)) + "</em>") + "</div>";
+  h += '<div class="evRow"><span>⚔️ <b>Arène de Brume</b><br><small>Survis aux vagues seul ou avec tes potes (code d\'invitation). Record : vague ' + (S.arenaBest || 0) + "</small></span><button class=\"buy\" id=\"arEvBtn\">Jouer</button></div>";
   h += '<button class="smallBtn" id="calBtn" style="width:100%;margin-top:6px">' + ic("gift") + " Calendrier de connexion (jour " + S.login.day + "/7)</button></div>";
   return h;
 }
 function bindEvents() {
   const b = $("invBtn"); if (b) b.onclick = startInvasion;
+  const ab = $("arEvBtn"); if (ab) ab.onclick = openArena;
   const vbb = $("vbBtn"); if (vbb) vbb.onclick = () => modal("🌑 Le Seigneur du Néant", '<img src="' + VB_IMG_SRC + '" style="width:200px;max-width:70%;filter:drop-shadow(0 0 14px #9b3cff)"><br>Niveau <b>' + vbLevel() + "</b> · " + VB_TIME + " secondes pour le vaincre.<br>Sous la moitié de sa vie, il se déchaîne !", [{ t: "Plus tard", alt: true }, { t: "Combattre !", f: startVoidBoss }]);
   const c = $("calBtn"); if (c) c.onclick = showLogin;
 }
@@ -3985,7 +4023,7 @@ function loop(now) {
   const t = now / 1000;
   update(dt); S.stats.time = (S.stats.time || 0) + Math.min(raw, 1);
   const sh = shakeT > 0; if (sh) { shakeT -= raw; ctx.save(); ctx.translate(rand(-5, 5), rand(-4, 4)); }
-  if (!sceneHidden()) { const vbOn = tower && tower.vb; if (vbOn) drawVoidBg(t); else drawBackground(t); drawHero(t); drawPet(t); drawMonster(t); if (!vbOn) drawForeground(t, dt); drawFx(dt); if (vbOn || vbFx) drawVoidUi(t); }
+  if (!sceneHidden() && !arenaOn) { const vbOn = tower && tower.vb; if (vbOn) drawVoidBg(t); else drawBackground(t); drawHero(t); drawPet(t); drawMonster(t); if (!vbOn) drawForeground(t, dt); drawFx(dt); if (vbOn || vbFx) drawVoidUi(t); }
   else { if (floats.length) floats.length = 0; if (particles.length > 40) particles.length = 40; }
   if (sh) ctx.restore();
   saveT += dt; if (saveT > 5) { saveT = 0; save(); }
@@ -4279,10 +4317,12 @@ function updateBagTab() {
 }
 
 let toastT;
-function toast(msg) { const t = $("toast"); t.innerHTML = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2600); }
+function toast(msg, force) { if (arenaOn && !force) return; const t = $("toast"); t.innerHTML = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2600); }
 const mq = [];
 function closeModal() { $("modal").style.display = "none"; if (mq.length) setTimeout(() => { if ($("modal").style.display !== "flex" && mq.length) modal(...mq.shift()); }, 160); }
+let modalForce = false;
 function modal(title, text, btns) {
+  if (arenaOn && !modalForce) { mq.push([title, text, btns]); return; } // pendant l'Arène, les messages du jeu attendent
   if ($("modal").style.display === "flex") { mq.push([title, text, btns]); return; }
   $("mTitle").innerHTML = title; $("mTitle").style.display = title ? "" : "none"; $("mText").innerHTML = text;
   const bx = $("modalBtns"); bx.innerHTML = "";
@@ -4441,6 +4481,492 @@ function refreshAll() {
 
 /* ================== DÉMARRAGE ================== */
 // Appli installable : enregistre le service worker (seulement quand le jeu est en ligne, ex. GitHub Pages)
+
+/* ================== ARÈNE DE BRUME : mini-jeu en coopération (jusqu'à 4 joueurs) ================== */
+// Vue de dessus, tu déplaces ton chasseur avec le doigt (joystick). Il tire tout seul quand il s'arrête.
+// En ligne : l'hôte fait tourner la partie, les autres rejoignent avec un code (connexion directe entre téléphones, PeerJS).
+const AW = 400, AH = 720, AR_MAX = 4, AR_PREFIX = "brumeria-arene-";
+const AR_WAVES = [10, 20, 30, 50, 0]; // 0 = illimité
+const AR_BONUS = [
+  { id: "dmg",    ic: "⚔️", name: "Lame aiguisée", desc: "Dégâts +30 %",                f: p => { p.dmg *= 1.3; } },
+  { id: "rate",   ic: "💨", name: "Tir rapide",    desc: "Cadence de tir +25 %",        f: p => { p.rate *= 1.25; } },
+  { id: "hp",     ic: "❤️", name: "Cœur robuste",  desc: "Vie max +30 et soin complet", f: p => { p.maxhp += 30; p.hp = p.maxhp; } },
+  { id: "spd",    ic: "👟", name: "Pas léger",     desc: "Vitesse de déplacement +12 %", f: p => { p.spd *= 1.12; } },
+  { id: "multi",  ic: "🎯", name: "Tir multiple",  desc: "+1 projectile à chaque tir",  f: p => { p.multi = Math.min(5, p.multi + 1); } },
+  { id: "pierce", ic: "🗡️", name: "Perforation",   desc: "Tes tirs traversent +1 ennemi", f: p => { p.pierce++; } },
+  { id: "crit",   ic: "💥", name: "Œil vif",       desc: "Critique +12 % (dégâts ×2)",  f: p => { p.crit = Math.min(0.75, p.crit + 0.12); } },
+  { id: "heal",   ic: "💚", name: "Potion",        desc: "Soigne 60 % de ta vie",       f: p => { p.hp = Math.min(p.maxhp, p.hp + p.maxhp * 0.6); } },
+  { id: "vamp",   ic: "🩸", name: "Vampire",       desc: "Chaque ennemi tué te soigne de 3 PV", f: p => { p.vamp += 3; } }
+];
+let arena = null, arenaOn = false, arRaf = 0, arNet = null;
+const arRnd = (a, b) => a + Math.random() * (b - a);
+const arDist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+const arCode = () => Array.from({ length: 4 }, () => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random() * 32)]).join("");
+function arName() { return (S.pseudo || "Chasseur").slice(0, 14); }
+
+/* ---------- images (chasseurs et monstres dessinés par le jeu) ---------- */
+const arSprites = {};
+function bakeSticker(sz, ox, oy, fn) {
+  const tmp = mkOff(sz), tint = mkOff(sz), out = mkOff(sz);
+  drawOff(tmp, sz, ox, oy, fn);
+  withCtx(out.getContext("2d"), () => { ctx.setTransform(out._pr, 0, 0, out._pr, 0, 0); sticker(tmp, tint, sz, 0, 0); });
+  return out;
+}
+function withLook(look, cls, fn) {
+  const L0 = S.look, C0 = S.cls; if (look) S.look = Object.assign({}, L0, look); if (cls && CLASSES[cls]) S.cls = cls;
+  HC = heroColors();
+  try { return fn(); } finally { S.look = L0; S.cls = C0; HC = heroColors(); }
+}
+function heroSprites(look, cls) {
+  const key = "h|" + JSON.stringify(look || {}) + "|" + cls;
+  if (arSprites[key]) return arSprites[key];
+  const fr = withLook(look, cls, () => [0, 1, 2].map(i => bakeSticker(HOFF, HOFF / 2, HOFF - 15, () => {
+    const t = 0.13 + i * 0.14, walk = i > 0, lg = walk ? (i === 1 ? 4 : -4) : 0, bob = walk ? -2 : 0;
+    heroArt(t, walk, bob, lg); heroWeapon(t, bob, 0, 0);
+  })));
+  return (arSprites[key] = fr);
+}
+function monSprite(key) {
+  if (arSprites[key]) return arSprites[key];
+  const [type, color, scs] = key.split("|"), sc = +scs || 0.6, r = seeded(type.length * 97 + color.charCodeAt(2));
+  const m = { type, color, eyes: 2, mouth: ["sourire", "crocs", "grimace", "o"][Math.floor(r() * 4)], blush: r() < 0.5, hat: null, horns: r() < 0.4, spots: Array.from({ length: 5 }, () => [r() * 70 - 35, r() * 20, 4 + r() * 5]), wobble: 0, blinkEvery: 99, flash: 0, scale: sc, iris: "#5a3a8a", boss: false };
+  const SZ = Math.ceil(150 * sc + 50);
+  return (arSprites[key] = { c: bakeSticker(SZ, SZ / 2, SZ - 18, () => { ctx.scale(sc, sc); BODY[type](m, color, 0.5); }), sz: SZ, sc });
+}
+let arFloor = null;
+function arFloorImg(k) {
+  if (arFloor && arFloor._k === k) return arFloor;
+  const c = document.createElement("canvas"); c.width = Math.ceil(AW * k); c.height = Math.ceil(AH * k); const g = c.getContext("2d"); g.scale(k, k);
+  const gr = g.createRadialGradient(AW / 2, AH / 2, 40, AW / 2, AH / 2, AH * 0.7); gr.addColorStop(0, "#2c2a4a"); gr.addColorStop(1, "#141226"); g.fillStyle = gr; g.fillRect(0, 0, AW, AH);
+  const rr2 = seeded(42);
+  for (let y = 0; y < AH; y += 40) for (let x = (y / 40 % 2) * 20 - 20; x < AW; x += 40) { g.fillStyle = "rgba(255,255,255," + (0.02 + rr2() * 0.035) + ")"; g.beginPath(); g.roundRect ? g.roundRect(x + 2, y + 2, 36, 36, 6) : g.rect(x + 2, y + 2, 36, 36); g.fill(); }
+  for (let i = 0; i < 26; i++) { g.fillStyle = "rgba(120,80,220," + (0.04 + rr2() * 0.05) + ")"; g.beginPath(); g.arc(rr2() * AW, rr2() * AH, 8 + rr2() * 26, 0, Math.PI * 2); g.fill(); }
+  g.strokeStyle = "rgba(160,110,255,.45)"; g.lineWidth = 4; g.strokeRect(6, 6, AW - 12, AH - 12);
+  g.strokeStyle = "rgba(10,6,24,.9)"; g.lineWidth = 6; g.strokeRect(1, 1, AW - 2, AH - 2);
+  const vg = g.createRadialGradient(AW / 2, AH / 2, AH * 0.35, AW / 2, AH / 2, AH * 0.75); vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, "rgba(5,2,15,.55)"); g.fillStyle = vg; g.fillRect(0, 0, AW, AH);
+  c._k = k; return (arFloor = c);
+}
+
+/* ---------- simulation (faite par l'hôte, ou seul en solo) ---------- */
+function arNewPlayer(id, name, look, cls) {
+  return { id, name, look, cls, x: AW / 2 + arRnd(-60, 60), y: AH * 0.62 + arRnd(-30, 30), hp: 100, maxhp: 100, dmg: 12, rate: 2.2, spd: 150, multi: 1, pierce: 0, crit: 0.05, vamp: 0,
+    cd: 0, inv: 0, alive: true, face: 1, mv: 0, kills: 0, opts: null, picked: true };
+}
+function arZone(w) { return Math.min(ZONES.length - 1, Math.floor((w - 1) / 3)); }
+function arStartWave(A) {
+  A.wave++; A.phase = "fight"; A.queue = []; A.spawnT = 0.6;
+  const np = A.players.length, w = A.wave, z = ZONES[arZone(w)];
+  const K = Math.pow(1.16, w - 1), D = Math.pow(1.08, w - 1);
+  const n = Math.min(48, Math.round((5 + w * 1.6) * (1 + 0.6 * (np - 1))));
+  for (const p of A.players) if (!p.alive) { p.alive = true; p.hp = Math.ceil(p.maxhp * 0.5); p.inv = 1.5; } // les morts reviennent
+  if (w % 5 === 0) A.queue.push({ kind: "boss", key: z.types[0] + "|" + z.mon[0] + "|1.1", hp: 420 * K * (1 + 0.35 * (np - 1)), dmg: 16 * D, r: 30, spd: 42 });
+  for (let i = 0; i < n; i++) {
+    const roll = Math.random(); let kind = "chase";
+    if (w >= 3 && roll < 0.2) kind = "dash"; else if (w >= 4 && roll < 0.38) kind = "shoot"; else if (w >= 6 && roll < 0.5) kind = "tank";
+    const ty = z.types[Math.floor(Math.random() * z.types.length)], col = z.mon[Math.floor(Math.random() * z.mon.length)];
+    const base = { chase: [22, 9, 13, Math.min(120, 55 + w * 1.6), 0.5], dash: [18, 10, 12, 40, 0.48], shoot: [16, 7, 12, 50, 0.46], tank: [70, 14, 20, 32, 0.75] }[kind];
+    A.queue.push({ kind, key: ty + "|" + col + "|" + base[4], hp: base[0] * K, dmg: base[1] * D, r: base[2], spd: base[3] });
+  }
+  A.msg = { txt: "Vague " + w + (A.N ? " / " + A.N : ""), t: 1.8 };
+}
+function arSpawn(A, q) {
+  const side = Math.floor(Math.random() * 4), m = 24;
+  const x = side === 0 ? arRnd(m, AW - m) : side === 1 ? AW - m : side === 2 ? arRnd(m, AW - m) : m;
+  const y = side === 0 ? m : side === 1 ? arRnd(m, AH - m) : side === 2 ? AH - m : arRnd(m, AH - m);
+  A.enemies.push({ id: A.eid++, kind: q.kind, key: q.key, x, y, r: q.r, hp: q.hp, max: q.hp, dmg: q.dmg, spd: q.spd, cd: arRnd(1, 2.5), tele: 0.8, dash: 0, dx: 0, dy: 0, boss: q.kind === "boss", fl: 0 });
+}
+function arAlive(A) { return A.players.filter(p => p.alive); }
+function arNearest(A, e) { let b = null, bd = 1e9; for (const p of arAlive(A)) { const d = arDist(p, e); if (d < bd) { bd = d; b = p; } } return b; }
+function arFx(A, x, y, k) { A.fx.push([Math.round(x), Math.round(y), k]); }
+function arStep(A, dt) {
+  if (A.msg) { A.msg.t -= dt; if (A.msg.t <= 0) A.msg = null; }
+  if (A.phase === "over") return;
+  if (A.phase === "pick") {
+    A.pickT -= dt;
+    if (A.pickT <= 0 || A.players.every(p => p.picked)) { for (const p of A.players) if (!p.picked && p.opts) { AR_BONUS.find(b => b.id === p.opts[0]).f(p); p.picked = true; } arStartWave(A); }
+    return;
+  }
+  // apparition progressive
+  if (A.queue.length) { A.spawnT -= dt; if (A.spawnT <= 0) { arSpawn(A, A.queue.shift()); A.spawnT = Math.max(0.12, 0.45 - A.wave * 0.006); } }
+  // joueurs : tir automatique quand ils ne bougent pas
+  for (const p of A.players) {
+    p.inv = Math.max(0, p.inv - dt); p.cd -= dt;
+    if (!p.alive || p.mv) continue;
+    if (p.cd <= 0) {
+      let tg = null, bd = 1e9; for (const e of A.enemies) if (e.tele <= 0) { const d = arDist(p, e); if (d < bd) { bd = d; tg = e; } }
+      if (tg) {
+        p.cd = 1 / p.rate; p.face = tg.x < p.x ? -1 : 1;
+        const a0 = Math.atan2(tg.y - p.y, tg.x - p.x);
+        for (let i = 0; i < p.multi; i++) { const a = a0 + (i - (p.multi - 1) / 2) * 0.16; A.bullets.push({ x: p.x, y: p.y - 24, vx: Math.cos(a) * 440, vy: Math.sin(a) * 440, o: p.id, dmg: p.dmg, pierce: p.pierce, hit: [], life: 1.6 }); }
+      }
+    }
+  }
+  // ennemis
+  for (const e of A.enemies) {
+    if (e.tele > 0) { e.tele -= dt; continue; }
+    e.fl = Math.max(0, e.fl - dt);
+    const tg = arNearest(A, e); if (!tg) continue;
+    const dx = tg.x - e.x, dy = tg.y - e.y, d = Math.hypot(dx, dy) || 1;
+    let vx = dx / d * e.spd, vy = dy / d * e.spd;
+    if (e.kind === "dash") { e.cd -= dt; if (e.dash > 0) { e.dash -= dt; vx = e.dx; vy = e.dy; } else if (e.cd <= 0) { e.dash = 0.45; e.dx = dx / d * 270; e.dy = dy / d * 270; e.cd = 2.6; } }
+    if (e.kind === "shoot") { if (d < 170) { vx = -vx * 0.7; vy = -vy * 0.7; } e.cd -= dt; if (e.cd <= 0) { e.cd = 2.3; A.ebullets.push({ x: e.x, y: e.y - 8, vx: dx / d * 165, vy: dy / d * 165, dmg: e.dmg, life: 4 }); } }
+    if (e.kind === "boss") { e.cd -= dt; if (e.cd <= 0) { e.cd = 2.6; const n = 12, o = Math.random(); for (let i = 0; i < n; i++) { const a = (i + o) / n * Math.PI * 2; A.ebullets.push({ x: e.x, y: e.y - 12, vx: Math.cos(a) * 140, vy: Math.sin(a) * 140, dmg: e.dmg * 0.8, life: 5 }); } } }
+    e.x = Math.max(e.r, Math.min(AW - e.r, e.x + vx * dt)); e.y = Math.max(e.r, Math.min(AH - e.r, e.y + vy * dt));
+    for (const p of arAlive(A)) if (p.inv <= 0 && Math.hypot(p.x - e.x, (p.y - 10) - (e.y - 6)) < e.r + 12) arHurt(A, p, e.dmg);
+  }
+  // pas d'empilement des monstres
+  for (let i = 0; i < A.enemies.length; i++) for (let j = i + 1; j < A.enemies.length; j++) {
+    const a = A.enemies[i], b = A.enemies[j], dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy), m = a.r + b.r;
+    if (d > 0 && d < m) { const k = (m - d) / d * 0.5; a.x -= dx * k; a.y -= dy * k; b.x += dx * k; b.y += dy * k; }
+  }
+  // tirs des joueurs
+  for (const b of A.bullets) {
+    b.x += b.vx * dt; b.y += b.vy * dt; b.life -= dt;
+    if (b.x < 0 || b.x > AW || b.y < 0 || b.y > AH) b.life = 0;
+    for (const e of A.enemies) if (b.life > 0 && e.tele <= 0 && e.hp > 0 && !b.hit.includes(e.id) && Math.hypot(b.x - e.x, b.y - (e.y - 8)) < e.r + 5) {
+      const own = A.players.find(p => p.id === b.o), cr = own && Math.random() < own.crit, dm = b.dmg * (cr ? 2 : 1);
+      e.hp -= dm; e.fl = 0.1; b.hit.push(e.id); arFx(A, e.x, e.y - e.r - 6, cr ? 2 : 1);
+      if (e.hp <= 0) { arFx(A, e.x, e.y, 3); if (own) { own.kills++; if (own.vamp && own.alive) own.hp = Math.min(own.maxhp, own.hp + own.vamp); } }
+      if (b.pierce > 0) b.pierce--; else b.life = 0;
+    }
+  }
+  A.bullets = A.bullets.filter(b => b.life > 0);
+  A.enemies = A.enemies.filter(e => e.hp > 0);
+  for (const b of A.ebullets) {
+    b.x += b.vx * dt; b.y += b.vy * dt; b.life -= dt;
+    for (const p of arAlive(A)) if (b.life > 0 && p.inv <= 0 && Math.hypot(b.x - p.x, b.y - (p.y - 22)) < 16) { arHurt(A, p, b.dmg); b.life = 0; }
+  }
+  A.ebullets = A.ebullets.filter(b => b.life > 0 && b.x > -10 && b.x < AW + 10 && b.y > -10 && b.y < AH + 10);
+  // fin de partie / fin de vague
+  if (!arAlive(A).length) { A.phase = "over"; A.win = false; return; }
+  if (!A.queue.length && !A.enemies.length) {
+    A.cleared = A.wave;
+    if (A.N && A.wave >= A.N) { A.phase = "over"; A.win = true; return; }
+    A.phase = "pick"; A.pickT = 15; A.ebullets = []; A.bullets = [];
+    for (const p of A.players) { const pool = AR_BONUS.map(b => b.id).sort(() => Math.random() - 0.5); p.opts = pool.slice(0, 3); p.picked = false; }
+  }
+}
+function arHurt(A, p, dmg) {
+  p.hp -= dmg; p.inv = 0.55; arFx(A, p.x, p.y - 20, 4);
+  if (p.hp <= 0) { p.hp = 0; p.alive = false; arFx(A, p.x, p.y, 5); }
+}
+
+/* ---------- réseau (PeerJS, connexion directe entre téléphones) ---------- */
+function loadPeer() {
+  if (window.Peer) return Promise.resolve();
+  const urls = ["https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js", "https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"];
+  return urls.reduce((pr, u) => pr.catch(() => new Promise((ok, ko) => { const s = document.createElement("script"); s.src = u; s.onload = () => window.Peer ? ok() : ko(); s.onerror = ko; document.head.appendChild(s); })), Promise.reject());
+}
+function arSend(c, m) { try { if (c && c.open) c.send(m); } catch (e) {} }
+function arBroadcast(m) { if (arNet && arNet.conns) for (const c of arNet.conns) arSend(c, m); }
+function arHost() {
+  arMenuMsg("Création de la partie…");
+  loadPeer().then(() => {
+    const code = arCode(), peer = new Peer(AR_PREFIX + code);
+    arNet = { host: true, peer, code, conns: [], ids: 1 };
+    arena = arNewArena(true); arena.players.push(arNewPlayer(0, arName(), S.look, S.cls)); arena.me = 0;
+    peer.on("open", () => arLobby());
+    peer.on("error", e => { if (e && e.type === "unavailable-id") { peer.destroy(); arHost(); } else arMenuMsg("Connexion impossible (" + (e && e.type || "réseau") + "). Vérifie ta connexion internet.", true); });
+    peer.on("connection", c => {
+      c.on("data", m => arHostData(c, m));
+      c.on("close", () => { arNet.conns = arNet.conns.filter(x => x !== c); if (arena) { arena.players = arena.players.filter(p => p.id !== c._pid); if (arena.phase === "lobby") arLobby(); else toast((c._pname || "Un joueur") + " a quitté la partie", true); } });
+    });
+  }).catch(() => arMenuMsg("Impossible de charger le mode en ligne. Il faut une connexion internet.", true));
+}
+function arHostData(c, m) {
+  if (!arena) return;
+  if (m.t === "hello") {
+    if (arena.phase !== "lobby") { arSend(c, { t: "refuse", why: "La partie a déjà commencé." }); return; }
+    if (arena.players.length >= AR_MAX) { arSend(c, { t: "refuse", why: "La partie est pleine (4 joueurs max)." }); return; }
+    c._pid = arNet.ids++; c._pname = String(m.name || "Chasseur").slice(0, 14); arNet.conns.push(c);
+    arena.players.push(arNewPlayer(c._pid, c._pname, m.look || {}, m.cls)); arSend(c, { t: "you", id: c._pid }); arLobby(); sfx("buy");
+  } else if (m.t === "in") {
+    const p = arena.players.find(p => p.id === c._pid); if (!p || !p.alive) return;
+    p.x = Math.max(12, Math.min(AW - 12, +m.x || p.x)); p.y = Math.max(20, Math.min(AH - 8, +m.y || p.y)); p.mv = m.mv ? 1 : 0; if (m.f) p.face = m.f;
+  } else if (m.t === "pick") {
+    const p = arena.players.find(p => p.id === c._pid); if (p && !p.picked && p.opts && p.opts.includes(m.id)) { AR_BONUS.find(b => b.id === m.id).f(p); p.picked = true; }
+  }
+}
+function arJoin(code) {
+  code = String(code || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if (code.length !== 4) { arMenuMsg("Le code fait 4 caractères.", true); return; }
+  arMenuMsg("Connexion à la partie " + code + "…");
+  loadPeer().then(() => {
+    const peer = new Peer();
+    arNet = { host: false, peer, code };
+    peer.on("open", () => {
+      const c = peer.connect(AR_PREFIX + code, { reliable: true }); arNet.c = c;
+      const to = setTimeout(() => arMenuMsg("Aucune partie trouvée avec le code " + code + ".", true), 9000);
+      c.on("open", () => { clearTimeout(to); arSend(c, { t: "hello", name: arName(), look: S.look, cls: S.cls, v: GAME_VER }); });
+      c.on("data", m => arClientData(m));
+      c.on("close", () => { if (arena && arena.phase !== "over") arEnd("L'hôte a quitté la partie."); });
+    });
+    peer.on("error", e => arMenuMsg(e && e.type === "peer-unavailable" ? "Aucune partie trouvée avec le code " + code + "." : "Connexion impossible. Vérifie ta connexion internet.", true));
+  }).catch(() => arMenuMsg("Impossible de charger le mode en ligne. Il faut une connexion internet.", true));
+}
+function arClientData(m) {
+  if (m.t === "refuse") { arMenuMsg(m.why, true); arLeave(true); return; }
+  if (m.t === "you") { arNet.me = m.id; return; }
+  if (m.t === "lobby") { arNet.lobby = m; arLobbyView(m); return; }
+  if (m.t === "start") { arena = arNewArena(false); arena.N = m.N; arena.me = arNet.me; arOpenField(); return; }
+  if (!arena) return;
+  if (m.t === "s") arApplySnap(m);
+  else if (m.t === "pick") arShowPick(m.opts);
+  else if (m.t === "end") { if (arena.endShown) return; arena.endShown = true; arena.phase = "over"; arena.win = m.win; arena.cleared = m.cleared; arShowEnd(); }
+}
+
+/* ---------- état de partie et écran ---------- */
+function arNewArena(host) {
+  return { host, phase: "lobby", wave: 0, N: 10, players: [], enemies: [], bullets: [], ebullets: [], fx: [], queue: [], eid: 1, me: 0, cleared: 0, msg: null, view: { p: {}, e: {} }, snapT: 0, inT: 0, t: 0 };
+}
+function arStartGame() {
+  const A = arena; if (!A || !A.host) return;
+  A.N = arNet ? arNet.N : A.N;
+  A.phase = "fight"; A.wave = 0; arStartWave(A);
+  if (arNet && arNet.conns) for (const c of arNet.conns) arSend(c, { t: "start", N: A.N });
+  arOpenField();
+}
+const arMe = () => arena && (arena.host ? arena.players.find(p => p.id === arena.me) : arena.view.p[arena.me]);
+let arJoy = null, arKeys = {};
+function arOpenField() {
+  document.body.classList.add("arOn"); $("arMenu").classList.remove("show"); $("arField").classList.add("show"); $("arPick").innerHTML = ""; $("arEnd").innerHTML = "";
+  arenaOn = true; arResize(); cancelAnimationFrame(arRaf);
+  let last = performance.now();
+  const loop = now => {
+    if (!arenaOn) return;
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    arTick(dt); arDraw(now / 1000);
+    arRaf = requestAnimationFrame(loop);
+  };
+  arRaf = requestAnimationFrame(loop);
+}
+function arTick(dt) {
+  const A = arena; if (!A) return; A.t += dt;
+  // déplacement de mon chasseur (calculé sur mon téléphone pour que ce soit fluide)
+  const me = arMe();
+  let jx = 0, jy = 0;
+  if (arJoy && arJoy.on) { jx = arJoy.dx; jy = arJoy.dy; }
+  if (arKeys.ArrowLeft || arKeys.a || arKeys.q) jx -= 1; if (arKeys.ArrowRight || arKeys.d) jx += 1; if (arKeys.ArrowUp || arKeys.w || arKeys.z) jy -= 1; if (arKeys.ArrowDown || arKeys.s) jy += 1;
+  const jl = Math.hypot(jx, jy), moving = jl > 0.15 && A.phase !== "over";
+  if (me && me.alive) {
+    if (moving) { const k = Math.min(1, jl) / (jl || 1), sp = me.spd || 150; me.x = Math.max(12, Math.min(AW - 12, me.x + jx * k * sp * dt)); me.y = Math.max(20, Math.min(AH - 8, me.y + jy * k * sp * dt)); if (Math.abs(jx) > 0.1) me.face = jx < 0 ? -1 : 1; }
+    me.mv = moving ? 1 : 0;
+  }
+  if (A.host) {
+    arStep(A, dt);
+    if (A.phase === "pick") { const p = A.players.find(p => p.id === A.me); if (p && !p.picked && !$("arPick").innerHTML) arShowPick(p.opts); if (arNet && arNet.conns) for (const c of arNet.conns) { const q = A.players.find(p => p.id === c._pid); if (q && !q.picked && !c._sentPick) { c._sentPick = true; arSend(c, { t: "pick", opts: q.opts }); } } }
+    else { if ($("arPick").innerHTML) $("arPick").innerHTML = ""; if (arNet && arNet.conns) for (const c of arNet.conns) c._sentPick = false; }
+    const nf = A.fx; A.fx = []; for (const f of nf) arSpawnFx(f);
+    const online = arNet && arNet.conns && arNet.conns.length;
+    if (online) { (A.fxOut = A.fxOut || []).push(...nf); A.snapT -= dt; if (A.snapT <= 0) { A.snapT = 0.066; const sn = arSnap(A); sn.fx = A.fxOut; A.fxOut = []; arBroadcast(sn); } }
+    if (A.phase === "over" && !A.endShown) { A.endShown = true; arBroadcast({ t: "end", win: A.win, cleared: A.cleared }); arShowEnd(); }
+  } else {
+    A.inT -= dt;
+    if (me && A.inT <= 0 && arNet && arNet.c) { A.inT = 0.05; arSend(arNet.c, { t: "in", x: Math.round(me.x), y: Math.round(me.y), mv: me.mv, f: me.face }); }
+    for (const id in A.view.e) { const e = A.view.e[id]; e.x += (e.tx - e.x) * Math.min(1, dt * 14); e.y += (e.ty - e.y) * Math.min(1, dt * 14); }
+    for (const id in A.view.p) { const p = A.view.p[id]; if (+id === A.me) continue; p.x += (p.tx - p.x) * Math.min(1, dt * 12); p.y += (p.ty - p.y) * Math.min(1, dt * 12); }
+  }
+  arTickFx(dt);
+  arHud();
+}
+function arSnap(A) {
+  return { t: "s", w: A.wave, N: A.N, ph: A.phase, pt: Math.ceil(A.pickT || 0), q: A.queue.length + A.enemies.length, msg: A.msg ? A.msg.txt : "",
+    p: A.players.map(p => [p.id, Math.round(p.x), Math.round(p.y), Math.ceil(p.hp), Math.ceil(p.maxhp), p.alive ? 1 : 0, p.face, p.kills, Math.round(p.spd), p.mv, p.name, p.look, p.cls]),
+    e: A.enemies.map(e => [e.id, e.key, Math.round(e.x), Math.round(e.y), Math.ceil(e.hp), Math.ceil(e.max), e.r, e.tele > 0 ? 1 : 0, e.boss ? 1 : 0, e.fl > 0 ? 1 : 0]),
+    b: A.bullets.map(b => [Math.round(b.x), Math.round(b.y)]).concat(A.ebullets.map(b => [Math.round(b.x), Math.round(b.y), 1])), fx: A.fx };
+}
+function arApplySnap(m) {
+  const A = arena, V = A.view; A.wave = m.w; A.N = m.N; A.phase = m.ph; A.pickT = m.pt; A.left = m.q; A.msgTxt = m.msg; A.cleared = Math.max(A.cleared, m.ph === "pick" ? m.w : m.w - 1);
+  const seen = {};
+  for (const r of m.p) {
+    const [id, x, y, hp, maxhp, alive, face, kills, spd, mv, name, look, cls] = r; seen[id] = 1;
+    let p = V.p[id];
+    if (!p) p = V.p[id] = { id, x, y, tx: x, ty: y };
+    Object.assign(p, { hp, maxhp, alive: !!alive, kills, spd, name, look, cls });
+    if (id !== A.me) Object.assign(p, { tx: x, ty: y, face, mv }); else if (!p.init || !alive) { p.x = x; p.y = y; p.init = true; }
+    if (id === A.me && p.alive && !p.wasAlive) { p.x = x; p.y = y; } p.wasAlive = p.alive;
+  }
+  for (const id in V.p) if (!seen[id]) delete V.p[id];
+  const se = {};
+  for (const r of m.e) {
+    const [id, key, x, y, hp, max, rad, tele, boss, fl] = r; se[id] = 1;
+    let e = V.e[id]; if (!e) e = V.e[id] = { id, key, x, y };
+    Object.assign(e, { tx: x, ty: y, hp, max, r: rad, tele, boss, fl });
+  }
+  for (const id in V.e) if (!se[id]) delete V.e[id];
+  A.vb = m.b; for (const f of m.fx || []) arSpawnFx(f);
+  if (m.ph !== "pick" && $("arPick").innerHTML) $("arPick").innerHTML = "";
+}
+let arParts = [], arNums = [];
+function arSpawnFx(f) {
+  const [x, y, k] = f;
+  if (k === 1 || k === 2) { arNums.push({ x: x + arRnd(-6, 6), y, t: 0.6, c: k === 2 ? "#ffd166" : "#fff", s: k === 2 ? 13 : 10 }); for (let i = 0; i < 3; i++) arParts.push({ x, y, vx: arRnd(-60, 60), vy: arRnd(-80, -10), t: 0.35, c: "#e0d4ff" }); }
+  else if (k === 3) for (let i = 0; i < 12; i++) arParts.push({ x, y, vx: arRnd(-120, 120), vy: arRnd(-120, 120), t: 0.5, c: pick(["#b07cff", "#ffd166", "#ffffff"]) });
+  else if (k === 4) { arNums.push({ x, y, t: 0.5, c: "#ff6b6b", s: 11, txt: "aïe" }); }
+  else if (k === 5) for (let i = 0; i < 20; i++) arParts.push({ x, y, vx: arRnd(-90, 90), vy: arRnd(-140, 20), t: 0.8, c: "#ff4d5e" });
+}
+function arHostFx(A) { for (const f of A.fx) arSpawnFx(f); A.fx = []; }
+function arTickFx(dt) {
+  for (const p of arParts) { p.x += p.vx * dt; p.y += p.vy * dt; p.t -= dt; }
+  for (const n of arNums) { n.y -= 30 * dt; n.t -= dt; }
+  arParts = arParts.filter(p => p.t > 0).slice(-200); arNums = arNums.filter(n => n.t > 0).slice(-30);
+}
+
+/* ---------- dessin ---------- */
+let arK = 1, arOX = 0, arOY = 0;
+function arResize() {
+  const c = $("arCv"), r = c.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1);
+  c.width = Math.round(r.width * d); c.height = Math.round(r.height * d);
+  arK = Math.min(r.width / AW, r.height / AH) * d; arOX = (c.width - AW * arK) / 2; arOY = (c.height - AH * arK) / 2;
+}
+function arDraw(t) {
+  const A = arena, c = $("arCv"), g = c.getContext("2d");
+  g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = "#0b0a16"; g.fillRect(0, 0, c.width, c.height);
+  g.setTransform(arK, 0, 0, arK, arOX, arOY);
+  g.drawImage(arFloorImg(arK), 0, 0, AW, AH);
+  const host = A.host, P = host ? A.players : Object.values(A.view.p), E = host ? A.enemies : Object.values(A.view.e);
+  // ennemis (alertes d'apparition puis monstres)
+  const drawList = [];
+  for (const e of E) drawList.push({ y: e.y, f: () => {
+    if (e.tele > 0) { const pu = 0.5 + 0.5 * Math.sin(t * 16); g.strokeStyle = "rgba(255,77,94," + (0.4 + 0.5 * pu) + ")"; g.lineWidth = 2; g.beginPath(); g.arc(e.x, e.y, e.r + 4, 0, Math.PI * 2); g.stroke(); return; }
+    g.fillStyle = "rgba(0,0,0,.35)"; g.beginPath(); g.ellipse(e.x, e.y + 2, e.r, e.r * 0.35, 0, 0, Math.PI * 2); g.fill();
+    const s = monSprite(e.key), h = e.r * (e.boss ? 3.2 : 3.1), k = h / (110 * s.sc), bob = Math.sin(t * 5 + e.id) * 1.5;
+    g.save(); if (e.fl) g.filter = "brightness(1.8)";
+    g.drawImage(s.c, e.x - s.sz * k / 2, e.y - (s.sz - 18) * k + bob, s.sz * k, s.sz * k); g.restore(); g.filter = "none";
+    if (e.hp < e.max || e.boss) { const w = e.boss ? 60 : 26; g.fillStyle = "rgba(10,8,20,.8)"; g.fillRect(e.x - w / 2, e.y - h * 0.95 - 6, w, e.boss ? 6 : 4); g.fillStyle = e.boss ? "#c77dff" : "#ff6b6b"; g.fillRect(e.x - w / 2, e.y - h * 0.95 - 6, w * Math.max(0, e.hp / e.max), e.boss ? 6 : 4); }
+  } });
+  for (const p of P) drawList.push({ y: p.y, f: () => {
+    const me = p.id === A.me, fr = heroSprites(p.look, p.cls), walk = p.mv && p.alive, img = walk ? fr[1 + (Math.floor(t * 8) % 2)] : fr[0];
+    g.fillStyle = "rgba(0,0,0,.35)"; g.beginPath(); g.ellipse(p.x, p.y + 2, 13, 4.5, 0, 0, Math.PI * 2); g.fill();
+    if (me) { g.strokeStyle = "rgba(255,209,102,.8)"; g.lineWidth = 2; g.beginPath(); g.ellipse(p.x, p.y + 2, 17, 6, 0, 0, Math.PI * 2); g.stroke(); }
+    const k = 0.48, bob = p.alive && !walk ? Math.sin(t * 3 + p.id) * 0.8 : 0;
+    g.save(); g.globalAlpha = p.alive ? ((p.inv || 0) > 0 && Math.floor(t * 20) % 2 ? 0.5 : 1) : 0.35;
+    g.translate(p.x, p.y + bob); g.scale((p.face || 1) * k, k); g.drawImage(img, -HOFF / 2, -(HOFF - 15), HOFF, HOFF); g.restore();
+    g.font = "800 9px system-ui"; g.textAlign = "center"; g.lineWidth = 3; g.strokeStyle = "rgba(0,0,0,.7)"; g.strokeText(p.name || "", p.x, p.y - 76); g.fillStyle = me ? "#ffd166" : "#e6e2ff"; g.fillText(p.name || "", p.x, p.y - 76);
+    g.fillStyle = "rgba(10,8,20,.8)"; g.fillRect(p.x - 16, p.y - 72, 32, 4); g.fillStyle = "#52d17c"; g.fillRect(p.x - 16, p.y - 72, 32 * Math.max(0, p.hp / (p.maxhp || 100)), 4);
+    if (!p.alive) { g.fillStyle = "#ff8a8a"; g.font = "900 9px system-ui"; g.fillText("K.O.", p.x, p.y - 84); }
+  } });
+  drawList.sort((a, b) => a.y - b.y).forEach(d => d.f());
+  // tirs
+  const B = host ? A.bullets.map(b => [b.x, b.y]).concat(A.ebullets.map(b => [b.x, b.y, 1])) : (A.vb || []);
+  for (const b of B) { g.drawImage(glowC(b[2] ? "#ff4dd2" : "#9fe4ff"), b[0] - 8, b[1] - 8, 16, 16); g.fillStyle = b[2] ? "#ff9ae8" : "#ffffff"; g.beginPath(); g.arc(b[0], b[1], b[2] ? 4 : 3, 0, Math.PI * 2); g.fill(); }
+  for (const p of arParts) { g.globalAlpha = Math.min(1, p.t * 3); g.fillStyle = p.c; g.fillRect(p.x - 1.5, p.y - 1.5, 3, 3); }
+  g.globalAlpha = 1; g.textAlign = "center";
+  for (const n of arNums) { g.globalAlpha = Math.min(1, n.t * 3); g.font = "900 " + n.s + "px system-ui"; g.lineWidth = 3; g.strokeStyle = "rgba(0,0,0,.7)"; g.strokeText(n.txt || "•", n.x, n.y); g.fillStyle = n.c; g.fillText(n.txt || "•", n.x, n.y); }
+  g.globalAlpha = 1;
+  // message de vague
+  const mt = host ? (A.msg && A.msg.txt) : A.msgTxt;
+  if (mt && A.phase === "fight") { g.font = "900 28px system-ui"; g.lineWidth = 6; g.strokeStyle = "#12021f"; g.strokeText(mt, AW / 2, AH * 0.4); g.fillStyle = "#e6c2ff"; g.fillText(mt, AW / 2, AH * 0.4); }
+  // joystick
+  if (arJoy && arJoy.on) {
+    g.setTransform(1, 0, 0, 1, 0, 0); const d = c.width / c.getBoundingClientRect().width;
+    g.globalAlpha = 0.35; g.fillStyle = "#ffffff"; g.beginPath(); g.arc(arJoy.ox * d, arJoy.oy * d, 50 * d, 0, Math.PI * 2); g.fill();
+    g.globalAlpha = 0.75; g.beginPath(); g.arc((arJoy.ox + arJoy.dx * 50) * d, (arJoy.oy + arJoy.dy * 50) * d, 22 * d, 0, Math.PI * 2); g.fill(); g.globalAlpha = 1;
+  }
+}
+function arHud() {
+  const A = arena, P = A.host ? A.players : Object.values(A.view.p), left = A.host ? A.queue.length + A.enemies.length : A.left || 0;
+  const me = arMe();
+  setHtml($("arTop"), '<b>Vague ' + Math.max(1, A.wave) + (A.N ? " / " + A.N : " · ∞") + "</b> · " + (A.phase === "pick" ? "Choisis un bonus (" + Math.ceil(A.pickT || 0) + " s)" : left + " monstre" + (left > 1 ? "s" : "")) +
+    '<div class="arPl">' + P.map(p => '<span class="' + (p.alive ? "" : "ko") + (p.id === A.me ? " me" : "") + '">' + (p.name || "") + " " + Math.ceil(Math.max(0, p.hp)) + "</span>").join("") + "</div>" + (me && !me.alive && A.phase !== "over" ? '<div class="arKo">K.O. ! Tu reviens à la prochaine vague si un allié survit.</div>' : ""));
+}
+function arShowPick(opts) {
+  if (!opts) return;
+  $("arPick").innerHTML = '<div class="arPickBox"><b>Vague terminée ! Choisis un bonus</b><div class="arCards">' + opts.map(id => { const b = AR_BONUS.find(x => x.id === id); return '<button data-pk="' + id + '"><span>' + b.ic + "</span><b>" + b.name + "</b><small>" + b.desc + "</small></button>"; }).join("") + "</div></div>";
+  $("arPick").querySelectorAll("[data-pk]").forEach(bt => bt.onclick = () => {
+    const id = bt.dataset.pk; sfx("rare");
+    if (arena.host) { const p = arena.players.find(p => p.id === arena.me); if (p && !p.picked) { AR_BONUS.find(b => b.id === id).f(p); p.picked = true; } }
+    else arSend(arNet.c, { t: "pick", id });
+    $("arPick").innerHTML = '<div class="arPickBox"><b>Bonus choisi !</b><br><small>On attend les autres chasseurs…</small></div>';
+  });
+}
+function arRewards(W) {
+  const gold = monGoldB(Math.max(10, S.maxLevel)) * 20 * W, cr = Math.floor(W * W / 12), gems = Math.floor(W / 10);
+  S.gold += gold; S.perles += cr; S.totalPerles += cr; for (let i = 0; i < gems; i++) addGem(randGem());
+  S.arenaBest = Math.max(S.arenaBest || 0, W); S.arenaGames = (S.arenaGames || 0) + 1; save();
+  return "+" + fmt(gold) + " " + COIN + (cr ? "<br>+" + cr + " " + PERLE : "") + (gems ? "<br>+" + gems + " gemme" + (gems > 1 ? "s" : "") : "");
+}
+function arShowEnd() {
+  const A = arena, W = A.cleared || 0, P = A.host ? A.players : Object.values(A.view.p);
+  const rew = arRewards(W);
+  $("arPick").innerHTML = "";
+  $("arEnd").innerHTML = '<div class="arPickBox"><b style="font-size:20px">' + (A.win ? "🏆 Victoire !" : "💀 Fin de la partie") + "</b><br>Vagues réussies : <b>" + W + "</b>" + (A.N ? " / " + A.N : "") + " · record : " + (S.arenaBest || 0) +
+    '<div class="arRes">' + P.map(p => "<span>" + (p.name || "") + " : " + (p.kills || 0) + " monstres</span>").join("") + '</div><div class="arRew">' + rew + "</div>" +
+    '<div class="arBtns">' + (A.host && (!arNet || !arNet.conns || !arNet.conns.length) ? '<button id="arAgain">Rejouer</button>' : "") + '<button id="arQuit2">Quitter</button></div></div>';
+  if ($("arAgain")) $("arAgain").onclick = () => { const N = A.N; arLeave(true); arSolo(N); };
+  $("arQuit2").onclick = () => arLeave();
+  sfx(A.win ? "rare" : "lose");
+}
+function arEnd(msg) { if (!arena || arena.endShown) return; arena.endShown = true; arena.phase = "over"; toast(msg, true); arShowEnd(); }
+function arLeave(silent) {
+  arenaOn = false; cancelAnimationFrame(arRaf);
+  try { if (arNet) { if (arNet.host) arBroadcast({ t: "end", win: false, cleared: arena ? arena.cleared : 0 }); if (arNet.c) arNet.c.close(); setTimeout(() => { try { arNet && arNet.peer && arNet.peer.destroy(); arNet = null; } catch (e) {} }, 300); } } catch (e) {}
+  arena = null; arParts = []; arNums = [];
+  setTimeout(() => { if (!arenaOn && mq.length && $("modal").style.display !== "flex") modal(...mq.shift()); }, 400);
+  $("arField").classList.remove("show"); if (!silent) { $("arMenu").classList.remove("show"); document.body.classList.remove("arOn"); }
+  refreshTop();
+}
+function arSolo(N) {
+  arena = arNewArena(true); arena.N = N; arena.players.push(arNewPlayer(0, arName(), S.look, S.cls)); arena.me = 0; arNet = null;
+  arena.phase = "fight"; arStartWave(arena); arOpenField();
+}
+
+/* ---------- menus ---------- */
+let arPickN = 10;
+function openArena() {
+  if (tower) { toast("Quitte d'abord la Tour"); return; }
+  document.body.classList.add("arOn"); $("arMenu").classList.add("show"); arMenuHome();
+}
+function arWavesHtml() {
+  return '<div class="cuChips arW">' + AR_WAVES.map(n => '<button data-wn="' + n + '" class="' + (arPickN === n ? "on" : "") + '">' + (n ? n + " vagues" : "Illimité ∞") + "</button>").join("") + "</div>";
+}
+function arBindWaves(cb) { $("arMenuBody").querySelectorAll("[data-wn]").forEach(b => b.onclick = () => { arPickN = +b.dataset.wn; sfx("buy"); if (arNet) arNet.N = arPickN; cb(); }); }
+function arMenuHome() {
+  $("arMenuBody").innerHTML =
+    '<div class="hint">Survis aux vagues de monstres, seul ou <b>avec tes potes</b> (jusqu\'à 4). Déplace ton chasseur avec le doigt : <b>il tire tout seul quand il s\'arrête</b>. Après chaque vague, choisis un bonus. Plus la vague est loin, plus c\'est dur… et plus la récompense est grosse !</div>' +
+    '<div class="cuRow"><div class="cuLbl">Ton pseudo</div><input id="arPseudo" maxlength="14" value="' + arName().replace(/"/g, "") + '"></div>' +
+    '<div class="cuRow"><div class="cuLbl">Nombre de vagues</div>' + arWavesHtml() + "</div>" +
+    '<button class="arBig" id="arSoloB">▶ Jouer seul</button><button class="arBig alt" id="arHostB">👥 Créer une partie avec des potes</button>' +
+    '<div class="arJoinRow"><input id="arCodeIn" maxlength="4" placeholder="CODE" autocapitalize="characters"><button id="arJoinB">Rejoindre</button></div>' +
+    '<div class="arMsg" id="arMsg"></div><div class="hint" style="font-size:11px">Record : vague <b>' + (S.arenaBest || 0) + "</b> · Récompenses : or, Cristaux (dès la vague 4) et gemmes (toutes les 10 vagues). Le mode à plusieurs a besoin d'internet.</div>";
+  const keep = () => { S.pseudo = ($("arPseudo").value || "").trim().slice(0, 14) || "Chasseur"; save(); };
+  $("arPseudo").onchange = keep;
+  arBindWaves(arMenuHome);
+  $("arSoloB").onclick = () => { keep(); arSolo(arPickN); };
+  $("arHostB").onclick = () => { keep(); arHost(); };
+  $("arJoinB").onclick = () => { keep(); arJoin($("arCodeIn").value); };
+}
+function arMenuMsg(txt, err) { const m = $("arMsg"); if (m) { m.textContent = txt; m.className = "arMsg" + (err ? " err" : ""); } else { arMenuHome(); arMenuMsg(txt, err); } }
+function arLobby() { // vue de l'hôte
+  if (!arena) return; arNet.N = arPickN;
+  const lob = { t: "lobby", code: arNet.code, N: arPickN, players: arena.players.map(p => ({ id: p.id, name: p.name })) };
+  arBroadcast(lob); arLobbyView(lob, true);
+}
+function arLobbyView(m, isHost) {
+  $("arMenuBody").innerHTML = '<div class="arCode">Code de la partie<b>' + m.code + "</b><small>Donne ce code à tes potes : ils tapent « Rejoindre » dans l'Arène.</small></div>" +
+    '<div class="cuLbl">Chasseurs (' + m.players.length + " / " + AR_MAX + ')</div><div class="arLob">' + m.players.map((p, i) => "<span>" + (i ? "👤 " : "👑 ") + p.name + "</span>").join("") + "</div>" +
+    (isHost ? '<div class="cuRow"><div class="cuLbl">Nombre de vagues</div>' + arWavesHtml() + '</div><button class="arBig" id="arGo">▶ Lancer la partie</button>' : '<div class="hint" style="text-align:center">Vagues : <b>' + (m.N ? m.N : "illimité") + "</b><br>On attend que l'hôte lance la partie…</div>") +
+    '<button class="arBig alt" id="arQuitL">Quitter</button>';
+  if (isHost) { arBindWaves(arLobby); $("arGo").onclick = arStartGame; }
+  $("arQuitL").onclick = () => { arLeave(true); arMenuHome(); };
+}
+function arInput() {
+  const c = $("arCv");
+  const pos = e => { const r = c.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  c.addEventListener("pointerdown", e => { const [x, y] = pos(e); arJoy = { on: true, ox: x, oy: y, dx: 0, dy: 0, id: e.pointerId }; try { c.setPointerCapture(e.pointerId); } catch (er) {} e.preventDefault(); });
+  c.addEventListener("pointermove", e => { if (!arJoy || !arJoy.on || e.pointerId !== arJoy.id) return; const [x, y] = pos(e); let dx = (x - arJoy.ox) / 50, dy = (y - arJoy.oy) / 50; const l = Math.hypot(dx, dy); if (l > 1) { dx /= l; dy /= l; } arJoy.dx = dx; arJoy.dy = dy; });
+  const up = e => { if (arJoy && e.pointerId === arJoy.id) arJoy = null; };
+  c.addEventListener("pointerup", up); c.addEventListener("pointercancel", up);
+  window.addEventListener("keydown", e => { if (arenaOn) arKeys[e.key] = true; });
+  window.addEventListener("keyup", e => { arKeys[e.key] = false; });
+  window.addEventListener("resize", () => { if (arenaOn) arResize(); });
+  $("arQuit").onclick = () => { modalForce = true; modal("Quitter l'Arène ?", "Tu gardes les récompenses des vagues déjà réussies.", [{ t: "Rester", alt: true }, { t: "Quitter", f: () => { if (arena && arena.phase !== "over") { arena.phase = "over"; arena.endShown = true; arShowEnd(); } else arLeave(); } }]); modalForce = false; };
+  $("arMenuClose").onclick = () => { if (arNet) arLeave(true); $("arMenu").classList.remove("show"); document.body.classList.remove("arOn"); };
+}
+
+arInput();
+$("arenaBtn").onclick = e => { e.stopPropagation(); openArena(); };
+
 /* ================== PERSONNALISATION DU CHASSEUR ================== */
 let custRaf = 0;
 function openCust() {
@@ -4484,6 +5010,13 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 43, d: "Arène de Brume (co-op)", l: [
+    "Nouveau mini-jeu : l'<b>Arène de Brume</b> (écran d'accueil ou Journal → Événements).",
+    "<b>Tu déplaces ton chasseur</b> avec le doigt (un joystick apparaît où tu touches). Il <b>tire tout seul quand il s'arrête</b>.",
+    "Survis à des <b>vagues de monstres</b> de plus en plus dures : 10, 20, 30, 50 vagues ou <b>illimité</b>. Un boss toutes les 5 vagues.",
+    "Après chaque vague, choisis <b>1 bonus parmi 3</b> (dégâts, tir rapide, tir multiple, perforation, vampire…).",
+    "<b>Joue avec tes potes</b> (jusqu'à 4) : crée une partie, donne le <b>code</b> à 4 caractères, ils tapent « Rejoindre ». Un allié K.O. revient à la vague suivante.",
+    "Récompenses dans le jeu principal : or, Cristaux et gemmes selon les vagues réussies. Nouveaux succès : vague 10 et vague 30."] },
   { v: 42, d: "Personnalisation et compétences", l: [
     "<b>👤 Personnalise ton chasseur</b> dès l'écran d'accueil (ou Chasseur → Héros) : <b>homme ou femme</b>, 7 coiffures, 10 couleurs de cheveux, 6 couleurs de peau, 7 couleurs d'yeux, manteau et énergie, avec un aperçu animé.",
     "Les nouvelles options (personnage, coiffure, peau, yeux) sont gratuites. Les couleurs spéciales se débloquent toujours avec des Cristaux.",
@@ -4566,7 +5099,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 42, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 43, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {

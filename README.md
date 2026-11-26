@@ -22,6 +22,7 @@ Pas de prise de tête : tu peux jouer 2 minutes ou 2 heures, ta progression est 
 
 - **1 000 niveaux** répartis dans **10 zones**, chacune avec ses décors, sa météo, sa musique et ses monstres.
 - **💀 Mode Difficile** : une fois le niveau 1000 atteint, recommence les 1000 niveaux face à des monstres bien plus redoutables.
+- **⚔️ Arène de Brume** : un mini-jeu où tu déplaces ton chasseur pour survivre aux vagues, seul ou jusqu'à 4 avec un code d'invitation.
 - **🌑 Le Seigneur du Néant** : un boss géant dès le niveau 500, avec une arène à lui, qui revient 3 heures après chaque défaite.
 - **Des vagues de monstres** (jusqu'à 6 à la fois) et des **boss** tous les 10 niveaux.
 - **Équipement complet** : arme, casque, armure, gants, ceinture, bottes, amulette.
