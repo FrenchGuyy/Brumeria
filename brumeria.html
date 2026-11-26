@@ -471,13 +471,13 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v37</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v38</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v37 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v38 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -493,7 +493,7 @@
   <button id="newsBtn">📜 Nouveautés<span class="dot" id="newsDot"></span></button>
   <button id="playBtn">JOUER</button>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v37</div></div>
+  <div class="tsVer">v38</div></div>
 <div id="newsPanel"><div id="newsBox"><div id="newsHead">📜 Nouveautés</div><button id="newsClose" aria-label="Fermer">✕</button><div id="newsBody"></div></div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
@@ -1900,41 +1900,51 @@ function upgradeItem(it) {
   S.stats.forges++; qProg("forge"); sfx("rare"); toast(ic("anvil") + " " + itemName(it) + " : " + itemLine(it));
   refreshBag(); refreshStats(); refreshTop(); save();
 }
+const FUSE_CH = [1, 1, 0.6, 0.4]; // Commun→Rare 100 %, Rare→Épique 100 %, Épique→Légendaire 60 %, Légendaire→Mythique 40 %
+const fusePct = r => Math.round(FUSE_CH[r] * 100);
 function fuseOk(i) { return !i.set && !(i.plus > 0) && !(i.gems && i.gems.some(Boolean)); }
 function autoFuse() { // fusion automatique (option de la Forge)
   const a = S.autoFuse; if (!a || !a.on) return;
-  let made = [];
+  let made = [], fails = 0;
   for (let r = 0; r <= Math.min(3, a.maxRar); r++) {
     let list;
     while ((list = S.inv.filter(i => i.rar === r && fuseOk(i))).length >= 3) {
       const use = list.sort((x, y) => x.val - y.val).slice(0, 3);
-      made.push(fuse(r, use, true));
+      const it = fuse(r, use, true); if (it) made.push(it); else fails++;
     }
   }
+  if (fails) setTimeout(() => toast(ic("anvil") + " Fusion auto : " + fails + " échec" + (fails > 1 ? "s" : "") + " (objets détruits, revendus en or)"), made.length ? 1400 : 0);
   if (made.length) { const best = made.reduce((x, y) => y.rar > x.rar ? y : x); toast(ic("anvil") + " Fusion auto : " + made.length + " objet" + (made.length > 1 ? "s" : "") + " créé" + (made.length > 1 ? "s" : "") + ' (meilleur : <span class="c' + best.rar + '">' + RARITY[best.rar].name + "</span>)"); if (curSub("b") === "sForge") refreshForge(); }
 }
 function fuse(rar, forced, silent) {
   const list = forced || S.inv.filter(i => i.rar === rar).sort((a, b) => a.val - b.val).slice(0, 3);
   if (list.length < 3 || rar >= 4) return;
   S.inv = S.inv.filter(i => !list.includes(i));
+  S.stats.forges++; qProg("forge");
+  if (Math.random() >= FUSE_CH[rar]) { // échec : les 3 objets sont détruits, on récupère juste leur prix de vente
+    const g = list.reduce((a, i) => a + sellPrice(i), 0); S.gold += g; S.stats.fuseFail = (S.stats.fuseFail || 0) + 1;
+    if (silent) return null;
+    sfx("lose"); vib(60);
+    modal("", '<span style="font-size:34px">💥</span><br><b class="worse" style="font-size:17px">La fusion a échoué…</b><br><br>Les 3 objets <span class="c' + rar + '">' + RARITY[rar].name + "</span> ont été détruits.<br>Tu récupères leur prix de vente : <b style='color:#ffd166'>+" + fmt(g) + " " + COIN + "</b><br><br><span style='font-size:12px;color:#9a98ad'>Chance de réussite : " + fusePct(rar) + " %</span>", [{ t: "Dommage…" }]);
+    refreshForge(); refreshBag(); refreshTop(); save(); return null;
+  }
   const src = pick(list), sl = SLOTS[src.slot], lvl = Math.max(...list.map(i => i.lvl)), nr = rar + 1;
   const it = { id: S.itemId++, set: src.set, slot: src.slot, stat: sl.stat, rar: nr, val: Math.max(1, Math.round(itemBase(sl.stat, lvl) * RARITY[nr].mult * rand(0.95, 1.15))), lvl, name: pick(sl.names) + " " + (src.set ? SETS[src.set].suffix : pick(ADJ)) };
   genAff(it); S.inv.push(it); if (nr === 3) S.stats.legend++; if (nr === 4) S.stats.mythic = (S.stats.mythic || 0) + 1;
-  S.stats.forges++; qProg("forge");
   if (silent) return it;
   sfx("rare"); vib(30);
   modal("", '<span style="font-size:13px;color:#9a98ad">Fusion réussie !</span><br><br><span style="font-size:34px">' + sl.icon + '</span><br><b class="c' + nr + '">' + it.name + "</b><br>" + RARITY[nr].name + " · " + itemLine(it), [{ t: "Super !" }]);
   refreshForge(); refreshBag(); save();
 }
 function refreshForge() {
-  let h = '<div class="secTitle" style="margin-top:4px"><span>' + ic("anvil") + ' Fusion</span></div><div class="hint">Fusionne 3 objets de la même rareté pour obtenir 1 objet de la rareté supérieure (jusqu\'à Mythique). Les 3 moins bons sont utilisés. Les objets divins ne s\'obtiennent qu\'en chassant.</div>';
+  let h = '<div class="secTitle" style="margin-top:4px"><span>' + ic("anvil") + ' Fusion</span></div><div class="hint">Fusionne 3 objets de la même rareté pour obtenir 1 objet de la rareté supérieure (jusqu\'à Mythique). Les 3 moins bons sont utilisés.<br><b>Attention :</b> vers Légendaire, la fusion réussit <b>' + fusePct(2) + ' %</b> du temps, et vers Mythique seulement <b>' + fusePct(3) + ' %</b>. Si elle échoue, les 3 objets sont détruits (tu récupères leur prix de vente). Les objets divins ne s\'obtiennent qu\'en chassant.</div>';
   for (let r = 0; r < 4; r++) {
     const n = S.inv.filter(i => i.rar === r).length;
-    h += '<div class="upg"><div class="fuseRow"><span class="c' + r + '">3 ' + RARITY[r].name + "</span> → <span class=\"c" + (r + 1) + '">1 ' + RARITY[r + 1].name + '</span><br><span class="upgDesc">Dans ton sac : ' + n + '</span></div><button class="buy" data-fuse="' + r + '"' + (n < 3 ? " disabled" : "") + ">Fusionner</button></div>";
+    h += '<div class="upg"><div class="fuseRow"><span class="c' + r + '">3 ' + RARITY[r].name + "</span> → <span class=\"c" + (r + 1) + '">1 ' + RARITY[r + 1].name + '</span><br><span class="upgDesc">Dans ton sac : ' + n + ' · réussite <b style="color:' + (FUSE_CH[r] < 1 ? "#ff8a8a" : "#7fe0a0") + '">' + fusePct(r) + ' %</b></span></div><button class="buy" data-fuse="' + r + '"' + (n < 3 ? " disabled" : "") + ">Fusionner</button></div>";
   }
   const af = S.autoFuse;
   h += '<div class="upg" style="display:block"><div style="display:flex;align-items:center;gap:8px"><b style="flex:1">' + ic("bolt") + ' Fusion automatique</b><button class="buy' + (af.on ? "" : " alt") + '" id="afTog">' + (af.on ? "Activée" : "Désactivée") + '</button></div>' +
-    '<div class="upgDesc" style="margin:6px 0">Dès que tu as 3 objets de la même rareté, ils fusionnent tout seuls. Les objets de panoplie, améliorés (+) ou avec des gemmes ne sont jamais fusionnés.</div><div class="upgDesc">Fusionner jusqu\'à :</div><div class="afChips">' +
+    '<div class="upgDesc" style="margin:6px 0">Dès que tu as 3 objets de la même rareté, ils fusionnent tout seuls (avec les mêmes chances d\'échec). Les objets de panoplie, améliorés (+) ou avec des gemmes ne sont jamais fusionnés.</div><div class="upgDesc">Fusionner jusqu\'à :</div><div class="afChips">' +
     [0, 1, 2, 3].map(r => '<button class="smallBtn c' + r + (af.maxRar === r ? " on" : "") + '" data-afr="' + r + '">' + RARITY[r].name + "</button>").join("") + "</div></div>";
   h += '<div class="secTitle"><span>' + ic("anvil") + ' Amélioration</span></div><div class="hint">Touche un objet (dans Équipement) puis « Améliorer » : +15 % de bonus par niveau, jusqu\'à +' + UPG_MAX + ". Coûte de l'or.</div>";
   $("sForge").innerHTML = h;
@@ -4130,6 +4140,11 @@ function refreshAll() {
 // Appli installable : enregistre le service worker (seulement quand le jeu est en ligne, ex. GitHub Pages)
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 38, d: "Fusion risquée", l: [
+    "La fusion devient risquée : vers <b>Légendaire</b>, elle réussit <b>60 %</b> du temps, et vers <b>Mythique</b> seulement <b>40 %</b>.",
+    "En cas d'échec, les 3 objets sont <b>détruits</b> (tu récupères juste leur prix de vente).",
+    "La fusion automatique suit les mêmes règles.",
+    "Les joueurs équipés <b>entièrement en Mythique</b> ont vu leurs objets Mythiques échangés contre beaucoup d'or : c'était trop facile à obtenir."] },
   { v: 37, d: "Plus fluide, plus beau", l: [
     "Le jeu est <b>plus fluide</b> : les monstres et les familiers demandent beaucoup moins de calculs, tout en gardant des mouvements doux.",
     "<b>Chiffres de dégâts</b> plus lisibles : contour, petit effet « pop », et moins d'embouteillage à l'écran.",
@@ -4178,7 +4193,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 37, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 38, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -4201,6 +4216,17 @@ $("xpBar").onclick = () => { document.querySelector('.tab[data-p="pUpg"]').click
 setTimeout(() => checkUpdate(false), 4000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastUpdCheck > 3e5) checkUpdate(false); });
 load();
+if (!S.fz38) { // v38 : la fusion vers Mythique était trop facile
+  S.fz38 = true;
+  const eq = Object.values(S.equip);
+  if (eq.length && eq.every(it => it && it.rar >= 4)) {
+    let g = 0, n = 0;
+    for (const k in S.equip) { const it = S.equip[k]; if (it.rar === 4) { g += sellPrice(it) * 5; n++; S.equip[k] = null; } }
+    S.inv = S.inv.filter(it => { if (it.rar === 4) { g += sellPrice(it) * 5; n++; return false; } return true; });
+    S.gold += g;
+    setTimeout(() => modal(ic("anvil") + " Rééquilibrage", "La fusion permettait d'obtenir des objets <span class='c4'>Mythiques</span> beaucoup trop facilement.<br><br>Tes <b>" + n + " objets Mythiques</b> ont été échangés contre de l'or :<br><b style='color:#ffd166;font-size:18px'>+" + fmt(g) + " " + COIN + "</b><br><br>Maintenant, fusionner vers Légendaire réussit 60 % du temps, et vers Mythique 40 %.", [{ t: "Compris" }]), 3000);
+  }
+}
 resize();
 hero.hp = P.maxHp();
 spawnMonster();
