@@ -162,6 +162,7 @@
   .vol { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 6px; background: linear-gradient(90deg, #8a6cff var(--v, 50%), #343a5c var(--v, 50%)); outline: none; }
   .vol::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 3px solid #8a6cff; box-shadow: 0 2px 6px rgba(0,0,0,.4); }
   .vol::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 3px solid #8a6cff; }
+  .bagMore { grid-column: 1 / -1; padding: 10px; margin-top: 4px; }
   .opt { display: flex; justify-content: space-between; align-items: center; background: #1f2338; border-radius: 10px; padding: 12px; margin-bottom: 8px; font-size: 14px; }
   .danger { background: #8d2a2a; }
 
@@ -618,7 +619,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v56</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v57</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -627,7 +628,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v56 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v57 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -644,7 +645,7 @@
   <button id="playBtn">JOUER</button>
   <div class="tsRow"><button id="custBtn">👤 Personnaliser · 🧬 Race</button></div><div class="tsRow"><button id="clanBtn">🛡️ Clan</button><button id="arenaBtn">⚔️ Arène co-op</button></div><div id="clanTitleTag"></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v56</div></div>
+  <div class="tsVer">v57</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -2596,7 +2597,7 @@ function sendAccount() {
   const st = t => { const e = $("xferSt"); if (e) e.innerHTML = t; };
   xferStop();
   loadPeer().then(() => {
-    const peer = new Peer(ACCT_PREFIX + code); xfer = { peer };
+    const peer = mkPeer(ACCT_PREFIX + code); xfer = { peer };
     peer.on("open", () => st("En attente de l'autre téléphone…"));
     peer.on("error", e => st(e && e.type === "unavailable-id" ? "Ce code est déjà ouvert ailleurs : ferme l'autre fenêtre « Envoyer » et réessaie." : "<span class='worse'>Connexion impossible. Vérifie internet.</span>"));
     peer.on("connection", c => {
@@ -2612,7 +2613,7 @@ function recvAccount() {
       if (code.length !== 6) { st("<span class='worse'>Le code fait 6 caractères.</span>"); return; }
       st("Connexion…"); xferStop();
       loadPeer().then(() => {
-        const peer = new Peer(); xfer = { peer };
+        const peer = mkPeer(); xfer = { peer };
         const to = setTimeout(() => st("<span class='worse'>Aucun téléphone trouvé avec ce code. Vérifie qu'il est sur « Envoyer ».</span>"), 10000);
         peer.on("open", () => {
           const c = peer.connect(ACCT_PREFIX + code, { reliable: true });
@@ -3342,7 +3343,7 @@ function mkLayer(name, w, h) { // réutilise les mêmes images en mémoire au li
   const cw = Math.ceil(w * DPR), ch = Math.ceil(h * DPR);
   let c = layerPool[name];
   if (!c || c.width !== cw || c.height !== ch) { c = layerPool[name] = document.createElement("canvas"); c.width = cw; c.height = ch; }
-  const x = c.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, cw, ch); x.setTransform(DPR, 0, 0, DPR, 0, 0);
+  const x = c.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, cw, ch); x.setTransform(DPR, 0, 0, DPR, 0, 0); c._ver = (c._ver || 0) + 1;
   return [c, x];
 }
 // Le décor n'est redessiné que tous les 4 niveaux (les couleurs changent très doucement)
@@ -3520,10 +3521,24 @@ function buildLayers() {
   });
   layers = L;
 }
+// Les couches du décor sont surtout transparentes en haut : on ne dessine que la bande utile (beaucoup moins de pixels par image)
+function layerTop(c) {
+  if (c._top != null && c._tw === c.width && c._tv === c._ver) return c._top;
+  let top = 0;
+  try { // lecture sur une petite copie réduite (une seule lecture, légère)
+    const sw = 160, k = sw / c.width, sh = Math.max(1, Math.ceil(c.height * k)), t = document.createElement("canvas"); t.width = sw; t.height = sh;
+    const x = t.getContext("2d", { willReadFrequently: true }); x.drawImage(c, 0, 0, sw, sh);
+    const d = x.getImageData(0, 0, sw, sh).data; let ty = sh;
+    for (let y = 0; y < sh && ty === sh; y++) for (let i = (y * sw) * 4 + 3, e = i + sw * 4; i < e; i += 4) if (d[i] > 2) { ty = y; break; }
+    top = Math.max(0, Math.floor((ty - 2) / k));
+  } catch (e) { top = 0; }
+  c._top = top; c._tw = c.width; c._tv = c._ver; return top;
+}
 function blit(c, sp, h) {
-  const off = Math.round(((scroll * sp) % TILE + TILE) % TILE);
-  ctx.drawImage(c, -off, 0, TILE, h);
-  if (TILE - off < W) ctx.drawImage(c, TILE - off, 0, TILE, h);
+  const off = Math.round(((scroll * sp) % TILE + TILE) % TILE), sy = layerTop(c), sh = c.height - sy; if (sh <= 0) return;
+  const dy = sy / c.height * h, dh = h - dy;
+  ctx.drawImage(c, 0, sy, c.width, sh, -off, dy, TILE, dh);
+  if (TILE - off < W) ctx.drawImage(c, 0, sy, c.width, sh, TILE - off, dy, TILE, dh);
 }
 
 function drawBackground(t) {
@@ -3619,7 +3634,7 @@ const RCOL = ["#cfd8e3", "#7cc4ff", "#c9a2ff", "#ffd166", "#ff5a6a", "#fff2b0"];
 /* --- rendu « autocollant » : contour sombre + ombrage, pour le chasseur et les monstres --- */
 const OFF = 300, HOFF = 170;
 // Qualité graphique : résolution, finesse du contour et fréquence de redessin des monstres
-const QUALS = { haute: { pr: 2, o8: true, skip: [1, 1], hs: 1 }, normale: { pr: 2, o8: true, skip: [2, 3], hs: 1 }, eco: { pr: 1.5, o8: true, skip: [3, 4], hs: 2 } };
+const QUALS = { haute: { pr: 2, o8: true, skip: [1, 1], hs: 1 }, normale: { pr: 2, o8: false, skip: [2, 3], hs: 1 }, eco: { pr: 1.5, o8: true, skip: [3, 4], hs: 2 } };
 const QUAL = () => QUALS[S.quality] || QUALS.normale;
 let frameN = 0;
 let offM = null, offMT = null, offH = null, offHT = null;
@@ -4444,7 +4459,7 @@ function loopBody(now) {
   if (!sceneHidden() && !arenaOn) { const vbOn = tower && tower.vb; if (vbOn) drawVoidBg(t); else drawBackground(t); drawHero(t); drawPet(t); drawMonster(t); if (!vbOn) drawForeground(t, dt); drawFx(dt); if (vbOn || vbFx) drawVoidUi(t); }
   else { if (floats.length) floats.length = 0; if (particles.length > 40) particles.length = 40; }
   if (sh) ctx.restore();
-  saveT += dt; if (saveT > 5) { saveT = 0; save(); }
+  saveT += raw; if (saveT > 5) { saveT = 0; save(); } // toutes les 5 vraies secondes, même en ×3
   uiT += dt; if (uiT > 0.25) { uiT = 0; refreshUpgButtons(); refreshSkill(); updateSkillBar(); refreshLive(); }
   sanT += raw; if (sanT > 10) { sanT = 0; sanitize(); }
 }
@@ -4627,7 +4642,9 @@ function itemBase(stat, l) { return { atk: 3 + l * 0.35, hp: 3 + l * 0.35, gold:
 const shortVal = it => "+" + it.val + (SLOTS[it.slot].flat ? "" : "%");
 const setBadge = it => it.set ? '<span class="setDot" style="background:' + SETS[it.set].color + '"></span>' : "";
 const plusBadge = it => it.plus ? '<span class="plus">+' + it.plus + "</span>" : "";
+let bagPage = 120, bagObs = null;
 function refreshBag() {
+  if (!($("pBag").classList.contains("active") && curSub("b") === "sEq")) { updateBagTab(); return; } // pas affiché : rien à redessiner
   const sl = $("slots"); sl.innerHTML = "";
   for (const k in SLOTS) {
     const it = S.equip[k], d = document.createElement("button");
@@ -4641,18 +4658,23 @@ function refreshBag() {
   const sb = Object.keys(SETS).filter(id => setCount(id) > 0).map(id => { const n = setCount(id), act = (S.cls || "spectre") === id, t = SETS[id].tiers.filter(x => n >= x[0]).length;
     return '<div class="setSum" style="border-color:' + SETS[id].color + '"><span style="color:' + SETS[id].color + '">◆ ' + SETS[id].name + "</span> " + n + " pièce" + (n > 1 ? "s" : "") + (act ? " · " + t + " bonus actif" + (t > 1 ? "s" : "") : ' · <span class="worse">classe ' + CLASSES[id].name + " requise</span>") + "</div>"; }).join("");
   $("setSummary").innerHTML = sb;
-  const grid = $("invList"); grid.innerHTML = "";
+  const grid = $("invList");
   const sorted = [...S.inv].sort((a, b) => b.rar - a.rar || a.slot.localeCompare(b.slot) || b.val - a.val);
   const shown = Math.max(S.inv.length, Math.min(bagMax(), Math.max(60, Math.ceil((S.inv.length + 1) / 5) * 5 + 10))); // on n'affiche que les cases utiles
-  for (let i = 0; i < shown; i++) {
-    const it = sorted[i], d = document.createElement("button");
-    if (!it) { d.className = "cell vide"; d.disabled = true; grid.appendChild(d); continue; }
+  let h = ""; // le sac en une seule fois (bien plus rapide que de créer les cases une par une)
+  const lim = Math.min(shown, Math.max(bagPage, 120)); // gros sac : on affiche par paquets de 120, la suite arrive en descendant
+  for (let i = 0; i < lim; i++) {
+    const it = sorted[i];
+    if (!it) { h += '<button class="cell vide" disabled></button>'; continue; }
     const cur = S.equip[it.slot], better = !cur || it.val > cur.val;
-    d.className = "cell r" + it.rar + " bg" + it.rar;
-    d.innerHTML = '<span class="ci">' + SLOTS[it.slot].icon + '</span><span class="cv">' + shortVal(it) + '</span>' + (better ? '<span class="up">▲</span>' : "") + plusBadge(it) + setBadge(it);
-    d.onclick = () => showItem(it, false);
-    grid.appendChild(d);
+    h += '<button class="cell r' + it.rar + " bg" + it.rar + '" data-ix="' + i + '"><span class="ci">' + SLOTS[it.slot].icon + '</span><span class="cv">' + shortVal(it) + "</span>" + (better ? '<span class="up">▲</span>' : "") + plusBadge(it) + setBadge(it) + "</button>";
   }
+  if (lim < sorted.length) h += '<button class="smallBtn bagMore" id="bagMore">Afficher la suite (' + (sorted.length - lim) + " objets)</button>";
+  grid.innerHTML = h; grid._items = sorted;
+  const more = $("bagMore");
+  if (more) { more.onclick = () => { bagPage = lim + 120; const y = scroller.scrollTop; refreshBag(); scroller.scrollTop = y; };
+    try { if (bagObs) bagObs.disconnect(); bagObs = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { bagObs.disconnect(); setTimeout(() => more.isConnected && more.click(), 30); } }, { root: scroller, rootMargin: "300px" }); bagObs.observe(more); } catch (e) {} }
+  grid.onclick = e => { const b = e.target.closest && e.target.closest("[data-ix]"); if (b && grid._items[+b.dataset.ix]) showItem(grid._items[+b.dataset.ix], false); };
   const bb = $("bagBuy"), n = S.bagBuy || 0;
   if (bagMax() >= BAG_CAP) bb.innerHTML = '<div class="hint" style="text-align:center">' + ic("bag") + " Sac au maximum : " + BAG_CAP + " emplacements</div>";
   else { const c = bagCost(n), ok = S.gold >= c, add = Math.min(BAG_STEP, BAG_CAP - bagMax());
@@ -4866,7 +4888,7 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
   document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
   document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
   t.classList.add("active"); $(t.dataset.p).classList.add("active");
-  if (t.dataset.p === "pBag") refreshBag();
+  if (t.dataset.p === "pBag") bagPage = 120; // (le sac est redessiné par setSub juste en dessous)
   if (t.dataset.p === "pUpg") refreshUpg();
   if (t.dataset.p === "pSk") refreshSkills();
   if (t.dataset.p === "pBag") setSub("b", curSub("b") || "sEq");
@@ -4925,8 +4947,12 @@ window.addEventListener("pagehide", save);
 window.addEventListener("resize", resize);
 /* ---- défilement libre : en descendant dans les menus, le combat remonte et les onglets restent collés en haut ---- */
 const scroller = $("scroller");
-const sceneHidden = () => scroller.scrollTop >= $("sceneWrap").offsetHeight - 4;
-scroller.addEventListener("scroll", () => { $("upBtn").classList.toggle("show", scroller.scrollTop > $("sceneWrap").offsetHeight * 0.6); }, { passive: true });
+// on retient la hauteur du combat au lieu de la mesurer à chaque image (ça forçait le navigateur à tout recalculer)
+let sceneH = 0, sceneHid = false;
+const measureScene = () => { sceneH = $("sceneWrap").offsetHeight; sceneHid = scroller.scrollTop >= sceneH - 4; };
+const sceneHidden = () => sceneHid;
+scroller.addEventListener("scroll", () => { if (!sceneH) sceneH = $("sceneWrap").offsetHeight; const st = scroller.scrollTop; sceneHid = st >= sceneH - 4; $("upBtn").classList.toggle("show", st > sceneH * 0.6); }, { passive: true });
+window.addEventListener("resize", () => setTimeout(measureScene, 50)); setTimeout(measureScene, 300);
 $("upBtn").innerHTML = ic("swords"); $("upBtn").onclick = () => scroller.scrollTo({ top: 0, behavior: "smooth" });
 
 function refreshAll() {
@@ -5149,6 +5175,11 @@ function arHurt(A, p, dmg) {
 }
 
 /* ---------- réseau (PeerJS, connexion directe entre téléphones) ---------- */
+// Réseau : plusieurs serveurs STUN publics pour que deux téléphones trouvent plus facilement un chemin (4G, box, Wi-Fi…)
+const PEER_OPT = { debug: 0, pingInterval: 4000, config: { iceServers: [
+  { urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"] },
+  { urls: "stun:stun.cloudflare.com:3478" }, { urls: "stun:global.stun.twilio.com:3478" }] } };
+const mkPeer = id => id ? new Peer(id, PEER_OPT) : new Peer(PEER_OPT);
 function loadPeer() {
   if (window.Peer) return Promise.resolve();
   const urls = ["https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js", "https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"];
@@ -5159,10 +5190,11 @@ function arBroadcast(m) { if (arNet && arNet.conns) for (const c of arNet.conns)
 function arHost() {
   arMenuMsg("Création de la partie…");
   loadPeer().then(() => {
-    const code = arCode(), peer = new Peer(AR_PREFIX + code);
+    const code = arCode(), peer = mkPeer(AR_PREFIX + code);
     arNet = { host: true, peer, code, conns: [], ids: 1 };
     arena = arNewArena(true); arena.players.push(arNewPlayer(0, arName(), S.look)); arena.me = 0;
     peer.on("open", () => arLobby());
+    peer.on("disconnected", () => { try { if (!peer.destroyed) peer.reconnect(); } catch (e) {} });
     peer.on("error", e => { if (e && e.type === "unavailable-id") { peer.destroy(); arHost(); } else arMenuMsg("Connexion impossible (" + (e && e.type || "réseau") + "). Vérifie ta connexion internet.", true); });
     peer.on("connection", c => {
       c.on("data", m => arHostData(c, m));
@@ -5183,21 +5215,30 @@ function arHostData(c, m) {
     p.x = Math.max(12, Math.min(AW - 12, +m.x || p.x)); p.y = Math.max(20, Math.min(AH - 8, +m.y || p.y)); p.mv = m.mv ? 1 : 0; if (m.f) p.face = m.f;
   } else if (m.t === "sk") arSpecial(arena, arena.players.find(p => p.id === c._pid));
 }
-function arJoin(code) {
+let arJoinTry = 0;
+function arJoin(code, retry) {
   code = String(code || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
   if (code.length !== 4) { arMenuMsg("Le code fait 4 caractères.", true); return; }
-  arMenuMsg("Connexion à la partie " + code + "…");
+  if (!retry) arJoinTry++;
+  const myTry = arJoinTry, alive = () => myTry === arJoinTry && arNet && !arNet.host && arNet.code === code;
+  try { if (arNet && arNet.peer) arNet.peer.destroy(); } catch (e) {} // jamais deux connexions en même temps
+  arMenuMsg((retry ? "2e essai… " : "") + "① Connexion au serveur…");
   loadPeer().then(() => {
-    const peer = new Peer();
-    arNet = { host: false, peer, code };
+    const peer = mkPeer(); arNet = { host: false, peer, code }; let linked = false, gotReply = false;
+    const fail = (msg, canRetry) => { if (!alive() || gotReply) return; try { peer.destroy(); } catch (e) {} arNet = null;
+      if (canRetry && !retry) { arJoin(code, true); return; } arMenuMsg(msg, true); };
+    const to = setTimeout(() => fail(!linked ? "Le serveur ne répond pas. Vérifie ta connexion internet et réessaie."
+      : "Partie trouvée, mais vos deux téléphones n'arrivent pas à se relier (certains réseaux 4G bloquent ce mode). Essayez d’être sur le même Wi-Fi, ou réessaie.", true), retry ? 20000 : 14000);
     peer.on("open", () => {
+      if (!alive()) return; linked = true; arMenuMsg((retry ? "2e essai… " : "") + "② Recherche de la partie " + code + "…");
       const c = peer.connect(AR_PREFIX + code, { reliable: true }); arNet.c = c;
-      const to = setTimeout(() => arMenuMsg("Aucune partie trouvée avec le code " + code + ".", true), 9000);
-      c.on("open", () => { clearTimeout(to); arSend(c, { t: "hello", name: arName(), look: Object.assign({ race: S.race }, S.look), st: arMyStats(), v: GAME_VER }); });
-      c.on("data", m => arClientData(m));
-      c.on("close", () => { if (arena && arena.phase !== "over") arEnd("L'hôte a quitté la partie."); });
+      c.on("open", () => { if (!alive()) return; arMenuMsg("③ Connecté ! Entrée dans la partie…"); arSend(c, { t: "hello", name: arName(), look: Object.assign({ race: S.race }, S.look), st: arMyStats(), v: GAME_VER }); });
+      c.on("data", m => { if (!gotReply) { gotReply = true; clearTimeout(to); } arClientData(m); });
+      c.on("close", () => { if (arena && arena.phase !== "over") arEnd("L'hôte a quitté la partie."); else if (!gotReply) fail("La connexion a été coupée. Réessaie.", true); });
+      c.on("error", () => fail("La connexion a échoué. Réessaie.", true));
     });
-    peer.on("error", e => arMenuMsg(e && e.type === "peer-unavailable" ? "Aucune partie trouvée avec le code " + code + "." : "Connexion impossible. Vérifie ta connexion internet.", true));
+    peer.on("disconnected", () => { try { if (!peer.destroyed) peer.reconnect(); } catch (e) {} });
+    peer.on("error", e => { clearTimeout(to); if (e && e.type === "peer-unavailable") { if (alive()) { try { peer.destroy(); } catch (x) {} arNet = null; arMenuMsg("Aucune partie trouvée avec le code " + code + ". Vérifie le code, et que ton pote est bien dans le salon de la partie.", true); } } else fail("Connexion impossible. Vérifie ta connexion internet.", true); });
   }).catch(() => arMenuMsg("Impossible de charger le mode en ligne. Il faut une connexion internet.", true));
 }
 function arClientData(m) {
@@ -5630,7 +5671,7 @@ function clanConnect() {
   if (!S.clan || !ONLINE) return; clanStop();
   loadPeer().then(() => {
     if (!S.clan) return;
-    const net = clanNet = { peer: new Peer(CLAN_PREFIX + S.clan.code), hub: false, conns: [] };
+    const net = clanNet = { peer: mkPeer(CLAN_PREFIX + S.clan.code), hub: false, conns: [] };
     net.peer.on("open", () => { if (net !== clanNet) return; net.hub = true; clanOnline = { [acctCode()]: 1 }; clanSelf(); clanUI(); });
     net.peer.on("connection", c => { net.conns.push(c); c.on("data", m => clanHubMsg(c, m)); c.on("close", () => { net.conns = net.conns.filter(x => x !== c); if (c._id) delete clanOnline[c._id]; clanBroadcast(); }); });
     net.peer.on("error", e => { if (net !== clanNet) return; if (e && e.type === "unavailable-id") { try { net.peer.destroy(); } catch (x) {} clanAsClient(); } else if (!net.hub) clanRetry(); });
@@ -5638,7 +5679,7 @@ function clanConnect() {
   }).catch(() => { clanT = setTimeout(clanConnect, 30000); });
 }
 function clanAsClient() {
-  const net = clanNet = { peer: new Peer(), hub: false, conns: [] };
+  const net = clanNet = { peer: mkPeer(), hub: false, conns: [] };
   net.peer.on("open", () => {
     const c = net.peer.connect(CLAN_PREFIX + S.clan.code, { reliable: true }); net.hubConn = c;
     c.on("open", () => { clanSelf(); arSend(c, { t: "hello", id: acctCode(), clan: clanPack() }); });
@@ -5738,7 +5779,7 @@ function clanJoin(code, st) {
   st("Recherche du clan…");
   loadPeer().then(() => {
     try { clanJoinNet && clanJoinNet.destroy(); } catch (e) {}
-    const peer = clanJoinNet = new Peer(), to = setTimeout(() => { st("<span class='worse'>Aucun membre de ce clan n'est connecté. Demande à un membre d'ouvrir le jeu, puis réessaie.</span>"); try { peer.destroy(); } catch (e) {} }, 12000);
+    const peer = clanJoinNet = mkPeer(), to = setTimeout(() => { st("<span class='worse'>Aucun membre de ce clan n'est connecté. Demande à un membre d'ouvrir le jeu, puis réessaie.</span>"); try { peer.destroy(); } catch (e) {} }, 12000);
     peer.on("open", () => {
       const c = peer.connect(CLAN_PREFIX + code, { reliable: true });
       c.on("open", () => arSend(c, { t: "hello", id: acctCode(), me: clanMe() }));
@@ -5872,6 +5913,11 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 57, d: "Arène corrigée et jeu plus fluide", l: [
+    "⚔️ <b>Arène en ligne</b> : rejoindre une partie ne reste plus bloqué sur « Connexion… ». Le jeu montre les étapes (serveur → partie → connecté), réessaie tout seul une fois, et explique le problème s'il n'y arrive pas. Plus de serveurs aident les téléphones à se trouver (aussi pour le clan et le code de compte).",
+    "⚡ <b>Plus fluide</b> : le décor demande beaucoup moins de travail au téléphone (+30 % d'images par seconde dans nos tests), et une mesure faite à chaque image a été supprimée.",
+    "🎒 <b>Sac beaucoup plus rapide</b> avec beaucoup d'objets : il s'affiche par paquets et charge la suite quand tu descends.",
+    "La sauvegarde automatique ne s'accélère plus en ×2 / ×3 (moins de travail pour le téléphone)."] },
   { v: 56, d: "Son plus doux et jeu plus solide", l: [
     "🔊 <b>Nouveaux bruitages</b>, plus doux et accordés à la musique de chaque zone. En ×2 et ×3, le jeu <b>limite les sons</b> qui s'enchaînent et baisse leur volume : fini les oreilles qui saignent !",
     "🎚️ <b>Options refaites</b> : des <b>curseurs</b> pour le volume général, la musique et les effets, un bouton pour tester les sons, et des rubriques plus claires.",
@@ -6023,7 +6069,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 56, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 57, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
