@@ -211,6 +211,15 @@
   #arSk span { display: flex; align-items: center; justify-content: center; position: absolute; inset: 6px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #34406a, #1a2036); }
   #arSk.ready { border-color: #ffd166; animation: pulse 1s infinite; box-shadow: 0 0 18px #ffd166; }
   #arSk:disabled { opacity: .85; }
+  .acctCode { color: #ffd166; letter-spacing: 2px; margin-left: 4px; }
+  .acctBig { display: inline-block; font-size: 34px; letter-spacing: 8px; color: #ffd166; background: #12152a; border: 1px dashed #6a5aa8; border-radius: 12px; padding: 6px 14px; }
+  .acctIn { width: 70%; text-align: center; letter-spacing: 8px; font-size: 24px; font-weight: 900; background: #12152a; border: 1px solid #3a4070; color: #fff; border-radius: 10px; padding: 8px; text-transform: uppercase; }
+  .arDiff { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .arDiff button { border: 2px solid #343a5c; background: #1d2034; color: #c8c6d8; border-radius: 12px; padding: 7px 2px; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+  .arDiff button span { font-size: 18px; } .arDiff button b { font-size: 11px; } .arDiff button small { font-size: 9px; color: #9a98ad; text-align: center; line-height: 1.1; }
+  .arDiff button.on { border-color: var(--c); color: var(--c); box-shadow: 0 0 10px -3px var(--c); background: #262a46; }
+  .arDiff button:disabled { opacity: .45; }
+  .arLoot { display: flex; flex-direction: column; gap: 4px; margin: 6px 0 10px; font-size: 12px; font-weight: 800; }
   .arStats { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 2px; } .arStats span { background: #12152a; border: 1px solid #343a5c; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight: 800; color: #e6e2ff; }
   .arCards { display: flex; gap: 8px; margin-top: 10px; } .arCards button { flex: 1; border: 2px solid #5a4a8a; background: #232744; color: #fff; border-radius: 12px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
   .arCards button span { font-size: 26px; } .arCards button b { font-size: 12px; } .arCards button small { font-size: 10px; color: #b8b6cc; }
@@ -565,13 +574,14 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v44</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
-      <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
+      <div class="opt"><span>🔄 Version <b>v46</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
+      <div class="opt"><span>💾 Sauvegarde (code long, de secours)</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v44 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v46 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -588,7 +598,7 @@
   <button id="playBtn">JOUER</button>
   <div class="tsRow"><button id="custBtn">👤 Personnaliser</button><button id="arenaBtn">⚔️ Arène co-op</button></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v44</div></div>
+  <div class="tsVer">v46</div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
 <div id="arField"><canvas id="arCv"></canvas><div id="arTop"></div><button id="arQuit" aria-label="Quitter">✕</button><button id="arSk"><span>FRAPPE<br>BRUME</span></button><div id="arPick"></div><div id="arEnd"></div></div>
@@ -2199,6 +2209,13 @@ const ACH = [
   ["vb5", "crown", "Maître du Néant", "Vaincre le Seigneur du Néant 10 fois", () => S.vbKills || 0, 10, 50],
   ["ar10", "swords", "Survivant", "Atteindre la vague 10 dans l'Arène", () => S.arenaBest || 0, 10, 10],
   ["ar30", "swords", "Inarrêtable", "Atteindre la vague 30 dans l'Arène", () => S.arenaBest || 0, 30, 30],
+  ["ar50", "swords", "Sans limites", "Atteindre la vague 50 dans l'Arène", () => S.arenaBest || 0, 50, 60],
+  ["arc1", "swords", "Tous pour un", "Finir une partie de l'Arène à plusieurs", () => S.arenaCoop || 0, 1, 5],
+  ["arc10", "swords", "L'escouade", "Finir 10 parties de l'Arène à plusieurs", () => S.arenaCoop || 0, 10, 20],
+  ["ark", "burst", "Exterminateur", "Vaincre 1 000 monstres dans l'Arène", () => S.arenaKills || 0, 1000, 15],
+  ["ark2", "burst", "Faucheur de Brume", "Vaincre 10 000 monstres dans l'Arène", () => S.arenaKills || 0, 10000, 40],
+  ["ard2", "flame", "Gladiateur", "Atteindre la vague 10 en Difficile", () => arBestD()[2] || 0, 10, 20],
+  ["ard3", "crown", "Cauchemar vivant", "Atteindre la vague 20 en Cauchemar", () => arBestD()[3] || 0, 20, 50],
   ["hd", "crown", "Chasseur de l'impossible", "Terminer les 1000 niveaux en mode Difficile", () => S.wonH ? 1 : 0, 1, 60],
   ["dv", "crown", "Élu des dieux", "Obtenir un objet divin", () => S.stats.divine || 0, 1, 40],
   ["g1", "coin", "Ruée vers l'or", "Vaincre un monstre doré", () => S.stats.rares, 1, 3],
@@ -2351,6 +2368,53 @@ function importSave() {
     } }]);
 }
 
+/* ================== TRANSFERT DE COMPTE PAR CODE (6 caractères) ================== */
+// Chaque compte a son code. Sur l'ancien téléphone : « Envoyer ». Sur le nouveau : « Récupérer » + le code.
+// La partie passe directement d'un téléphone à l'autre (les deux doivent être ouverts en même temps, avec internet).
+const ACCT_ABC = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", ACCT_PREFIX = "brumeria-compte-";
+function acctCode() { if (!S.acct || !/^[A-Z2-9]{6}$/.test(S.acct)) { S.acct = Array.from({ length: 6 }, () => ACCT_ABC[Math.floor(Math.random() * 32)]).join(""); save(); } return S.acct; }
+let xfer = null;
+function xferStop() { try { if (xfer && xfer.peer) xfer.peer.destroy(); } catch (e) {} xfer = null; }
+function sendAccount() {
+  const code = acctCode();
+  modalForce = true;
+  modal("📤 Envoyer ma partie", "Sur ton <b>autre téléphone</b>, ouvre Brumeria puis <b>⚙️ Options → Récupérer</b> et tape ce code :<br><br><b class='acctBig'>" + code + "</b><br><span id='xferSt' style='color:#9fd0ff'>Préparation…</span><br><br><small style='color:#9a98ad'>Garde cette fenêtre ouverte pendant le transfert. Les deux téléphones ont besoin d'internet. Ta partie reste aussi sur ce téléphone.</small>", [{ t: "Fermer", f: xferStop }]);
+  modalForce = false;
+  const st = t => { const e = $("xferSt"); if (e) e.innerHTML = t; };
+  xferStop();
+  loadPeer().then(() => {
+    const peer = new Peer(ACCT_PREFIX + code); xfer = { peer };
+    peer.on("open", () => st("En attente de l'autre téléphone…"));
+    peer.on("error", e => st(e && e.type === "unavailable-id" ? "Ce code est déjà ouvert ailleurs : ferme l'autre fenêtre « Envoyer » et réessaie." : "<span class='worse'>Connexion impossible. Vérifie internet.</span>"));
+    peer.on("connection", c => {
+      c.on("open", () => { save(); const raw = localStorage.getItem(SAVE_KEY); c.send({ t: "save", v: GAME_VER, data: raw }); st("<b style='color:#52d17c'>✓ Partie envoyée !</b> Tu peux fermer."); sfx("rare"); });
+    });
+  }).catch(() => st("<span class='worse'>Impossible de charger le transfert : il faut internet.</span>"));
+}
+function recvAccount() {
+  modalForce = true;
+  modal("📥 Récupérer une partie", "Sur ton <b>ancien téléphone</b> : ⚙️ Options → <b>Envoyer</b>. Tape ici le code à 6 caractères qui s'affiche :<br><br><input id='xferIn' class='acctIn' maxlength='6' placeholder='CODE' autocapitalize='characters'><br><span id='xferSt' style='color:#9fd0ff'></span><br><b class='worse'>Ta partie actuelle sur ce téléphone sera remplacée.</b>",
+    [{ t: "Annuler", alt: true, f: xferStop }, { t: "Récupérer", keep: true, f: () => {
+      const code = ($("xferIn").value || "").toUpperCase().replace(/[^A-Z0-9]/g, ""), st = t => { const e = $("xferSt"); if (e) e.innerHTML = t; };
+      if (code.length !== 6) { st("<span class='worse'>Le code fait 6 caractères.</span>"); return; }
+      st("Connexion…"); xferStop();
+      loadPeer().then(() => {
+        const peer = new Peer(); xfer = { peer };
+        const to = setTimeout(() => st("<span class='worse'>Aucun téléphone trouvé avec ce code. Vérifie qu'il est sur « Envoyer ».</span>"), 10000);
+        peer.on("open", () => {
+          const c = peer.connect(ACCT_PREFIX + code, { reliable: true });
+          c.on("data", m => {
+            clearTimeout(to);
+            try { const d = JSON.parse(m.data); if (!d || typeof d.level !== "number") throw 0; st("<b style='color:#52d17c'>✓ Partie reçue !</b> Chargement…"); saveLock = true; localStorage.setItem(SAVE_KEY, JSON.stringify(d)); xferStop(); setTimeout(() => location.reload(), 600); }
+            catch (e) { st("<span class='worse'>La partie reçue est abîmée, réessaie.</span>"); }
+          });
+        });
+        peer.on("error", e => { clearTimeout(to); st("<span class='worse'>" + (e && e.type === "peer-unavailable" ? "Aucun téléphone trouvé avec ce code. Vérifie qu'il est sur « Envoyer »." : "Connexion impossible. Vérifie internet.") + "</span>"); });
+      }).catch(() => st("<span class='worse'>Impossible de charger le transfert : il faut internet.</span>"));
+    } }]);
+  modalForce = false;
+}
+
 /* ================== CLASSES, APPARENCE, TITRES ================== */
 const CLASSES = {
   spectre:   { name: "Spectre",   weapon: "Katana", icon: "sword", unlock: 0,  hair: "spiky", desc: "Corps à corps. +10 points de critique.", atk: 1, spd: 1, crit: 10, fb: 1 },
@@ -2387,7 +2451,10 @@ const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
     { id: "hl100", name: "Maître chasseur", ok: () => S.hlv >= 100 },
     { id: "hl150", name: "Héros de Brumeria", ok: () => S.hlv >= 150 },
     { id: "hl200", name: "Légende vivante", ok: () => S.hlv >= 200 },
-    { id: "vb1", name: "Fléau du Néant", ok: () => (S.vbKills || 0) >= 1 }
+    { id: "vb1", name: "Fléau du Néant", ok: () => (S.vbKills || 0) >= 1 },
+    { id: "ar25", name: "Champion de l'Arène", ok: () => (S.arenaBest || 0) >= 25 },
+    { id: "ard30", name: "Roi du Cauchemar", ok: () => (arBestD()[3] || 0) >= 30 },
+    { id: "arc25", name: "Âme de la meute", ok: () => (S.arenaCoop || 0) >= 25 }
   ]);
 function drawHeroPreview(c, tt = 1.3, sz = 150) { c.width = c.height = sz * DPR; c.style.width = c.style.height = sz + "px";
   const tmp = mkOff(HOFF), tint = mkOff(HOFF);
@@ -4332,7 +4399,7 @@ function modal(title, text, btns) {
   if ($("modal").style.display === "flex") { mq.push([title, text, btns]); return; }
   $("mTitle").innerHTML = title; $("mTitle").style.display = title ? "" : "none"; $("mText").innerHTML = text;
   const bx = $("modalBtns"); bx.innerHTML = "";
-  for (const b of btns) { const e = document.createElement("button"); e.innerHTML = b.t; if (b.alt) e.className = "alt"; e.onclick = () => { closeModal(); b.f && b.f(); }; bx.appendChild(e); }
+  for (const b of btns) { const e = document.createElement("button"); e.innerHTML = b.t; if (b.alt) e.className = "alt"; e.onclick = () => { if (!b.keep) closeModal(); b.f && b.f(); }; bx.appendChild(e); }
   $("modal").style.display = "flex";
 }
 
@@ -4450,6 +4517,7 @@ $("gearBtn").onclick = () => {
 };
 $("musicBtn").onclick = () => { S.music = !S.music; $("musicBtn").textContent = S.music ? "Activée" : "Coupée"; if (S.music) startMusic(); else stopMusic(); save(); };
 $("expBtn").onclick = exportSave;
+$("sendBtn").onclick = sendAccount; $("recvBtn").onclick = recvAccount; $("acctCode").textContent = acctCode();
 const setQualBtns = () => document.querySelectorAll("[data-q2]").forEach(b => b.classList.toggle("qOn", (S.quality || "normale") === b.dataset.q2));
 document.querySelectorAll("[data-q2]").forEach(b => b.onclick = () => { S.quality = b.dataset.q2; setQualBtns(); resize(); layerKey = ""; for (const m of pack) m._c = null; toast("Graphismes : " + b.textContent); save(); });
 setQualBtns(); $("impBtn").onclick = importSave;
@@ -4494,6 +4562,15 @@ function refreshAll() {
 // En ligne : l'hôte fait tourner la partie, les autres rejoignent avec un code (connexion directe entre téléphones, PeerJS).
 const AW = 400, AH = 720, AR_MAX = 4, AR_PREFIX = "brumeria-arene-";
 const AR_WAVES = [10, 20, 30, 50, 0]; // 0 = illimité
+const AR_DIFF = [ // hp/dmg/spd : monstres · rew : récompenses · luck : plus c'est bas, meilleur est le butin
+  { name: "Facile",    ic: "🌱", hp: 0.6, dmg: 0.6, spd: 0.9,  rew: 0.6, luck: 1,    col: "#52d17c" },
+  { name: "Moyen",     ic: "⚔️", hp: 1,   dmg: 1,   spd: 1,    rew: 1,   luck: 0.7,  col: "#9fd0ff" },
+  { name: "Difficile", ic: "🔥", hp: 1.8, dmg: 1.5, spd: 1.07, rew: 1.8, luck: 0.45, col: "#ffb04a", need: [1, 10] },
+  { name: "Cauchemar", ic: "💀", hp: 3.2, dmg: 2.4, spd: 1.15, rew: 3.5, luck: 0.25, col: "#ff4d5e", need: [2, 10] }
+];
+const arBestD = () => S.arBest || (S.arBest = [0, 0, 0, 0]);
+const arDiffOk = i => { const d = AR_DIFF[i]; return !d.need || arBestD()[d.need[0]] >= d.need[1]; };
+const arCoop = np => 1 + 0.2 * (np - 1); // bonus de récompenses quand on joue à plusieurs
 const AR_CLS = { // style de tir selon la classe
   spectre:   { name: "Lames",   mult: 1,    rate: 1,    multi: 1, pierce: 1, splash: 0,  col: "#9fe4ff", spd: 520 },
   rodeur:    { name: "Flèches", mult: 0.75, rate: 1.2,  multi: 2, pierce: 0, splash: 0,  col: "#ffe0a0", spd: 560 },
@@ -4568,8 +4645,9 @@ function arSetBase(A) {
   const np = A.players.length || 1, avg = f => A.players.reduce((s, p) => s + f(p), 0) / np;
   const dmg = avg(p => p.dmg), hp = avg(p => p.maxhp);
   const lvHp = avg(p => arBaseHp(Math.max(1, p.lvl - 15), p.hard)) * 0.15, lvDmg = avg(p => arBaseDmg(Math.max(1, p.lvl - 15), p.hard)) * 0.6;
-  A.bhp = Math.max(dmg * 1.5, Math.min(dmg * 6, lvHp));
-  A.bdmg = Math.max(hp * 0.03, Math.min(hp * 0.12, lvDmg));
+  const D = AR_DIFF[A.diff || 0] || AR_DIFF[1];
+  A.bhp = Math.max(dmg * 1.5, Math.min(dmg * 6, lvHp)) * D.hp;
+  A.bdmg = Math.max(hp * 0.03, Math.min(hp * 0.12, lvDmg)) * D.dmg;
 }
 function arStartWave(A) {
   A.wave++; A.phase = "fight"; A.queue = []; A.spawnT = 0.6;
@@ -4591,7 +4669,7 @@ function arSpawn(A, q) {
   const side = Math.floor(Math.random() * 4), m = 24;
   const x = side === 0 ? arRnd(m, AW - m) : side === 1 ? AW - m : side === 2 ? arRnd(m, AW - m) : m;
   const y = side === 0 ? m : side === 1 ? arRnd(m, AH - m) : side === 2 ? AH - m : arRnd(m, AH - m);
-  A.enemies.push({ id: A.eid++, kind: q.kind, key: q.key, x, y, r: q.r, hp: q.hp, max: q.hp, dmg: q.dmg, spd: q.spd, cd: arRnd(1, 2.5), tele: 0.8, dash: 0, dx: 0, dy: 0, kx: 0, ky: 0, boss: q.kind === "boss", fl: 0 });
+  A.enemies.push({ id: A.eid++, kind: q.kind, key: q.key, x, y, r: q.r, hp: q.hp, max: q.hp, dmg: q.dmg, spd: q.spd * ((AR_DIFF[A.diff] || AR_DIFF[1]).spd), cd: arRnd(1, 2.5), tele: 0.8, dash: 0, dx: 0, dy: 0, kx: 0, ky: 0, boss: q.kind === "boss", fl: 0 });
 }
 function arAlive(A) { return A.players.filter(p => p.alive); }
 function arNearest(A, e) { let b = null, bd = 1e9; for (const p of arAlive(A)) { const d = arDist(p, e); if (d < bd) { bd = d; b = p; } } return b; }
@@ -4734,7 +4812,7 @@ function arClientData(m) {
   if (m.t === "refuse") { arMenuMsg(m.why, true); arLeave(true); return; }
   if (m.t === "you") { arNet.me = m.id; return; }
   if (m.t === "lobby") { arNet.lobby = m; arLobbyView(m); return; }
-  if (m.t === "start") { arena = arNewArena(false); arena.N = m.N; arena.me = arNet.me; arOpenField(); return; }
+  if (m.t === "start") { arena = arNewArena(false); arena.N = m.N; arena.diff = m.d || 1; arena.me = arNet.me; arOpenField(); return; }
   if (!arena) return;
   if (m.t === "s") arApplySnap(m);
   else if (m.t === "end") { if (arena.endShown) return; arena.endShown = true; arena.phase = "over"; arena.win = m.win; arena.cleared = m.cleared; arShowEnd(); }
@@ -4742,13 +4820,13 @@ function arClientData(m) {
 
 /* ---------- état de partie et écran ---------- */
 function arNewArena(host) {
-  return { host, phase: "lobby", wave: 0, N: 10, players: [], enemies: [], bullets: [], ebullets: [], fx: [], queue: [], eid: 1, me: 0, cleared: 0, msg: null, view: { p: {}, e: {} }, snaps: [], snapT: 0, inT: 0, t: 0 };
+  return { host, phase: "lobby", wave: 0, N: 10, diff: 1, players: [], enemies: [], bullets: [], ebullets: [], fx: [], queue: [], eid: 1, me: 0, cleared: 0, msg: null, view: { p: {}, e: {} }, snaps: [], snapT: 0, inT: 0, t: 0 };
 }
 function arStartGame() {
   const A = arena; if (!A || !A.host) return;
-  A.N = arNet ? arNet.N : A.N; arSetBase(A);
+  A.N = arNet ? arNet.N : A.N; A.diff = arDiff; arSetBase(A);
   A.phase = "fight"; A.wave = 0; arStartWave(A);
-  if (arNet && arNet.conns) for (const c of arNet.conns) arSend(c, { t: "start", N: A.N });
+  if (arNet && arNet.conns) for (const c of arNet.conns) arSend(c, { t: "start", N: A.N, d: A.diff });
   arOpenField();
 }
 const arMe = () => arena && (arena.host ? arena.players.find(p => p.id === arena.me) : arena.view.p[arena.me]);
@@ -4908,7 +4986,8 @@ function arDraw(t) {
 function arHud() {
   const A = arena, P = A.host ? A.players : Object.values(A.view.p), left = A.host ? A.queue.length + A.enemies.length : A.left || 0;
   const me = arMe();
-  setHtml($("arTop"), '<b>Vague ' + Math.max(1, A.wave) + (A.N ? " / " + A.N : " · ∞") + "</b> · " + (A.phase === "rest" ? "Prochaine vague…" : left + " monstre" + (left > 1 ? "s" : "")) +
+  const Dd = AR_DIFF[A.diff] || AR_DIFF[1];
+  setHtml($("arTop"), '<b>Vague ' + Math.max(1, A.wave) + (A.N ? " / " + A.N : " · ∞") + '</b> <span style="color:' + Dd.col + '">' + Dd.ic + " " + Dd.name + "</span> · " + (A.phase === "rest" ? "Prochaine vague…" : left + " monstre" + (left > 1 ? "s" : "")) +
     '<div class="arPl">' + P.map(p => '<span class="' + (p.alive ? "" : "ko") + (p.id === A.me ? " me" : "") + '">' + (p.name || "") + " " + Math.round(Math.max(0, p.hp) / (p.maxhp || 1) * 100) + "%</span>").join("") + "</div>" + (me && !me.alive && A.phase !== "over" ? '<div class="arKo">K.O. ! Tu reviens à la prochaine vague si un allié survit.</div>' : ""));
   const ch = me ? Math.floor(me.charge || 0) : 0, bt = $("arSk");
   bt.style.setProperty("--p", ch + "%"); bt.classList.toggle("ready", ch >= 100 && me && me.alive); bt.disabled = !(ch >= 100 && me && me.alive);
@@ -4918,16 +4997,37 @@ function arUseSk() {
   sfx("skill"); vib(40);
   if (A.host) arSpecial(A, me); else { me.charge = 0; arSend(arNet.c, { t: "sk" }); }
 }
-function arRewards(W) {
-  const gold = monGoldB(Math.max(10, S.maxLevel)) * 20 * W * (S.diff ? HARD.gold : 1), cr = Math.floor(W * W / 12), gems = Math.floor(W / 10);
-  S.gold += gold; S.perles += cr; S.totalPerles += cr; for (let i = 0; i < gems; i++) addGem(randGem());
-  S.arenaBest = Math.max(S.arenaBest || 0, W); S.arenaGames = (S.arenaGames || 0) + 1; save();
-  return "+" + fmt(gold) + " " + COIN + (cr ? "<br>+" + cr + " " + PERLE : "") + (gems ? "<br>+" + gems + " gemme" + (gems > 1 ? "s" : "") : "");
+function arRollRar(luck) { // même table que le butin du jeu (Normal ou Difficile), en meilleur selon la difficulté de l'Arène
+  let roll = Math.random() * 100 * luck, acc = 0;
+  for (let i = RARITY.length - 1; i >= 0; i--) { acc += rarCh(i); if (roll < acc) return i; }
+  return 0;
+}
+function arRewards(W, np, di) {
+  const D = AR_DIFF[di] || AR_DIFF[1], k = D.rew * arCoop(np), L = Math.max(10, S.maxLevel);
+  const gold = monGoldB(L) * 20 * W * k * (S.diff ? HARD.gold : 1), cr = Math.floor(W * W / 12 * k), gl = di >= 3 ? 3 : di >= 2 ? 2 : 1, gems = Math.floor(W / 10 * k);
+  S.gold += gold; S.perles += cr; S.totalPerles += cr; for (let i = 0; i < gems; i++) addGem(randGem(), gl);
+  // équipement : 1 objet toutes les 5 vagues (+ objets garantis aux paliers), au niveau du joueur
+  const items = [], nIt = Math.min(12, Math.floor(W / 5 * (0.8 + 0.2 * np)));
+  for (let i = 0; i < nIt; i++) items.push(arRollRar(D.luck * Math.max(0.5, 1 - W / 120)));
+  if (W >= 10) items.push(Math.max(2, arRollRar(D.luck * 0.5)));
+  if (W >= 20 && di >= 1) items.push(Math.max(3, arRollRar(D.luck * 0.4)));
+  if (W >= 30 && di >= 3) items.push(Math.max(R_DIAM, arRollRar(D.luck * 0.3)));
+  const got = [];
+  for (const r of items) { const it = makeItem(Math.min(r, S.diff ? R_MYTH : R_DIAM), L); if (S.inv.length < bagMax()) { S.inv.push(it); countRar(it.rar); got.push(it); } else S.gold += sellPrice(it); }
+  if (got.length) autoFuse();
+  const bd = arBestD(); bd[di] = Math.max(bd[di] || 0, W);
+  S.arenaBest = Math.max(S.arenaBest || 0, W); S.arenaGames = (S.arenaGames || 0) + 1; if (np > 1) S.arenaCoop = (S.arenaCoop || 0) + 1;
+  if (W >= (arena && arena.N || 0) && arena && arena.N && di >= 2) S.arenaWinH = true;
+  save(); updateBagTab();
+  const best = got.slice().sort((a, b) => b.rar - a.rar).slice(0, 4);
+  return { html: "+" + fmt(gold) + " " + COIN + (cr ? " · +" + cr + " " + PERLE : "") + (gems ? " · +" + gems + " gemme" + (gems > 1 ? "s" : "") + (gl > 1 ? " niv. " + gl : "") : "") +
+    (got.length ? '<div class="arLoot">' + best.map(it => '<span class="c' + it.rar + '">' + SLOTS[it.slot].icon + " " + it.name + " · " + RARITY[it.rar].name + "</span>").join("") + (got.length > best.length ? "<span style='color:#9a98ad'>+ " + (got.length - best.length) + " autre(s) objet(s)</span>" : "") + "</div>" : ""), k };
 }
 function arShowEnd() {
-  const A = arena, W = A.cleared || 0, P = A.host ? A.players : Object.values(A.view.p);
-  const rew = arRewards(W);
-  $("arEnd").innerHTML = '<div class="arPickBox"><b style="font-size:20px">' + (A.win ? "🏆 Victoire !" : "💀 Fin de la partie") + "</b><br>Vagues réussies : <b>" + W + "</b>" + (A.N ? " / " + A.N : "") + " · record : " + (S.arenaBest || 0) +
+  const A = arena, W = A.cleared || 0, P = A.host ? A.players : Object.values(A.view.p), me = arMe(), D = AR_DIFF[A.diff] || AR_DIFF[1];
+  if (me) S.arenaKills = (S.arenaKills || 0) + (me.kills || 0);
+  const R = arRewards(W, Math.max(1, P.length), A.diff), rew = R.html;
+  $("arEnd").innerHTML = '<div class="arPickBox"><b style="font-size:20px">' + (A.win ? "🏆 Victoire !" : "💀 Fin de la partie") + "</b><br>Vagues réussies : <b>" + W + "</b>" + (A.N ? " / " + A.N : "") + ' · <span style="color:' + D.col + '">' + D.ic + " " + D.name + "</span><br><small style='color:#9a98ad'>Récompenses ×" + fmtDec(R.k) + (P.length > 1 ? " (bonus à " + P.length + " joueurs)" : "") + " · record " + D.name + " : " + arBestD()[A.diff] + "</small>" +
     '<div class="arRes">' + P.map(p => "<span>" + (p.name || "") + " : " + (p.kills || 0) + " monstres</span>").join("") + '</div><div class="arRew">' + rew + "</div>" +
     '<div class="arBtns">' + (A.host && (!arNet || !arNet.conns || !arNet.conns.length) ? '<button id="arAgain">Rejouer</button>' : "") + '<button id="arQuit2">Quitter</button></div></div>';
   if ($("arAgain")) $("arAgain").onclick = () => { const N = A.N; arLeave(true); arSolo(N); };
@@ -4944,12 +5044,16 @@ function arLeave(silent) {
   refreshTop();
 }
 function arSolo(N) {
-  arena = arNewArena(true); arena.N = N; arena.players.push(arNewPlayer(0, arName(), S.look)); arena.me = 0; arNet = null;
+  arena = arNewArena(true); arena.N = N; arena.diff = arDiff; arena.players.push(arNewPlayer(0, arName(), S.look)); arena.me = 0; arNet = null;
   arSetBase(arena); arena.phase = "fight"; arStartWave(arena); arOpenField();
 }
 
 /* ---------- menus ---------- */
-let arPickN = 10;
+let arPickN = 10, arDiff = 1;
+function arDiffHtml() {
+  return '<div class="arDiff">' + AR_DIFF.map((d, i) => { const ok = arDiffOk(i); return '<button data-df="' + i + '" class="' + (arDiff === i ? "on" : "") + '" style="--c:' + d.col + '"' + (ok ? "" : " disabled") + "><span>" + (ok ? d.ic : "🔒") + "</span><b>" + d.name + "</b><small>" + (ok ? "Récompenses ×" + fmtDec(d.rew) : "Vague " + d.need[1] + " en " + AR_DIFF[d.need[0]].name) + "</small></button>"; }).join("") + "</div>";
+}
+function arBindDiff(cb) { $("arMenuBody").querySelectorAll("[data-df]").forEach(b => b.onclick = () => { const i = +b.dataset.df; if (!arDiffOk(i)) return; arDiff = i; sfx("buy"); cb(); }); }
 function openArena() {
   if (tower) { toast("Quitte d'abord la Tour"); return; }
   document.body.classList.add("arOn"); $("arMenu").classList.add("show"); arMenuHome();
@@ -4964,13 +5068,14 @@ function arMenuHome() {
     '<div class="hint">Survis aux vagues de monstres, seul ou <b>avec tes potes</b> (jusqu\'à 4). Déplace ton chasseur avec le doigt : <b>il tire tout seul</b> sur le monstre le plus proche. Quand ta jauge est pleine, lance ta <b>Frappe Brume</b> ! Tu joues avec <b>ton équipement</b> : les monstres sont réglés sur ton niveau.</div>' +
     '<div class="arStats"><span>⚔️ ' + fmt(st.atk * C.mult) + '</span><span>❤️ ' + fmt(st.hp) + '</span><span>💨 ' + (st.rate * C.rate).toFixed(1) + ' tirs/s</span><span>🎯 ' + Math.round(st.crit * 100) + '%</span><span>' + C.name + "</span></div>" +
     '<div class="cuRow"><div class="cuLbl">Ton pseudo</div><input id="arPseudo" maxlength="14" value="' + arName().replace(/"/g, "") + '"></div>' +
+    '<div class="cuRow"><div class="cuLbl">Difficulté</div>' + arDiffHtml() + "</div>" +
     '<div class="cuRow"><div class="cuLbl">Nombre de vagues</div>' + arWavesHtml() + "</div>" +
     '<button class="arBig" id="arSoloB">▶ Jouer seul</button><button class="arBig alt" id="arHostB">👥 Créer une partie avec des potes</button>' +
     '<div class="arJoinRow"><input id="arCodeIn" maxlength="4" placeholder="CODE" autocapitalize="characters"><button id="arJoinB">Rejoindre</button></div>' +
-    '<div class="arMsg" id="arMsg"></div><div class="hint" style="font-size:11px">Record : vague <b>' + (S.arenaBest || 0) + "</b> · Récompenses : or, Cristaux (dès la vague 4) et gemmes (toutes les 10 vagues). Le mode à plusieurs a besoin d'internet.</div>";
+    '<div class="arMsg" id="arMsg"></div><div class="hint" style="font-size:11px">Record : vague <b>' + (S.arenaBest || 0) + "</b> · Récompenses : or, Cristaux, gemmes et <b>équipement</b> selon les vagues réussies, la difficulté et ton niveau. À plusieurs : <b>+20 % par joueur en plus</b>. Le mode à plusieurs a besoin d'internet.</div>";
   const keep = () => { S.pseudo = ($("arPseudo").value || "").trim().slice(0, 14) || "Chasseur"; save(); };
   $("arPseudo").onchange = keep;
-  arBindWaves(arMenuHome);
+  arBindWaves(arMenuHome); arBindDiff(arMenuHome);
   $("arSoloB").onclick = () => { keep(); arSolo(arPickN); };
   $("arHostB").onclick = () => { keep(); arHost(); };
   $("arJoinB").onclick = () => { keep(); arJoin($("arCodeIn").value); };
@@ -4978,15 +5083,15 @@ function arMenuHome() {
 function arMenuMsg(txt, err) { const m = $("arMsg"); if (m) { m.textContent = txt; m.className = "arMsg" + (err ? " err" : ""); } else { arMenuHome(); arMenuMsg(txt, err); } }
 function arLobby() {
   if (!arena) return; arNet.N = arPickN;
-  const lob = { t: "lobby", code: arNet.code, N: arPickN, players: arena.players.map(p => ({ id: p.id, name: p.name, lvl: p.lvl })) };
+  const lob = { t: "lobby", code: arNet.code, N: arPickN, d: arDiff, players: arena.players.map(p => ({ id: p.id, name: p.name, lvl: p.lvl })) };
   arBroadcast(lob); arLobbyView(lob, true);
 }
 function arLobbyView(m, isHost) {
   $("arMenuBody").innerHTML = '<div class="arCode">Code de la partie<b>' + m.code + "</b><small>Donne ce code à tes potes : ils tapent « Rejoindre » dans l'Arène.</small></div>" +
     '<div class="cuLbl">Chasseurs (' + m.players.length + " / " + AR_MAX + ')</div><div class="arLob">' + m.players.map((p, i) => "<span>" + (i ? "👤 " : "👑 ") + p.name + ' <small style="color:#9a98ad">niv. ' + (p.lvl || "?") + "</small></span>").join("") + "</div>" +
-    (isHost ? '<div class="cuRow"><div class="cuLbl">Nombre de vagues</div>' + arWavesHtml() + '</div><button class="arBig" id="arGo">▶ Lancer la partie</button>' : '<div class="hint" style="text-align:center">Vagues : <b>' + (m.N ? m.N : "illimité") + "</b><br>On attend que l'hôte lance la partie…</div>") +
+    (isHost ? '<div class="cuRow"><div class="cuLbl">Difficulté</div>' + arDiffHtml() + '</div><div class="cuRow"><div class="cuLbl">Nombre de vagues</div>' + arWavesHtml() + '</div><button class="arBig" id="arGo">▶ Lancer la partie</button>' : '<div class="hint" style="text-align:center">Difficulté : <b style="color:' + (AR_DIFF[m.d] || AR_DIFF[1]).col + '">' + (AR_DIFF[m.d] || AR_DIFF[1]).name + "</b> · Vagues : <b>" + (m.N ? m.N : "illimité") + "</b><br>On attend que l'hôte lance la partie…</div>") +
     '<button class="arBig alt" id="arQuitL">Quitter</button>';
-  if (isHost) { arBindWaves(arLobby); $("arGo").onclick = arStartGame; }
+  if (isHost) { arBindWaves(arLobby); arBindDiff(arLobby); $("arGo").onclick = arStartGame; }
   $("arQuitL").onclick = () => { arLeave(true); arMenuHome(); };
 }
 function arInput() {
@@ -5050,6 +5155,17 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 46, d: "Transfert de compte par code", l: [
+    "Chaque compte a maintenant un <b>code à 6 caractères</b> (⚙️ Options → Code de compte).",
+    "Pour changer de téléphone : sur l'ancien, appuie sur <b>Envoyer</b> ; sur le nouveau, <b>Récupérer</b> et tape le code. La partie passe directement d'un téléphone à l'autre (les deux ouverts en même temps, avec internet).",
+    "Plus besoin de copier le long pavé de texte. L'ancien code long reste disponible en secours."] },
+  { v: 45, d: "Arène : difficultés et butin", l: [
+    "4 difficultés : <b style='color:#52d17c'>Facile</b>, <b style='color:#9fd0ff'>Moyen</b>, <b style='color:#ffb04a'>Difficile</b> (vague 10 en Moyen pour débloquer) et <b style='color:#ff4d5e'>Cauchemar</b> (vague 10 en Difficile).",
+    "Plus c'est dur, plus les monstres sont forts et rapides, et plus les récompenses sont grosses : ×0,6 en Facile, ×1 en Moyen, ×1,8 en Difficile, ×3,5 en Cauchemar.",
+    "<b>Équipement</b> à la fin de chaque partie : 1 objet toutes les 5 vagues à ton niveau, avec de meilleures raretés selon la difficulté, plus des objets garantis aux vagues 10, 20 et 30 (Diamant en Cauchemar).",
+    "<b>À plusieurs</b> : +20 % de récompenses par joueur en plus, et un peu plus d'objets.",
+    "Les gemmes gagnées sont de niveau 2 en Difficile et de niveau 3 en Cauchemar.",
+    "<b>9 nouveaux succès</b> (vague 50, parties à plusieurs, 1 000 et 10 000 monstres, Difficile, Cauchemar) et <b>3 nouveaux titres</b> : Champion de l'Arène, Roi du Cauchemar, Âme de la meute."] },
   { v: 44, d: "Arène : avec ton équipement", l: [
     "Dans l'Arène, tu joues maintenant avec <b>ton équipement et tes stats</b> du jeu principal (attaque, vie, vitesse, critique, familiers, arbre, renaissance…).",
     "Les monstres sont réglés sur <b>ton niveau</b> (et ton mode Normal ou Difficile), puis ils deviennent plus forts à chaque vague. À plusieurs, c'est la moyenne des joueurs.",
@@ -5147,7 +5263,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 44, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 46, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
