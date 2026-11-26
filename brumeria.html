@@ -427,12 +427,13 @@
       <div class="opt"><span>📳 Vibrations</span><button class="smallBtn" id="vibBtn">Activées</button></div>
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
+      <div class="opt"><span>🔄 Version <b>v31</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v30 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v31 — sauvegarde automatique</p>
     </div>
   </div>
 </div>
@@ -445,7 +446,7 @@
   <div id="tsLoad"><i id="tsLoadFill"></i></div><div id="tsLoadTxt">Chargement…</div>
   <button id="playBtn">JOUER</button>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v30</div></div>
+  <div class="tsVer">v31</div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
 <script>
@@ -3426,7 +3427,28 @@ function refreshAll() {
 
 /* ================== DÉMARRAGE ================== */
 // Appli installable : enregistre le service worker (seulement quand le jeu est en ligne, ex. GitHub Pages)
-if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(() => {});
+/* ================== MISES À JOUR ================== */
+const GAME_VER = 31, ONLINE = location.protocol.startsWith("http");
+let swReg = null, updAsked = false, lastUpdCheck = 0;
+if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
+function applyUpdate() {
+  save(); saveLock = true; toast("Mise à jour en cours…");
+  const go = () => location.reload();
+  (swReg ? swReg.update().catch(() => {}) : Promise.resolve()).then(() => caches.keys()).then(ks => Promise.all(ks.map(k => caches.delete(k)))).catch(() => {}).then(() => setTimeout(go, 400));
+}
+function checkUpdate(manual) {
+  if (!ONLINE) { if (manual) toast("Les mises à jour marchent seulement avec la version en ligne"); return; }
+  lastUpdCheck = Date.now();
+  fetch("version.json?t=" + Date.now(), { cache: "no-store" }).then(r => r.json()).then(j => {
+    const v = +j.v || 0;
+    if (v > GAME_VER) {
+      if (manual || !updAsked) { updAsked = true; modal(ic("rocket") + " Nouvelle version !", "La version <b>v" + v + "</b> de Brumeria est disponible" + (j.note ? " :<br><br>" + j.note : ".") + "<br><br>Ta partie est sauvegardée avant la mise à jour.", [{ t: "Plus tard", alt: true }, { t: "Mettre à jour", f: applyUpdate }]); }
+    } else if (manual) toast("Tu as déjà la dernière version (v" + GAME_VER + ")");
+  }).catch(() => { if (manual) toast("Pas de connexion : impossible de vérifier"); });
+}
+$("updBtn").onclick = () => checkUpdate(true);
+setTimeout(() => checkUpdate(false), 4000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastUpdCheck > 3e5) checkUpdate(false); });
 load();
 resize();
 hero.hp = P.maxHp();

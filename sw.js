@@ -1,12 +1,12 @@
 // Brumeria : service worker
-// Stratégie "réseau d'abord" : on prend toujours la dernière version sur GitHub,
+// "Réseau d'abord" : on demande toujours la dernière version à GitHub (sans cache),
 // et on garde une copie pour pouvoir jouer hors connexion.
-const CACHE = "brumeria-v1";
-const FILES = ["brumeria.html", "manifest.webmanifest", "icon-192.png", "icon-512.png"];
+const CACHE = "brumeria-v31";
+const FILES = ["./", "index.html", "brumeria.html", "manifest.webmanifest", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", e => {
   self.skipWaiting();
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).catch(() => {}));
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES.map(f => new Request(f, { cache: "reload" })))).catch(() => {}));
 });
 
 self.addEventListener("activate", e => {
@@ -14,10 +14,11 @@ self.addEventListener("activate", e => {
 });
 
 self.addEventListener("fetch", e => {
-  if (e.request.method !== "GET") return;
+  const req = e.request;
+  if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
   e.respondWith(
-    fetch(e.request)
-      .then(res => { const copy = res.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); return res; })
-      .catch(() => caches.match(e.request))
+    fetch(req, { cache: "no-store" })
+      .then(res => { if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)); } return res; })
+      .catch(() => caches.match(req, { ignoreSearch: true }))
   );
 });
