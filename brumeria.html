@@ -575,7 +575,7 @@
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v47</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v48</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="opt"><span>💾 Sauvegarde (code long, de secours)</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
@@ -583,7 +583,7 @@
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v47 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v48 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -600,7 +600,7 @@
   <button id="playBtn">JOUER</button>
   <div class="tsRow"><button id="custBtn">👤 Personnaliser</button><button id="arenaBtn">⚔️ Arène co-op</button></div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v47</div></div>
+  <div class="tsVer">v48</div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
 <div id="arField"><canvas id="arCv"></canvas><div id="arTop"></div><button id="arQuit" aria-label="Quitter">✕</button><button id="arSk"><span>FRAPPE<br>BRUME</span></button><div id="arPick"></div><div id="arEnd"></div></div>
@@ -2392,6 +2392,45 @@ const ACCT_ABC = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", ACCT_PREFIX = "brumeria-com
 function acctCode() { if (!S.acct || !/^[A-Z2-9]{6}$/.test(S.acct)) S.acct = Array.from({ length: 6 }, () => ACCT_ABC[Math.floor(Math.random() * 32)]).join(""); return S.acct; }
 let xfer = null;
 function xferStop() { try { if (xfer && xfer.peer) xfer.peer.destroy(); } catch (e) {} xfer = null; }
+/* ===== Rattrapage v46 : la v46 a effacé des sauvegardes, on rend leur progression aux joueurs ===== */
+const COMP = [
+  { id: "n100", t: "Vers le niveau 100", L: 100, reb: 0, hl: 15, rar: 2, pets: 2, pl: 4 },
+  { id: "n250", t: "Vers le niveau 250", L: 250, reb: 2, hl: 35, rar: 3, pets: 3, pl: 6 },
+  { id: "n500", t: "Vers le niveau 500", L: 500, reb: 5, hl: 65, rar: 3, pets: 4, pl: 9 },
+  { id: "n750", t: "Vers le niveau 750", L: 750, reb: 8, hl: 95, rar: 4, pets: 5, pl: 12 },
+  { id: "n1000", t: "Niveau 1000 (fin du mode Normal)", L: 999, reb: 10, hl: 120, rar: 4, pets: 6, pl: 15 },
+  { id: "hard", t: "💀 J'étais en mode Difficile", L: 300, reb: 14, hl: 150, rar: 5, pets: 7, pl: 18, hard: true }
+];
+const GOLDX = 500;
+function compItem(ri, lvl, slot) { let it; for (let k = 0; k < 60; k++) { it = makeItem(ri, lvl); if (it.slot === slot) break; } it.slot = slot; it.stat = SLOTS[slot].stat; return it; }
+function giveComp(c) {
+  S.comp47 = true; S.tutoDone = true;
+  if (c) {
+    if (c.hard) { S.won = true; S.diff = 1; S.best = Math.max(S.best || 1, 999); }
+    const L = Math.min(MAX_LEVEL - 1, c.L);
+    S.level = Math.max(S.level, L); S.maxLevel = Math.max(S.maxLevel, L); S.best = Math.max(S.best || 1, S.maxLevel);
+    S.rebirths = Math.max(S.rebirths || 0, c.reb);
+    const pr = c.reb ? perlesFor(Math.max(REB_MIN, c.hard ? 999 : L)) * Math.ceil(c.reb / 2) : 0; S.perles += pr; S.totalPerles += pr;
+    S.gold += monGold(L) * GOLDX;
+    { const ids = ["atk", "hp", "spd", "crit", "critdmg", "combo"]; let guard = 0; // dépense l'or comme un joueur l'aurait fait, pour ne pas mourir en boucle
+      while (guard++ < 20000) { let best = null, bc = Infinity; for (const id of ids) { const u = UPGRADES.find(x => x.id === id); if (!u || (u.max && S.upg[id] >= u.max)) continue; const cst = upgCost(u, S.upg[id]) * (id === "atk" || id === "hp" ? 1 : 2.5); if (cst < bc) { bc = cst; best = u; } } if (!best) break; const real = upgCost(best, S.upg[best.id]); if (real > S.gold * 0.995) break; S.gold -= real; S.upg[best.id]++; } }
+    while (S.hlv < Math.min(HLV_MAX, c.hl)) { S.hlv++; giveLv(S.hlv); } S.hxp = 0;
+    for (const sl in SLOTS) { const it = compItem(c.rar, L, sl), cur = S.equip[sl]; if (!cur || it.val > cur.val) { if (cur) S.inv.push(cur); S.equip[sl] = it; } else S.inv.push(it); }
+    const ids = Object.keys(PETS).sort(() => Math.random() - 0.5).slice(0, c.pets);
+    for (const id of ids) S.pets[id] = Math.max(S.pets[id] || 0, Math.min(PET_MAX, c.pl));
+    S.petsOn = ids.slice(0, petSlots());
+    for (let i = 0; i < 3 + c.pets; i++) addGem(randGem(), c.hard ? 3 : c.L >= 500 ? 2 : 1);
+  } else { S.gold += monGold(Math.max(1, S.maxLevel)) * 100; S.perles += 20; S.totalPerles += 20; addGem(randGem(), 2); }
+  hero.hp = P.maxHp(); statF++; spawnMonster(); refreshAll(); save(); sfx("rare"); vib(60);
+  modal("🎁 C'est cadeau !", c ? "Ta progression est rendue : <b>niveau " + fmt(S.level) + "</b>" + (c.hard ? " en <b style='color:#ff6a78'>mode Difficile</b>" : "") + ", " + c.reb + " renaissance(s), chasseur niveau " + S.hlv + ", un équipement complet <span class='c" + c.rar + "'>" + RARITY[c.rar].name + "</span>, " + c.pets + " familiers, des gemmes, de l'or et des Cristaux.<br><br>Encore désolé pour la v46 !" : "Merci d'être resté ! Voilà un petit cadeau : de l'or, 20 Cristaux et une gemme.", [{ t: "Merci !" }]);
+}
+function offerComp() {
+  if (S.comp47) return;
+  const cur = Math.max(S.best || 1, S.maxLevel);
+  const opts = COMP.filter(c => c.hard ? !S.diff : c.L > cur + 20);
+  modal("🙏 Désolé pour la v46", "La version 46 a pu <b>effacer des sauvegardes</b>. C'est réparé.<br><br>Si tu as perdu ta partie, choisis <b>à peu près où tu en étais</b> : le jeu te rend ton niveau, des renaissances, du stuff, des familiers, des gemmes, de l'or et des Cristaux.<br><br>" + opts.map(c => '<button class="smallBtn bakRow" data-comp="' + c.id + '">' + c.t + "</button>").join("") + '<button class="smallBtn bakRow" data-comp="none">✅ Je n\'ai rien perdu (petit cadeau)</button><br><small>Tu ne peux choisir qu\'une seule fois.</small>', [{ t: "Plus tard", alt: true }]);
+}
+document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("[data-comp]"); if (!b || S.comp47) return; const c = COMP.find(x => x.id === b.dataset.comp) || null; closeModal(); setTimeout(() => giveComp(c), 60); });
 function showBackups() {
   let list = []; try { list = JSON.parse(localStorage.getItem(BAK()) || "[]"); } catch (e) {}
   if (!list.length) { modal("🛟 Sauvegardes de secours", "Aucune sauvegarde de secours pour l'instant. Le jeu en garde une à chaque lancement (et une par jour sur les derniers jours).", [{ t: "OK" }]); return; }
@@ -5181,6 +5220,10 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 48, d: "Rattrapage pour les parties perdues", l: [
+    "Tu as perdu ta partie avec la v46 ? Au lancement, choisis <b>à peu près où tu en étais</b> : le jeu te rend ton niveau, tes renaissances, du stuff, des familiers, des gemmes, de l'or et des Cristaux.",
+    "Rien perdu ? Un petit cadeau t'attend quand même.",
+    "Tu peux choisir une seule fois. Si tu appuies sur « Plus tard », le choix revient au prochain lancement."] },
   { v: 47, d: "Correctif important des sauvegardes", l: [
     "<b>Corrigé</b> : la v46 pouvait effacer la sauvegarde au lancement. Désolé ! C'est réparé.",
     "Le jeu ne peut plus jamais écrire sur ta sauvegarde avant de l'avoir chargée.",
@@ -5293,7 +5336,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 47, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 48, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -5339,7 +5382,7 @@ refreshAll();
 offlineGains();
 save();
 requestAnimationFrame(loop);
-showTitle(() => { checkLogin(); if (!S.tutoDone && S.totalKills < 5) setTimeout(startTuto, 500); });
+showTitle(() => { offerComp(); checkLogin(); if (!S.tutoDone && S.totalKills < 5) setTimeout(startTuto, 500); });
 </script>
 </body>
 </html>
