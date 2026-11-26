@@ -145,6 +145,20 @@
   #modalBtns button.alt { background: #333648; }
 
   /* --- style graphique v12 --- */
+  #xpBar { position: relative; height: 15px; background: #12152a; border-bottom: 1px solid #262a44; overflow: hidden; cursor: pointer; flex: none; }
+  #xpFill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, #3d5bd9, #6fa8ff 70%, #bfe2ff); box-shadow: 0 0 8px #6fa8ff; transition: width .35s; }
+  #xpTxt { position: relative; display: block; text-align: center; font-size: 10px; font-weight: 800; line-height: 15px; color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; letter-spacing: .3px; }
+  .lvlTop { display: flex; gap: 12px; align-items: center; background: linear-gradient(135deg, #252a48, #1c1f35); border: 1px solid #343a5c; border-radius: 14px; padding: 12px; margin-bottom: 8px; }
+  .lvlBig { width: 64px; height: 64px; border-radius: 50%; flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: #fff; background: radial-gradient(circle at 40% 30%, #6fa8ff, #2a3c8a); box-shadow: 0 0 14px -2px #6fa8ff, inset 0 -3px 6px rgba(0,0,0,.35); text-shadow: 0 2px 3px rgba(0,0,0,.5); line-height: 1; }
+  .lvlBig small { font-size: 9px; letter-spacing: 1px; opacity: .85; }
+  .xpBig { height: 12px; border-radius: 6px; background: #12152a; margin: 6px 0 4px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.6); }
+  .xpBig i { display: block; height: 100%; background: linear-gradient(90deg, #3d5bd9, #6fa8ff 70%, #bfe2ff); border-radius: 6px; }
+  .secT { font-weight: 800; font-size: 14px; margin: 12px 2px 6px; color: #e6e4f2; }
+  .accIc { width: 48px; height: 48px; flex: none; display: flex; align-items: center; justify-content: center; font-size: 30px; border-radius: 12px; background: radial-gradient(circle at 50% 40%, #343a5c, #1d2034); }
+  .accCard.act { border-color: #6fa8ff; box-shadow: 0 0 10px -3px #6fa8ff; }
+  .accCard.locked { opacity: .5; } .accCard.locked .accIc { filter: grayscale(1) brightness(.6); }
+  .lvRow { display: flex; gap: 10px; align-items: flex-start; background: #1f2338; border-radius: 10px; padding: 8px 10px; margin-bottom: 6px; font-size: 12px; color: #c8c6d8; }
+  .lvRow b { flex: none; width: 54px; color: #9fd0ff; }
   .ic { width: 1.15em; height: 1.15em; vertical-align: -0.22em; display: inline-block; overflow: visible; flex: none; filter: drop-shadow(0 1.5px 1px rgba(0,0,0,.45)); }
   #top { background: linear-gradient(180deg, #22263c, #1a1d2e); box-shadow: 0 2px 8px rgba(0,0,0,.35); position: relative; z-index: 2; }
   #gold { display: flex; gap: 12px; align-items: center; font-size: 17px; }
@@ -158,6 +172,7 @@
   .upg { background: linear-gradient(135deg, #23273e, #1d2034); border: 1px solid #2c3050; border-radius: 12px; }
   .upgIcon { width: 42px; height: 42px; border-radius: 11px; background: radial-gradient(circle at 35% 30%, #343a5c, #252944); display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 1px #3a4066; }
   .upgIcon .ic { width: 28px; height: 28px; }
+  .buy.alt { background: linear-gradient(180deg, #4a4f6e, #363a54) !important; box-shadow: 0 2px 0 #24273a !important; }
   .buy { background: linear-gradient(180deg, #3a8a62, #2a6a4a); box-shadow: 0 2px 0 #1c4a33; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
   .buy:active:not(:disabled) { transform: translateY(2px); box-shadow: none; }
   .buy:disabled { box-shadow: none; }
@@ -367,6 +382,7 @@
     <button id="towerBtn" class="topBtn" aria-label="Tour de la Brume"></button>
     <button id="gearBtn" class="topBtn" aria-label="Options"></button>
   </div>
+  <div id="xpBar"><i id="xpFill"></i><span id="xpTxt">Niv. 1</span></div>
 
   <div id="sceneWrap">
     <canvas id="scene"></canvas>
@@ -391,12 +407,13 @@
 
   <div id="panel">
     <div class="page active" id="pUpg">
-      <div class="subTabs"><button class="subTab on" data-g="c" data-sp="cUp">Améliorations</button><button class="subTab" data-g="c" data-sp="cHero">Héros</button></div>
+      <div class="subTabs"><button class="subTab on" data-g="c" data-sp="cUp">Améliorations</button><button class="subTab" data-g="c" data-sp="cLvl">Niveau</button><button class="subTab" data-g="c" data-sp="cHero">Héros</button></div>
       <div class="subPage on" data-g="c" id="cUp">
       <div class="statsBox" id="statsBox"></div>
       <div id="upgList"></div>
       <div id="pupgList"></div>
       </div>
+      <div class="subPage" data-g="c" id="cLvl"><div id="lvlPanel"></div></div>
       <div class="subPage" data-g="c" id="cHero"><div id="heroPanel"></div></div>
     </div>
     <div class="page" id="pSk">
@@ -427,13 +444,13 @@
       <div class="opt"><span>📳 Vibrations</span><button class="smallBtn" id="vibBtn">Activées</button></div>
       <div class="opt"><span>🖥️ Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="opt"><span>🎵 Musique</span><button class="smallBtn" id="musicBtn">Activée</button></div>
-      <div class="opt"><span>🔄 Version <b>v31</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v32</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>💾 Sauvegarde</span><span><button class="smallBtn" id="expBtn">Exporter</button> <button class="smallBtn" id="impBtn">Importer</button></span></div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
       <div class="opt"><span>Niveau max atteint</span><b><span id="maxLvlTxt">1</span> / 1000</b></div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v31 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v32 — sauvegarde automatique</p>
     </div>
   </div>
 </div>
@@ -446,7 +463,7 @@
   <div id="tsLoad"><i id="tsLoadFill"></i></div><div id="tsLoadTxt">Chargement…</div>
   <button id="playBtn">JOUER</button>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v31</div></div>
+  <div class="tsVer">v32</div></div>
 <div id="tuto"><div id="tutoBox"><div id="tutoTxt"></div><div class="tutoBtns"><span id="tutoStep"></span><button id="tutoSkip">Passer</button><button id="tutoNext">Suivant</button></div></div></div>
 
 <script>
@@ -640,13 +657,13 @@ function newState() {
     tree: {}, bonusPts: 0, music: true,
     stats: { bossKills: 0, taps: 0, legend: 0, items: 0, forges: 0, rares: 0, skills: 0, quests: 0, time: 0, bestHit: 0, goldTotal: 0 },
     ach: {}, daily: null, bestiary: {}, pets: {}, pet: null,
-    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false };
+    quality: "normale", q26: true, autoSell: { on: false, maxRar: 0, keepBetter: true }, gems: {}, login: { last: null, day: 1, claimed: false }, exp: {}, invDay: null, cls: "spectre", look: { coat: 0, trim: 0, hair: 0 }, owned: {}, title: "novice", tower: { best: 0 }, tutoDone: false, hlv: 1, hxp: 0, petsOn: [], accOn: [] };
 }
 let S = newState();
 function load() {
   try {
     const raw = localStorage.getItem(SAVE_KEY);
-    if (raw) { const d = JSON.parse(raw); S = Object.assign(newState(), d); S.upg = Object.assign(newState().upg, d.upg || {}); S.equip = Object.assign(newState().equip, d.equip || {}); S.pupg = Object.assign(newState().pupg, d.pupg || {}); S.tree = d.tree || {}; S.stats = Object.assign(newState().stats, d.stats || {}); S.ach = d.ach || {}; S.bestiary = d.bestiary || {}; S.pets = d.pets || {}; S.look = Object.assign(newState().look, d.look || {}); S.autoSell = Object.assign(newState().autoSell, d.autoSell || {}); if (!d.q26) { S.quality = "normale"; S.q26 = true; } S.gems = d.gems || {}; S.login = Object.assign(newState().login, d.login || {}); S.exp = d.exp || {}; S.owned = d.owned || {}; S.tower = Object.assign({ best: 0 }, d.tower || {}); S.best = Math.max(S.best || 1, S.maxLevel); migrate(d.ver || 0); }
+    if (raw) { const d = JSON.parse(raw); S = Object.assign(newState(), d); S.upg = Object.assign(newState().upg, d.upg || {}); S.equip = Object.assign(newState().equip, d.equip || {}); S.pupg = Object.assign(newState().pupg, d.pupg || {}); S.tree = d.tree || {}; S.stats = Object.assign(newState().stats, d.stats || {}); S.ach = d.ach || {}; S.bestiary = d.bestiary || {}; S.pets = d.pets || {}; S.look = Object.assign(newState().look, d.look || {}); S.autoSell = Object.assign(newState().autoSell, d.autoSell || {}); if (!d.q26) { S.quality = "normale"; S.q26 = true; } S.gems = d.gems || {}; S.login = Object.assign(newState().login, d.login || {}); S.exp = d.exp || {}; S.owned = d.owned || {}; S.tower = Object.assign({ best: 0 }, d.tower || {}); S.best = Math.max(S.best || 1, S.maxLevel); if (!Array.isArray(d.petsOn)) S.petsOn = d.pet ? [d.pet] : []; if (!Array.isArray(d.accOn)) S.accOn = []; migrate(d.ver || 0); }
   } catch (e) {}
 }
 // Remet les anciens objets aux valeurs actuelles (rééquilibrage v7)
@@ -672,12 +689,12 @@ function eqBonus(stat) {
   return b;
 }
 const P = {
-  atk:  () => atkFrom(S.upg.atk) * (1 + eqBonus("atk") / 100) * (1 + 0.25 * S.pupg.patk) * (1 + 0.15 * T("g1")) * (1 + petPv("atk") / 100) * (1 + bestStars() / 100) * CL().atk * (setOn("spectre", 2) ? 1.2 : 1) * (setOn("rodeur", 4) ? 1.25 : 1) * (setOn("arcaniste", 2) ? 1.2 : 1) * (setOn("arcaniste", 6) ? 1.4 : 1) * (1 + gemSum("atk") / 100) * (frenzyT > 0 ? 3 : 1) * (buffOn("rage") ? SKILLS.rage.power(T("rage")) : 1),
-  maxHp:() => hpFrom(S.upg.hp) * (1 + eqBonus("hp") / 100) * (1 + 0.25 * S.pupg.php) * (1 + 0.15 * T("d1")) * (1 + petPv("hp") / 100) * (1 + gemSum("hp") / 100),
-  spd:  () => spdFrom(S.upg.spd) * (1 + eqBonus("spd") / 100) * (1 + petPv("spd") / 100) * CL().spd * (setOn("rodeur", 2) ? 1.2 : 1) * (setOn("spectre", 6) ? 1.25 : 1) * (1 + affSum("spd") / 100) * (1 + gemSum("spd") / 100) * (buffOn("eclair") ? 2 : 1),
-  crit: () => { const sc = (setOn("spectre", 4) ? 10 : 0) + affSum("crit"); return Math.min(60 + 3 * T("g2") + CL().crit + sc, critFrom(S.upg.crit) + eqBonus("crit") + 3 * T("g2") + CL().crit + sc); },
-  tap:  () => P.atk() * tapFrom(S.upg.tap),
-  goldMult: () => (1 + S.upg.gold * 0.1) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1)
+  atk:  () => atkFrom(S.upg.atk) * (1 + eqBonus("atk") / 100) * (1 + 0.25 * S.pupg.patk) * (1 + 0.15 * T("g1")) * (1 + petPv("atk") / 100) * (1 + bestStars() / 100) * CL().atk * (setOn("spectre", 2) ? 1.2 : 1) * (setOn("rodeur", 4) ? 1.25 : 1) * (setOn("arcaniste", 2) ? 1.2 : 1) * (setOn("arcaniste", 6) ? 1.4 : 1) * (1 + gemSum("atk") / 100) * (frenzyT > 0 ? 3 : 1) * (buffOn("rage") ? SKILLS.rage.power(T("rage")) : 1) * hlvB() * (1 + accSum("atk") / 100),
+  maxHp:() => hpFrom(S.upg.hp) * (1 + eqBonus("hp") / 100) * (1 + 0.25 * S.pupg.php) * (1 + 0.15 * T("d1")) * (1 + petPv("hp") / 100) * (1 + gemSum("hp") / 100) * hlvB() * (1 + accSum("hp") / 100),
+  spd:  () => spdFrom(S.upg.spd) * (1 + eqBonus("spd") / 100) * (1 + petPv("spd") / 100) * CL().spd * (setOn("rodeur", 2) ? 1.2 : 1) * (setOn("spectre", 6) ? 1.25 : 1) * (1 + affSum("spd") / 100) * (1 + gemSum("spd") / 100) * (buffOn("eclair") ? 2 : 1) * (1 + accSum("spd") / 100),
+  crit: () => { const sc = (setOn("spectre", 4) ? 10 : 0) + affSum("crit") + accSum("crit") + petPv("crit"); return Math.min(60 + 3 * T("g2") + CL().crit + sc, critFrom(S.upg.crit) + eqBonus("crit") + 3 * T("g2") + CL().crit + sc); },
+  tap:  () => P.atk() * tapFrom(S.upg.tap) * (1 + (accSum("tap") + petPv("tap")) / 100),
+  goldMult: () => (1 + S.upg.gold * 0.1) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1) * (1 + accSum("gold") / 100)
 };
 
 // Les stats du héros sont recalculées une seule fois par image (au lieu de des dizaines de fois)
@@ -778,6 +795,7 @@ function killMonster() {
   mon.hp = 0; mon.dying = DIE_T;
   const g = mon.gold * P.goldMult();
   S.gold += g; S.totalKills++; S.stats.goldTotal = (S.stats.goldTotal || 0) + g;
+  gainXp(xpKill(S.level, mon.boss));
   if (mon.boss) $("bossAlert").classList.remove("show");
   addFloat("+" + fmt(g), "#ffd166", 18, -40);
   sfx("kill"); vib(15);
@@ -835,7 +853,7 @@ function useSkill() {
 
 /* ================== BUTIN ================== */
 function rollLoot(boss, rareMon) {
-  if (!boss && Math.random() > 0.04 * (1 + 0.1 * S.pupg.ploot) * (1 + 0.15 * T("p2")) * (1 + affSum("loot") / 100)) return;
+  if (!boss && Math.random() > 0.04 * (1 + 0.1 * S.pupg.ploot) * (1 + 0.15 * T("p2")) * (1 + affSum("loot") / 100) * (1 + (accSum("loot") + petPv("luck")) / 100)) return;
   let roll = Math.random() * 100, ri = 0;
   if (boss) roll *= rareMon ? 0.3 : 0.55;
   roll *= 1 - 0.1 * T("p4");           // les boss lâchent de meilleurs objets
@@ -1116,6 +1134,7 @@ const ICONS = {
   bow: () => line2("M7 3q12 9 0 18", "#a86c40", 2.6) + '<path d="M7 3V21" stroke="#e8e0d0" stroke-width="1"/>' + line2("M5 12h14", "#d8c8a8", 1.4) + '<path d="M21 12l-3.6-2.2v4.4Z" fill="#5ce1ff"/>',
   staff: () => line2("M8 22L15 7", "#7a5a3a", 2.4) + '<circle cx="16.4" cy="5" r="3.6" fill="#c07cff"/><circle cx="15.4" cy="4" r="1.1" fill="#fff" stroke="none"/>',
   palette: () => '<path d="M12 3a9 9 0 1 0 0 18c1.6 0 2-1.2 1.4-2.2c-.8-1.4.2-2.8 1.8-2.8H17a4 4 0 0 0 4-4C21 6.8 17 3 12 3Z" fill="#f3e6cf"/><circle cx="7.4" cy="11" r="1.6" fill="#ff4d5e" stroke-width="1"/><circle cx="10" cy="7" r="1.6" fill="#ffd166" stroke-width="1"/><circle cx="14.6" cy="7" r="1.6" fill="#52ffa0" stroke-width="1"/><circle cx="17" cy="10.8" r="1.6" fill="#5ce1ff" stroke-width="1"/>',
+  ring: () => '<path d="M12 8.2a6.6 6.6 0 1 0 .01 0Zm0 3a3.6 3.6 0 1 1-.01 0Z" fill="#ffd166" fill-rule="evenodd"/><path d="M9 3.2h6l1.6 2.4L12 9.4 7.4 5.6Z" fill="#c39bff"/>',
   medal: () => '<path d="M8 2.6h3l1 5H9Z M13 2.6h3l-1 5h-3Z" fill="#4ea8de"/><circle cx="12" cy="14.4" r="6.4" fill="#ffd166"/><path d="' + starPts(12, 14.6, 3.6, 1.6, 5) + '" fill="#fff3c4" stroke-width="1"/>',
   crown: () => '<path d="M3 18.4V7.6l4.6 4.4L12 4.6l4.4 7.4L21 7.6v10.8Z" fill="#ffd166"/><rect x="3" y="17.4" width="18" height="3.2" rx="1" fill="#e0a83a"/><circle cx="12" cy="13.6" r="1.6" fill="#e63946" stroke-width="1"/>'
 };
@@ -1160,13 +1179,23 @@ const COIN = ic("coin"), PERLE = ic("perle");
 
 /* ================== FAMILIERS ================== */
 const PETS = {
-  lumio:     { name: "Lumio",     zone: 0, color: "#e8f06a", info: "Une luciole qui attire l'or",          atk: l => 0.15 + 0.08 * l, pas: "gold", pv: l => 6 * l, pasTxt: "Or" },
-  bloblo:    { name: "Bloblo",    zone: 0, color: "#7cc4ff", info: "Un mini slime très résistant",         atk: l => 0.12 + 0.06 * l, pas: "hp",   pv: l => 6 * l, pasTxt: "Vie" },
-  plumet:    { name: "Plumet",    zone: 1, color: "#8ecae6", info: "Un petit oiseau des neiges très vif",  atk: l => 0.3 + 0.12 * l,  pas: "spd",  pv: l => 3 * l, pasTxt: "Vitesse" },
-  etincelle: { name: "Étincelle", zone: 2, color: "#ff8a3a", info: "Un esprit de feu qui frappe fort",     atk: l => 0.5 + 0.2 * l,   pas: "atk",  pv: l => 5 * l, pasTxt: "Attaque" }
+  lumio:     { name: "Lumio",     zone: 0, color: "#e8f06a", info: "Une luciole qui attire l'or",            atk: l => 0.25 + 0.1 * l,  pas: "gold", pv: l => 8 * l,   pasTxt: "Or" },
+  bloblo:    { name: "Bloblo",    zone: 0, color: "#7cc4ff", info: "Un mini slime très résistant",           atk: l => 0.2 + 0.08 * l,  pas: "hp",   pv: l => 8 * l,   pasTxt: "Vie", ground: true },
+  plumet:    { name: "Plumet",    zone: 1, color: "#8ecae6", info: "Un petit oiseau des neiges très vif",    atk: l => 0.35 + 0.14 * l, pas: "spd",  pv: l => 3 * l,   pasTxt: "Vitesse" },
+  etincelle: { name: "Étincelle", zone: 2, color: "#ff8a3a", info: "Un esprit de feu qui frappe fort",       atk: l => 0.6 + 0.22 * l,  pas: "atk",  pv: l => 5 * l,   pasTxt: "Attaque" },
+  nacrelle:  { name: "Nacrelle",  zone: 3, color: "#ff9ad5", info: "Une méduse qui vise les points faibles", atk: l => 0.5 + 0.2 * l,   pas: "crit", pv: l => 0.5 * l, pasTxt: "Critique", flat: true },
+  spectrin:  { name: "Spectrin",  zone: 4, color: "#c9b8ff", info: "Un petit fantôme qui apprend vite",      atk: l => 0.6 + 0.22 * l,  pas: "xp",   pv: l => 6 * l,   pasTxt: "Expérience" },
+  croa:      { name: "Croâ",      zone: 5, color: "#8fd14f", info: "Une grenouille qui flaire les trésors",  atk: l => 0.7 + 0.25 * l,  pas: "luck", pv: l => 4 * l,   pasTxt: "Chance de butin", ground: true },
+  scarabor:  { name: "Scarabor",  zone: 6, color: "#ffcf4a", info: "Un scarabée doré qui adore les pièces",  atk: l => 0.8 + 0.28 * l,  pas: "gold", pv: l => 12 * l,  pasTxt: "Or", ground: true },
+  boulon:    { name: "Boulon",    zone: 7, color: "#9fb4c8", info: "Un mini robot qui renforce tes coups",   atk: l => 0.9 + 0.3 * l,   pas: "tap",  pv: l => 15 * l,  pasTxt: "Dégâts au toucher" },
+  gelou:     { name: "Gélou",     zone: 8, color: "#ff7aa8", info: "Un ourson en gélatine qui rebondit",     atk: l => 1 + 0.33 * l,    pas: "spd",  pv: l => 4 * l,   pasTxt: "Vitesse", ground: true },
+  astrea:    { name: "Astréa",    zone: 9, color: "#fff2b0", info: "Une étoile tombée du Néant",             atk: l => 1.2 + 0.4 * l,   pas: "atk",  pv: l => 8 * l,   pasTxt: "Attaque" }
 };
-const PET_MAX = 10;
-const petPv = stat => { const id = S.pet, l = id ? S.pets[id] : 0; return l && PETS[id].pas === stat ? PETS[id].pv(l) : 0; };
+const PET_MAX = 20, PET_RATE = 1.2;
+const PET_SLOT_LV = [1, 15, 40, 80, 130];
+const petSlots = () => PET_SLOT_LV.filter(l => S.hlv >= l).length;
+const activePets = () => (S.petsOn || []).filter(id => PETS[id] && S.pets[id] && !S.exp[id]).slice(0, petSlots());
+const petPv = stat => { let v = 0; for (const id of activePets()) if (PETS[id].pas === stat) v += PETS[id].pv(S.pets[id]); return v; };
 const petsOwned = () => Object.values(S.pets).filter(l => l > 0).length;
 const PETFACE = { eyes: 2, mouth: "sourire", blush: true, wobble: 1, blinkEvery: 4, flash: 0, boss: false };
 function drawPetShape(id, t) { // dessin centré sur (0,0), taille ~ 24px
@@ -1192,37 +1221,92 @@ function drawPetShape(id, t) { // dessin centré sur (0,0), taille ~ 24px
     ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(0, -18 - fl); ctx.bezierCurveTo(9, -9, 12, 1, 10, 5); ctx.bezierCurveTo(8, 12, -8, 12, -10, 5); ctx.bezierCurveTo(-12, 1, -9, -9, 0, -18 - fl); ctx.fill();
     ctx.fillStyle = "#ffd166"; ctx.beginPath(); ctx.moveTo(0, -7); ctx.bezierCurveTo(5, -2, 6, 4, 4, 7); ctx.bezierCurveTo(2, 10, -2, 10, -4, 7); ctx.bezierCurveTo(-6, 4, -5, -2, 0, -7); ctx.fill();
     drawFace(PETFACE, 0, 1, 0.32, t);
+  } else if (id === "nacrelle") { // petite méduse
+    ctx.strokeStyle = shade(c, -0.15); ctx.lineWidth = 2.4; ctx.lineCap = "round";
+    for (let i = -1; i <= 1; i++) { ctx.beginPath(); ctx.moveTo(i * 6, -2); ctx.quadraticCurveTo(i * 6 + Math.sin(t * 5 + i * 2) * 4, 5, i * 6 + Math.sin(t * 5 + i) * 2, 12); ctx.stroke(); }
+    ctx.fillStyle = c; ctx.beginPath(); ctx.arc(0, -4, 12, Math.PI, 0); ctx.quadraticCurveTo(6, 0, 0, -2); ctx.quadraticCurveTo(-6, 0, -12, -4); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,.45)"; ctx.beginPath(); ctx.ellipse(-5, -11, 3.5, 2, -0.5, 0, Math.PI * 2); ctx.fill();
+    drawFace(PETFACE, 0, -6, 0.34, t);
+  } else if (id === "spectrin") { // petit fantôme
+    ctx.globalAlpha = 0.9; ctx.fillStyle = c; ctx.beginPath(); ctx.arc(0, -5, 11, Math.PI, 0); ctx.lineTo(11, 9);
+    for (let i = 0; i < 4; i++) { const x0 = 11 - i * 5.5, w = Math.sin(t * 6 + i) * 2; ctx.quadraticCurveTo(x0 - 2.75, 13 + w, x0 - 5.5, 9); }
+    ctx.closePath(); ctx.fill(); ctx.globalAlpha = 1;
+    ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.ellipse(-5, -10, 3, 2, -0.5, 0, Math.PI * 2); ctx.fill();
+    drawFace(PETFACE, 0, -3, 0.36, t);
+  } else if (id === "croa") { // grenouille
+    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, -6, 13, 9, 0, 0, Math.PI * 2); ctx.fill(); circ(-6, -14, 5); circ(6, -14, 5);
+    ctx.fillStyle = "#e6f7c0"; ctx.beginPath(); ctx.ellipse(0, -3, 8, 5, 0, 0, Math.PI * 2); ctx.fill();
+    const bl = (t % 4) < 0.15 ? 0.3 : 1;
+    ctx.fillStyle = "#fff"; circ(-6, -14, 3.2); circ(6, -14, 3.2); ctx.fillStyle = "#1a1a2a"; ctx.beginPath(); ctx.ellipse(-6, -14, 1.8, 1.8 * bl, 0, 0, Math.PI * 2); ctx.ellipse(6, -14, 1.8, 1.8 * bl, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#2e5a1a"; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(0, -8, 4, 0.2, Math.PI - 0.2); ctx.stroke();
+    ctx.fillStyle = "rgba(255,120,150,.5)"; circ(-9, -7, 1.8); circ(9, -7, 1.8);
+  } else if (id === "scarabor") { // scarabée doré
+    ctx.strokeStyle = "#5a4010"; ctx.lineWidth = 1.8; ctx.lineCap = "round";
+    for (let i = -1; i <= 1; i++) { const w = Math.sin(t * 14 + i * 2) * 1.5; ctx.beginPath(); ctx.moveTo(i * 5, -3); ctx.lineTo(i * 5 + w - 2, 1); ctx.stroke(); }
+    ctx.fillStyle = "#4a3410"; circ(11, -6, 5);
+    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(-1, -8, 12, 8, 0, Math.PI, 0); ctx.lineTo(11, -4); ctx.lineTo(-13, -4); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = shade(c, -0.35); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-1, -16); ctx.lineTo(-1, -4); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.6)"; ctx.beginPath(); ctx.ellipse(-6, -12, 3, 1.6, -0.4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#fff"; circ(13, -7, 1.6); ctx.fillStyle = "#111"; circ(13.4, -7, 0.9);
+  } else if (id === "boulon") { // mini robot
+    ctx.strokeStyle = "#6a7a8c"; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(0, -12); ctx.lineTo(0, -18); ctx.stroke();
+    ctx.globalAlpha = 0.5 + 0.5 * Math.abs(Math.sin(t * 3)); ctx.drawImage(glowSprite(), -7, -26, 14, 14); ctx.globalAlpha = 1;
+    ctx.fillStyle = "#ff5a6a"; circ(0, -19, 2.4);
+    ctx.fillStyle = c; rr(-11, -12, 22, 18, 5); ctx.fill();
+    ctx.fillStyle = "#1c2433"; rr(-8, -9, 16, 10, 3); ctx.fill();
+    const bl = (t % 3.5) < 0.15 ? 0.6 : 3;
+    ctx.fillStyle = "#5ce1ff"; ctx.fillRect(-5.5, -5.5 - bl / 2 + 0.5, 3, bl); ctx.fillRect(2.5, -5.5 - bl / 2 + 0.5, 3, bl);
+    ctx.fillStyle = "rgba(120,200,255,.55)"; ctx.beginPath(); ctx.moveTo(-5, 6); ctx.lineTo(5, 6); ctx.lineTo(0, 10 + Math.sin(t * 20) * 2); ctx.fill();
+  } else if (id === "gelou") { // ourson en gélatine
+    ctx.globalAlpha = 0.92; ctx.fillStyle = c; circ(-7, -17, 4.5); circ(7, -17, 4.5);
+    ctx.beginPath(); ctx.ellipse(0, -8, 11, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
+    ctx.fillStyle = "rgba(255,255,255,.45)"; ctx.beginPath(); ctx.ellipse(-5, -13, 3.5, 2, -0.5, 0, Math.PI * 2); ctx.fill();
+    drawFace(PETFACE, 0, -8, 0.36, t);
+  } else if (id === "astrea") { // étoile tombée
+    ctx.globalAlpha = 0.7; ctx.drawImage(glowSprite(), -22, -24, 44, 44); ctx.globalAlpha = 1;
+    ctx.fillStyle = c; ctx.fill(new Path2D(starPts(0, -2, 14, 7, 5, -Math.PI / 2 + Math.sin(t * 2) * 0.15)));
+    ctx.fillStyle = "#ffd166"; ctx.fill(new Path2D(starPts(0, -1, 7, 3.6, 5, -Math.PI / 2 + Math.sin(t * 2) * 0.15)));
+    drawFace(PETFACE, 0, -2, 0.3, t);
   }
 }
-let petTimer = 1, petShots = [];
-function petPos(t) {
-  const hx = heroX(), gy = groundY();
-  if (S.pet === "bloblo") return [hx - 40, gy - Math.abs(Math.sin(t * 4)) * 8];
-  return [hx - 36 + Math.sin(t * 1.3) * 6, gy - 80 + Math.sin(t * 2.6) * 6];
+let petTimers = {}, petShots = [];
+const PET_FLY = [[-36, -80], [-66, -108], [-14, -122], [-92, -76], [-96, -132]];
+function petPositions(t) { // position de chaque familier actif
+  const hx = heroX(), gy = groundY(), out = []; let f = 0, g = 0;
+  activePets().forEach((id, i) => {
+    if (PETS[id].ground) { const k = g++; out.push([id, hx - 42 - 28 * k, gy - Math.abs(Math.sin(t * 4 + k * 1.3)) * 8]); }
+    else { const [ox, oy] = PET_FLY[f++ % PET_FLY.length]; out.push([id, hx + ox + Math.sin(t * 1.3 + i) * 6, gy + oy + Math.sin(t * 2.6 + i * 1.7) * 6]); }
+  });
+  return out;
 }
 function drawPet(t) {
-  if (!S.pet || hero.dead > 0) return;
-  const [x, y] = petPos(t);
-  ctx.save(); ctx.translate(x, y); drawPetShape(S.pet, t); ctx.restore();
+  if (hero.dead > 0) return;
+  for (const [id, x, y] of petPositions(t)) { ctx.save(); ctx.translate(x, y); drawPetShape(id, t); ctx.restore(); }
   for (const s of petShots) {
     const k = Math.min(1, s.t), px = s.x + (monX() - s.x) * k, py = s.y + (monY() - 40 - s.y) * k - Math.sin(k * Math.PI) * 30;
     ctx.globalAlpha = 0.5; ctx.drawImage(glowSprite(), px - 10, py - 10, 20, 20); ctx.globalAlpha = 1;
-    ctx.fillStyle = PETS[S.pet].color; circ(px, py, 4);
+    ctx.fillStyle = PETS[s.id].color; circ(px, py, 4);
   }
 }
 function updatePet(dt, t) {
   for (const s of petShots) s.t += dt / 0.35;
-  for (const s of petShots) if (s.t >= 1 && !s.done) { s.done = true; if (mon && mon.dying <= 0 && respawn <= 0) dealDamage(P.atk() * PETS[S.pet].atk(S.pets[S.pet]), "pet"); }
+  for (const s of petShots) if (s.t >= 1 && !s.done) { s.done = true; if (mon && mon.dying <= 0 && respawn <= 0 && S.pets[s.id]) dealDamage(P.atk() * PETS[s.id].atk(S.pets[s.id]) * (1 + accSum("pet") / 100), "pet"); }
   petShots = petShots.filter(s => !s.done);
-  if (!S.pet || !mon || mon.dying > 0 || respawn > 0 || hero.dead > 0) return;
-  petTimer -= dt;
-  if (petTimer <= 0) { petTimer = 1.4; const [x, y] = petPos(t); petShots.push({ x, y, t: 0 }); }
+  if (!mon || mon.dying > 0 || respawn > 0 || hero.dead > 0) return;
+  petPositions(t).forEach(([id, x, y], i) => {
+    if (petTimers[id] == null) petTimers[id] = 0.3 + i * 0.25;
+    petTimers[id] -= dt;
+    if (petTimers[id] <= 0) { petTimers[id] = PET_RATE; petShots.push({ x, y, t: 0, id }); }
+  });
 }
 function dropPet(zb) {
-  if (!zb && Math.random() > 0.15) return;
+  if (!zb && Math.random() > 0.25) return;
   const pool = Object.keys(PETS).filter(id => PETS[id].zone <= zoneIdx(S.level));
   const id = pick(pool), p = PETS[id], l = S.pets[id] || 0;
-  if (!l) { S.pets[id] = 1; if (!S.pet) S.pet = id; setTimeout(() => modal("Nouveau familier !", '<canvas class="petBig" data-pet="' + id + '"></canvas><br><b>' + p.name + "</b><br>" + p.info + "<br><br>Il t'aide au combat. Retrouve-le dans Sac → Familiers.", [{ t: "Trop mignon !" }]) || drawPetThumbs(), 900); }
+  if (!l) {
+    S.pets[id] = 1; const free = activePets().length < petSlots(); if (free) S.petsOn = activePets().concat(id);
+    setTimeout(() => modal("Nouveau familier !", '<canvas class="petBig" data-pet="' + id + '"></canvas><br><b>' + p.name + "</b><br>" + p.info + "<br><br>" + (free ? "Il t'aide déjà au combat !" : "Tous tes emplacements sont pris : active-le dans Sac → Familiers.") , [{ t: "Trop mignon !" }]) || drawPetThumbs(), 900);
+  }
   else if (l < PET_MAX) { S.pets[id] = l + 1; setTimeout(() => toast(ic("paw") + " " + p.name + " passe niveau " + (l + 1) + " !"), 900); }
   else { const g = mon.gold * 5; S.gold += g; setTimeout(() => toast(ic("paw") + " " + p.name + " est déjà au max : +" + fmt(g) + " " + COIN), 900); }
   sfx("rare"); save();
@@ -1232,24 +1316,128 @@ function drawPetThumbs() {
     const big = c.classList.contains("petBig"), sz = big ? 90 : 56, id = c.dataset.pet;
     c.width = sz * DPR; c.height = sz * DPR; c.style.width = c.style.height = sz + "px";
     const x = c.getContext("2d"); x.setTransform(DPR, 0, 0, DPR, 0, 0);
-    withCtx(x, () => { ctx.translate(sz / 2, sz / 2 + (id === "bloblo" ? 10 : 2) * sz / 56); ctx.scale(sz / 40, sz / 40); drawPetShape(id, 1); });
+    withCtx(x, () => { ctx.translate(sz / 2, sz / 2 + (PETS[id].ground ? 10 : 2) * sz / 56); ctx.scale(sz / 40, sz / 40); drawPetShape(id, 1); });
   });
 }
 function refreshPets() {
-  let h = '<div class="hint">' + ic("paw") + " Les familiers se trouvent sur les boss (15 % de chance, garanti sur les boss de zone). Un doublon fait monter son niveau. Ils restent après une Renaissance.</div>";
+  const act = activePets(), sl = petSlots(), nextSl = PET_SLOT_LV.find(l => l > S.hlv);
+  let h = '<div class="hint">' + ic("paw") + " <b>Familiers actifs : " + act.length + " / " + sl + "</b>" + (nextSl ? " · prochain emplacement au <b>niveau " + nextSl + "</b> du chasseur" : " · tous les emplacements sont débloqués") + ".<br>Ils se trouvent sur les boss (25 % de chance, garanti sur les boss de zone). Un doublon le fait monter de niveau (max " + PET_MAX + "). Leurs bonus s'additionnent et ils restent après une Renaissance.</div>";
   for (const id in PETS) {
-    const p = PETS[id], l = S.pets[id] || 0, act = S.pet === id;
-    h += '<div class="upg petCard' + (act ? " act" : "") + '">' + (l ? '<canvas data-pet="' + id + '"></canvas>' : '<div class="q">?</div>') + '<div class="upgTxt"><div class="upgName">' + (l ? p.name + ' <span class="lv">niv. ' + l + "/" + PET_MAX + "</span>" : "???") + '</div><div class="upgDesc">' +
-      (l ? p.info + "<br>Attaque : " + Math.round(p.atk(l) * 100) + "% de la tienne · " + p.pasTxt + " +" + p.pv(l) + "%" : "Se trouve à partir de : " + ZONES[p.zone].name) + "</div></div>" +
-      (l ? (S.exp[id] ? (expDone(id) ? '<button class="buy" data-claim="' + id + '">Récupérer</button>' : '<span class="expLeft">En expédition<br>' + fmtLeft(S.exp[id].end - Date.now()) + "</span>") : '<button class="buy" data-act="' + id + '"' + (act ? " disabled" : "") + ">" + (act ? "Actif" : "Choisir") + "</button>") : "") + "</div>";
-    if (l && !act && !S.exp[id]) h += '<div class="expRow"><span>' + ic("rocket") + " Envoyer " + p.name + " en expédition :</span>" + EXP_H.map(x => '<button class="smallBtn" data-exp="' + id + '" data-h="' + x + '">' + x + " h</button>").join("") + "</div>";
+    const p = PETS[id], l = S.pets[id] || 0, on = act.includes(id);
+    h += '<div class="upg petCard' + (on ? " act" : "") + '">' + (l ? '<canvas data-pet="' + id + '"></canvas>' : '<div class="q">?</div>') + '<div class="upgTxt"><div class="upgName">' + (l ? p.name + ' <span class="lv">niv. ' + l + "/" + PET_MAX + "</span>" : "???") + '</div><div class="upgDesc">' +
+      (l ? p.info + "<br>Attaque : " + Math.round(p.atk(l) * 100) + "% de la tienne · " + p.pasTxt + " +" + (p.flat ? fmtDec(p.pv(l)) : p.pv(l) + "%") : "Se trouve à partir de : " + ZONES[p.zone].name) + "</div></div>" +
+      (l ? (S.exp[id] ? (expDone(id) ? '<button class="buy" data-claim="' + id + '">Récupérer</button>' : '<span class="expLeft">En expédition<br>' + fmtLeft(S.exp[id].end - Date.now()) + "</span>") : '<button class="buy' + (on ? " alt" : "") + '" data-tog="' + id + '">' + (on ? "Retirer" : "Activer") + "</button>") : "") + "</div>";
+    if (l && !on && !S.exp[id]) h += '<div class="expRow"><span>' + ic("rocket") + " Envoyer " + p.name + " en expédition :</span>" + EXP_H.map(x => '<button class="smallBtn" data-exp="' + id + '" data-h="' + x + '">' + x + " h</button>").join("") + "</div>";
   }
-  h += '<div class="hint" style="margin-top:6px">' + ic("rocket") + " Un familier en expédition ne combat pas, mais revient avec de l'or, des gemmes (et des objets dès 4 h). Le familier actif ne peut pas partir.</div>";
+  h += '<div class="hint" style="margin-top:6px">' + ic("rocket") + " Un familier en expédition ne combat pas, mais revient avec de l'or, des gemmes (et des objets dès 4 h). Retire-le d'abord des familiers actifs.</div>";
   $("sPets").innerHTML = h;
   $("sPets").querySelectorAll("[data-exp]").forEach(b => b.onclick = () => sendExp(b.dataset.exp, +b.dataset.h));
   $("sPets").querySelectorAll("[data-claim]").forEach(b => b.onclick = () => claimExp(b.dataset.claim));
-  $("sPets").querySelectorAll("[data-act]").forEach(b => b.onclick = () => { if (S.exp[b.dataset.act]) return; S.pet = b.dataset.act; petShots = []; sfx("buy"); refreshPets(); refreshStats(); save(); });
+  $("sPets").querySelectorAll("[data-tog]").forEach(b => b.onclick = () => {
+    const id = b.dataset.tog, cur = activePets();
+    if (cur.includes(id)) S.petsOn = cur.filter(x => x !== id);
+    else if (cur.length >= petSlots()) { toast("Tous tes emplacements sont pris : retire d'abord un familier" + (nextSl ? " (nouvel emplacement au niveau " + nextSl + ")" : "")); return; }
+    else S.petsOn = cur.concat(id);
+    delete petTimers[id]; sfx("buy"); statF++; refreshPets(); refreshStats(); save();
+  });
   drawPetThumbs();
+}
+
+/* ================== NIVEAU DU CHASSEUR (1 → 200) ================== */
+const fmtDec = v => String(Math.round(v * 10) / 10).replace(".", ",");
+const HLV_MAX = 200;
+const xpNeed = l => Math.round(10 * Math.pow(l, 1.6) + 10);
+const xpMult = () => 1 + (accSum("xp") + petPv("xp")) / 100;
+const xpKill = (lvl, boss) => Math.max(1, Math.round((3 + lvl * 0.2) * (boss ? 8 : 1) * xpMult()));
+const hlvB = () => 1 + 0.015 * ((S.hlv || 1) - 1);
+const ACC_SLOT_LV = [5, 60, 150];
+const accSlots = () => ACC_SLOT_LV.filter(l => S.hlv >= l).length;
+const ACCS = [
+  { id: "a1",  name: "Anneau de Brume",    lvl: 5,   ic: "ring",      st: "atk",   v: 15,  txt: "Attaque +15 %" },
+  { id: "a2",  name: "Plume du Vent",      lvl: 12,  ic: "wind",      st: "spd",   v: 10,  txt: "Vitesse d'attaque +10 %" },
+  { id: "a3",  name: "Trèfle du Veilleur", lvl: 20,  ic: "clover",    st: "gold",  v: 30,  txt: "Or +30 %" },
+  { id: "a4",  name: "Sablier d'Aube",     lvl: 35,  ic: "hourglass", st: "xp",    v: 30,  txt: "Expérience +30 %" },
+  { id: "a5",  name: "Cœur de Givre",      lvl: 50,  ic: "heartP",    st: "hp",    v: 40,  txt: "Vie +40 %" },
+  { id: "a6",  name: "Œil du Chasseur",    lvl: 70,  ic: "target",    st: "crit",  v: 5,   txt: "Critique +5" },
+  { id: "a7",  name: "Griffe de Lune",     lvl: 90,  ic: "paw",       st: "pet",   v: 60,  txt: "Dégâts des familiers +60 %" },
+  { id: "a8",  name: "Étoile Filante",     lvl: 110, ic: "star",      st: "loot",  v: 30,  txt: "Chance de butin +30 %" },
+  { id: "a9",  name: "Médaille du Héros",  lvl: 140, ic: "medal",     st: "atkhp", v: 40,  txt: "Attaque et Vie +40 %" },
+  { id: "a10", name: "Foudre Captive",     lvl: 170, ic: "bolt",      st: "tap",   v: 100, txt: "Dégâts au toucher +100 %" },
+  { id: "a11", name: "Couronne d'Aube",    lvl: 200, ic: "crown",     st: "all",   v: 30,  txt: "Attaque, Vie et Or +30 %" }
+];
+const accOn = () => (S.accOn || []).filter(id => ACCS.some(a => a.id === id && S.hlv >= a.lvl)).slice(0, accSlots());
+function accSum(st) {
+  let v = 0;
+  for (const id of accOn()) { const a = ACCS.find(x => x.id === id); if (a.st === st || (a.st === "atkhp" && (st === "atk" || st === "hp")) || (a.st === "all" && (st === "atk" || st === "hp" || st === "gold"))) v += a.v; }
+  return v;
+}
+const LV_ITEM = { 25: 2, 50: 2, 75: 3, 100: 3, 125: 3, 150: 4, 175: 4, 200: 5 };
+const LV_TITLE = { 50: "Vétéran", 100: "Maître chasseur", 150: "Héros de Brumeria", 200: "Légende vivante" };
+const lvGold = l => monGold(Math.max(1, S.maxLevel)) * (20 + l * 2);
+function lvRewards(l) { // ce que rapporte le passage au niveau l
+  const r = [];
+  const ps = PET_SLOT_LV.indexOf(l); if (ps > 0) r.push(ic("paw") + " Emplacement de familier n°" + (ps + 1));
+  const as = ACC_SLOT_LV.indexOf(l); if (as >= 0) r.push(ic("ring") + " Emplacement d'accessoire n°" + (as + 1));
+  for (const a of ACCS) if (a.lvl === l) r.push(ic(a.ic) + " Accessoire : <b>" + a.name + "</b>");
+  if (LV_ITEM[l] != null) r.push(ic("chest") + ' Objet <span class="c' + LV_ITEM[l] + '">' + RARITY[LV_ITEM[l]].name + "</span> garanti");
+  if (LV_TITLE[l]) r.push(ic("medal") + " Titre « " + LV_TITLE[l] + " »");
+  if (l % 10 === 0) r.push(PERLE + " " + Math.floor(l / 10) + " Cristaux");
+  if (l % 5 === 0) r.push(ic("gem") + " " + (1 + Math.floor(l / 50)) + " gemme" + (l >= 50 ? "s" : ""));
+  r.push(COIN + " Bourse d'or");
+  return r;
+}
+function giveLv(l) {
+  S.gold += lvGold(l);
+  if (l % 5 === 0) for (let i = 0; i < 1 + Math.floor(l / 50); i++) addGem(randGem());
+  if (l % 10 === 0) { S.perles += Math.floor(l / 10); S.totalPerles += Math.floor(l / 10); }
+  if (LV_ITEM[l] != null) S.inv.push(makeItem(LV_ITEM[l], S.maxLevel));
+  const nw = ACCS.find(a => a.lvl === l); if (nw && accOn().length < accSlots()) S.accOn = accOn().concat(nw.id);
+}
+function gainXp(n) {
+  if (S.hlv >= HLV_MAX) return;
+  S.hxp += n; let up = 0;
+  while (S.hlv < HLV_MAX && S.hxp >= xpNeed(S.hlv)) { S.hxp -= xpNeed(S.hlv); S.hlv++; up++; giveLv(S.hlv); }
+  if (S.hlv >= HLV_MAX) S.hxp = 0;
+  if (up) levelUpFx(up);
+  refreshXp();
+}
+function levelUpFx(up) {
+  const l = S.hlv, big = lvRewards(l).length > 2 || l % 25 === 0;
+  sfx("rare"); vib(40); statF++;
+  addFloatAt(heroX(), groundY() - 130, "NIVEAU " + l + " !", "#9fd0ff", 22);
+  for (let i = 0; i < 24; i++) particles.push({ x: heroX() + rand(-20, 20), y: groundY() - rand(10, 90), vx: rand(-90, 90), vy: rand(-260, -60), life: 1, c: pick(["#9fd0ff", "#ffffff", "#ffd166"]), r: rand(3, 5), star: true });
+  if (big) modal(ic("rocket") + " Niveau " + l + " !", "Ton chasseur passe au <b>niveau " + l + "</b> !<br><br>" + lvRewards(l).join("<br>") + (up > 1 ? "<br><br><small>(+ récompenses des " + (up - 1) + " niveaux d'avant)</small>" : ""), [{ t: "Super !" }]);
+  else toast(ic("rocket") + " Niveau " + l + " ! " + lvRewards(l).join(" · "));
+  refreshTop(); refreshStats(); updateBagTab();
+  if (curSub("c") === "cLvl") refreshLvl();
+}
+function refreshXp() {
+  const max = S.hlv >= HLV_MAX, need = xpNeed(S.hlv), pct = max ? 100 : Math.min(100, S.hxp / need * 100);
+  $("xpFill").style.width = pct + "%";
+  $("xpTxt").textContent = "Niv. " + S.hlv + (max ? " — MAX" : " — " + fmt(S.hxp) + " / " + fmt(need) + " XP");
+}
+function refreshLvl() {
+  const max = S.hlv >= HLV_MAX, need = xpNeed(S.hlv), pct = max ? 100 : Math.min(100, S.hxp / need * 100), on = accOn(), sl = accSlots();
+  let h = '<div class="lvlTop"><div class="lvlBig"><small>NIV.</small>' + S.hlv + '</div><div style="flex:1"><b>Niveau du chasseur</b> <span class="lv">/ ' + HLV_MAX + '</span><div class="xpBig"><i style="width:' + pct + '%"></i></div><small style="color:#9a98ad">' + (max ? "Niveau maximum atteint !" : fmt(S.hxp) + " / " + fmt(need) + " XP · +" + fmt(xpKill(S.level, false)) + " XP par monstre") + "</small></div></div>";
+  h += '<div class="hint">' + ic("swords") + " Chaque niveau donne <b>Attaque et Vie +1,5 %</b> (total : <b>+" + fmtDec((hlvB() - 1) * 100) + " %</b>). Tu gagnes de l'expérience en battant des monstres, 8 fois plus avec les boss. Ton niveau reste après une Renaissance.</div>";
+  h += '<div class="secT">' + ic("ring") + " Accessoires équipés : " + on.length + " / " + sl + (sl < ACC_SLOT_LV.length ? ' <span class="lv">(prochain emplacement au niveau ' + ACC_SLOT_LV[sl] + ")</span>" : "") + "</div>";
+  for (const a of ACCS) {
+    const got = S.hlv >= a.lvl, eq = on.includes(a.id);
+    h += '<div class="upg accCard' + (eq ? " act" : "") + (got ? "" : " locked") + '"><div class="accIc">' + ic(a.ic) + '</div><div class="upgTxt"><div class="upgName">' + (got ? a.name : "???") + '</div><div class="upgDesc">' + a.txt + "</div></div>" +
+      (got ? '<button class="buy' + (eq ? " alt" : "") + '" data-acc="' + a.id + '">' + (eq ? "Retirer" : "Équiper") + "</button>" : '<span class="expLeft">Niveau ' + a.lvl + "</span>") + "</div>";
+  }
+  h += '<div class="secT">' + ic("gift") + " Prochaines récompenses</div>";
+  let n = 0;
+  for (let l = S.hlv + 1; l <= HLV_MAX && n < 8; l++) { const r = lvRewards(l); if (r.length < 2 && l !== S.hlv + 1) continue; n++; h += '<div class="lvRow"><b>Niv. ' + l + "</b><span>" + r.join("<br>") + "</span></div>"; }
+  if (max) h += '<div class="hint">Tu as tout débloqué. Tu es une légende de Brumeria !</div>';
+  $("lvlPanel").innerHTML = h;
+  $("lvlPanel").querySelectorAll("[data-acc]").forEach(b => b.onclick = () => {
+    const id = b.dataset.acc, cur = accOn();
+    if (cur.includes(id)) S.accOn = cur.filter(x => x !== id);
+    else if (cur.length >= sl) { toast("Tous tes emplacements d'accessoire sont pris : retire-en un d'abord"); return; }
+    else S.accOn = cur.concat(id);
+    sfx("buy"); statF++; refreshLvl(); refreshStats(); refreshTop(); save();
+  });
 }
 
 /* ================== FORGE ================== */
@@ -1422,7 +1610,7 @@ function updateJournalDot() {
 function setSub(group, id) {
   document.querySelectorAll('.subTab[data-g="' + group + '"]').forEach(b => b.classList.toggle("on", b.dataset.sp === id));
   document.querySelectorAll('.subPage[data-g="' + group + '"]').forEach(p => p.classList.toggle("on", p.id === id));
-  ({ sGems: refreshGems, cUp: refreshUpg, cHero: refreshHero, sEq: refreshBag, sForge: refreshForge, sPets: refreshPets, jQuest: refreshQuests, jAch: refreshAch, jBest: refreshBestiary })[id]();
+  ({ sGems: refreshGems, cUp: refreshUpg, cHero: refreshHero, cLvl: refreshLvl, sEq: refreshBag, sForge: refreshForge, sPets: refreshPets, jQuest: refreshQuests, jAch: refreshAch, jBest: refreshBestiary })[id]();
 }
 const curSub = g => { const b = document.querySelector('.subTab.on[data-g="' + g + '"]'); return b ? b.dataset.sp : null; };
 
@@ -1514,7 +1702,11 @@ const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
     { id: "tw25", name: "Vigie de la Brume", ok: () => S.tower.best >= 25 },
     { id: "tw50", name: "Seigneur de la Tour", ok: () => S.tower.best >= 50 },
     { id: "cl2", name: "Œil de faucon", ok: () => S.best >= CLASSES.rodeur.unlock },
-    { id: "cl3", name: "Tisseur d'arcanes", ok: () => S.best >= CLASSES.arcaniste.unlock }
+    { id: "cl3", name: "Tisseur d'arcanes", ok: () => S.best >= CLASSES.arcaniste.unlock },
+    { id: "hl50", name: "Vétéran", ok: () => S.hlv >= 50 },
+    { id: "hl100", name: "Maître chasseur", ok: () => S.hlv >= 100 },
+    { id: "hl150", name: "Héros de Brumeria", ok: () => S.hlv >= 150 },
+    { id: "hl200", name: "Légende vivante", ok: () => S.hlv >= 200 }
   ]);
 function drawHeroPreview(c) {
   const sz = 150; c.width = c.height = sz * DPR; c.style.width = c.style.height = sz + "px";
@@ -1881,7 +2073,7 @@ function invasionWin() {
 const EXP_H = [1, 4, 8];
 function expDone(id) { const e = S.exp[id]; return e && Date.now() >= e.end; }
 function sendExp(id, h) {
-  if (S.pet === id) { toast("Choisis d'abord un autre familier actif"); return; }
+  if (activePets().includes(id)) { toast("Retire d'abord " + PETS[id].name + " des familiers actifs"); return; }
   S.exp[id] = { end: Date.now() + h * 3600e3, h }; sfx("buy"); refreshPets(); save();
 }
 function claimExp(id) {
@@ -3341,8 +3533,9 @@ function offlineGains() {
   const gold = (secs / ttk) * monGold(l) * P.goldMult() * 0.5 * (1 + 0.1 * S.pupg.poff);
   if (gold <= 0) return;
   S.gold += gold;
+  const hl0 = S.hlv, xp = Math.round((secs / ttk) * xpKill(l, false) * 0.5); gainXp(xp);
   const h = Math.floor(secs / 3600), m = Math.floor(secs % 3600 / 60);
-  modal("Bon retour, chasseur !", "Pendant ton absence (" + (h ? h + " h " : "") + m + " min), ton chasseur a continué à farmer.<br><br><b style='color:#ffd166;font-size:20px'>+" + fmt(gold) + " " + COIN + "</b>", [{ t: "Super !", f: () => sfx("coin") }]);
+  modal("Bon retour, chasseur !", "Pendant ton absence (" + (h ? h + " h " : "") + m + " min), ton chasseur a continué à farmer.<br><br><b style='color:#ffd166;font-size:20px'>+" + fmt(gold) + " " + COIN + "</b><br><b style='color:#9fd0ff'>+" + fmt(xp) + " XP</b>" + (S.hlv > hl0 ? " (niveau " + S.hlv + " !)" : ""), [{ t: "Super !", f: () => sfx("coin") }]);
 }
 
 /* ================== ÉVÉNEMENTS ================== */
@@ -3413,7 +3606,7 @@ window.addEventListener("pagehide", save);
 window.addEventListener("resize", resize);
 
 function refreshAll() {
-  refreshTop(); refreshUpg(); refreshBag(); updateBagTab(); refreshSkills(); refreshReb(); buildSkillBar();
+  refreshTop(); refreshUpg(); refreshBag(); updateBagTab(); refreshSkills(); refreshReb(); buildSkillBar(); refreshXp();
   $("soundBtn").textContent = S.sound ? "Activés" : "Coupés";
   $("vibBtn").textContent = S.vib ? "Activées" : "Coupées";
   $("musicBtn").textContent = S.music ? "Activée" : "Coupée";
@@ -3428,7 +3621,7 @@ function refreshAll() {
 /* ================== DÉMARRAGE ================== */
 // Appli installable : enregistre le service worker (seulement quand le jeu est en ligne, ex. GitHub Pages)
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 31, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 32, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -3447,6 +3640,7 @@ function checkUpdate(manual) {
   }).catch(() => { if (manual) toast("Pas de connexion : impossible de vérifier"); });
 }
 $("updBtn").onclick = () => checkUpdate(true);
+$("xpBar").onclick = () => { document.querySelector('.tab[data-p="pUpg"]').click(); setSub("c", "cLvl"); };
 setTimeout(() => checkUpdate(false), 4000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastUpdCheck > 3e5) checkUpdate(false); });
 load();
