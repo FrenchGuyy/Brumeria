@@ -49,4 +49,4 @@ Aucune image, aucun son et aucun personnage externe n'est utilisé.
 
 ---
 
-<p align="center">© 2026 FrenchGuyy — Tous droits réservés.</p>
+<p align="center">© 2026 FrenchGuyy &amp; Ryutsukii — Tous droits réservés.</p>
