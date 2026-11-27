@@ -235,6 +235,7 @@
   .bakRow { display: block; width: 100%; margin: 4px 0; padding: 9px; text-align: left; }
   .acctCode { color: #ffd166; letter-spacing: 2px; margin-left: 4px; }
   .acctBig { display: inline-block; font-size: 34px; letter-spacing: 8px; color: #ffd166; background: #12152a; border: 1px dashed #6a5aa8; border-radius: 12px; padding: 6px 14px; }
+  .cloudBig { font-size: 20px; letter-spacing: 2px; } .cloudIn { width: 92%; letter-spacing: 2px; font-size: 17px; }
   .acctIn { width: 70%; text-align: center; letter-spacing: 8px; font-size: 24px; font-weight: 900; background: #12152a; border: 1px solid #3a4070; color: #fff; border-radius: 10px; padding: 8px; text-transform: uppercase; }
   .arDiff { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .arDiff button { border: 2px solid #343a5c; background: #1d2034; color: #c8c6d8; border-radius: 12px; padding: 7px 2px; display: flex; flex-direction: column; align-items: center; gap: 1px; }
@@ -651,8 +652,9 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v76</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v77</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
+      <div class="opt"><span>☁️ Sauvegarde en ligne <small id="cloudInfo" style="color:#9a98ad"></small></span><span><button class="smallBtn" id="cloudBtn">Ma clé</button> <button class="smallBtn" id="cloudGet">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
       <div class="opt"><span>Monstres vaincus</span><b id="totalKills">0</b></div>
@@ -660,7 +662,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v76 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v77 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -683,7 +685,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v76</div></div>
+  <div class="tsVer">v77</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -2819,6 +2821,78 @@ function recvAccount() {
         });
         peer.on("error", e => { clearTimeout(to); st("<span class='worse'>" + (e && e.type === "peer-unavailable" ? "Aucun téléphone trouvé avec ce code. Vérifie qu'il est sur « Envoyer »." : "Connexion impossible. Vérifie internet.") + "</span>"); });
       }).catch(() => st("<span class='worse'>Impossible de charger le transfert : il faut internet.</span>"));
+    } }]);
+  modalForce = false;
+}
+
+/* ================== SAUVEGARDE EN LIGNE (Supabase) ================== */
+// Une copie de la partie part en ligne toutes les 5 min et quand on quitte le jeu. Elle sert si le téléphone
+// est perdu ou si le navigateur est vidé. Chaque joueur a une clé secrète de 16 caractères (⚙️ Options) ;
+// le serveur ne garde que son empreinte. Il refuse d'écraser une partie plus avancée et garde un historique.
+const CLOUD = { url: "https://jbthtgiqwsazsdvuihfw.supabase.co", key: "sb_publishable_lDBJ0Ci-gQBM-mMGKbQWxg_4gG3bLLA", every: 5 * 60000 };
+let cloudBusy = false, cloudNext = 0, cloudAsked = false, cloudErr = 0;
+function cloudState() { if (!S.cloud || typeof S.cloud !== "object") S.cloud = { key: "", rb: 0, t: 0 }; return S.cloud; }
+function cloudKey() {
+  const c = cloudState();
+  if (!/^[A-Z2-9]{16}$/.test(c.key || "")) { const r = new Uint8Array(16); crypto.getRandomValues(r); c.key = Array.from(r, x => ACCT_ABC[x % 32]).join(""); }
+  return c.key;
+}
+const cloudFmt = k => (k || "").match(/.{1,4}/g).join("-");
+function cloudRpc(fn, body, keepalive) {
+  return fetch(CLOUD.url + "/rest/v1/rpc/" + fn, { method: "POST", keepalive: !!keepalive, headers: { apikey: CLOUD.key, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)));
+}
+function cloudPayload() { // la partie telle qu'elle est sauvegardée sur le téléphone, sans la clé secrète
+  save(); const raw = localStorage.getItem(SAVE_KEY); if (!raw) return null;
+  const d = JSON.parse(raw); delete d.cloud; return d;
+}
+function cloudReplace(data, key, rb, msg) { // remplace la partie du téléphone par celle du serveur, puis recharge
+  if (!data || typeof data.level !== "number") return;
+  data.cloud = { key, rb: rb || 0, t: Date.now() };
+  saveLock = true; try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)); } catch (e) { saveLock = false; toast("⚠️ Stockage plein : impossible de charger la partie"); return; }
+  if (msg) toast(msg); setTimeout(() => location.reload(), 700);
+}
+function cloudSync(force, leaving) {
+  if (!ONLINE || !loadedOK || saveLock || tower || cloudBusy || !navigator.onLine) return Promise.resolve();
+  const c = cloudState(), key = cloudKey(), data = cloudPayload(); if (!data) return Promise.resolve();
+  cloudBusy = true;
+  return cloudRpc("brumeria_save", { p_key: key, p_data: data, p_ver: GAME_VER, p_rb: c.rb || 0, p_force: !!force }, leaving).then(r => {
+    cloudErr = 0;
+    if (r && r.ok) { c.t = Date.now(); c.rb = r.rb || c.rb || 0; refreshCloud(); return; }
+    if (r && r.err === "rollback") { cloudReplace(r.data, key, r.rb, "⏪ Ta partie a été remise en arrière suite à un bug corrigé."); return; }
+    if (r && r.err === "ancienne" && !leaving && !cloudAsked) { cloudAsked = true;
+      const when = new Date(r.updated_at).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+      modal("☁️ Partie plus avancée en ligne", "Ta sauvegarde en ligne du <b>" + when + "</b> est <b>plus avancée</b> que la partie de ce téléphone :<br>record en ligne <b>" + fmt(r.best || 1) + "</b> · ici <b>" + fmt(S.best || 1) + "</b><br><br>Laquelle veux-tu garder ?",
+        [{ t: "Garder celle-ci", alt: true, f: () => modal("⚠️ Sûr ?", "La partie en ligne, plus avancée, sera <b>remplacée</b> par celle de ce téléphone.<br>(Elle reste 7 jours dans l'historique du serveur.)", [{ t: "Annuler", alt: true, f: () => { cloudAsked = false; } }, { t: "Oui, garder celle-ci", f: () => cloudSync(true) }]) },
+         { t: "Reprendre celle en ligne", f: () => cloudRpc("brumeria_load", { p_key: key }).then(l => { if (l && l.ok) cloudReplace(l.data, key, l.rb, "☁️ Partie en ligne récupérée !"); }).catch(() => toast("☁️ Connexion impossible, réessaie")) }]);
+    }
+  }).catch(() => { cloudErr++; }).finally(() => { cloudBusy = false; cloudNext = Date.now() + (cloudErr ? Math.min(30, 2 * cloudErr) * 60000 : CLOUD.every); refreshCloud(); });
+}
+function cloudTick() { if (Date.now() >= cloudNext) cloudSync(); }
+function refreshCloud() {
+  const e = $("cloudInfo"); if (!e) return; const c = cloudState();
+  e.textContent = !ONLINE ? "hors ligne" : c.t ? "sauvée à " + new Date(c.t).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : cloudErr ? "pas de connexion" : "en attente";
+}
+function showCloud() {
+  const key = cloudKey();
+  modal("☁️ Sauvegarde en ligne", "Ta partie est copiée en ligne toutes les 5 minutes. Si tu changes de téléphone ou si ton navigateur est vidé, tu la récupères avec <b>ta clé secrète</b> :<br><br><b class='acctBig cloudBig'>" + cloudFmt(key) + "</b><br><br><b class='worse'>Note-la et ne la donne à personne</b> : avec cette clé, on peut récupérer ta partie.",
+    [{ t: "Copier la clé", keep: true, f: () => { try { navigator.clipboard.writeText(cloudFmt(key)); toast("🔑 Clé copiée"); } catch (e) { toast("Copie impossible : recopie-la à la main"); } } },
+     { t: "Sauver maintenant", f: () => { if (!ONLINE) { toast("La sauvegarde en ligne marche seulement sur le site du jeu"); return; } cloudNext = 0; cloudSync().then(() => toast(cloudState().t > Date.now() - 5000 ? "☁️ Partie sauvée en ligne" : "☁️ Pas de connexion, réessaie plus tard")); } },
+     { t: "Fermer", alt: true }]);
+}
+function cloudRecover() {
+  modalForce = true;
+  modal("☁️ Récupérer une partie en ligne", "Tape ta <b>clé secrète</b> (16 caractères, ⚙️ Options → Sauvegarde en ligne sur ton ancien téléphone) :<br><br><input id='cloudIn' class='acctIn cloudIn' maxlength='19' placeholder='XXXX-XXXX-XXXX-XXXX' autocapitalize='characters'><br><span id='cloudSt' style='color:#9fd0ff'></span><br><b class='worse'>Ta partie actuelle sur ce téléphone sera remplacée.</b>",
+    [{ t: "Annuler", alt: true }, { t: "Récupérer", keep: true, f: () => {
+      const st = t => { const e = $("cloudSt"); if (e) e.innerHTML = t; }, key = ($("cloudIn").value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (!/^[A-Z2-9]{16}$/.test(key)) { st("<span class='worse'>La clé fait 16 caractères (lettres et chiffres 2 à 9).</span>"); return; }
+      if (!ONLINE) { st("<span class='worse'>Possible seulement sur le site du jeu.</span>"); return; }
+      st("Recherche…");
+      cloudRpc("brumeria_load", { p_key: key }).then(l => {
+        if (!l || !l.ok) { st("<span class='worse'>Aucune partie trouvée avec cette clé.</span>"); return; }
+        const d = l.data || {}; st("<b style='color:#52d17c'>✓ Partie trouvée</b> : record " + fmt(d.best || 1) + (d.rebirths ? " · " + d.rebirths + " renaissance(s)" : "") + ". Chargement…");
+        backupRaw(localStorage.getItem(SAVE_KEY) || ""); cloudReplace(d, key, l.rb, "☁️ Partie récupérée !");
+      }).catch(() => st("<span class='worse'>Connexion impossible. Vérifie internet.</span>"));
     } }]);
   modalForce = false;
 }
@@ -6046,7 +6120,7 @@ for (const [id, k] of [["volMaster", "master"], ["volMusic", "music"], ["volSfx"
 $("volSfx").onchange = () => sfx("loot");
 $("volTest").onclick = () => { sfx("hit"); setTimeout(() => sfx("kill"), 180); setTimeout(() => sfx("coin"), 380); setTimeout(() => sfx("rare"), 620); };
 
-$("sendBtn").onclick = sendAccount; $("recvBtn").onclick = recvAccount; $("bakBtn").onclick = showBackups;
+$("sendBtn").onclick = sendAccount; $("recvBtn").onclick = recvAccount; $("bakBtn").onclick = showBackups; $("cloudBtn").onclick = showCloud; $("cloudGet").onclick = cloudRecover;
 const setQualBtns = () => document.querySelectorAll("[data-q2]").forEach(b => b.classList.toggle("qOn", (S.quality || "normale") === b.dataset.q2));
 document.querySelectorAll("[data-q2]").forEach(b => b.onclick = () => { S.quality = b.dataset.q2; setQualBtns(); resize(); layerKey = ""; for (const m of pack) m._c = null; toast("Graphismes : " + b.textContent); save(); });
 setQualBtns();
@@ -7039,6 +7113,7 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 77, d: "Sauvegarde en ligne", l: ["☁️ Ta partie est maintenant aussi copiée en ligne toutes les 5 minutes et quand tu quittes le jeu. Si tu perds ton téléphone ou si ton navigateur est vidé, tu ne perds plus rien.", "🔑 Ta clé secrète est dans ⚙️ Options → Sauvegarde en ligne → Ma clé. Note-la : sur un autre téléphone, « Récupérer » + ta clé te rend ta partie. Ne la donne à personne.", "🛡️ Une partie plus ancienne ne peut jamais écraser une partie plus avancée : le jeu te demande laquelle garder."] },
   { v: 76, d: "Correctif", l: ["🐛 Corrigé pour de bon : rester dans la Tour (ou un combat spécial) ne fait plus monter ton niveau atteint. Le jeu vérifiait la sauvegarde toutes les 10 s et prenait l'étage de la Tour pour ton niveau.", "🛟 Ta partie est maintenant aussi sauvegardée toutes les 15 minutes (historique de 24 h sur ton téléphone), pour pouvoir revenir en arrière si un bug survient."] },
   { v: 75, d: "Correctifs", l: ["🐛 Corrigé : en confirmant une Renaissance pendant la Tour, on récupérait son ancien niveau en sortant (on gardait les Cristaux ET le niveau).", "🎨 Affichage : l'aperçu du chasseur dans Héros n'est plus géant, et les boutons de compétences tiennent sur une seule ligne pour ne plus cacher le combat."] },
   { v: 74, d: "Confort", l: ["🎨 La barre « Monstres » change de couleur selon le mode : vert (Facile), orange (Moyen), rouge (Difficile), violet (Cauchemar).", "📦 Plus besoin de cliquer « OK » à chaque bel objet : ils s'annoncent dans un bandeau qui disparaît tout seul (et sont regroupés quand il en tombe plusieurs). La grande fenêtre reste pour un objet Mythique ou Divin."] },
@@ -7273,7 +7348,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 76, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 77, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -7297,6 +7372,8 @@ setTimeout(() => checkUpdate(false), 4000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastUpdCheck > 3e5) checkUpdate(false); });
 load();
 $("acctCode").textContent = acctCode();
+cloudKey(); refreshCloud(); cloudNext = Date.now() + 8000; setInterval(cloudTick, 15000); // sauvegarde en ligne
+document.addEventListener("visibilitychange", () => { if (document.hidden) cloudSync(false, true); });
 setTimeout(() => { clanUI(); if (S.clan) clanConnect(); }, 2500);
 if (!S.rr39) { // v39 : nouvelles raretés. Les objets Mythiques et Divins redeviennent Légendaires (sans être supprimés)
   S.rr39 = true; S.fz38 = true;
