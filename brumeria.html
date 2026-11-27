@@ -650,7 +650,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v72</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v73</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -659,7 +659,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v72 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v73 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -682,7 +682,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v72</div></div>
+  <div class="tsVer">v73</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -822,7 +822,7 @@ const RARITY = [
   { name: "Divin",      mult: 25,  chance: 0,    hard: 0 }       // uniquement par les événements
 ];
 const R_DIAM = 4, R_EMER = 5, R_MYTH = 7, R_DIV = 8;
-const rarCh = i => S.diff ? RARITY[i].hard : RARITY[i].chance;
+const rarCh = i => S.diff ? RARITY[i].hard : RARITY[i].chance * ((S.mode || 0) === 1 && i >= 3 ? 1.6 : 1); // Moyen : +60 % de chances pour les raretés hautes
 const RTXT = ["#ddd", "#6cc0f5", "#c39bff", "#ffc93c", "#c8f8ff", "#3cf09a", "#5b8cff", "#ff5a6a", "#fff2b0"];
 /* --- panoplies : chacune booste une classe --- */
 const SETS = {
@@ -934,6 +934,9 @@ function sanitize() {
     const okIt = it => it && typeof it === "object" && SLOTS[it.slot] && okNum(it.val) && RARITY[it.rar];
     if (!Array.isArray(S.inv)) S.inv = []; S.inv = S.inv.filter(okIt);
     if (S.mode == null) { S.mode = S.diff ? 2 : 0; S.modeDone = {}; if (S.won) S.modeDone[0] = true; if (S.wonH) S.modeDone[2] = true; } S.diff = S.mode >= 2 ? 1 : 0; // v72 : modes
+    if (!S.modeMig73) { S.modeMig73 = 1; const eq = (m, L) => { const g = modeGrow(m); return g ? Math.max(1, 1 + Math.floor((L - 1) * Math.log(1.2) / Math.log(1.2 * (1 + g)))) : L; };
+      if (S.mode) { const nm = eq(S.mode, S.maxLevel); if (nm < S.maxLevel) { S.mig73 = [S.maxLevel, nm]; S.maxLevel = nm; S.level = Math.min(S.level, nm); } }
+      for (const k in (S.modeProg || {})) if (+k) { const pr = S.modeProg[k]; pr.maxLevel = eq(+k, pr.maxLevel); pr.level = Math.min(pr.level, pr.maxLevel); } }
     if (!S.tips) { S.tips = {}; if ((S.totalKills || 0) > 3000) for (const k of ["upg", "bag", "tree", "pet", "reb", "afk", "death", "boss"]) S.tips[k] = 1; }
     if (!S.lockMig) { const best = {}; for (const it of S.inv) if (it.set) { const k = it.set + "|" + it.slot; if (!best[k] || it.val > best[k].val) best[k] = it; } for (const k in best) best[k].lock = true; S.lockMig = 1; } // v64 : cadenas
     if (!S.equip || typeof S.equip !== "object") S.equip = N.equip; for (const k in N.equip) if (S.equip[k] && !okIt(S.equip[k])) S.equip[k] = null;
@@ -1006,6 +1009,13 @@ const modeName = m => m < 3 ? ["Facile", "Moyen", "Difficile"][m] : "Cauchemar "
 const modeIcon = m => ["🌿", "⚔️", "💀"][m] || "🌑";
 const modeMul = m => m <= 0 ? { hp: 1, dmg: 1, gold: 1, perles: 1 } : m === 1 ? { hp: 15, dmg: 12, gold: 6, perles: 1.5 }
   : { hp: 250 * Math.pow(8, m - 2), dmg: 180 * Math.pow(6, m - 2), gold: 40 * Math.pow(4, m - 2), perles: 3 * Math.pow(1.5, m - 2) };
+// v73 : en plus du multiplicateur, les monstres se renforcent plus vite à chaque niveau dans les modes durs
+// (sinon ×15 ou ×250 ne valaient que 15 à 30 niveaux de Facile, et on finissait les modes trop vite)
+const modeGrow = m => [0, 0.01, 0.02][m] ?? 0.03;          // vie et dégâts : +1 % / +2 % / +3 % de plus par niveau
+const modeGrowG = m => [0, 0.005, 0.01][m] ?? 0.015;       // or : un peu moins, pour que les améliorations restent utiles
+const modeLv = l => hardOn() ? Math.pow(1 + modeGrow(S.mode || 0), l - 1) : 1;
+const modeLvG = l => hardOn() ? Math.pow(1 + modeGrowG(S.mode || 0), l - 1) : 1;
+const modeItemLv = () => [0, 400, 1000][S.mode || 0] ?? 1000 + 300 * ((S.mode || 0) - 2); // puissance des objets selon le mode
 const HARD = { get hp() { return modeMul(S.mode || 0).hp; }, get dmg() { return modeMul(S.mode || 0).dmg; }, get gold() { return modeMul(S.mode || 0).gold; }, get perles() { return modeMul(S.mode || 0).perles; } };
 const hardOn = () => (S.mode || 0) > 0 && !tower;
 const nightmare = () => (S.mode || 0) >= 2; // ambiance, malédictions et boss de Cauchemar dès le Difficile
@@ -1028,19 +1038,19 @@ const CURSES = [
 ];
 const curse = () => nightmare() && !tower ? CURSES[(zoneIdx(S.level) + (S.mode || 0)) % CURSES.length] : null;
 const curseIs = n => { const c = curse(); return !!c && c.n === n; };
-const monHp   = l => 30 * Math.pow(1.2, l - 1) * (isBossLvl(l) ? 9 : 1) * (isZoneBoss(l) ? 1.7 : 1) * (1 + 0.6 * Math.min(1, l / 300)) * (hardOn() ? HARD.hp : 1) * (curseIs("Brume épaisse") ? 1.3 : 1);
+const monHp   = l => 30 * Math.pow(1.2, l - 1) * (isBossLvl(l) ? 9 : 1) * (isZoneBoss(l) ? 1.7 : 1) * (1 + 0.6 * Math.min(1, l / 300)) * (hardOn() ? HARD.hp : 1) * modeLv(l) * (curseIs("Brume épaisse") ? 1.3 : 1);
 // v63 : les dégâts des monstres suivent enfin la vie du chasseur (avant, ils devenaient inoffensifs après le niv. 100)
 // Au niveau où ton attaque suffit tout juste, un coup de boss ≈ 5-6 % de ta vie si tu as amélioré Force et Endurance à égalité :
 // on farme sans risque, mais les boss peuvent te tuer si tu négliges ta Vie.
 const dmgCurve = l => 8 * Math.pow(1.15, l - 1) * Math.exp(0.0295 * Math.max(0, l - 60)) * (1 + 0.5 * Math.min(1, Math.max(0, l - 60) / 120));
-const monDmg  = l => dmgCurve(l) * (isBossLvl(l) ? 1.4 : 1) * (isZoneBoss(l) ? 1.3 : 1) * (hardOn() ? HARD.dmg : 1);
+const monDmg  = l => dmgCurve(l) * (isBossLvl(l) ? 1.4 : 1) * (isZoneBoss(l) ? 1.3 : 1) * (hardOn() ? HARD.dmg : 1) * modeLv(l);
 // v70 : l'or monte plus vite après le niveau 60 (17 % avant) — sinon le prix des améliorations
 // (≈ +25 %/niveau) distançait l'or dès le niveau 200 et l'or ne servait plus à rien
 const goldCurve = l => 3 * Math.pow(1.17, Math.min(l, 60) - 1) * Math.pow(1.185, Math.max(0, l - 60)); // v71 : 20 % → 18,5 % (c'était trop facile)
 const monGoldB = l => goldCurve(l) * (isBossLvl(l) ? 12 : 1) * (isZoneBoss(l) ? 3 : 1);
 // or d'un monstre normal au dernier niveau atteint (jamais un niveau de boss, qui rapporte ×12)
 const farmGold = () => { let l = Math.max(1, S.maxLevel - 1); if (isBossLvl(l)) l--; return monGold(Math.max(1, l)); };
-const monGold = l => monGoldB(l) * (hardOn() ? HARD.gold : 1) * (curse() ? curse().g : 1);
+const monGold = l => monGoldB(l) * (hardOn() ? HARD.gold : 1) * modeLvG(l) * (curse() ? curse().g : 1);
 
 let mon = null;
 let forceRare = false;
@@ -1323,7 +1333,7 @@ const critMult = () => Math.round((2.5 + 0.5 * T("g3") + 0.3 * T("g7") + (setOn(
 function hitDmg(m, mult = 1) {
   if (m.boss && !m.tower && curseIs("Rage des boss") && gameT - (m.born || gameT) > 20) mult *= 2;
   if (m.nmRage) mult *= 1.3;
-  const cap = (m.tower ? 0.1 : m.zb ? 0.08 : m.boss ? 0.065 : 0.035 * (m.wk || 1)) * (S.diff ? 1.25 : 1) * mult; // en groupe, chaque monstre a un plafond plus bas (le groupe entier ≈ un seul monstre)
+  const cap = (m.tower ? 0.1 : m.zb ? 0.08 : m.boss ? 0.065 : 0.035 * (m.wk || 1)) * ([1, 1.1, 1.25][S.mode || 0] ?? 1.4) * mult; // en groupe, chaque monstre a un plafond plus bas (le groupe entier ≈ un seul monstre)
   return Math.min(m.dmg * mult, P.maxHp() * cap) * dmgTaken();
 }
 const dmgTaken = () => Math.max(0.1, (1 - 0.08 * T("d3")) * (1 - 0.04 * T("d8")) * (1 - 0.05 * A2("a14")) * (buffOn("rempart") ? 0.2 : 1));
@@ -3215,7 +3225,7 @@ function showLogin() {
 }
 function makeItem(ri, lvl = S.level) {
   const slotKey = pick(Object.keys(SLOTS)), sl = SLOTS[slotKey], h = S.diff ? 1 : 0;
-  return genAff(maybeSet({ id: S.itemId++, slot: slotKey, stat: sl.stat, rar: ri, val: Math.max(1, Math.round(itemBase(sl.stat, lvl + (h ? 1000 : 0)) * RARITY[ri].mult * rand(0.9, 1.15))), lvl, h, name: pick(sl.names) + " " + pick(ADJ) }));
+  return genAff(maybeSet({ id: S.itemId++, slot: slotKey, stat: sl.stat, rar: ri, val: Math.max(1, Math.round(itemBase(sl.stat, lvl + modeItemLv()) * RARITY[ri].mult * rand(0.9, 1.15))), lvl, h, name: pick(sl.names) + " " + pick(ADJ) }));
 }
 
 /* ================== ÉVÉNEMENTS ================== */
@@ -6986,6 +6996,11 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 73, d: "Modes rééquilibrés", l: [
+    "⚖️ Les modes étaient trop faciles à finir : ×15 ou ×250 ne valaient que 15 à 30 niveaux de Facile. Maintenant les monstres se renforcent <b>plus vite à chaque niveau</b> : +1 % (Moyen), +2 % (Difficile), +3 % (Cauchemar). Le début de chaque mode reste accessible, la fin demande vraiment de progresser.",
+    "💰 L'or suit un peu (+0,5 % / +1 % / +1,5 % par niveau) et les coups des boss sont un peu plus forts dans les modes durs.",
+    "🛡️ <b>Équipement par mode</b> : objets plus puissants en Moyen (et plus de Diamant), encore plus en Difficile (Émeraude, Saphir, Mythique), et de plus en plus forts à chaque Cauchemar.",
+    "📍 Si tu étais déjà loin dans un mode dur, ton niveau a été ajusté au niveau <b>équivalent en difficulté</b> (tu affrontes des monstres aussi forts qu'avant)."] },
   { v: 72, d: "Les modes de jeu", l: [
     "🎚️ <b>4 modes et plus</b> : 🌿 Facile (l'ancien Normal) → ⚔️ <b>Moyen</b> (nouveau) → 💀 Difficile → 🌑 <b>Cauchemar 1, 2, 3…</b> sans fin. Termine le niveau 1000 d'un mode pour débloquer le suivant (+ des Âmes de Brume).",
     "🔁 <b>Change de mode quand tu veux</b> (onglet Renaissance) : chaque mode garde son propre niveau, tu ne perds rien. Farme en Facile, pousse en Cauchemar !",
@@ -7212,7 +7227,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 72, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 73, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
