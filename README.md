@@ -1,6 +1,4 @@
-<p align="center"><img src="icon-512.png" width="160" alt="Logo de Brumeria"></p>
-
-<h1 align="center">Brumeria</h1>
+<p align="center"><img src="logo.jpg" width="640" alt="Brumeria"></p>
 
 <p align="center"><b>Un jeu de chasse aux monstres tranquille, à jouer directement dans le navigateur.</b><br>
 Farme, équipe-toi, renais plus fort… et dissipe la brume, zone après zone.</p>
