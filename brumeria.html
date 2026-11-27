@@ -48,7 +48,8 @@
   .tab { flex: 1; padding: 6px 0 5px; border: none; background: none; color: #9a98ad; font-weight: 700; font-size: 10px; border-bottom: 3px solid transparent; position: relative; min-width: 0; }
   .tab .ti { display: block; font-size: 18px; margin-bottom: 1px; }
   .tab.dot::after { content: ""; position: absolute; top: 5px; right: 22%; width: 8px; height: 8px; border-radius: 50%; background: #e63946; }
-  #skillBar { position: absolute; left: 8px; bottom: 8px; display: flex; flex-wrap: wrap-reverse; gap: 5px; max-width: 172px; }
+  #skillBar { position: absolute; left: 8px; bottom: 8px; display: flex; flex-wrap: nowrap; gap: 5px; max-width: calc(100% - 130px); }
+  #skillBar.many { gap: 4px; } #skillBar.many .skB { width: 33px; height: 33px; font-size: 15px; border-width: 1.5px; }
   .skB { position: relative; width: 39px; height: 39px; border-radius: 50%; border: 2px solid #8ecae6; background: #23304a; font-size: 18px; color: #fff; overflow: hidden; padding: 0; }
   .skB .cdv { position: absolute; inset: 0; background: rgba(0,0,0,.62); display: none; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
   .skB.on { border-color: #ffd166; box-shadow: 0 0 12px #ffd166; }
@@ -650,7 +651,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v74</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v75</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -659,7 +660,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v74 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v75 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -682,7 +683,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v74</div></div>
+  <div class="tsVer">v75</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -933,6 +934,7 @@ function sanitize() {
     for (const o of ["upg", "pupg"]) { if (!S[o] || typeof S[o] !== "object") S[o] = N[o]; for (const k in S[o]) if (!okNum(S[o][k]) || S[o][k] < 0) S[o][k] = 0; }
     const okIt = it => it && typeof it === "object" && SLOTS[it.slot] && okNum(it.val) && RARITY[it.rar];
     if (!Array.isArray(S.inv)) S.inv = []; S.inv = S.inv.filter(okIt);
+    if (!tower && S.level > S.maxLevel) S.level = S.maxLevel;
     if (S.mode == null) { S.mode = S.diff ? 2 : 0; S.modeDone = {}; if (S.won) S.modeDone[0] = true; if (S.wonH) S.modeDone[2] = true; } S.diff = S.mode >= 2 ? 1 : 0; // v72 : modes
     if (!S.modeMig73) { S.modeMig73 = 1; const eq = (m, L) => { const g = modeGrow(m); return g ? Math.max(1, 1 + Math.floor((L - 1) * Math.log(1.2) / Math.log(1.2 * (1 + g)))) : L; };
       if (S.mode) { const nm = eq(S.mode, S.maxLevel); if (nm < S.maxLevel) { S.mig73 = [S.maxLevel, nm]; S.maxLevel = nm; S.level = Math.min(S.level, nm); } }
@@ -1373,6 +1375,7 @@ function buildSkillBar() {
     b.onclick = () => useSk(id);
     bar.appendChild(b);
   }
+  bar.classList.toggle("many", bar.children.length > 5);
   updateSkillBar();
 }
 function updateSkillBar() {
@@ -1557,6 +1560,7 @@ let modeMsg = false;
 // de quoi racheter Force / Endurance / Coup de doigt / Flair et remonter vite sans retourner farmer en arrière
 const rebGold = ref => ref > 1 ? Math.round(monGold(ref) * 1000) : 0;
 function doRebirth(g, mode) {
+  if (tower) { toast("Quitte d'abord la Tour ou le combat en cours"); return; } // v75 : anti-glitch (renaissance confirmée pendant la Tour)
   S.perles += g; S.totalPerles += g; S.rebirths++;
   if (mode !== undefined && mode !== S.diff) { S.diff = mode; modeMsg = true; }
   const st = rebStart(S.maxLevel, modeMsg);
@@ -2855,7 +2859,8 @@ const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
   ]);
 function drawHeroPreview(c, tt = 1.3, sz = 150) {
   if (!c || c.id === "titleHero") return; // l'accueil a sa propre scène animée
-  if (c.width !== Math.round(sz * DPR)) { c.width = c.height = Math.round(sz * DPR); c.style.width = c.style.height = sz + "px"; } // taille fixée une fois (pas à chaque image)
+  if (c.width !== Math.round(sz * DPR)) { c.width = c.height = Math.round(sz * DPR); } // résolution fixée une fois (pas à chaque image)
+  if (c.style.width !== sz + "px") c.style.width = c.style.height = sz + "px";
   HC = heroColors(); const V = heroVariant(), x = c.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height); if (!V) return;
   const kk = Math.min(sz * 0.8 / V.h, sz * 0.95 / V.w); // tout le personnage tient dans la case
   x.setTransform(DPR, 0, 0, DPR, 0, 0); heroBlit(x, V, (sz - V.w * kk) / 2 + V.fx * kk, sz - 6, tt, { h: V.h * kk / V.small });
@@ -2992,7 +2997,7 @@ function towerClear() {
 function exitTower(msg) {
   if (!tower) return;
   const wasInv = tower.inv || tower.cb, wasVb = tower.vb, wasCb = tower.cb; $("bossAlert").classList.remove("show"); $("towerExit").classList.remove("vbx"); vbFx = null;
-  S.level = tower.saved.level; S.kills = tower.saved.kills; S.auto = tower.saved.auto;
+  S.level = Math.max(1, Math.min(tower.saved.level, S.maxLevel)); S.kills = tower.saved.kills; S.auto = tower.saved.auto; // jamais au-delà du niveau atteint
   tower = null; bossTimer = 0; respawn = 0; hero.dead = 0; hero.hp = P.maxHp(); heroShots = [];
   spawnMonster(); refreshTop(); save();
   if (msg) modal(wasCb ? "🐲 Boss de clan" : wasVb ? "🌑 Le Seigneur du Néant" : wasInv ? ic("crown") + " Invasion de Brume" : ic("tower") + " Tour de la Brume", msg + (wasInv || wasVb ? "" : "<br><br>Record : étage <b>" + S.tower.best + "</b>"), [{ t: "OK" }]);
@@ -5971,7 +5976,7 @@ $("bossBtn").onclick = () => { S.auto = true; S.level = S.maxLevel; S.kills = 0;
 let lvlStep = 1; // ◀ ▶ avancent de 1, 10 ou 50 niveaux
 $("lvlStep").onclick = () => { lvlStep = lvlStep === 1 ? 10 : lvlStep === 10 ? 50 : 1; $("lvlStep").textContent = "×" + lvlStep; sfx("buy"); };
 $("prevLvl").onclick = () => { if (!tower && S.level > 1) { S.level = Math.max(1, S.level - lvlStep); S.kills = 0; S.auto = false; spawnMonster(); refreshTop(); } };
-$("nextLvl").onclick = () => { if (!tower && S.level < S.maxLevel) { S.level = Math.min(S.maxLevel, S.level + lvlStep); S.kills = 0; S.auto = S.level === S.maxLevel; spawnMonster(); refreshTop(); } };
+$("nextLvl").onclick = () => { if (S.level > S.maxLevel) S.level = S.maxLevel; if (!tower && S.level < S.maxLevel) { S.level = Math.min(S.maxLevel, S.level + lvlStep); S.kills = 0; S.auto = S.level === S.maxLevel; spawnMonster(); refreshTop(); } };
 document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
   document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
   document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
@@ -7009,6 +7014,7 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 75, d: "Correctifs", l: ["🐛 Corrigé : en confirmant une Renaissance pendant la Tour, on récupérait son ancien niveau en sortant (on gardait les Cristaux ET le niveau).", "🎨 Affichage : l'aperçu du chasseur dans Héros n'est plus géant, et les boutons de compétences tiennent sur une seule ligne pour ne plus cacher le combat."] },
   { v: 74, d: "Confort", l: ["🎨 La barre « Monstres » change de couleur selon le mode : vert (Facile), orange (Moyen), rouge (Difficile), violet (Cauchemar).", "📦 Plus besoin de cliquer « OK » à chaque bel objet : ils s'annoncent dans un bandeau qui disparaît tout seul (et sont regroupés quand il en tombe plusieurs). La grande fenêtre reste pour un objet Mythique ou Divin."] },
   { v: 73, d: "Modes rééquilibrés", l: [
     "⚖️ Les modes étaient trop faciles à finir : ×15 ou ×250 ne valaient que 15 à 30 niveaux de Facile. Maintenant les monstres se renforcent <b>plus vite à chaque niveau</b> : +1 % (Moyen), +2 % (Difficile), +3 % (Cauchemar). Le début de chaque mode reste accessible, la fin demande vraiment de progresser.",
@@ -7241,7 +7247,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 74, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 75, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
