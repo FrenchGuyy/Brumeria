@@ -188,6 +188,9 @@
   .hardTag { color: #ff6a78; margin-right: 3px; }
   .modeBox { border: 1px solid #5a2a3a; background: linear-gradient(135deg, #2a1622, #1c1f35); border-radius: 14px; padding: 12px; margin: 10px 0; font-size: 13px; line-height: 1.5; }
   .modeBox b.t { color: #ff6a78; font-size: 15px; }
+  .modeList { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+  .modeChip { border: 1px solid #3a3360; border-radius: 10px; padding: 7px; background: #1c1a30; color: #e8e6f0; text-align: left; font-size: 12px; }
+  .modeChip small { display: block; color: #9a98ad; font-size: 10px; margin-top: 2px; } .modeChip.on { border-color: #ff6a78; background: #3a1622; } .modeChip.lockd { opacity: .45; }
   .modeBtn { width: 100%; margin-top: 8px; border: none; border-radius: 12px; padding: 11px; font-weight: 900; font-size: 15px; color: #fff; background: linear-gradient(180deg, #c0303e, #8a1e2a); box-shadow: 0 3px 0 #5a121a; }
   .modeBtn.norm { background: linear-gradient(180deg, #3a8a62, #2a6a4a); box-shadow: 0 3px 0 #1c4a33; }
   .upg.adv { border-left: 3px solid #ff9ad5; }
@@ -485,6 +488,7 @@
   .gemLv { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
   .gemCell { background: #23273e; border-radius: 8px; padding: 4px 2px; text-align: center; font-size: 10px; color: #9a98ad; display: flex; flex-direction: column; gap: 2px; }
   .gemCell b { color: #fff; font-size: 13px; } .gemCell.none { opacity: .45; }
+  .gemTop { display: flex; gap: 6px; margin: 0 0 8px; } .gemTop .buy { flex: 1; } .gemTop .smallBtn.on { background: #3fd08a; color: #12101c; }
   .gemFuse { border: none; border-radius: 6px; background: #5a3d8a; color: #fff; font-size: 9px; font-weight: 800; padding: 3px 0; }
   .gemPick { display: flex; flex-direction: column; gap: 6px; max-height: 50vh; overflow-y: auto; }
   .gemPick button { display: flex; align-items: center; gap: 8px; background: #23273e; border: 1px solid #343a5c; border-radius: 10px; color: #e8e6f0; padding: 6px 10px; text-align: left; font-size: 13px; }
@@ -646,7 +650,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v71</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v72</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -655,7 +659,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v71 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v72 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -678,7 +682,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v71</div></div>
+  <div class="tsVer">v72</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -929,6 +933,7 @@ function sanitize() {
     for (const o of ["upg", "pupg"]) { if (!S[o] || typeof S[o] !== "object") S[o] = N[o]; for (const k in S[o]) if (!okNum(S[o][k]) || S[o][k] < 0) S[o][k] = 0; }
     const okIt = it => it && typeof it === "object" && SLOTS[it.slot] && okNum(it.val) && RARITY[it.rar];
     if (!Array.isArray(S.inv)) S.inv = []; S.inv = S.inv.filter(okIt);
+    if (S.mode == null) { S.mode = S.diff ? 2 : 0; S.modeDone = {}; if (S.won) S.modeDone[0] = true; if (S.wonH) S.modeDone[2] = true; } S.diff = S.mode >= 2 ? 1 : 0; // v72 : modes
     if (!S.tips) { S.tips = {}; if ((S.totalKills || 0) > 3000) for (const k of ["upg", "bag", "tree", "pet", "reb", "afk", "death", "boss"]) S.tips[k] = 1; }
     if (!S.lockMig) { const best = {}; for (const it of S.inv) if (it.set) { const k = it.set + "|" + it.slot; if (!best[k] || it.val > best[k].val) best[k] = it; } for (const k in best) best[k].lock = true; S.lockMig = 1; } // v64 : cadenas
     if (!S.equip || typeof S.equip !== "object") S.equip = N.equip; for (const k in N.equip) if (S.equip[k] && !okIt(S.equip[k])) S.equip[k] = null;
@@ -989,11 +994,41 @@ const isBossLvl = l => l % 10 === 0;
 const isZoneBoss = l => l % LPZ === 0;
 const zoneIdx = l => Math.min(ZONES.length - 1, Math.floor((l - 1) / LPZ));
 const zoneOf = l => ZONES[zoneIdx(l)];
+// 1 : en Difficile et Cauchemar, les biomes sont maudits
+const CURSED_N = ["Forêt Maudite", "Pics Sanglants", "Volcan Infernal", "Abysses Noirs", "Cœur du Cauchemar", "Marais Putride", "Désert des Os", "Cité Damnée", "Royaume Pourri", "Néant Hurlant"];
+const zName = z => nightmare() ? CURSED_N[ZONES.indexOf(z)] || z.name : z.name;
 const zoneProg = l => ((l - 1) % LPZ) / (LPZ - 1);
 // Mode Difficile : les 1000 niveaux recommencent, avec des monstres bien plus costauds (mais plus d'or et de meilleurs objets)
-const HARD = { hp: 250, dmg: 180, gold: 40, perles: 3 }; // dmg 60 → 180 (v63) : en Difficile les monstres étaient encore moins dangereux qu'en normal
-const hardOn = () => S.diff === 1 && !tower;
-const monHp   = l => 30 * Math.pow(1.2, l - 1) * (isBossLvl(l) ? 9 : 1) * (isZoneBoss(l) ? 1.7 : 1) * (1 + 0.6 * Math.min(1, l / 300)) * (hardOn() ? HARD.hp : 1);
+/* ===== MODES (v72) : Facile → Moyen → Difficile → Cauchemar 1 → Cauchemar 2 → … =====
+   S.mode = 0, 1, 2, 3, 4… · chaque mode garde son propre niveau, on passe de l'un à l'autre sans rien perdre.
+   S.diff reste à 1 à partir du Difficile (objets Émeraude, Saphir, Mythique…). */
+const modeName = m => m < 3 ? ["Facile", "Moyen", "Difficile"][m] : "Cauchemar " + (m - 2);
+const modeIcon = m => ["🌿", "⚔️", "💀"][m] || "🌑";
+const modeMul = m => m <= 0 ? { hp: 1, dmg: 1, gold: 1, perles: 1 } : m === 1 ? { hp: 15, dmg: 12, gold: 6, perles: 1.5 }
+  : { hp: 250 * Math.pow(8, m - 2), dmg: 180 * Math.pow(6, m - 2), gold: 40 * Math.pow(4, m - 2), perles: 3 * Math.pow(1.5, m - 2) };
+const HARD = { get hp() { return modeMul(S.mode || 0).hp; }, get dmg() { return modeMul(S.mode || 0).dmg; }, get gold() { return modeMul(S.mode || 0).gold; }, get perles() { return modeMul(S.mode || 0).perles; } };
+const hardOn = () => (S.mode || 0) > 0 && !tower;
+const nightmare = () => (S.mode || 0) >= 2; // ambiance, malédictions et boss de Cauchemar dès le Difficile
+const modeOpen = m => m === 0 || !!(S.modeDone || {})[m - 1] || (m <= 2 && S.won) || (m === 3 && S.wonH);
+function switchMode(m) {
+  if (tower) { toast("Quitte d'abord la Tour"); return; } if (!modeOpen(m) || m === (S.mode || 0)) return;
+  S.modeProg = S.modeProg || {}; S.modeProg[S.mode || 0] = { level: S.level, maxLevel: S.maxLevel };
+  const P0 = S.modeProg[m] || { level: 1, maxLevel: 1 }; S.mode = m; S.diff = m >= 2 ? 1 : 0;
+  S.level = P0.level; S.maxLevel = P0.maxLevel; S.kills = 0; S.auto = true; bossTimer = 0; respawn = 0; hero.dead = 0; statF++; layerKey = "";
+  hero.hp = P.maxHp(); spawnMonster(); refreshAll(); save(); sfx("rare");
+  modal(modeIcon(m) + " Mode " + modeName(m), "Tu passes en mode <b>" + modeName(m) + "</b>, au niveau <b>" + S.level + "</b>.<br><br>Monstres : ×" + fmt(HARD.hp) + " de vie, ×" + fmt(HARD.dmg) + " de dégâts.<br>Récompenses : ×" + fmt(HARD.gold) + " d'or, ×" + fmtDec(HARD.perles) + " Cristaux à la Renaissance." + (nightmare() ? "<br><br>🌑 Ambiance Cauchemar, <b>malédictions de zone</b> et <b>boss de Cauchemar</b> !" : "") + "<br><br>Ton niveau dans chaque mode est gardé : tu peux revenir quand tu veux.", [{ t: "C'est parti !" }]);
+}
+// 2 : malédictions de zone (dès le Difficile) — chaque zone a une règle et un bonus d'or
+const CURSES = [
+  { n: "Régénération", d: "les monstres se soignent", g: 1.5 },
+  { n: "Rage des boss", d: "les boss frappent ×2 après 20 s", g: 1.5 },
+  { n: "Sans répit", d: "ta régénération est divisée par 2", g: 1.6 },
+  { n: "Horde d'élites", d: "1 monstre sur 8 est une élite", g: 1.4 },
+  { n: "Brume épaisse", d: "les monstres ont +30 % de vie", g: 1.5 }
+];
+const curse = () => nightmare() && !tower ? CURSES[(zoneIdx(S.level) + (S.mode || 0)) % CURSES.length] : null;
+const curseIs = n => { const c = curse(); return !!c && c.n === n; };
+const monHp   = l => 30 * Math.pow(1.2, l - 1) * (isBossLvl(l) ? 9 : 1) * (isZoneBoss(l) ? 1.7 : 1) * (1 + 0.6 * Math.min(1, l / 300)) * (hardOn() ? HARD.hp : 1) * (curseIs("Brume épaisse") ? 1.3 : 1);
 // v63 : les dégâts des monstres suivent enfin la vie du chasseur (avant, ils devenaient inoffensifs après le niv. 100)
 // Au niveau où ton attaque suffit tout juste, un coup de boss ≈ 5-6 % de ta vie si tu as amélioré Force et Endurance à égalité :
 // on farme sans risque, mais les boss peuvent te tuer si tu négliges ta Vie.
@@ -1005,7 +1040,7 @@ const goldCurve = l => 3 * Math.pow(1.17, Math.min(l, 60) - 1) * Math.pow(1.185,
 const monGoldB = l => goldCurve(l) * (isBossLvl(l) ? 12 : 1) * (isZoneBoss(l) ? 3 : 1);
 // or d'un monstre normal au dernier niveau atteint (jamais un niveau de boss, qui rapporte ×12)
 const farmGold = () => { let l = Math.max(1, S.maxLevel - 1); if (isBossLvl(l)) l--; return monGold(Math.max(1, l)); };
-const monGold = l => monGoldB(l) * (hardOn() ? HARD.gold : 1);
+const monGold = l => monGoldB(l) * (hardOn() ? HARD.gold : 1) * (curse() ? curse().g : 1);
 
 let mon = null;
 let forceRare = false;
@@ -1051,7 +1086,7 @@ function makeMonster(n) {
   const pr = a => a[Math.floor(r() * a.length)];
   const type = zb ? z.types[0] : pr(z.types);
   const rare = !boss && (Math.random() < 1 / 200 || forceRare); forceRare = false;
-  const elite = !boss && !rare && !tower && Math.random() < 1 / 50 ? pick(Object.keys(ELITE)) : null; // 1 monstre sur 50
+  const elite = !boss && !rare && !tower && Math.random() < (curseIs("Horde d'élites") ? 1 / 8 : 1 / 50) ? pick(Object.keys(ELITE)) : null; // 1 monstre sur 50
   const name = zb ? ZONE_BOSS[zoneIdx(l)] : boss ? pr(BOSS_T) + " " + pr(TYPE_NAMES[type]) : pr(TYPE_NAMES[type]) + " " + (rare ? "doré" : pr(SUF));
   const hp = monHp(l) * (rare ? 3 : elite ? 4 : 1) * WAVE.hp[k];
   const mon = { name, boss, zb, type, rare, hp, max: hp, dmg: monDmg(l) * WAVE.dmg[k], wk: WAVE.dmg[k], gold: monGold(l) * (rare ? 25 : elite ? 10 : 1) * WAVE.gold[k], elite, px: W * 0.7, tx: W * 0.7, py: 0,
@@ -1059,7 +1094,7 @@ function makeMonster(n) {
     hat: boss ? "couronne" : (r() < 0.45 ? pr(z.key === "foret" ? ["feuille", "fleur", "bonnet"] : ["bonnet", "bonnet", "fleur"]) : null),
     hatColor: pr(["#e63946", "#ffd166", "#4ea8de", "#f4a261", "#b07cff", "#52d17c"]), horns: r() < 0.35,
     spots: Array.from({ length: 5 }, () => [r() * 70 - 35, r() * 20, 4 + r() * 5]),
-    wobble: r() * 6, blinkEvery: 2.5 + r() * 3, atkTimer: 1.2, flash: 0, shake: 0, squash: 0, bite: 0, dying: 0, spawnT: 0,
+    born: gameT, wobble: r() * 6, blinkEvery: 2.5 + r() * 3, atkTimer: 1.2, flash: 0, shake: 0, squash: 0, bite: 0, dying: 0, spawnT: 0,
     scale: (zb ? 1.7 : boss ? 1.4 : rare ? 1.15 : 0.85 + r() * 0.3) * WAVE.size[k] };
   mon.iris = pick(["#3a6ea5", "#5a3a8a", "#2a7a5a", "#8a4a2a", "#a03a5a"]);
   if (elite) { mon.name = ELITE[elite].n + " " + mon.name.split(" ")[0]; mon.scale *= 1.15; setTimeout(() => toast(ELITE[elite].i + " Monstre élite : " + ELITE[elite].d), 200); }
@@ -1098,6 +1133,7 @@ function hitMon(amount, kind) {
   if (crit) amount *= critMult();
   amount *= dmgMods(kind);
   if (mon.elite === "bouclier") amount *= 0.5;
+  if (mon.shield > 0) { const k = kind === "tap" ? 4 : 1, ab = Math.min(mon.shield, amount * k); mon.shield -= ab; amount -= ab / k; if (mon.shield <= 0) { mon.shield = 0; toast("💥 Bouclier brisé !"); sfx("crit"); shakeT = 0.2; } if (amount <= 0) { mon.flash = 0.06; return; } }
   if (mon.boss) amount *= (1 + affSum("boss") / 100) * (1 + 0.15 * T("g6")) * (1 + 0.1 * A2("a7"));
   if (devOneShot) amount = Math.max(amount, mon.hp);
   mon.hp -= amount; if (mon.vb) vbOnHit();
@@ -1138,9 +1174,9 @@ function killMonster() {
   qProg("kill"); clanAddPts(wasBoss ? 3 : 0.05); clanWeek(wasBoss ? "b" : "m", 1); if (wasBoss) { S.stats.bossKills++; qProg("boss"); dropPet(mon.zb); if (Math.random() < 0.3 + 0.1 * T("p9") || mon.zb) { const gt = randGem(); addGem(gt); setTimeout(() => toast(gemIcon(gt, 16) + " " + GEMS[gt].name + " trouvé !"), 1300); } }
   if (wasBoss && S.level >= MAX_LEVEL) {
     bossTimer = 0; S.kills = 0; S.auto = true;
-    if (S.diff && !S.wonH) { S.wonH = true; modal("💀 Mode Difficile terminé !", "Tu as vaincu le <b>Dévoreur d'Étoiles</b> en mode <b>Difficile</b> !<br><br>Tu fais partie des plus grands chasseurs de Brumeria. D'autres défis arrivent bientôt…", [{ t: "Légendaire !" }]); }
-    else if (!S.diff && !S.won) { S.won = true; modal("🏆 Palier atteint !", "Tu as vaincu le <b>Dévoreur d'Étoiles</b> et atteint le niveau 1000 !<br><br><b style='color:#ff6a78'>💀 Le mode Difficile est débloqué !</b> Les 1000 niveaux recommencent avec des monstres bien plus forts, plus d'or, plus de Cristaux et de nouvelles raretés : <span class='c5'>Émeraude</span>, <span class='c6'>Saphir</span> et <span class='c7'>Mythique</span>.<br><br>Lance-le depuis l'onglet <b>Renaissance</b>. La Forge peut aussi fusionner en Émeraude et au-delà.", [{ t: "J'y vais !" }]); }
-    else toast("Boss final vaincu encore une fois !");
+    { const m = S.mode || 0; S.modeDone = S.modeDone || {}; const first = !S.modeDone[m]; S.modeDone[m] = true; if (m === 0) S.won = true; if (m === 2) S.wonH = true;
+      if (first) { addAmes(20 + 10 * m, null); modal("🏆 Mode " + modeName(m) + " terminé !", "Tu as vaincu le <b>Dévoreur d'Étoiles</b> en mode <b>" + modeName(m) + "</b> !<br><br>+" + (20 + 10 * m) + " Âmes de Brume 👻<br><br>" + modeIcon(m + 1) + " Le mode <b>" + modeName(m + 1) + "</b> est débloqué : change de mode dans l'onglet <b>Renaissance</b>. Ton niveau dans chaque mode est gardé.", [{ t: "Génial !" }]); }
+      else toast("Boss final vaincu encore une fois !"); }
   } else if (wasBoss) {
     bossTimer = 0;
     if (isZoneBoss(S.level)) modal("🗺️ Nouvelle zone !", "Tu as vaincu <b>" + mon.name + "</b> !<br><br>Ton chasseur part vers <b>" + zoneOf(S.level + 1).name + "</b>.", [{ t: "En route !" }]);
@@ -1285,6 +1321,8 @@ const critMult = () => Math.round((2.5 + 0.5 * T("g3") + 0.3 * T("g7") + (setOn(
 // (Âme guerrière, panoplies, classe, Clic fantôme, Écho…) avançaient plus vite que leur vie et mouraient en boucle.
 // Farm : ≤ 3,5 % par coup pour un monstre seul, partagé quand ils sont en groupe (la régénération suit) · boss : ≤ 6,5 % · boss de zone : ≤ 8 % · Tour / Invasion / Néant : ≤ 10 %.
 function hitDmg(m, mult = 1) {
+  if (m.boss && !m.tower && curseIs("Rage des boss") && gameT - (m.born || gameT) > 20) mult *= 2;
+  if (m.nmRage) mult *= 1.3;
   const cap = (m.tower ? 0.1 : m.zb ? 0.08 : m.boss ? 0.065 : 0.035 * (m.wk || 1)) * (S.diff ? 1.25 : 1) * mult; // en groupe, chaque monstre a un plafond plus bas (le groupe entier ≈ un seul monstre)
   return Math.min(m.dmg * mult, P.maxHp() * cap) * dmgTaken();
 }
@@ -1387,7 +1425,7 @@ const REB_MIN = 60;
 // Plus tu vas loin avant de renaître, plus tu gagnes de Cristaux (ça grandit de plus en plus vite)
 // Cristaux : grandissent avec le niveau atteint, avec un bonus qui monte encore plus vite en fin de partie
 const rebLvlBonus = L => 1 + L / 500;     // ×1,2 au niveau 100 · ×2 au niveau 500 · ×3 au niveau 1000
-const perlesFor = L => L < REB_MIN ? 0 : Math.floor(2 * Math.pow((L - 50) / 10, 2) * rebLvlBonus(L) * (1 + 0.04 * A2("a4")) * (1 + 0.1 * A2("a15")) * (S.diff ? HARD.perles : 1));
+const perlesFor = L => L < REB_MIN ? 0 : Math.floor(2 * Math.pow((L - 50) / 10, 2) * rebLvlBonus(L) * (1 + 0.04 * A2("a4")) * (1 + 0.1 * A2("a15")) * (HARD.perles));
 // Niveau de départ après une Renaissance : selon Départ rapide ET le niveau que tu avais atteint
 const startPct = () => 0.03 * S.pupg.pstart;           // jusqu'à 30 % du niveau atteint
 const rebStart = (L, modeChange) => Math.min(MAX_LEVEL - 1, Math.max(1 + 5 * S.pupg.pstart, modeChange ? 0 : Math.floor(L * startPct())) + 15 * A2("a13"));
@@ -1467,7 +1505,7 @@ function refreshReb() {
   box.innerHTML =
     '<div class="rebHead"><div class="rebOrb">' + PERLE + '</div><div><b style="font-size:20px">' + fmt(S.perles) + '</b> Cristaux de Renaissance<br><span style="color:#9a98ad;font-size:12px">Renaissances : ' + S.rebirths + ' · Cristaux gagnés au total : ' + fmt(S.totalPerles) + '</span></div></div>' +
     '<div class="statsBox">Niveau max de cette partie : <b>' + S.maxLevel + '</b><br>' +
-    (g > 0 ? 'Si tu renais maintenant : <b style="color:#c39bff">+' + fmt(g) + ' ' + PERLE + '</b> <span style="color:#9a98ad;font-size:12px">(bonus de niveau ×' + fmtDec(rebLvlBonus(S.maxLevel)) + (S.diff ? " · Difficile ×" + HARD.perles : "") + ')</span><br>Au niveau ' + next + ' : <b style="color:#c39bff">+' + fmt(perlesFor(next)) + ' ' + PERLE + '</b>'
+    (g > 0 ? 'Si tu renais maintenant : <b style="color:#c39bff">+' + fmt(g) + ' ' + PERLE + '</b> <span style="color:#9a98ad;font-size:12px">(bonus de niveau ×' + fmtDec(rebLvlBonus(S.maxLevel)) + ((S.mode || 0) ? " · " + modeName(S.mode) + " ×" + fmtDec(HARD.perles) : "") + ')</span><br>Au niveau ' + next + ' : <b style="color:#c39bff">+' + fmt(perlesFor(next)) + ' ' + PERLE + '</b>'
            : ic("lock") + ' Renaissance possible à partir du niveau <b>' + REB_MIN + '</b> (encore ' + (REB_MIN - S.maxLevel) + ' niveaux)') + '</div>' +
     '<div class="statsBox" style="font-size:12px;line-height:1.6"><b style="color:#ff8fa3">Tu perds :</b> ton or, tes améliorations à l\'or (onglet Chasseur), ton niveau (tu repars du niveau ' + rebStart(S.maxLevel) + ').<br>' +
     '<b style="color:#52d17c">Tu gardes :</b> tes améliorations de Renaissance (ici), ton équipement, ton sac, tes familiers, tes Cristaux et tes Âmes de Brume.<br>' +
@@ -1476,13 +1514,15 @@ function refreshReb() {
   const b = document.createElement("button"); b.className = "rebBtn"; b.innerHTML = g > 0 ? PERLE + " Renaître (+" + fmt(g) + ")" : ic("lock") + " Niveau " + REB_MIN + " requis";
   b.disabled = g <= 0; b.onclick = () => askRebirth();
   box.appendChild(b);
-  if (S.won) { // choix du mode (débloqué après les 1000 niveaux)
-    const m = document.createElement("div"); m.className = "modeBox";
-    m.innerHTML = '<b class="t">💀 Mode Difficile</b> ' + (S.diff ? '<span style="color:#ff6a78">· EN COURS</span>' : "") + "<br>Les 1000 niveaux recommencent : monstres ×" + HARD.hp + " de vie et ×" + HARD.dmg + " de dégâts, mais ×" + HARD.gold + " d'or, ×" + HARD.perles + " Cristaux, plus d'XP, objets bien plus forts et nouvelles raretés (<span class='c5'>Émeraude</span>, <span class='c6'>Saphir</span>, <span class='c7'>Mythique</span>).<br><small style='color:#9a98ad'>Changer de mode fait une Renaissance (tu gagnes tes Cristaux si tu en as).</small>";
-    const mb = document.createElement("button"); mb.className = "modeBtn" + (S.diff ? " norm" : ""); mb.textContent = S.diff ? "Revenir en mode Normal" : "💀 Lancer le mode Difficile";
-    mb.onclick = () => { if (tower) { toast("Quitte d'abord la Tour"); return; } const nm = S.diff ? 0 : 1; modal(nm ? "💀 Mode Difficile ?" : "Mode Normal ?", (nm ? "Tu recommences au niveau 1 en <b>mode Difficile</b>." : "Tu recommences au niveau 1 en <b>mode Normal</b>.") + "<br><br>C'est une Renaissance : ton or, tes améliorations à l'or, ton niveau et ton arbre repartent à zéro. Tu gardes <b>tes améliorations de Renaissance</b>, ton équipement, ton sac, tes familiers, tes Cristaux et tes Âmes de Brume." + (g ? "<br><br><b style='color:#c39bff'>+" + fmt(g) + " Cristaux</b>" : ""), [{ t: "Annuler", alt: true }, { t: "Confirmer", f: () => doRebirth(g, nm) }]); };
-    m.appendChild(mb); box.appendChild(m);
+  { // modes : Facile → Moyen → Difficile → Cauchemar 1, 2, 3… (on change sans rien perdre)
+    const m = document.createElement("div"); m.className = "modeBox"; const cur = S.mode || 0, mx = Math.max(3, cur + 1);
+    let h = '<b class="t">' + modeIcon(cur) + " Mode " + modeName(cur) + "</b><br>Chaque mode garde son propre niveau : change quand tu veux, tu ne perds rien. Termine le niveau 1000 d'un mode pour débloquer le suivant.<div class=\"modeList\">";
+    for (let k = 0; k <= mx; k++) { const op = modeOpen(k), mm = modeMul(k), pr = (S.modeProg || {})[k];
+      h += '<button class="modeChip' + (k === cur ? " on" : "") + (op ? "" : " lockd") + '" data-mode="' + k + '"' + (op ? "" : " disabled") + "><b>" + modeIcon(k) + " " + modeName(k) + "</b><small>" + (op ? (k === cur ? "en cours · niv. " + S.level : pr ? "niv. " + pr.maxLevel : "niv. 1") + " · ×" + fmt(mm.gold) + " or" : "🔒 termine " + modeName(k - 1)) + "</small></button>"; }
+    m.innerHTML = h + "</div>"; box.appendChild(m);
+    m.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => { const k = +b.dataset.mode; if (k === cur) return; modal(modeIcon(k) + " Mode " + modeName(k) + " ?", "Tu passes en mode <b>" + modeName(k) + "</b>. Ton niveau actuel en " + modeName(cur) + " est gardé.", [{ t: "Annuler", alt: true }, { t: "Changer", f: () => switchMode(k) }]); });
   }
+
 }
 function askRebirth() {
   if (tower) { toast("Quitte d'abord la Tour"); return; }
@@ -2200,7 +2240,7 @@ const fmtDec = v => String(Math.round(v * 10) / 10).replace(".", ",");
 const HLV_MAX = 200;
 const xpNeed = l => Math.round(15 * l * l * Math.pow(1.016, l) + 10); // niveau 200 : ~500 millions d'XP au total, il faut s'accrocher !
 const xpMult = () => (1 + (accSum("xp") + petPv("xp") + 10 * T("p8") + 10 * S.upg.xp + 5 * A2("a10")) / 100) * (1 + 0.1 * A2("a15")) * 1.3; // v62 : +30 % d'XP pour tout le monde
-const xpKill = (lvl, boss) => Math.max(1, Math.round((3 + (lvl + (hardOn() ? 1000 : 0)) * 0.2) * (boss ? 8 : 1) * xpMult()));
+const xpKill = (lvl, boss) => Math.max(1, Math.round((3 + (lvl + (hardOn() ? 500 * (S.mode || 0) : 0)) * 0.2) * (boss ? 8 : 1) * xpMult()));
 const hlvB = () => 1 + 0.015 * ((S.hlv || 1) - 1);
 const ACC_SLOT_LV = [5, 60, 150];
 const accSlots = () => ACC_SLOT_LV.filter(l => S.hlv >= l).length;
@@ -3027,7 +3067,10 @@ const gemParse = g => { const l = +g.slice(-1); return [g.slice(0, -1), l]; };
 const gemTxt = g => { const [ty, l] = gemParse(g); return GEMS[ty].name + " niv. " + l + " (+" + gemVal(ty, l) + " % " + GEMS[ty].txt + ")"; };
 const gemSum = stat => { let t = 0; for (const s in S.equip) { const it = S.equip[s]; if (it && it.gems) for (const g of it.gems) if (g) { const [ty, l] = gemParse(g); if (GEMS[ty].stat === stat) t += gemVal(ty, l); } } return t; };
 const gemIcon = (type, sz = 22) => '<svg class="ic" style="width:' + sz + 'px;height:' + sz + 'px" viewBox="0 0 24 24"><g stroke="#1b1e33" stroke-width="1.5" stroke-linejoin="round"><path d="M7 4h10l4 5-9 12L3 9Z" fill="' + gradFill(GEMS[type].color) + '"/><path d="M3 9h18M9 4l3 5 3-5M12 9v12" fill="none" stroke-width="1" opacity=".6"/><path d="M6.4 8l2-2.6" stroke="#fff" stroke-width="1.3"/></g></svg>';
-function addGem(type, l = 1, n = 1) { const k = type + l; S.gems[k] = (S.gems[k] || 0) + n; }
+function addGem(type, l = 1, n = 1) { const k = type + l; S.gems[k] = (S.gems[k] || 0) + n; if (S.gemAuto) fuseGemType(type); }
+// fusion de gemmes : 3 identiques = 1 du niveau au-dessus, en cascade (niv. 1 → 2 → 3…)
+function fuseGemType(ty) { let n = 0; for (let l = 1; l < GEM_MAX; l++) { const c = Math.floor((S.gems[ty + l] || 0) / 3); if (c > 0) { S.gems[ty + l] -= c * 3; S.gems[ty + (l + 1)] = (S.gems[ty + (l + 1)] || 0) + c; n += c; } } if (n) { S.stats.forges += n; qProg("forge", Math.min(n, 3)); } return n; }
+function fuseAllGems() { let n = 0; for (const ty in GEMS) n += fuseGemType(ty); return n; }
 const randGem = () => pick(Object.keys(GEMS));
 function gemsCount() { return Object.values(S.gems).reduce((a, b) => a + b, 0); }
 function refreshGems() {
@@ -3041,7 +3084,11 @@ function refreshGems() {
     }
     h += "</div></div>";
   }
+  const canF = Object.keys(GEMS).some(ty => { for (let l = 1; l < GEM_MAX; l++) if ((S.gems[ty + l] || 0) >= 3) return true; return false; });
+  h = '<div class="gemTop"><button class="buy" id="gemAllBtn"' + (canF ? "" : " disabled") + '>⚡ Tout fusionner</button><button class="smallBtn' + (S.gemAuto ? " on" : "") + '" id="gemAutoBtn">🔁 Fusion auto : ' + (S.gemAuto ? "OUI" : "NON") + "</button></div>" + h;
   $("sGems").innerHTML = h;
+  $("gemAllBtn").onclick = () => { const n = fuseAllGems(); if (!n) return; sfx("rare"); vib(30); toast("💎 " + n + " fusion" + (n > 1 ? "s" : "") + " de gemmes faite" + (n > 1 ? "s" : "") + " !"); refreshGems(); save(); };
+  $("gemAutoBtn").onclick = () => { S.gemAuto = !S.gemAuto; if (S.gemAuto) { const n = fuseAllGems(); if (n) toast("💎 " + n + " fusion" + (n > 1 ? "s" : "") + " faite" + (n > 1 ? "s" : "")); } sfx("buy"); refreshGems(); save(); };
   $("sGems").querySelectorAll("[data-gf]").forEach(b => b.onclick = () => {
     const [ty, l] = gemParse(b.dataset.gf); if ((S.gems[ty + l] || 0) < 3) return;
     S.gems[ty + l] -= 3; addGem(ty, l + 1); S.stats.forges++; qProg("forge"); sfx("rare");
@@ -3376,7 +3423,7 @@ function startVoidBoss() {
 }
 function spawnVoidBoss() {
   let L = vbLevel(); if (isBossLvl(L)) L--; S.level = L; spawnMonster();
-  const hk = S.diff ? HARD.hp : 1, dk = S.diff ? HARD.dmg : 1, gk = S.diff ? HARD.gold : 1;
+  const hk = HARD.hp, dk = HARD.dmg, gk = HARD.gold;
   const hp = 30 * Math.pow(1.2, L - 1) * (1 + 0.6 * Math.min(1, L / 300)) * 45 * hk;
   Object.assign(mon, { hp, max: hp, dmg: dmgCurve(L) * 2.2 * dk, gold: monGoldB(L) * 120 * gk, boss: true, zb: true, rare: false, tower: true, vb: true, vbL: L,
     name: "Le Seigneur du Néant", hat: null, scale: 1.9, color: "#9b3cff", spawnT: 0, intro: VB_INTRO, enraged: false, atkTimer: VB_INTRO + 1.2, charge: null, nextSp: VB_INTRO + 7 });
@@ -3520,6 +3567,7 @@ function palette(l) {
   const ph = zoneOf(l).phases, f = zoneProg(l) * (ph.length - 1), i = Math.min(ph.length - 2, Math.floor(f)), t = f - i, o = {};
   for (const k in ph[0]) o[k] = mix(ph[i][k], ph[i + 1][k], t);
   // ambiance « Brume » : décors assombris et teintés de violet, pour aller avec le chasseur et les créatures
+  if (nightmare()) for (const k in o) if (typeof o[k] === "string" && o[k][0] === "#") o[k] = mix(o[k], k === "top" || k === "bot" ? "#4a0812" : "#2a0610", Math.min(0.55, 0.32 + 0.05 * (S.mode - 2)));
   for (const k in o) if (typeof o[k] === "string" && o[k][0] === "#") o[k] = mix(o[k], k === "top" || k === "bot" ? "#1c1030" : "#140c22", k === "top" ? 0.42 : k === "bot" ? 0.3 : k === "near" || k === "gdark" ? 0.42 : 0.34);
   o.night = Math.max(0, (zoneProg(l) - 0.55) / 0.45);
   o.leaf = mix("#8acb5a", "#e8903a", Math.min(1, zoneProg(l) * 1.6));
@@ -3755,7 +3803,7 @@ function blit(c, sp, h) {
 }
 
 function drawBackground(t) {
-  const key = layerLevel(S.level) + "|" + W + "|" + H + "|" + DPR;
+  const key = layerLevel(S.level) + "|" + W + "|" + H + "|" + DPR + "|" + (S.mode || 0);
   if (key !== layerKey) { buildLayers(); layerKey = key; }
   const p = palette(layerLevel(S.level)), gy = groundY(), ice = zoneOf(S.level).key === "glace";
   ctx.drawImage(layers.sky, 0, 0, W, gy);
@@ -4187,7 +4235,8 @@ function mbEye(x, y, w, h, tilt, c, m, t) {
   if (bl > 0.5) { ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.ellipse(-w * 0.05, -hh * 0.2, w * 0.32, hh * 0.38, 0, 0, Math.PI * 2); ctx.fill(); }
   ctx.restore();
 }
-function mbEyes(x, y, s, c, m, t, gap = 13) {
+let MB_RED = false;
+function mbEyes(x, y, s, c, m, t, gap = 13) { if (MB_RED) c = "#ff3a4a";
   mbGlow(x - gap * s, y, 15 * s, c, 0.55); mbGlow(x + gap * s, y, 15 * s, c, 0.55);
   mbEye(x - gap * s, y, 8.5 * s, 4.6 * s, 0.34, c, m, t); mbEye(x + gap * s, y, 8.5 * s, 4.6 * s, -0.34, c, m, t);
 }
@@ -5194,7 +5243,7 @@ function drawMonster(t) {
   for (const m of [...pack].sort((a, b) => a.py - b.py || b.px - a.px)) { mon = m; m._tgt = m === tg; m._many = many; drawOneMonster(t); }
   mon = tg;
 }
-function drawOneMonster(t) {
+function drawOneMonster(t) { MB_RED = nightmare() && !(mon && mon.vb);
   if (!mon || mon.spawnT < 0) return;
   const m = mon, sc = m.scale;
   let x = monX() - (m.bite > 0 ? Math.sin(m.bite / 0.25 * Math.PI) * 26 : 0);
@@ -5206,6 +5255,8 @@ function drawOneMonster(t) {
   const sx = sc * (1 + br + sq) * (m.dying > 0 ? 1 + (1 - die) * 0.5 : 1);
   const sy = sc * (1 - br - sq) * die;
   ctx.save(); ctx.translate(x, monY());
+  if (m.shield > 0 && m.dying <= 0) { ctx.save(); ctx.globalAlpha = 0.35 + 0.15 * Math.sin(t * 6); ctx.strokeStyle = "#9fd0ff"; ctx.lineWidth = 4; ctx.fillStyle = "rgba(120,180,255,.15)"; ctx.beginPath(); ctx.arc(0, -50 * sc, 85 * sc, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore(); }
+  if (m.nmRage && m.dying <= 0) mbGlow(0, -45 * sc, 95 * sc, "#ff2a3a", 0.3 + 0.2 * Math.sin(t * 8));
   if (m.elite && m.dying <= 0) { const E = ELITE[m.elite]; mbGlow(0, -40 * sc, 80 * sc, E.c, 0.35 + 0.15 * Math.sin(t * 4)); ctx.strokeStyle = E.c; ctx.lineWidth = 2.5; ctx.globalAlpha = 0.8; ctx.beginPath(); ctx.ellipse(0, 2, 46 * sc, 9 * sc, 0, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1; ctx.font = Math.round(20 * Math.max(0.8, sc)) + "px system-ui"; ctx.textAlign = "center"; ctx.fillText(E.i, 0, -130 * sc); }
   if (m.rare && m.dying <= 0) {
     const gr = ctx.createRadialGradient(0, -40 * sc, 8, 0, -40 * sc, 80 * sc); gr.addColorStop(0, "rgba(255,215,90,.35)"); gr.addColorStop(1, "rgba(255,215,90,0)");
@@ -5317,7 +5368,7 @@ function update(dt) {
   hero.hurt = Math.max(0, hero.hurt - dt);
   const maxHp = P.maxHp();
   if (hero.dead > 0) { hero.dead -= dt; if (hero.dead <= 0) hero.hp = maxHp; return; }
-  hero.hp = Math.min(maxHp, hero.hp + maxHp * (0.025 + 0.01 * T("d2")) * dt);
+  hero.hp = Math.min(maxHp, hero.hp + maxHp * (0.025 + 0.01 * T("d2")) * (curseIs("Sans répit") ? 0.5 : 1) * dt);
   for (const m of pack) {
     if (m.dying > 0) m.dying = Math.max(0, m.dying - dt);
     if (m.intro > 0) m.intro -= dt;
@@ -5340,7 +5391,7 @@ function update(dt) {
     if (m.spawnT < 0.2 || m.charge || m.stun > 0) continue;
     m.atkTimer -= dt;
     if (m.atkTimer > 0) continue;
-    m.atkTimer = (m.boss ? 1.3 : 1.6 + Math.random() * 0.3) * (m.elite === "rapide" ? 0.5 : 1); m.bite = 0.25;
+    m.atkTimer = (m.boss ? 1.3 : 1.6 + Math.random() * 0.3) * (m.elite === "rapide" ? 0.5 : 1) * (m.nmRage ? 0.62 : 1); m.bite = 0.25;
     if (!devGod && !buffOn("inv")) hero.hp -= hitDmg(m);
     if (T("d4")) { const keep = skill; dealDamage(P.atk() * 0.5 * T("d4"), "thorns", m); skill = keep; }
     hero.hurt = 0.15; sfx("hurt");
@@ -5365,7 +5416,7 @@ function refreshTop() {
     $("totalKills").textContent = fmt(S.totalKills); $("maxLvlTxt").textContent = S.maxLevel; return;
   }
   const z = zoneOf(S.level);
-  $("zoneName").innerHTML = (S.diff ? '<span class="hardTag">💀</span>' : "") + z.name + " (" + (zoneIdx(S.level) + 1) + "/" + ZONES.length + ")";
+  $("zoneName").innerHTML = ((S.mode || 0) ? '<span class="hardTag">' + modeIcon(S.mode) + "</span>" : "") + zName(z) + " (" + (zoneIdx(S.level) + 1) + "/" + ZONES.length + ")";
   $("lvlTxt").textContent = "Niv. " + S.level;
   $("prevLvl").disabled = S.level <= 1;
   $("nextLvl").disabled = S.level >= S.maxLevel;
@@ -5857,7 +5908,13 @@ function titleLoop(now) {
 /* --- Clic fantôme (amélioration de Renaissance) : jusqu'à 20 clics automatiques par seconde --- */
 const GHOST_K = 0.5; // un clic fantôme = 50 % d'un vrai tap, et il ne fait pas monter le Combo
 let ghostAcc = 0; const ghostFx = [];
-function updateElites(dt) { for (const m of packAlive()) if (m.elite === "regen" && m.dying <= 0 && m.hp > 0) m.hp = Math.min(m.max, m.hp + m.max * 0.03 * dt); }
+function updateElites(dt) { const rg = curseIs("Régénération"); for (const m of packAlive()) if ((m.elite === "regen" || rg) && m.dying <= 0 && m.hp > 0) m.hp = Math.min(m.max, m.hp + m.max * (m.elite === "regen" ? 0.03 : 0.015) * dt);
+  nightmareBoss(dt); }
+function nightmareBoss(dt) {
+  const m = mon; if (!m || !m.boss || m.tower || !nightmare() || m.dying > 0 || m.hp <= 0) return;
+  if (!m.nmSh && m.hp < m.max * 0.6) { m.nmSh = 1; m.shield = m.max * 0.12; toast("🛡️ Le boss se protège : tape-le pour briser son bouclier !"); sfx("boss"); }
+  if (!m.nmRage && m.hp < m.max * 0.3) { m.nmRage = true; toast("😡 Le boss entre en rage : il frappe plus vite et plus fort !"); sfx("boss"); vib(60); }
+}
 function updateGhostClicks(dt) {
   const n = S.pupg.pclick || 0; if (!n || hero.dead > 0 || respawn > 0 || arenaOn) { ghostAcc = 0; return; }
   ghostAcc += dt * n;
@@ -6457,7 +6514,7 @@ function arRollRar(luck) { // même table que le butin du jeu (Normal ou Diffici
 }
 function arRewards(W, np, di) {
   const D = AR_DIFF[di] || AR_DIFF[1], k = D.rew * arCoop(np), L = Math.max(10, S.maxLevel);
-  const gold = monGoldB(L) * 20 * W * k * (S.diff ? HARD.gold : 1), cr = Math.floor(W * W / 12 * k), gl = di >= 3 ? 3 : di >= 2 ? 2 : 1, gems = Math.floor(W / 10 * k);
+  const gold = monGoldB(L) * 20 * W * k * (HARD.gold), cr = Math.floor(W * W / 12 * k), gl = di >= 3 ? 3 : di >= 2 ? 2 : 1, gems = Math.floor(W / 10 * k);
   S.gold += gold; S.perles += cr; S.totalPerles += cr; for (let i = 0; i < gems; i++) addGem(randGem(), gl);
   const am = Math.floor(W / 3 * [0.6, 1, 1.4, 2][di] || 0); if (am) addAmes(am, null);
   // équipement : 1 objet toutes les 5 vagues (+ objets garantis aux paliers), au niveau du joueur
@@ -6725,8 +6782,8 @@ function startClanBoss() {
 }
 function spawnClanBoss() {
   let L = Math.max(10, S.maxLevel); if (isBossLvl(L)) L--; S.level = L; spawnMonster();
-  const raw = 30 * Math.pow(1.2, L - 1) * (1 + 0.6 * Math.min(1, L / 300)) * (S.diff ? HARD.hp : 1), [nm, col] = cbInfo();
-  Object.assign(mon, { hp: raw * 400, max: raw * 400, dmg: dmgCurve(L) * 0.6 * (S.diff ? HARD.dmg : 1), gold: 0, boss: true, zb: true, rare: false, tower: true, cb: true, cbRaw: raw,
+  const raw = 30 * Math.pow(1.2, L - 1) * (1 + 0.6 * Math.min(1, L / 300)) * (HARD.hp), [nm, col] = cbInfo();
+  Object.assign(mon, { hp: raw * 400, max: raw * 400, dmg: dmgCurve(L) * 0.6 * (HARD.dmg), gold: 0, boss: true, zb: true, rare: false, tower: true, cb: true, cbRaw: raw,
     name: nm + " · boss de clan", hat: "couronne", scale: 2, color: col });
   pack = [mon]; layoutPack(true);
   bossTimer = CB_TIME; sfx("boss");
@@ -6929,6 +6986,14 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 72, d: "Les modes de jeu", l: [
+    "🎚️ <b>4 modes et plus</b> : 🌿 Facile (l'ancien Normal) → ⚔️ <b>Moyen</b> (nouveau) → 💀 Difficile → 🌑 <b>Cauchemar 1, 2, 3…</b> sans fin. Termine le niveau 1000 d'un mode pour débloquer le suivant (+ des Âmes de Brume).",
+    "🔁 <b>Change de mode quand tu veux</b> (onglet Renaissance) : chaque mode garde son propre niveau, tu ne perds rien. Farme en Facile, pousse en Cauchemar !",
+    "🌑 <b>Ambiance Cauchemar</b> dès le Difficile : biomes maudits (Forêt Maudite, Pics Sanglants…), ciel rouge sang, monstres aux yeux rouges.",
+    "☠️ <b>Malédictions de zone</b> : chaque zone maudite a une règle (régénération, rage des boss, sans répit, horde d'élites, brume épaisse) et donne +40 à +60 % d'or.",
+    "👹 <b>Boss de Cauchemar</b> : à 60 % de vie ils se protègent d'un bouclier (tape pour le briser, tes taps comptent ×4), et sous 30 % ils entrent en rage.",
+    "💎 <b>Gemmes</b> : bouton <b>Tout fusionner</b> (toutes les fusions possibles d'un coup, en cascade) et option <b>Fusion auto</b> (Sac → Gemmes).",
+    "Si tu étais en mode Difficile, tu y restes, au même niveau."] },
   { v: 71, d: "Ajustement de l'or", l: ["⚖️ L'or était devenu trop généreux : il monte maintenant de <b>18,5 %</b> par niveau après le niveau 60 (au lieu de 20 %). On avance bien jusqu'au niveau 300, puis la Renaissance redevient utile vers 400."] },
   { v: 70, d: "Plus d'or", l: ["🪙 Après le niveau 60, les monstres rapportent <b>18,5 % d'or en plus à chaque niveau</b> (au lieu de 17 %). Avant, le prix des améliorations dépassait vite l'or gagné : vers le niveau 300, il fallait près d'une heure de farm pour passer un seul niveau. Maintenant l'or reste utile beaucoup plus longtemps.", "Le coffre AFK, l'or offert à la Renaissance, la Tour, l'Invasion, l'Arène et la vente des objets suivent automatiquement.",
     "💰 <b>Gobelin voleur</b> : toutes les 3 à 6 minutes de jeu, un gobelin traverse l'écran avec un sac d'or. Touche-le 5 fois avant qu'il s'enfuie (≈ 2 min de farm d'or).",
@@ -7052,7 +7117,7 @@ const NEWS = [
     "<b>9 nouveaux succès</b> (vague 50, parties à plusieurs, 1 000 et 10 000 monstres, Difficile, Cauchemar) et <b>3 nouveaux titres</b> : Champion de l'Arène, Roi du Cauchemar, Âme de la meute."] },
   { v: 44, d: "Arène : avec ton équipement", l: [
     "Dans l'Arène, tu joues maintenant avec <b>ton équipement et tes stats</b> du jeu principal (attaque, vie, vitesse, critique, familiers, arbre, renaissance…).",
-    "Les monstres sont réglés sur <b>ton niveau</b> (et ton mode Normal ou Difficile), puis ils deviennent plus forts à chaque vague. À plusieurs, c'est la moyenne des joueurs.",
+    "Les monstres sont réglés sur <b>ton niveau</b> (et ton mode : Facile, Moyen, Difficile ou Cauchemar), puis ils deviennent plus forts à chaque vague. À plusieurs, c'est la moyenne des joueurs.",
     "Le choix de 3 bonus entre les vagues est supprimé. À la place : une petite pause et un soin de 25 %.",
     "Tu <b>tires beaucoup plus vite</b>, et tu continues à tirer en te déplaçant. Chaque classe a son tir : lames qui traversent (Spectre), 2 flèches (Rôdeur), orbes qui explosent (Arcaniste).",
     "Nouveau bouton <b>Frappe Brume</b> : une onde de choc qui fait de gros dégâts et repousse les monstres autour de toi.",
@@ -7084,7 +7149,7 @@ const NEWS = [
   { v: 39, d: "Mode Difficile et nouvelles raretés", l: [
     "<b>3 nouvelles raretés</b> entre Légendaire et Mythique : <span class='c4'>Diamant</span>, <span class='c5'>Émeraude</span> et <span class='c6'>Saphir</span>.",
     "Ordre complet : Commun · Rare · Épique · Légendaire · <span class='c4'>Diamant</span> · <span class='c5'>Émeraude</span> · <span class='c6'>Saphir</span> · <span class='c7'>Mythique</span> · <span class='c8'>Divin</span>.",
-    "En mode Normal, on peut trouver au mieux du <span class='c4'>Diamant</span>. Émeraude, Saphir et Mythique : mode Difficile seulement. Le <span class='c8'>Divin</span> : seulement par les événements (Invasion de Brume, 4 % de chance).",
+    "En mode Facile ou Moyen, on peut trouver au mieux du <span class='c4'>Diamant</span>. Émeraude, Saphir et Mythique : à partir du mode Difficile. Le <span class='c8'>Divin</span> : seulement par les événements (Invasion de Brume, 4 % de chance).",
     "Tous les objets ont été rééquilibrés selon leur rareté et leur niveau. Les objets Mythiques et Divins sont devenus Légendaires (sans être supprimés).",
     "<b>Forge</b> : il faut maintenant <b>7 objets</b> pour en faire 1 de la rareté au-dessus. Réussite : 100 % jusqu'à Épique, puis 80 %, 70 %, 60 %, 50 % et 40 % vers Mythique. Émeraude et plus : il faut avoir fini les 1000 niveaux.",
     "Corrigé : la <b>fusion automatique</b> ne marchait pas quand la vente automatique était activée (les objets étaient vendus avant d'être fusionnés).",
@@ -7147,7 +7212,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 71, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 72, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
