@@ -441,7 +441,7 @@
 
   /* --- interface v24 --- */
   #panel { background: radial-gradient(ellipse at 50% 0%, #1c2036 0%, #14172a 60%); }
-  #progress { background: linear-gradient(90deg, rgba(82,209,124,.55) var(--p, 0%), rgba(0,0,0,.5) var(--p, 0%)); border: 1px solid rgba(255,255,255,.15); font-weight: 700; padding: 4px 12px; border-radius: 12px; backdrop-filter: blur(2px); }
+  #progress { background: linear-gradient(90deg, var(--pc, rgba(82,209,124,.55)) var(--p, 0%), rgba(0,0,0,.5) var(--p, 0%)); border: 1px solid rgba(255,255,255,.15); font-weight: 700; padding: 4px 12px; border-radius: 12px; backdrop-filter: blur(2px); }
   #skillBtn { border: none; padding: 0; width: 70px; height: 70px; background: conic-gradient(#8ecae6 calc(var(--s, 0) * 1%), rgba(20,24,40,.85) 0); box-shadow: 0 4px 12px rgba(0,0,0,.45); }
   #skillBtn .in { position: absolute; inset: 5px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 35% 30%, #3a4878, #1b2240); font-size: 10.5px; line-height: 1.15; letter-spacing: .5px; }
   #skillBtn.ready { background: conic-gradient(#ffd166 100%, #ffd166 0); box-shadow: 0 0 18px #ffd166; }
@@ -650,7 +650,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v73</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v74</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -659,7 +659,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v73 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v74 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -682,7 +682,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v73</div></div>
+  <div class="tsVer">v74</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -1251,7 +1251,7 @@ function rollLoot(boss, rareMon) {
   const val = Math.round(base * RARITY[ri].mult * rand(0.85, 1.15));
   const it = genAff(maybeSet({ id: S.itemId++, slot: slotKey, stat: sl.stat, rar: ri, val, lvl: S.level, h, name: pick(sl.names) + " " + pick(ADJ) }));
   S.stats.items++; countRar(ri); qProg("loot");
-  if (ri >= R_DIAM) setTimeout(() => announceItem(it), 400);
+  if (ri >= R_DIAM) noticeItem(it);
   if (autoSellIt(it)) return;
   if (S.inv.length >= bagMax()) { const price = sellPrice(it); S.gold += price; toast("Sac plein : objet vendu +" + fmt(price) + " " + COIN); return; }
   S.inv.push(it); autoFuse();
@@ -1261,6 +1261,18 @@ function rollLoot(boss, rareMon) {
   updateBagTab();
 }
 function countRar(r) { if (r === 3) S.stats.legend++; if (r === R_DIAM) S.stats.diamond = (S.stats.diamond || 0) + 1; if (r === R_MYTH) S.stats.mythic = (S.stats.mythic || 0) + 1; if (r === R_DIV) S.stats.divine = (S.stats.divine || 0) + 1; }
+// Annonce des beaux objets sans bloquer : on regroupe ce qui tombe en même temps ; la grande fenêtre
+// n'apparaît que pour un objet Mythique ou Divin (et une seule à la fois), le reste passe en bandeau.
+let itemQ = [], itemT = null;
+function noticeItem(it) {
+  itemQ.push(it); clearTimeout(itemT);
+  itemT = setTimeout(() => {
+    const list = itemQ.sort((a, b) => b.rar - a.rar); itemQ = []; const best = list[0];
+    if (list.length === 1 && best.rar >= R_MYTH && $("modal").style.display !== "flex") { announceItem(best); return; }
+    sfx("rare"); vib(40); for (let i = 0; i < 24; i++) particles.push({ x: rand(0, W), y: rand(0, H * 0.7), vx: rand(-40, 40), vy: rand(-140, -20), life: 1.1, c: pick([RTXT[best.rar] || "#ffd166", "#ffffff"]), r: rand(3, 6), star: true });
+    toast(SLOTS[best.slot].icon + ' <b class="c' + best.rar + '">' + RARITY[best.rar].name + "</b> : " + itemName(best) + (list.length > 1 ? " <small>+" + (list.length - 1) + " autre" + (list.length > 2 ? "s" : "") + " objet" + (list.length > 2 ? "s" : "") + " rare" + (list.length > 2 ? "s" : "") + "</small>" : "") + "<br><small>(Sac)</small>");
+  }, 900);
+}
 function announceItem(it) {
   const sl = SLOTS[it.slot], div = it.rar === R_DIV;
   sfx("rare"); setTimeout(() => sfx("tower"), 350); vib(div ? [80, 60, 80, 60, 200] : 120);
@@ -5433,6 +5445,7 @@ function refreshTop() {
   const boss = isBossLvl(S.level);
   $("progress").innerHTML = boss ? ic("crown") + " Combat de boss" : (S.auto ? "Monstres : " : "Farm : ") + Math.min(S.kills, KILLS_PER_LEVEL) + " / " + KILLS_PER_LEVEL;
   $("progress").style.setProperty("--p", boss ? "0%" : Math.min(100, S.kills / KILLS_PER_LEVEL * 100) + "%");
+  $("progress").style.setProperty("--pc", ["rgba(82,209,124,.55)", "rgba(255,160,50,.6)", "rgba(230,55,75,.62)"][S.mode || 0] || "rgba(155,60,255,.65)"); // couleur selon le mode
   $("bossBtn").style.display = (!S.auto && !boss && S.level === S.maxLevel - 1 && isBossLvl(S.maxLevel)) ? "block" : "none";
   $("totalKills").textContent = fmt(S.totalKills);
   $("maxLvlTxt").textContent = S.maxLevel;
@@ -6996,6 +7009,7 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 74, d: "Confort", l: ["🎨 La barre « Monstres » change de couleur selon le mode : vert (Facile), orange (Moyen), rouge (Difficile), violet (Cauchemar).", "📦 Plus besoin de cliquer « OK » à chaque bel objet : ils s'annoncent dans un bandeau qui disparaît tout seul (et sont regroupés quand il en tombe plusieurs). La grande fenêtre reste pour un objet Mythique ou Divin."] },
   { v: 73, d: "Modes rééquilibrés", l: [
     "⚖️ Les modes étaient trop faciles à finir : ×15 ou ×250 ne valaient que 15 à 30 niveaux de Facile. Maintenant les monstres se renforcent <b>plus vite à chaque niveau</b> : +1 % (Moyen), +2 % (Difficile), +3 % (Cauchemar). Le début de chaque mode reste accessible, la fin demande vraiment de progresser.",
     "💰 L'or suit un peu (+0,5 % / +1 % / +1,5 % par niveau) et les coups des boss sont un peu plus forts dans les modes durs.",
@@ -7227,7 +7241,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 73, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 74, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
