@@ -498,6 +498,10 @@
   .evBox { background: linear-gradient(135deg, #2e2350, #1f2338); border: 1px solid #4a3a7a; border-radius: 12px; padding: 10px; margin-bottom: 10px; }
   .evTitle { font-weight: 800; font-size: 14px; margin-bottom: 6px; color: #e2d4ff; }
   .evRow { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: rgba(0,0,0,.2); border-radius: 10px; padding: 7px 8px; margin-bottom: 6px; font-size: 13px; }
+  .wheelWrap { position: relative; width: 200px; height: 200px; margin: 4px auto 10px; }
+  .wheel { width: 200px; height: 200px; border-radius: 50%; border: 4px solid #1a1030; box-shadow: 0 0 20px rgba(184,154,255,.5); position: relative; }
+  .wheel span { position: absolute; left: 50%; top: 50%; width: 70px; margin: -8px 0 0 -35px; text-align: center; font-size: 11px; font-weight: 900; color: #1a1030; }
+  .wheelPin { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); z-index: 2; color: #fff; font-size: 22px; text-shadow: 0 2px 4px #000; }
   .evRow small { color: #9a98ad; font-size: 11px; } .evRow em { font-style: normal; font-size: 11px; font-weight: 800; color: #9a98ad; white-space: nowrap; }
   .evRow.on em { color: #52d17c; } .evRow.on { border: 1px solid rgba(82,209,124,.4); }
   .petBest { width: 100%; margin: 6px 0 8px; padding: 11px; font-size: 14px; }
@@ -642,7 +646,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v69</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v70</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -651,7 +655,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v69 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v70 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -674,7 +678,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v69</div></div>
+  <div class="tsVer">v70</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -973,7 +977,7 @@ const P = {
   spd:  () => spdFrom(S.upg.spd) * (1 + eqBonus("spd") / 100) * (1 + petPv("spd") / 100) * CL().spd * (setOn("rodeur", 2) ? 1.2 : 1) * (setOn("spectre", 6) ? 1.25 : 1) * (1 + affSum("spd") / 100) * (1 + gemSum("spd") / 100) * (buffOn("eclair") ? 2 : 1) * (1 + accSum("spd") / 100) * rPow("spd"),
   crit: () => { if (rCrit()) return 100; const sc = (setOn("spectre", 4) ? 10 : 0) + affSum("crit") + accSum("crit") + petPv("crit"); return Math.min(70 + 3 * T("g2") + CL().crit + sc, critFrom(S.upg.crit) + eqBonus("crit") + 3 * T("g2") + CL().crit + sc); },
   tap:  () => P.atk() * tapFrom(S.upg.tap) * (1 + (accSum("tap") + petPv("tap")) / 100) * (1 + 0.05 * A2("a6")) * rPow("tap"),
-  goldMult: () => (1 + S.upg.gold * 0.1) * (1 + 0.05 * A2("a3")) * (1 + 0.1 * A2("a15")) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + 0.2 * T("p6")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1) * (1 + accSum("gold") / 100) * rPow("gold") * 1.1 /* v62 : +10 % d'or pour tout le monde */
+  goldMult: () => (1 + S.upg.gold * 0.1) * (1 + 0.05 * A2("a3")) * (1 + 0.1 * A2("a15")) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + 0.2 * T("p6")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (frenzyT > 0 ? 2 : 1) * (Date.now() < (S.goldBoost || 0) ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1) * (1 + accSum("gold") / 100) * rPow("gold") * 1.1 /* v62 : +10 % d'or pour tout le monde */
 };
 
 // Les stats du héros sont recalculées une seule fois par image (au lieu de des dizaines de fois)
@@ -995,7 +999,12 @@ const monHp   = l => 30 * Math.pow(1.2, l - 1) * (isBossLvl(l) ? 9 : 1) * (isZon
 // on farme sans risque, mais les boss peuvent te tuer si tu négliges ta Vie.
 const dmgCurve = l => 8 * Math.pow(1.15, l - 1) * Math.exp(0.0295 * Math.max(0, l - 60)) * (1 + 0.5 * Math.min(1, Math.max(0, l - 60) / 120));
 const monDmg  = l => dmgCurve(l) * (isBossLvl(l) ? 1.4 : 1) * (isZoneBoss(l) ? 1.3 : 1) * (hardOn() ? HARD.dmg : 1);
-const monGoldB = l => 3 * Math.pow(1.17, l - 1) * (isBossLvl(l) ? 12 : 1) * (isZoneBoss(l) ? 3 : 1);
+// v70 : l'or monte de 20 % par niveau après le niveau 60 (17 % avant) — sinon le prix des améliorations
+// (≈ +25 %/niveau) distançait l'or dès le niveau 200 et l'or ne servait plus à rien
+const goldCurve = l => 3 * Math.pow(1.17, Math.min(l, 60) - 1) * Math.pow(1.2, Math.max(0, l - 60));
+const monGoldB = l => goldCurve(l) * (isBossLvl(l) ? 12 : 1) * (isZoneBoss(l) ? 3 : 1);
+// or d'un monstre normal au dernier niveau atteint (jamais un niveau de boss, qui rapporte ×12)
+const farmGold = () => { let l = Math.max(1, S.maxLevel - 1); if (isBossLvl(l)) l--; return monGold(Math.max(1, l)); };
 const monGold = l => monGoldB(l) * (hardOn() ? HARD.gold : 1);
 
 let mon = null;
@@ -1029,15 +1038,23 @@ function spawnMonster() {
   if (boss) setTimeout(() => sfx("boss"), 150);
   hero.atkTimer = Math.min(hero.atkTimer, 0.2); // le chasseur frappe dès que le monstre arrive
 }
+// Élites : 1 sur 50, ×4 vie, ×10 or, 50 % de chance d'objet en plus, un pouvoir chacun
+const ELITE = {
+  bouclier: { n: "Élite blindé", i: "🛡️", c: "#7cc4ff", d: "bouclier (subit 2 fois moins de dégâts)" },
+  rapide:   { n: "Élite véloce", i: "⚡", c: "#ffd166", d: "véloce (attaque 2 fois plus vite)" },
+  regen:    { n: "Élite vivace", i: "💚", c: "#52ffa0", d: "vivace (se soigne en continu)" },
+  explosif: { n: "Élite instable", i: "💥", c: "#ff6a3a", d: "instable (explose en mourant)" }
+};
 function makeMonster(n) {
   const l = S.level, z = zoneOf(l), boss = isBossLvl(l), zb = isZoneBoss(l), k = n - 1;
   const r = seeded(Math.floor(Math.random() * 1e9) + 1);
   const pr = a => a[Math.floor(r() * a.length)];
   const type = zb ? z.types[0] : pr(z.types);
   const rare = !boss && (Math.random() < 1 / 200 || forceRare); forceRare = false;
+  const elite = !boss && !rare && !tower && Math.random() < 1 / 50 ? pick(Object.keys(ELITE)) : null; // 1 monstre sur 50
   const name = zb ? ZONE_BOSS[zoneIdx(l)] : boss ? pr(BOSS_T) + " " + pr(TYPE_NAMES[type]) : pr(TYPE_NAMES[type]) + " " + (rare ? "doré" : pr(SUF));
-  const hp = monHp(l) * (rare ? 3 : 1) * WAVE.hp[k];
-  const mon = { name, boss, zb, type, rare, hp, max: hp, dmg: monDmg(l) * WAVE.dmg[k], wk: WAVE.dmg[k], gold: monGold(l) * (rare ? 25 : 1) * WAVE.gold[k], px: W * 0.7, tx: W * 0.7, py: 0,
+  const hp = monHp(l) * (rare ? 3 : elite ? 4 : 1) * WAVE.hp[k];
+  const mon = { name, boss, zb, type, rare, hp, max: hp, dmg: monDmg(l) * WAVE.dmg[k], wk: WAVE.dmg[k], gold: monGold(l) * (rare ? 25 : elite ? 10 : 1) * WAVE.gold[k], elite, px: W * 0.7, tx: W * 0.7, py: 0,
     color: pr(z.mon), eyes: r() < 0.25 ? 1 : 2, mouth: pr(["sourire", "crocs", "langue", "o", "grimace"]), blush: r() < 0.5,
     hat: boss ? "couronne" : (r() < 0.45 ? pr(z.key === "foret" ? ["feuille", "fleur", "bonnet"] : ["bonnet", "bonnet", "fleur"]) : null),
     hatColor: pr(["#e63946", "#ffd166", "#4ea8de", "#f4a261", "#b07cff", "#52d17c"]), horns: r() < 0.35,
@@ -1045,6 +1062,7 @@ function makeMonster(n) {
     wobble: r() * 6, blinkEvery: 2.5 + r() * 3, atkTimer: 1.2, flash: 0, shake: 0, squash: 0, bite: 0, dying: 0, spawnT: 0,
     scale: (zb ? 1.7 : boss ? 1.4 : rare ? 1.15 : 0.85 + r() * 0.3) * WAVE.size[k] };
   mon.iris = pick(["#3a6ea5", "#5a3a8a", "#2a7a5a", "#8a4a2a", "#a03a5a"]);
+  if (elite) { mon.name = ELITE[elite].n + " " + mon.name.split(" ")[0]; mon.scale *= 1.15; setTimeout(() => toast(ELITE[elite].i + " Monstre élite : " + ELITE[elite].d), 200); }
   if (rare) { mon.color = "#ffd166"; mon.hat = "couronne"; setTimeout(() => toast(ic("coin") + " Un monstre doré apparaît !"), 200); sfx("rare"); }
   return mon;
 }
@@ -1079,6 +1097,7 @@ function hitMon(amount, kind) {
   let crit = Math.random() * 100 < P.crit();
   if (crit) amount *= critMult();
   amount *= dmgMods(kind);
+  if (mon.elite === "bouclier") amount *= 0.5;
   if (mon.boss) amount *= (1 + affSum("boss") / 100) * (1 + 0.15 * T("g6")) * (1 + 0.1 * A2("a7"));
   if (devOneShot) amount = Math.max(amount, mon.hp);
   mon.hp -= amount; if (mon.vb) vbOnHit();
@@ -1110,6 +1129,7 @@ function killMonster() {
   if (mon.tower && tower.cb) { cbEnd(); return; }
   if (mon.tower) { if (tower.vb) vbWin(); else if (tower.inv) invasionWin(); else towerClear(); respawn = tower.vb ? 2.2 : 0.6; refreshTop(); refreshUpgButtons(); return; }
   const wasBoss = mon.boss;
+  if (mon.elite) { qProg("elite"); if (Math.random() < 0.5) rollLoot(true); if (mon.elite === "explosif" && hero.dead <= 0 && !devGod) { hero.hp = Math.max(1, hero.hp - P.maxHp() * 0.08 * dmgTaken()); hero.hurt = 0.3; shakeT = 0.25; for (let i = 0; i < 20; i++) particles.push({ x: monX(), y: monY() - 30, vx: rand(-260, 260), vy: rand(-260, -40), life: 0.6, c: pick(["#ff6a3a", "#ffd166"]), r: rand(3, 6) }); } }
   rollLoot(wasBoss || mon.rare, mon.rare); if (wasBoss && T("p5")) rollLoot(true);
   if (wasBoss && S.pupg.pboss && Math.random() * 100 < 5 * S.pupg.pboss) { S.gold += g; rollLoot(true); addGem(randGem()); setTimeout(() => toast("👑 Butin royal : récompense du boss doublée !"), 600); }
   if (mon.zb && S.level === S.maxLevel) addAmes(4 + 2 * zoneIdx(S.level), "Boss de zone vaincu"); // Âmes de Brume
@@ -2558,7 +2578,9 @@ const QPOOL = [
   { type: "tap",   txt: n => "Taper " + n + " fois sur les monstres", n: [150, 300, 600] },
   { type: "skill", txt: n => "Utiliser " + n + " compétences", n: [3, 5, 8] },
   { type: "loot",  txt: n => "Trouver " + n + " objets", n: [3, 5, 8] },
-  { type: "forge", txt: n => "Fusionner ou améliorer " + n + " objet" + (n > 1 ? "s" : ""), n: [1, 2, 3] }
+  { type: "forge", txt: n => "Fusionner ou améliorer " + n + " objet" + (n > 1 ? "s" : ""), n: [1, 2, 3] },
+  { type: "elite", txt: n => "Vaincre " + n + " monstre" + (n > 1 ? "s" : "") + " élite" + (n > 1 ? "s" : ""), n: [1, 2, 3] },
+  { type: "gob",   txt: n => "Attraper " + n + " gobelin" + (n > 1 ? "s" : "") + " voleur" + (n > 1 ? "s" : ""), n: [1, 1, 2] }
 ];
 const dayKey = () => { const d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); };
 function ensureDaily() {
@@ -2572,7 +2594,7 @@ function qProg(type, n = 1) {
   if (!S.daily) return;
   for (const q of S.daily.q) if (q.type === type && q.p < q.n) { q.p = Math.min(q.n, q.p + n); if (q.p >= q.n) { setTimeout(() => toast(ic("scroll") + " Quête terminée ! (onglet Journal)"), 600); updateJournalDot(); } }
 }
-const qGold = q => monGold(Math.max(1, S.maxLevel - 1)) * 40 * (q.d + 1);
+const qGold = q => farmGold() * 40 * (q.d + 1);
 function refreshQuests() {
   ensureDaily();
   const now = new Date(), mid = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1), left = mid - now;
@@ -2588,10 +2610,10 @@ function refreshQuests() {
   $("jQuest").innerHTML = eventsHtml() + h; bindEvents();
   $("jQuest").querySelectorAll("[data-q]").forEach(b => b.onclick = () => {
     const q = S.daily.q[+b.dataset.q]; if (q.claimed || q.p < q.n) return;
-    q.claimed = true; const g = qGold(q); S.gold += g; S.perles += q.d + 1; S.stats.quests++;
+    q.claimed = true; const g = qGold(q); S.gold += g; S.perles += q.d + 1; S.stats.quests++; addAmes(q.d + 1, null);
     sfx("coin"); toast("+" + fmt(g) + " " + COIN + "  +" + (q.d + 1) + " " + PERLE); refreshQuests(); refreshTop(); updateJournalDot(); save();
   });
-  const qb = $("qBonus"); if (qb) qb.onclick = () => { if (S.daily.bonus || !all) return; S.daily.bonus = true; S.perles += 5; sfx("rare"); toast("Bonus du jour : +5 " + PERLE); refreshQuests(); refreshTop(); updateJournalDot(); save(); };
+  const qb = $("qBonus"); if (qb) qb.onclick = () => { if (S.daily.bonus || !all) return; S.daily.bonus = true; S.perles += 5; addAmes(4, null); sfx("rare"); toast("Bonus du jour : +5 " + PERLE + " et +4 👻"); refreshQuests(); refreshTop(); updateJournalDot(); save(); };
 }
 function updateJournalDot() {
   const t = document.querySelector('.tab[data-p="pJour"]'); if (!t) return;
@@ -2889,7 +2911,7 @@ function spawnTowerMonster() {
   const f = tower.floor; let L = Math.min(MAX_LEVEL, towerL(f)); if (isBossLvl(L)) L--;
   S.level = L; spawnMonster();
   const raw = 30 * Math.pow(1.2, towerL(f) - 1);
-  Object.assign(mon, { hp: raw * 6, max: raw * 6, dmg: dmgCurve(towerL(f)) * 1.5, gold: 3 * Math.pow(1.17, towerL(f) - 1) * 15,
+  Object.assign(mon, { hp: raw * 6, max: raw * 6, dmg: dmgCurve(towerL(f)) * 1.5, gold: goldCurve(towerL(f)) * 15,
     boss: true, zb: false, rare: false, tower: true, name: "Gardien · étage " + f, hat: "couronne", scale: 1.35, color: pick(["#9b6cf0", "#5ce1ff", "#ff4d5e", "#52ffa0", "#ffd166"]) });
   bossTimer = 25 + 5 * T("d5"); sfx("boss");
 }
@@ -3042,12 +3064,42 @@ function pickGem(it, equipped) {
 }
 function unsocket(it, equipped) { it.gems.forEach((g, i) => { if (g) { S.gems[g] = (S.gems[g] || 0) + 1; it.gems[i] = null; } }); sfx("buy"); save(); refreshBag(); refreshStats(); showItem(it, equipped); }
 
+/* ================== GOBELIN VOLEUR 💰 ==================
+   Toutes les 3 à 6 minutes de jeu actif, un gobelin traverse l'écran avec un sac d'or : touche-le 5 fois avant qu'il s'enfuie. */
+let gob = null, gobNext = 200;
+const gobGold = () => farmGold() * 90 * P.goldMult(); // ≈ 1 min 30 à 2 min de farm
+function updateGob(dt) {
+  if (tower || arenaOn || sceneHidden() || document.hidden) return;
+  if (!gob) { if ((gobNext -= dt / Math.max(1, gameSpeed())) <= 0 && S.maxLevel >= 8) { gob = { t: 0, hits: 0, x: W + 30 }; gobNext = 180 + Math.random() * 180; toast("💰 Un gobelin voleur ! Touche-le vite 5 fois !"); sfx("rare"); } return; }
+  gob.t += dt / Math.max(1, gameSpeed()); gob.x = W + 30 - (W + 60) * Math.min(1, gob.t / 7); gob.y = groundY() - 70 - Math.abs(Math.sin(gob.t * 9)) * 16;
+  if (gob.t >= 7) { gob = null; toast("💨 Le gobelin s'est enfui avec son or…"); }
+}
+function tapGob(x, y) {
+  if (!gob || Math.hypot(x - gob.x, y - gob.y) > 46) return false;
+  gob.hits++; gob.hurt = 0.15; sfx("hit"); vib(15); for (let i = 0; i < 6; i++) particles.push({ x: gob.x, y: gob.y, vx: rand(-160, 160), vy: rand(-200, -40), life: 0.5, c: "#ffd166", r: rand(2, 4), star: true });
+  if (gob.hits >= 5) { const g = gobGold(); S.gold += g; addFloat("+" + fmt(g), "#ffd166", 26, -60); toast("💰 Gobelin attrapé : +" + fmt(g) + " " + COIN); qProg("gob"); sfx("rare"); vib(50); for (let i = 0; i < 30; i++) particles.push({ x: gob.x, y: gob.y, vx: rand(-260, 260), vy: rand(-320, -60), life: 1, c: pick(["#ffd166", "#fff3c4"]), r: rand(3, 6), star: true }); gob = null; refreshTop(); }
+  return true;
+}
+function drawGob(t) {
+  if (!gob) return; const x = gob.x, y = gob.y, c = mbV("#ffd166");
+  ctx.save(); ctx.translate(x, y + 40); ctx.scale(-0.95, 0.95); if (gob.hurt > 0) { gob.hurt -= 1 / 60; ctx.filter = "brightness(2)"; }
+  mbGlow(0, -40, 60, c, 0.35);
+  const st = Math.sin(t * 18); for (const d of [-1, 1]) mbLimb(d * 8, -22, 10, 10, Math.PI / 2 + st * 0.6 * d, -0.4 * d, 6, 5, "#1a1422", d < 0 ? c : null);
+  ctx.save(); ctx.translate(18, -46); ctx.rotate(0.3 + st * 0.1); ctx.fillStyle = "#6a4a2a"; ctx.beginPath(); ctx.ellipse(0, 0, 16, 18, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = "#1a1020"; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = c; ctx.font = "bold 16px system-ui"; ctx.textAlign = "center"; ctx.fillText("$", 0, 6); ctx.restore();
+  mbSkin(() => { ctx.beginPath(); ctx.ellipse(0, -40, 17, 20, 0, 0, Math.PI * 2); }, c, t, { base: "#1e1828" });
+  ctx.fillStyle = "#2a2436"; mbPoly([-14, -54, 0, -84, 14, -54]); ctx.fill();
+  for (const d of [-1, 1]) { ctx.fillStyle = "#3a5a3a"; mbPoly([d * 12, -50, d * 28, -62, d * 15, -44]); ctx.fill(); }
+  mbEyes(0, -48, 0.55, mbG(c), {}, t, 6); mbFangs(0, -40, 7, 5, {}, 0.5);
+  ctx.restore(); ctx.filter = "none";
+  ctx.fillStyle = "rgba(10,8,24,.75)"; ctx.fillRect(x - 22, y - 46, 44, 6); ctx.fillStyle = "#ffd166"; ctx.fillRect(x - 22, y - 46, 44 * (1 - gob.hits / 5), 6);
+}
+
 /* ================== FRÉNÉSIE ================== */
 let frenzy = 0, frenzyT = 0;
 function addFrenzy() {
   if (frenzyT > 0) return;
   frenzy = Math.min(100, frenzy + 4.5);
-  if (frenzy >= 100) { frenzy = 0; frenzyT = 6; sfx("skill"); vib(40); toast("FRÉNÉSIE ! Dégâts ×3"); $("sceneWrap").classList.add("frenzy"); }
+  if (frenzy >= 100) { frenzy = 0; frenzyT = 8; sfx("skill"); vib(40); toast("🔥 FRÉNÉSIE ! Dégâts ×3 et or ×2 pendant 8 s"); $("sceneWrap").classList.add("frenzy"); }
 }
 function updateFrenzy(dt) {
   if (frenzyT > 0) { frenzyT -= dt; if (frenzyT <= 0) { frenzyT = 0; $("sceneWrap").classList.remove("frenzy"); } }
@@ -3089,10 +3141,10 @@ function addFloatAt(x, y, txt, c, size) { floats.push({ txt, c, size, x, y, life
 
 /* ================== CALENDRIER DE CONNEXION ================== */
 const LOGIN = [
-  { txt: "Or", ic: () => COIN, give: () => { const g = monGold(Math.max(1, S.maxLevel - 1)) * 40; S.gold += g; return "+" + fmt(g) + " " + COIN; } },
+  { txt: "Or", ic: () => COIN, give: () => { const g = farmGold() * 40; S.gold += g; return "+" + fmt(g) + " " + COIN; } },
   { txt: "2 gemmes", ic: () => gemIcon("rubis", 22), give: () => { const a = randGem(), b = randGem(); addGem(a); addGem(b); return GEMS[a].name + " + " + GEMS[b].name; } },
   { txt: "3 Cristaux", ic: () => PERLE, give: () => { S.perles += 3; return "+3 " + PERLE; } },
-  { txt: "Beaucoup d'or", ic: () => ic("coins"), give: () => { const g = monGold(Math.max(1, S.maxLevel - 1)) * 100; S.gold += g; return "+" + fmt(g) + " " + COIN; } },
+  { txt: "Beaucoup d'or", ic: () => ic("coins"), give: () => { const g = farmGold() * 100; S.gold += g; return "+" + fmt(g) + " " + COIN; } },
   { txt: "Gemme niv. 2", ic: () => gemIcon("amethyste", 22), give: () => { const a = randGem(); addGem(a, 2); return GEMS[a].name + " niv. 2"; } },
   { txt: "6 Cristaux", ic: () => PERLE, give: () => { S.perles += 6; return "+6 " + PERLE; } },
   { txt: "Coffre", ic: () => ic("gift"), give: () => { S.perles += 10; const it = makeItem(3); if (S.inv.length < bagMax()) S.inv.push(it); else S.gold += sellPrice(it); return "+10 " + PERLE + " et " + it.name + " (Légendaire)"; } }
@@ -3123,8 +3175,34 @@ function makeItem(ri, lvl = S.level) {
 const evWeekend = () => [0, 6].includes(new Date().getDay());
 const evInvasion = () => [3, 6].includes(new Date().getDay());
 const invasionReady = () => evInvasion() && S.invDay !== dayKey() && S.best >= TOWER_MIN;
+/* ================== ROUE DE LA FORTUNE 🎡 (1 tour gratuit par jour) ================== */
+const WHEEL = [ // [texte, couleur, poids, gain]
+  ["Or", "#ffd166", 26, () => { const g = farmGold() * 150 * P.goldMult(); S.gold += g; return "+" + fmt(g) + " " + COIN; }],
+  ["Âmes", "#b89aff", 14, () => { addAmes(3, null); return "+3 Âmes de Brume 👻"; }],
+  ["Gemme", "#52ffa0", 14, () => { const g = randGem(); addGem(g, 2); return GEMS[g].name + " niv. 2"; }],
+  ["Or ×2", "#ff9a3a", 12, () => { S.goldBoost = Math.max(Date.now(), S.goldBoost || 0) + 15 * 60000; return "Or ×2 pendant 15 minutes !"; }],
+  ["Cristaux", "#c39bff", 12, () => { const c = Math.max(5, Math.round(perlesFor(Math.max(REB_MIN, S.best)) * 0.03)); S.perles += c; S.totalPerles += c; return "+" + fmt(c) + " " + PERLE; }],
+  ["Gros or", "#ffe08a", 10, () => { const g = farmGold() * 400 * P.goldMult(); S.gold += g; return "+" + fmt(g) + " " + COIN + " !"; }],
+  ["Objet", "#7cc4ff", 9, () => { const it = makeItem(Math.random() < 0.2 ? 4 : 3, S.maxLevel); if (S.inv.length < bagMax()) { S.inv.push(it); countRar(it.rar); return it.name + ' (<span class="c' + it.rar + '">' + RARITY[it.rar].name + "</span>)"; } S.gold += sellPrice(it); return "Sac plein : objet vendu"; }],
+  ["Jackpot", "#ff4d8a", 3, () => { addAmes(12, null); const g = farmGold() * 600 * P.goldMult(); S.gold += g; return "JACKPOT ! +12 👻 et +" + fmt(g) + " " + COIN; }]
+];
+const wheelReady = () => S.wheelDay !== dayKey();
+function openWheel() {
+  if (!wheelReady()) { toast("🎡 Déjà tournée aujourd'hui : reviens demain !"); return; }
+  const n = WHEEL.length, seg = 360 / n, grad = WHEEL.map((w, i) => w[1] + " " + i * seg + "deg " + (i + 1) * seg + "deg").join(",");
+  modal("🎡 Roue de la fortune", '<div class="wheelWrap"><div class="wheelPin">▼</div><div class="wheel" id="wheel" style="background:conic-gradient(' + grad + ')">' + WHEEL.map((w, i) => '<span style="transform:rotate(' + (i * seg + seg / 2) + 'deg) translateY(-62px)">' + w[0] + "</span>").join("") + '</div></div>Un tour gratuit par jour.', [{ t: "Tourner !", keep: true, f: spinWheel }]);
+}
+function spinWheel() {
+  if (!wheelReady()) return; S.wheelDay = dayKey(); save();
+  let tot = WHEEL.reduce((a, w) => a + w[2], 0), r = Math.random() * tot, i = 0; for (; i < WHEEL.length - 1; i++) { r -= WHEEL[i][2]; if (r < 0) break; }
+  const seg = 360 / WHEEL.length, deg = 360 * 5 + (360 - (i * seg + seg / 2)) + rand(-seg * 0.3, seg * 0.3), wh = $("wheel");
+  if (wh) { wh.style.transition = "transform 3.2s cubic-bezier(.15,.8,.2,1)"; wh.style.transform = "rotate(" + deg + "deg)"; }
+  document.querySelectorAll("#modal button").forEach(b => b.disabled = true); sfx("buy");
+  setTimeout(() => { const txt = WHEEL[i][3](); sfx("rare"); vib(40); save(); refreshTop(); closeModal(); modal("🎡 " + WHEEL[i][0] + " !", txt, [{ t: "Super !" }]); try { refreshJournal(); } catch (e) {} }, 3400);
+}
 function eventsHtml() {
   let h = '<div class="evBox"><div class="evTitle">' + ic("star") + " Événements</div>";
+  h += '<div class="evRow' + (wheelReady() ? " on" : "") + '"><span>🎡 <b>Roue de la fortune</b><br><small>Un tour gratuit par jour : or, Âmes, gemmes, Cristaux, boost d\'or ou objet</small></span>' + (wheelReady() ? '<button class="smallBtn" id="wheelBtn">Tourner</button>' : "<em>Demain</em>") + "</div>";
   h += '<div class="evRow' + (evWeekend() ? " on" : "") + '"><span>' + ic("coins") + " <b>Week-end doré</b><br><small>Or ×2 le samedi et le dimanche</small></span><em>" + (evWeekend() ? "ACTIF" : "samedi") + "</em></div>";
   h += '<div class="evRow' + (evInvasion() ? " on" : "") + '"><span>' + ic("crown") + " <b>Invasion de Brume</b><br><small>Un boss géant, le mercredi et le samedi. Gemmes, Cristaux et objet Légendaire.</small></span>" +
     (invasionReady() ? '<button class="buy" id="invBtn">Combattre</button>' : "<em>" + (!evInvasion() ? "mer. / sam." : S.best < TOWER_MIN ? "niv. " + TOWER_MIN : "Fait ✓") + "</em>") + "</div>";
@@ -3140,6 +3218,7 @@ function bindEvents() {
   const ab = $("arEvBtn"); if (ab) ab.onclick = openArena;
   const vbb = $("vbBtn"); if (vbb) vbb.onclick = () => modal("🌑 Le Seigneur du Néant", '<img src="' + VB_IMG_SRC + '" style="width:200px;max-width:70%;filter:drop-shadow(0 0 14px #9b3cff)"><br>Niveau <b>' + vbLevel() + "</b> · " + VB_TIME + " secondes pour le vaincre.<br>Sous la moitié de sa vie, il se déchaîne !", [{ t: "Plus tard", alt: true }, { t: "Combattre !", f: startVoidBoss }]);
   const c = $("calBtn"); if (c) c.onclick = showLogin;
+  const wb = $("wheelBtn"); if (wb) wb.onclick = openWheel;
 }
 function startInvasion() {
   if (tower) { toast("Quitte d'abord la Tour"); return; }
@@ -3165,7 +3244,7 @@ function sendExp(id, h) {
   S.exp[id] = { end: Date.now() + h * 3600e3, h }; clanWeek("e", 1); sfx("buy"); refreshPets(); save();
 }
 function expLoot(id, tot) { // donne la récompense d'une expédition terminée et l'ajoute au total
-  const e = S.exp[id], l = S.pets[id] || 1, g = monGold(Math.max(1, S.maxLevel - 1)) * 25 * e.h * (1 + 0.1 * l);
+  const e = S.exp[id], l = S.pets[id] || 1, g = farmGold() * 25 * e.h * (1 + 0.1 * l);
   S.gold += g; tot.g += g;
   const ng = Math.floor(e.h / 2) + (Math.random() < 0.5 ? 1 : 0);
   for (let i = 0; i < ng; i++) addGem(randGem()); tot.gems += ng;
@@ -3271,7 +3350,7 @@ function statsHtml() {
 function spawnInvasionBoss() {
   let L = Math.max(10, S.maxLevel); if (isBossLvl(L)) L--; S.level = L; spawnMonster();
   const raw = 30 * Math.pow(1.2, L - 1);
-  Object.assign(mon, { hp: raw * 25, max: raw * 25, dmg: dmgCurve(L) * 1.8, gold: 3 * Math.pow(1.17, L - 1) * 60, boss: true, zb: true, rare: false, tower: true, name: "Avatar de la Brume", hat: "couronne", scale: 1.8, color: "#7a5aff" });
+  Object.assign(mon, { hp: raw * 25, max: raw * 25, dmg: dmgCurve(L) * 1.8, gold: goldCurve(L) * 60, boss: true, zb: true, rare: false, tower: true, name: "Avatar de la Brume", hat: "couronne", scale: 1.8, color: "#7a5aff" });
   bossTimer = 60 + 5 * T("d5"); sfx("boss");
 }
 /* --- images du Seigneur du Néant (fournies par le créateur du jeu) --- */
@@ -5127,6 +5206,7 @@ function drawOneMonster(t) {
   const sx = sc * (1 + br + sq) * (m.dying > 0 ? 1 + (1 - die) * 0.5 : 1);
   const sy = sc * (1 - br - sq) * die;
   ctx.save(); ctx.translate(x, monY());
+  if (m.elite && m.dying <= 0) { const E = ELITE[m.elite]; mbGlow(0, -40 * sc, 80 * sc, E.c, 0.35 + 0.15 * Math.sin(t * 4)); ctx.strokeStyle = E.c; ctx.lineWidth = 2.5; ctx.globalAlpha = 0.8; ctx.beginPath(); ctx.ellipse(0, 2, 46 * sc, 9 * sc, 0, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1; ctx.font = Math.round(20 * Math.max(0.8, sc)) + "px system-ui"; ctx.textAlign = "center"; ctx.fillText(E.i, 0, -130 * sc); }
   if (m.rare && m.dying <= 0) {
     const gr = ctx.createRadialGradient(0, -40 * sc, 8, 0, -40 * sc, 80 * sc); gr.addColorStop(0, "rgba(255,215,90,.35)"); gr.addColorStop(1, "rgba(255,215,90,0)");
     ctx.fillStyle = gr; circ(0, -40 * sc, 80 * sc);
@@ -5219,7 +5299,7 @@ function loopBody(now) {
   const t = now / 1000;
   update(dt); S.stats.time = (S.stats.time || 0) + Math.min(raw, 1);
   const sh = shakeT > 0; if (sh) { shakeT -= raw; ctx.save(); ctx.translate(rand(-5, 5), rand(-4, 4)); }
-  if (!sceneHidden() && !arenaOn) { const vbOn = tower && tower.vb; if (vbOn) drawVoidBg(t); else drawBackground(t); drawHero(t); drawPet(t); drawMonster(t); if (!vbOn) drawForeground(t, dt); drawFx(dt); drawGhostFx(dt); if (vbOn || vbFx) drawVoidUi(t); }
+  if (!sceneHidden() && !arenaOn) { const vbOn = tower && tower.vb; if (vbOn) drawVoidBg(t); else drawBackground(t); drawHero(t); drawPet(t); drawMonster(t); drawGob(t); if (!vbOn) drawForeground(t, dt); drawFx(dt); drawGhostFx(dt); if (vbOn || vbFx) drawVoidUi(t); }
   else { if (floats.length) floats.length = 0; if (particles.length > 40) particles.length = 40; }
   if (sh) ctx.restore();
   saveT += raw; if (saveT > 5) { saveT = 0; save(); } // toutes les 5 vraies secondes, même en ×3
@@ -5231,7 +5311,7 @@ function loopBody(now) {
 
 function update(dt) {
   if (comboT > 0) { comboT -= dt; if (comboT <= 0) comboN = 0; }
-  gameT += dt; racePowTick(dt); updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); updateGhostClicks(dt); tickRetry(); tickTips(Math.min(dt, 0.25)); if (S.pupg.pfb && skill >= 100) useSkill(); const rdt = dt / Math.max(1, typeof gameSpeed === "function" ? gameSpeed() : 1); // l'animation suit le temps réel, même en ×3
+  gameT += dt; racePowTick(dt); updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); updateGhostClicks(dt); updateElites(dt); updateGob(dt); tickRetry(); tickTips(Math.min(dt, 0.25)); if (S.pupg.pfb && skill >= 100) useSkill(); const rdt = dt / Math.max(1, typeof gameSpeed === "function" ? gameSpeed() : 1); // l'animation suit le temps réel, même en ×3
   hero.cast = Math.max(0, (hero.cast || 0) - rdt);
   hero.lunge = Math.max(0, hero.lunge - rdt);
   hero.hurt = Math.max(0, hero.hurt - dt);
@@ -5260,7 +5340,7 @@ function update(dt) {
     if (m.spawnT < 0.2 || m.charge || m.stun > 0) continue;
     m.atkTimer -= dt;
     if (m.atkTimer > 0) continue;
-    m.atkTimer = m.boss ? 1.3 : 1.6 + Math.random() * 0.3; m.bite = 0.25;
+    m.atkTimer = (m.boss ? 1.3 : 1.6 + Math.random() * 0.3) * (m.elite === "rapide" ? 0.5 : 1); m.bite = 0.25;
     if (!devGod && !buffOn("inv")) hero.hp -= hitDmg(m);
     if (T("d4")) { const keep = skill; dealDamage(P.atk() * 0.5 * T("d4"), "thorns", m); skill = keep; }
     hero.hurt = 0.15; sfx("hurt");
@@ -5684,7 +5764,7 @@ function afkClaim() {
   S.gold += L.gold; const hl0 = S.hlv; gainXp(L.xp);
   const got = []; let sold = 0;
   for (let i = 0; i < L.items; i++) { const r = Math.random(), ri = r < 0.12 ? 3 : r < 0.45 ? 2 : 1, it = makeItem(ri, S.maxLevel);
-    if (S.inv.length < bagMax()) { S.inv.push(it); countRar(ri); got.push(it); } else sold += monGold(Math.max(1, S.maxLevel - 1)) * 20; }
+    if (S.inv.length < bagMax()) { S.inv.push(it); countRar(ri); got.push(it); } else sold += farmGold() * 20; }
   if (sold) S.gold += sold;
   for (let i = 0; i < L.gems; i++) addGem(randGem(), Math.random() < 0.25 ? 2 : 1);
   if (L.cr) { S.perles += L.cr; S.totalPerles += L.cr; }
@@ -5777,6 +5857,7 @@ function titleLoop(now) {
 /* --- Clic fantôme (amélioration de Renaissance) : jusqu'à 20 clics automatiques par seconde --- */
 const GHOST_K = 0.5; // un clic fantôme = 50 % d'un vrai tap, et il ne fait pas monter le Combo
 let ghostAcc = 0; const ghostFx = [];
+function updateElites(dt) { for (const m of packAlive()) if (m.elite === "regen" && m.dying <= 0 && m.hp > 0) m.hp = Math.min(m.max, m.hp + m.max * 0.03 * dt); }
 function updateGhostClicks(dt) {
   const n = S.pupg.pclick || 0; if (!n || hero.dead > 0 || respawn > 0 || arenaOn) { ghostAcc = 0; return; }
   ghostAcc += dt * n;
@@ -5795,6 +5876,7 @@ function drawGhostFx(dt) { // petites ondes de brume là où le doigt fantôme t
 /* ================== ÉVÉNEMENTS ================== */
 cv.addEventListener("pointerdown", e => {
   const r = cv.getBoundingClientRect(), x = e.clientX - r.left;
+  if (gob && tapGob(x, e.clientY - r.top)) return;
   if (x > W * 0.45 && hero.dead <= 0) {
     const ty = e.clientY - r.top, al = packAlive();
     const tgt = al.length ? al.reduce((a, b) => (Math.hypot(a.px - x, groundY() + a.py - 40 - ty) < Math.hypot(b.px - x, groundY() + b.py - 40 - ty) ? a : b)) : mon;
@@ -6659,9 +6741,9 @@ const CB_K = 2.5, CB_CAP = 150; // points = dégâts infligés / vie d'un monstr
 function cbClaim(i) {
   const k = weekKey(); if (!S.cbClaim || S.cbClaim.k !== k) S.cbClaim = { k, t: [] };
   if (S.cbClaim.t.includes(i) || !(wk().cbd > 0) || clanWeekSum("cbd") < cbHP() * CB_TIERS[i] / 100) return;
-  const r = CB_REW[i]; S.cbClaim.t.push(i); S.ecus = (S.ecus || 0) + r.e; S.perles += r.c; S.totalPerles += r.c;
+  const r = CB_REW[i]; S.cbClaim.t.push(i); S.ecus = (S.ecus || 0) + r.e; S.perles += r.c; S.totalPerles += r.c; const am = [3, 6, 10, 20][i] || 0; addAmes(am, null);
   for (let j = 0; j < r.g; j++) addGem(randGem(), 2);
-  let txt = "+" + r.e + " écus de clan · +" + r.c + " " + PERLE + (r.g ? " · " + r.g + " gemme" + (r.g > 1 ? "s" : "") + " niv. 2" : "");
+  let txt = "+" + r.e + " écus de clan · +" + r.c + " " + PERLE + " · +" + am + " 👻" + (r.g ? " · " + r.g + " gemme" + (r.g > 1 ? "s" : "") + " niv. 2" : "");
   if (r.item) { const it = makeItem(S.diff ? R_EMER : R_DIAM, S.maxLevel); S.inv.push(it); countRar(it.rar); txt += "<br>" + it.name + ' (<span class="c' + it.rar + '">' + RARITY[it.rar].name + "</span>)"; }
   sfx("rare"); save(); clanUI(); modal("🐲 Palier " + CB_TIERS[i] + " %", txt, [{ t: "Super !" }]);
 }
@@ -6847,6 +6929,13 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 70, d: "Plus d'or", l: ["🪙 Après le niveau 60, les monstres rapportent <b>20 % d'or en plus à chaque niveau</b> (au lieu de 17 %). Avant, le prix des améliorations dépassait vite l'or gagné : vers le niveau 300, il fallait près d'une heure de farm pour passer un seul niveau. Maintenant l'or reste utile beaucoup plus longtemps.", "Le coffre AFK, l'or offert à la Renaissance, la Tour, l'Invasion, l'Arène et la vente des objets suivent automatiquement.",
+    "💰 <b>Gobelin voleur</b> : toutes les 3 à 6 minutes de jeu, un gobelin traverse l'écran avec un sac d'or. Touche-le 5 fois avant qu'il s'enfuie (≈ 2 min de farm d'or).",
+    "⚡ <b>Monstres élites</b> : 1 monstre sur 50 a un pouvoir (blindé, véloce, vivace ou instable). Plus coriace, mais ×10 d'or et souvent un objet en plus.",
+    "🎡 <b>Roue de la fortune</b> : un tour gratuit par jour (Journal → Événements) : or, Âmes, gemmes, Cristaux, or ×2 pendant 15 min, objet… ou le jackpot.",
+    "📜 <b>Contrats de chasse</b> : les quêtes du jour donnent aussi des Âmes de Brume (+4 en bonus si tu fais les 3), avec de nouveaux contrats (élites, gobelins).",
+    "🔥 <b>Frénésie</b> plus forte : 8 s au lieu de 6, et l'or est aussi doublé pendant ce temps.",
+    "🐲 <b>Boss de clan de la semaine</b> : ses paliers donnent maintenant aussi des Âmes de Brume (jusqu'à 20)."] },
   { v: 69, d: "Plus de mort en boucle", l: [
     "⚖️ <b>Équilibrage</b> : un coup de monstre ne peut plus dépasser une part de ta vie (3,5 % au farm, 6,5 % pour un boss, 8 % pour un boss de zone). Fini les morts en boucle quand ton attaque avance plus vite que ta vie, mais les boss restent un vrai défi.",
     "💪 Si ton chasseur tombe 2 fois au même niveau, il <b>recule un peu</b> pour farmer, puis il <b>retente tout seul</b> un peu plus tard. Après un boss raté aussi : plus besoin de relancer à la main.",
@@ -7057,7 +7146,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 69, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 70, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
