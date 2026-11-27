@@ -513,7 +513,8 @@
     -webkit-mask-image: radial-gradient(ellipse 70% 66% at 50% 50%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 70% 66% at 50% 50%, #000 62%, transparent 100%); }
   @keyframes logoIn { from { transform: translateY(-20px) scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
   .tsSub { position: relative; color: #c8bce8; font-size: 14px; letter-spacing: 3px; margin-top: 4px; text-transform: uppercase; }
-  #titleHero { position: relative; margin: 18px 0 10px; }
+  #titleHero { position: relative; margin: 6px 0 4px; cursor: pointer; }
+  body.tsOn #modal { z-index: 60; } body.tsOn #toast { z-index: 61; }
   #playBtn { position: relative; border: none; border-radius: 16px; padding: 14px 54px; font-size: 20px; font-weight: 900; letter-spacing: 3px; color: #1a1230; background: linear-gradient(180deg, #ffe08a, #ffb84a); box-shadow: 0 6px 0 #a8742a, 0 0 30px rgba(255,200,100,.5); animation: pulse 1.6s infinite; }
   #playBtn:active { transform: translateY(4px); box-shadow: 0 2px 0 #a8742a; }
   .tsVer { position: absolute; bottom: 8px; right: 12px; color: #6a5a90; font-size: 11px; }
@@ -632,7 +633,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v61</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v62</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -641,7 +642,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v61 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v62 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -664,7 +665,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v61</div></div>
+  <div class="tsVer">v62</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -841,7 +842,7 @@ const UPGRADES = [
   { id: "critdmg", icon: "💥", name: "Dégâts critiques", base: 60, grow: 1.42, max: 40, desc: (l, n) => "Coups critiques : +" + fmtDec(5 * l) + "% → +" + fmtDec(5 * (l + n)) + "% de dégâts en plus" },
   { id: "combo", icon: "🔗", name: "Combo",        base: 45, grow: 1.38, max: 40, desc: (l, n) => "Chaque tap : +" + fmtDec(comboPer(l)) + "% → +" + fmtDec(comboPer(l + n)) + "% de dégâts (jusqu'à " + COMBO_MAX + " fois, 3 s)" },
   { id: "fury",  icon: "😡", name: "Rage",         base: 70, grow: 1.4,  max: 30, desc: (l, n) => "Vie basse : jusqu'à +" + 8 * l + "% → +" + 8 * (l + n) + "% de dégâts" },
-  { id: "xp",    icon: "📘", name: "Expérience",   base: 200, grow: 1.55, max: 20, desc: (l, n) => "XP gagnée : +" + 5 * l + "% → +" + 5 * (l + n) + "%" },
+  { id: "xp",    icon: "📘", name: "Expérience",   base: 200, grow: 1.55, max: 20, desc: (l, n) => "XP gagnée : +" + 10 * l + "% → +" + 10 * (l + n) + "%" },
   { id: "tap",   icon: "👆", name: "Coup de doigt", base: 15, grow: 1.18, desc: (l, n) => "Dégâts du tap : " + Math.round(tapFrom(l) * 100) + "% → " + Math.round(tapFrom(l + n) * 100) + "% de l'attaque" },
   { id: "gold",  icon: "🪙", name: "Flair",        base: 50, grow: 1.3,  desc: (l, n) => "Or gagné : +" + l * 10 + "% → +" + (l + n) * 10 + "%" }
 ];
@@ -857,7 +858,7 @@ const upgCost  = (u, l) => Math.ceil(u.base * Math.pow(u.grow, l));
 const KILLS_PER_LEVEL = 10;
 const DIE_T = 0.2; // durée de l'animation de mort
 const BOSS_TIME = 30;
-const offMax = () => (8 + S.pupg.poff) * 3600;
+const offMax = () => (48 + 3 * S.pupg.poff) * 3600; // coffre AFK : plein en 2 jours (+3 h par niveau de Rêveur)
 
 /* ================== SAUVEGARDE ================== */
 let SAVE_KEY = "chasseBrume_v1";
@@ -868,7 +869,7 @@ function newState() {
   return { ver: 7, won: false, gold: 0, level: 1, maxLevel: 1, kills: 0, auto: true, totalKills: 0,
     upg: { atk: 0, hp: 0, spd: 0, crit: 0, tap: 0, gold: 0, critdmg: 0, combo: 0, fury: 0, xp: 0 }, diff: 0, wonH: false, pupg2: {},
     equip: { arme: null, casque: null, armure: null, gants: null, ceinture: null, bottes: null, amulette: null }, inv: [],
-    sound: true, vib: true, lastSeen: Date.now(), itemId: 1,
+    sound: true, vib: true, lastSeen: Date.now(), afk: 0, itemId: 1,
     perles: 0, totalPerles: 0, rebirths: 0, best: 1,
     pupg: { patk: 0, php: 0, pgold: 0, pstart: 0, ploot: 0, pskill: 0, poff: 0 },
     tree: {}, bonusPts: 0, music: true,
@@ -957,7 +958,7 @@ const P = {
   spd:  () => spdFrom(S.upg.spd) * (1 + eqBonus("spd") / 100) * (1 + petPv("spd") / 100) * CL().spd * (setOn("rodeur", 2) ? 1.2 : 1) * (setOn("spectre", 6) ? 1.25 : 1) * (1 + affSum("spd") / 100) * (1 + gemSum("spd") / 100) * (buffOn("eclair") ? 2 : 1) * (1 + accSum("spd") / 100) * rPow("spd"),
   crit: () => { if (rCrit()) return 100; const sc = (setOn("spectre", 4) ? 10 : 0) + affSum("crit") + accSum("crit") + petPv("crit"); return Math.min(60 + 3 * T("g2") + CL().crit + sc, critFrom(S.upg.crit) + eqBonus("crit") + 3 * T("g2") + CL().crit + sc); },
   tap:  () => P.atk() * tapFrom(S.upg.tap) * (1 + (accSum("tap") + petPv("tap")) / 100) * (1 + 0.05 * A2("a6")) * rPow("tap"),
-  goldMult: () => (1 + S.upg.gold * 0.1) * (1 + 0.05 * A2("a3")) * (1 + 0.1 * A2("a15")) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + 0.2 * T("p6")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1) * (1 + accSum("gold") / 100) * rPow("gold")
+  goldMult: () => (1 + S.upg.gold * 0.1) * (1 + 0.05 * A2("a3")) * (1 + 0.1 * A2("a15")) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + 0.2 * T("p6")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1) * (1 + accSum("gold") / 100) * rPow("gold") * 1.1 /* v62 : +10 % d'or pour tout le monde */
 };
 
 // Les stats du héros sont recalculées une seule fois par image (au lieu de des dizaines de fois)
@@ -1035,7 +1036,7 @@ let skill = 0, bossTimer = 0, respawn = 0;
 let floats = [], particles = [];
 
 function dmgMods(kind) { // bonus de dégâts : Combo, Rage, Renaissance avancée
-  let m = 1 + 0.03 * A2("a12");
+  let m = 1 + 0.05 * A2("a12");
   if (kind === "skill") m *= 1 + 0.1 * A2("a2");
   if (comboN && S.upg.combo) m *= 1 + comboN * comboPer(S.upg.combo) / 100;
   if (S.upg.fury) { const f = Math.max(0, Math.min(1, (0.6 - hero.hp / P.maxHp()) / 0.6)); m *= 1 + 0.08 * S.upg.fury * f; }
@@ -1216,7 +1217,7 @@ const BRANCHES = [
     { id: "p6", icon: "🪙", name: "Avarice", max: 5, desc: r => "Or +" + 20 * r + "%" },
     { id: "p7", icon: "🐾", name: "Dresseur", max: 5, desc: r => "Chance de familier sur les boss +" + 4 * r + " pts (25 % de base)" },
     { id: "tresor", icon: "🗝️", name: "Chasse au trésor", max: 3, skill: true, desc: r => "Compétence : " + SKILLS.tresor.desc(Math.max(1, r)) },
-    { id: "p8", icon: "📚", name: "Érudit", max: 5, desc: r => "Expérience +" + 5 * r + "%" },
+    { id: "p8", icon: "📚", name: "Érudit", max: 5, desc: r => "Expérience +" + 10 * r + "%" },
     { id: "p9", icon: "💠", name: "Gemmologue", max: 3, desc: r => "Chance de gemme sur les boss +" + 10 * r + " pts (30 % de base)" }] }
 ];
 const TREE_TOTAL = BRANCHES.reduce((a, b) => a + b.nodes.reduce((x, n) => x + n.max, 0), 0);
@@ -1316,10 +1317,10 @@ const REB_MIN = 60;
 // Plus tu vas loin avant de renaître, plus tu gagnes de Cristaux (ça grandit de plus en plus vite)
 // Cristaux : grandissent avec le niveau atteint, avec un bonus qui monte encore plus vite en fin de partie
 const rebLvlBonus = L => 1 + L / 500;     // ×1,2 au niveau 100 · ×2 au niveau 500 · ×3 au niveau 1000
-const perlesFor = L => L < REB_MIN ? 0 : Math.floor(2 * Math.pow((L - 50) / 10, 2) * rebLvlBonus(L) * (1 + 0.02 * A2("a4")) * (1 + 0.1 * A2("a15")) * (S.diff ? HARD.perles : 1));
+const perlesFor = L => L < REB_MIN ? 0 : Math.floor(2 * Math.pow((L - 50) / 10, 2) * rebLvlBonus(L) * (1 + 0.04 * A2("a4")) * (1 + 0.1 * A2("a15")) * (S.diff ? HARD.perles : 1));
 // Niveau de départ après une Renaissance : selon Départ rapide ET le niveau que tu avais atteint
 const startPct = () => 0.03 * S.pupg.pstart;           // jusqu'à 30 % du niveau atteint
-const rebStart = (L, modeChange) => Math.min(MAX_LEVEL - 1, Math.max(1 + 5 * S.pupg.pstart, modeChange ? 0 : Math.floor(L * startPct())) + 5 * A2("a13"));
+const rebStart = (L, modeChange) => Math.min(MAX_LEVEL - 1, Math.max(1 + 5 * S.pupg.pstart, modeChange ? 0 : Math.floor(L * startPct())) + 15 * A2("a13"));
 const PUPG = [
   { id: "patk",   icon: "🗡️", name: "Âme guerrière",     base: 1, grow: 1.45, desc: l => "Attaque +" + l * 25 + "% → +" + (l + 1) * 25 + "%" },
   { id: "php",    icon: "💖", name: "Cœur ancien",       base: 1, grow: 1.45, desc: l => "Vie +" + l * 25 + "% → +" + (l + 1) * 25 + "%" },
@@ -1327,7 +1328,7 @@ const PUPG = [
   { id: "pstart", icon: "🚀", name: "Départ rapide",     base: 3, grow: 1.8, max: 10, desc: l => "Après une renaissance, repars à " + 3 * l + "% → " + 3 * (l + 1) + "% du niveau atteint (au moins niv. " + (1 + 5 * (l + 1)) + ")" },
   { id: "ploot",  icon: "🍀", name: "Chance",            base: 2, grow: 1.6, max: 20, desc: l => "Chance de butin +" + l * 10 + "% → +" + (l + 1) * 10 + "%" },
   { id: "pskill", icon: "✨", name: "Maîtrise",          base: 3, grow: 1.7, max: 10, desc: l => "Recharge des compétences -" + l * 5 + "% → -" + (l + 1) * 5 + "%" },
-  { id: "poff",   icon: "🌙", name: "Rêveur",            base: 2, grow: 1.6, max: 8,  desc: l => "Hors ligne : " + (8 + l) + " h max et +" + l * 10 + "% → " + (9 + l) + " h et +" + (l + 1) * 10 + "%" }
+  { id: "poff",   icon: "🌙", name: "Rêveur",            base: 2, grow: 1.6, max: 8,  desc: l => "Coffre AFK : " + (48 + 3 * l) + " h max et +" + l * 10 + "% → " + (51 + 3 * l) + " h et +" + (l + 1) * 10 + "%" }
 ];
 const pCost = (u, l) => Math.ceil(u.base * Math.pow(u.grow, l));
 const ADV_MIN = 10; // Renaissances nécessaires
@@ -1335,16 +1336,16 @@ const PUPG2 = [
   { id: "a1",  icon: "🎯", name: "Œil du chasseur",    base: 40,  grow: 1.35, max: 20, desc: l => "Dégâts critiques +" + 5 * l + "% → +" + 5 * (l + 1) + "%" },
   { id: "a2",  icon: "💫", name: "Âme destructrice",   base: 40,  grow: 1.35, max: 20, desc: l => "Dégâts des compétences +" + 10 * l + "% → +" + 10 * (l + 1) + "%" },
   { id: "a3",  icon: "💰", name: "Trésor mystique",    base: 30,  grow: 1.3,  max: 30, desc: l => "Or gagné +" + 5 * l + "% → +" + 5 * (l + 1) + "%" },
-  { id: "a4",  icon: "💎", name: "Cristal vivant",     base: 80,  grow: 1.45, max: 25, desc: l => "Cristaux gagnés +" + 2 * l + "% → +" + 2 * (l + 1) + "%" },
+  { id: "a4",  icon: "💎", name: "Cristal vivant",     base: 80,  grow: 1.45, max: 25, desc: l => "Cristaux gagnés +" + 4 * l + "% → +" + 4 * (l + 1) + "%" },
   { id: "a5",  icon: "🩸", name: "Sang de titan",      base: 40,  grow: 1.35, max: 30, desc: l => "Vie maximale +" + 10 * l + "% → +" + 10 * (l + 1) + "%" },
   { id: "a6",  icon: "👆", name: "Rage éternelle",     base: 30,  grow: 1.3,  max: 30, desc: l => "Dégâts du tap +" + 5 * l + "% → +" + 5 * (l + 1) + "%" },
   { id: "a7",  icon: "👑", name: "Chasseur de boss",   base: 50,  grow: 1.38, max: 20, desc: l => "Dégâts contre les boss +" + 10 * l + "% → +" + 10 * (l + 1) + "%" },
   { id: "a8",  icon: "⏱️", name: "Esprit rapide",      base: 120, grow: 1.8,  max: 6,  desc: l => "Recharge des compétences -" + 5 * l + "% → -" + 5 * (l + 1) + "%" },
   { id: "a9",  icon: "🍀", name: "Fortune divine",     base: 60,  grow: 1.4,  max: 20, desc: l => "Chance de butin bonus +" + 5 * l + "% → +" + 5 * (l + 1) + "%" },
   { id: "a10", icon: "📘", name: "Expérience ancienne", base: 80, grow: 1.45, max: 20, desc: l => "XP gagnée +" + 5 * l + "% → +" + 5 * (l + 1) + "%" },
-  { id: "a11", icon: "🌙", name: "Âme vorace",         base: 40,  grow: 1.35, max: 20, desc: l => "Gains hors ligne +" + 5 * l + "% → +" + 5 * (l + 1) + "%" },
-  { id: "a12", icon: "⚔️", name: "Pouvoir ancestral",  base: 100, grow: 1.4,  max: 30, desc: l => "Tous les dégâts +" + 3 * l + "% → +" + 3 * (l + 1) + "%" },
-  { id: "a13", icon: "🚀", name: "Renaissance éclair", base: 150, grow: 1.7,  max: 10, desc: l => "Niveaux au départ +" + 5 * l + " → +" + 5 * (l + 1) },
+  { id: "a11", icon: "🌙", name: "Âme vorace",         base: 40,  grow: 1.35, max: 20, desc: l => "Coffre AFK +" + 5 * l + "% → +" + 5 * (l + 1) + "%" },
+  { id: "a12", icon: "⚔️", name: "Pouvoir ancestral",  base: 100, grow: 1.4,  max: 30, desc: l => "Tous les dégâts +" + 5 * l + "% → +" + 5 * (l + 1) + "%" },
+  { id: "a13", icon: "🚀", name: "Renaissance éclair", base: 150, grow: 1.7,  max: 10, desc: l => "Niveaux au départ +" + 15 * l + " → +" + 15 * (l + 1) },
   { id: "a14", icon: "🛡️", name: "Gardien mystique",   base: 70,  grow: 1.5,  max: 10, desc: l => "Résistance : dégâts subis -" + 5 * l + "% → -" + 5 * (l + 1) + "%" },
   { id: "a15", icon: "🌫️", name: "Dieu de la brume",   base: 400, grow: 1.75, max: 10, desc: l => "Tous les gains (or, XP, Cristaux) +" + 10 * l + "% → +" + 10 * (l + 1) + "%" }
 ];
@@ -2117,7 +2118,7 @@ function refreshPets() {
 const fmtDec = v => String(Math.round(v * 10) / 10).replace(".", ",");
 const HLV_MAX = 200;
 const xpNeed = l => Math.round(15 * l * l * Math.pow(1.016, l) + 10); // niveau 200 : ~500 millions d'XP au total, il faut s'accrocher !
-const xpMult = () => (1 + (accSum("xp") + petPv("xp") + 5 * T("p8") + 5 * S.upg.xp + 5 * A2("a10")) / 100) * (1 + 0.1 * A2("a15"));
+const xpMult = () => (1 + (accSum("xp") + petPv("xp") + 10 * T("p8") + 10 * S.upg.xp + 5 * A2("a10")) / 100) * (1 + 0.1 * A2("a15")) * 1.3; // v62 : +30 % d'XP pour tout le monde
 const xpKill = (lvl, boss) => Math.max(1, Math.round((3 + (lvl + (hardOn() ? 1000 : 0)) * 0.2) * (boss ? 8 : 1) * xpMult()));
 const hlvB = () => 1 + 0.015 * ((S.hlv || 1) - 1);
 const ACC_SLOT_LV = [5, 60, 150];
@@ -2703,7 +2704,7 @@ const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
     { id: "ard30", name: "Roi du Cauchemar", ok: () => (arBestD()[3] || 0) >= 30 },
     { id: "arc25", name: "Âme de la meute", ok: () => (S.arenaCoop || 0) >= 25 }
   ]);
-function drawHeroPreview(c, tt = 1.3, sz = 150) { c.width = c.height = sz * DPR; c.style.width = c.style.height = sz + "px";
+function drawHeroPreview(c, tt = 1.3, sz = 150) { if (c && c.id === "titleHero") return; // l'accueil a sa propre scène animée c.width = c.height = sz * DPR; c.style.width = c.style.height = sz + "px";
   HC = heroColors(); const V = heroVariant(), x = c.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height); if (!V) return;
   const kk = Math.min(sz * 0.8 / V.h, sz * 0.95 / V.w); // tout le personnage tient dans la case
   x.setTransform(DPR, 0, 0, DPR, 0, 0); heroBlit(x, V, (sz - V.w * kk) / 2 + V.fx * kk, sz - 6, tt, { h: V.h * kk / V.small });
@@ -3112,7 +3113,7 @@ function backToTitle() { // petit bouton maison : retour à l'écran d'accueil (
 function showTitle(then, quick) {
   const t = $("titleScreen"); t.classList.remove("out"); t.style.display = "flex"; $("playBtn").style.display = "none";
   $("tsLoad").style.opacity = quick ? 0 : 1; $("tsLoadTxt").style.opacity = quick ? 0 : 1;
-  try { const c = $("titleHero"); drawHeroPreview(c); } catch (e) {}
+  document.body.classList.add("tsOn"); try { titleScene(); } catch (e) {}
   let li = Math.floor(Math.random() * LORE.length);
   const showLore = () => { const el = $("tsLore"); el.classList.remove("in"); setTimeout(() => { $("tsLoreTitle").textContent = LORE[li][0]; $("tsLoreTxt").textContent = LORE[li][1]; el.classList.add("in"); li = (li + 1) % LORE.length; }, 250); };
   showLore(); const loreTimer = setInterval(showLore, 5000);
@@ -3128,7 +3129,7 @@ function showTitle(then, quick) {
     else { $("tsLoad").style.opacity = 0; $("tsLoadTxt").style.opacity = 0; $("playBtn").style.display = "block"; }
   };
   requestAnimationFrame(tick);
-  $("playBtn").onclick = () => { clearInterval(loreTimer); t.classList.add("out"); startMusic(); setTimeout(() => { t.style.display = "none"; then && then(); }, 450); };
+  $("playBtn").onclick = () => { clearInterval(loreTimer); t.classList.add("out"); document.body.classList.remove("tsOn"); startMusic(); setTimeout(() => { t.style.display = "none"; then && then(); }, 450); };
 }
 
 /* ================== STATISTIQUES ================== */
@@ -3864,7 +3865,7 @@ function drawHero(t) {
   drawShots(t);
   bar(heroX() - 30, groundY() - 140, 60, 7, hero.hp / P.maxHp(), "#52d17c");
   const tt = TITLES.find(x => x.id === S.title);
-  if (tt && tt.id !== "novice") { ctx.font = "italic bold 10px system-ui"; ctx.textAlign = "center"; ctx.fillStyle = "rgba(0,0,0,.55)"; ctx.fillText("« " + tt.name + " »", heroX() + 1, groundY() - 145); ctx.fillStyle = "#ffd166"; ctx.fillText("« " + tt.name + " »", heroX(), groundY() - 128); }
+  if (tt && tt.id !== "novice") { ctx.font = "italic bold 10px system-ui"; ctx.textAlign = "center"; ctx.fillStyle = "rgba(0,0,0,.55)"; ctx.fillText("« " + tt.name + " »", heroX() + 1, groundY() - 145); ctx.fillStyle = "#ffd166"; ctx.fillText("« " + tt.name + " »", heroX(), groundY() - 146); } // ombre + texte au même endroit, au-dessus de la barre de vie
 }
 
 /* --- visages et chapeaux des monstres --- */
@@ -4428,6 +4429,7 @@ function loopBody(now) {
   saveT += raw; if (saveT > 5) { saveT = 0; save(); } // toutes les 5 vraies secondes, même en ×3
   uiT += dt; if (uiT > 0.25) { uiT = 0; refreshUpgButtons(); refreshSkill(); updateSkillBar(); refreshLive(); }
   sanT += raw; if (sanT > 10) { sanT = 0; sanitize(); }
+  if (!document.hidden) S.afk = Math.min(offMax(), (+S.afk || 0) + Math.min(raw, 1) * AFK_ON);
 }
 
 function update(dt) {
@@ -4828,21 +4830,123 @@ function sfx(type) {
 }
 function vib(ms) { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} }
 
-/* ================== GAINS HORS LIGNE ================== */
-function offlineGains() {
+/* ================== COFFRE AFK ==================
+   Le coffre se remplit avec le temps : à 100 % quand le jeu est fermé (comme les anciens gains hors ligne),
+   et un peu (30 %) pendant que tu joues. On l'ouvre en touchant le coffre sur l'écran d'accueil. */
+const AFK_ON = 0.3;
+function afkFill() { return Math.min(1, (+S.afk || 0) / offMax()); }
+function afkAddOffline() { // au retour dans le jeu : le temps d'absence remplit le coffre
+  if (!isFinite(S.afk) || S.afk < 0) S.afk = 0;
   const secs = Math.min(offMax(), (Date.now() - (S.lastSeen || Date.now())) / 1000);
-  if (secs < 60) return;
-  let l = S.level; if (isBossLvl(l)) l = Math.max(1, l - 1);
-  const dps = P.atk() * P.spd() * (1 + P.crit() / 100 * (critMult() - 1));
-  const ttk = monHp(l) / dps + 0.6;
-  const gold = (secs / ttk) * monGold(l) * P.goldMult() * 0.5 * (1 + 0.1 * S.pupg.poff) * (1 + 0.05 * A2("a11"));
-  if (gold <= 0) return;
-  S.gold += gold;
-  const hl0 = S.hlv, xp = Math.round((secs / ttk) * xpKill(l, false) * 0.5 * (1 + 0.05 * A2("a11"))); gainXp(xp);
-  const h = Math.floor(secs / 3600), m = Math.floor(secs % 3600 / 60);
-  modal("Bon retour, chasseur !", "Pendant ton absence (" + (h ? h + " h " : "") + m + " min), ton chasseur a continué à farmer.<br><br><b style='color:#ffd166;font-size:20px'>+" + fmt(gold) + " " + COIN + "</b><br><b style='color:#9fd0ff'>+" + fmt(xp) + " XP</b>" + (S.hlv > hl0 ? " (niveau " + S.hlv + " !)" : ""), [{ t: "Super !", f: () => sfx("coin") }]);
+  S.lastSeen = Date.now(); if (!(secs >= 60)) return;
+  const before = S.afk; S.afk = Math.min(offMax(), before + secs);
+  const add = S.afk - before;
+  if (add >= 60) { const h = Math.floor(add / 3600), m = Math.floor(add % 3600 / 60); setTimeout(() => toast("🎁 Ton coffre AFK s'est rempli pendant ton absence (+" + (h ? h + " h " : "") + m + " min) — ouvre-le sur l'accueil !"), 900); }
+  save();
 }
-
+function afkLoot(secs) {
+  let l = S.level; if (isBossLvl(l)) l = Math.max(1, l - 1);
+  const dps = P.atk() * P.spd() * (1 + P.crit() / 100 * (critMult() - 1)), ttk = monHp(l) / dps + 0.6, kills = secs / ttk, b = 1 + 0.05 * A2("a11");
+  return { gold: kills * monGold(l) * P.goldMult() * 0.5 * (1 + 0.1 * S.pupg.poff) * b, xp: Math.round(kills * xpKill(l, false) * 0.5 * b),
+    items: Math.min(30, Math.floor(secs / 1800)), gems: Math.floor(secs / 3600), cr: Math.floor(secs / 7200) };
+}
+function afkClaim() {
+  const secs = +S.afk || 0;
+  if (secs < 60) { toast("🎁 Le coffre se remplit… reviens dans quelques minutes !"); return; }
+  const L = afkLoot(secs); S.afk = 0;
+  S.gold += L.gold; const hl0 = S.hlv; gainXp(L.xp);
+  const got = []; let sold = 0;
+  for (let i = 0; i < L.items; i++) { const r = Math.random(), ri = r < 0.12 ? 3 : r < 0.45 ? 2 : 1, it = makeItem(ri, S.maxLevel);
+    if (S.inv.length < bagMax()) { S.inv.push(it); countRar(ri); got.push(it); } else sold += monGold(Math.max(1, S.maxLevel - 1)) * 20; }
+  if (sold) S.gold += sold;
+  for (let i = 0; i < L.gems; i++) addGem(randGem(), Math.random() < 0.25 ? 2 : 1);
+  if (L.cr) { S.perles += L.cr; S.totalPerles += L.cr; }
+  try { if (got.length) autoFuse(); } catch (e) {}
+  const h = Math.floor(secs / 3600), m = Math.floor(secs % 3600 / 60);
+  const best = got.slice().sort((a, b) => b.rar - a.rar).slice(0, 3).map(it => '<span class="c' + it.rar + '">' + it.name + "</span>").join("<br>");
+  sfx("rare"); vib(40); save(); try { refreshTop(); updateBagTab(); } catch (e) {} statF++;
+  if (tsc) for (let i = 0; i < 10; i++) tsc.fx.push({ k: "spark", x: tsc.W * 0.86, y: tsc.H - 46, vx: rand(-90, 90), vy: rand(-160, -40), life: 0.8, c: i % 2 ? "#ffd166" : "#fff" });
+  modal("🎁 Coffre AFK", "Ton chasseur a farmé pendant <b>" + (h ? h + " h " : "") + m + " min</b> :<br><br><b style='color:#ffd166;font-size:20px'>+" + fmt(L.gold + sold) + " " + COIN + "</b><br><b style='color:#9fd0ff'>+" + fmt(L.xp) + " XP</b>" + (S.hlv > hl0 ? " (niveau " + S.hlv + " !)" : "") +
+    (got.length ? "<br><br><b>" + got.length + " objet" + (got.length > 1 ? "s" : "") + "</b><br>" + best : "") + (L.gems ? "<br>💎 " + L.gems + " gemme" + (L.gems > 1 ? "s" : "") : "") + (L.cr ? "<br>" + PERLE + " +" + L.cr + " Cristaux" : "") + (sold ? "<br><small>Sac plein : des objets ont été vendus.</small>" : ""), [{ t: "Super !" }]);
+}
+// ---------- petite scène de l'écran d'accueil : le chasseur combat en boucle ----------
+let tsc = null;
+function titleScene() {
+  const c = $("titleHero"); if (!c) return;
+  const Wc = Math.min(360, window.innerWidth * 0.94), Hc = 190;
+  c.style.width = Wc + "px"; c.style.height = Hc + "px"; c.width = Math.round(Wc * DPR); c.height = Math.round(Hc * DPR);
+  if (!tsc) tsc = { t: 0, last: performance.now(), mon: null, next: 0.6, atk: -1, cd: 0, fx: [], coins: [] };
+  tsc.W = Wc; tsc.H = Hc; tsc.last = performance.now();
+  if (!tsc.run) { tsc.run = true; requestAnimationFrame(titleLoop); }
+}
+function tscNewMon() { const z = zoneOf(S.level) || ZONES[0], ty = pick(z.types), col = pick(z.mon); tsc.mon = { key: ty + "|" + col + "|0.6", x: tsc.W + 40, hp: 3, fl: 0, kb: 0, a: 1, dy: 0 }; }
+function titleLoop(now) {
+  const ts = $("titleScreen"); if (!ts || ts.style.display === "none") { tsc.run = false; return; }
+  requestAnimationFrame(titleLoop);
+  try {
+    const dt = Math.min(0.05, Math.max(0, (now - tsc.last) / 1000)); tsc.last = now; tsc.t += dt;
+    const c = $("titleHero"), g = c.getContext("2d"), W = tsc.W, H = tsc.H, gy = H - 20, t = tsc.t;
+    g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, W, H);
+    HC = heroColors(); const V = heroImgReady() ? heroVariant() : null, hx = W * 0.24, mxT = W * 0.56, cx = W * 0.86, cy = gy;
+    // sol
+    g.save(); g.translate(W / 2, gy); g.scale(1, 0.16); const gr = g.createRadialGradient(0, 0, 4, 0, 0, W * 0.5); gr.addColorStop(0, "rgba(150,110,255,.30)"); gr.addColorStop(1, "rgba(150,110,255,0)"); g.fillStyle = gr; g.beginPath(); g.arc(0, 0, W * 0.5, 0, Math.PI * 2); g.fill(); g.restore();
+    // coffre AFK
+    const fill = afkFill(), open = Math.min(1, fill * 1.4);
+    g.fillStyle = "rgba(0,0,0,.35)"; g.beginPath(); g.ellipse(cx, cy + 2, 24, 6, 0, 0, Math.PI * 2); g.fill();
+    if (fill > 0.05) { g.save(); g.globalAlpha = 0.35 + 0.25 * Math.sin(t * 3); const gl = g.createRadialGradient(cx, cy - 22, 2, cx, cy - 22, 40); gl.addColorStop(0, "rgba(255,210,110,.9)"); gl.addColorStop(1, "rgba(255,210,110,0)"); g.fillStyle = gl; g.fillRect(cx - 40, cy - 62, 80, 80); g.restore(); }
+    const box = (x, y, w, h, col) => { g.fillStyle = col; g.beginPath(); g.roundRect(x, y, w, h, 3); g.fill(); g.lineWidth = 2; g.strokeStyle = "#1a1020"; g.stroke(); };
+    const shake = fill >= 1 ? Math.sin(t * 22) * (Math.sin(t * 1.7) > 0.6 ? 1.6 : 0) : 0;
+    g.save(); g.translate(shake, 0);
+    box(cx - 22, cy - 24, 44, 24, "#8a5530"); g.fillStyle = "#e8b84a"; g.fillRect(cx - 22, cy - 15, 44, 4); g.fillRect(cx - 3, cy - 24, 6, 24);
+    if (open > 0.3) { g.fillStyle = "#ffe08a"; for (let i = 0; i < 4; i++) { g.beginPath(); g.arc(cx - 12 + i * 8, cy - 25 - Math.sin(t * 4 + i) * 1.5, 3, 0, Math.PI * 2); g.fill(); } }
+    g.save(); g.translate(cx - 22, cy - 24); g.rotate(-0.35 * open); box(0, -12, 44, 12, "#9a6236"); g.fillStyle = "#e8b84a"; g.fillRect(0, -6, 44, 3); g.restore();
+    g.fillStyle = "#e8b84a"; g.beginPath(); g.arc(cx, cy - 13, 3.2, 0, Math.PI * 2); g.fill();
+    g.restore();
+    // barre de remplissage + texte
+    g.fillStyle = "rgba(10,8,24,.75)"; g.beginPath(); g.roundRect(cx - 26, cy - 54, 52, 7, 3.5); g.fill();
+    g.fillStyle = fill >= 1 ? "#52ffa0" : "#ffd166"; g.beginPath(); g.roundRect(cx - 26, cy - 54, 52 * Math.max(0.07, fill), 7, 3.5); g.fill();
+    const hh = Math.floor((+S.afk || 0) / 3600), mm = Math.floor((+S.afk || 0) % 3600 / 60);
+    g.font = "bold 10px system-ui"; g.textAlign = "center"; g.fillStyle = "#f0eaff"; g.fillText(fill >= 1 ? "PLEIN !" : hh + " h " + String(mm).padStart(2, "0"), cx, cy - 59);
+    g.font = "bold 9px system-ui"; g.fillStyle = "#c8b8f0"; g.fillText("COFFRE AFK", cx, cy + 13);
+    // monstre
+    if (!tsc.mon && (tsc.next -= dt) <= 0) tscNewMon();
+    const M = tsc.mon;
+    if (M) {
+      if (M.x > mxT) M.x = Math.max(mxT, M.x - 140 * dt);
+      M.fl = Math.max(0, M.fl - dt); M.kb = Math.max(0, M.kb - dt * 5);
+      if (M.dying) { M.a -= dt * 2.6; M.dy -= dt * 30; if (M.a <= 0) { tsc.mon = null; tsc.next = 0.5; } }
+      const s = monSprite(M.key), h = 62, k = h / (110 * s.sc), x = M.x + M.kb * 14, bob = Math.sin(t * 5) * 1.5;
+      g.save(); g.globalAlpha = Math.max(0, M.a); g.fillStyle = "rgba(0,0,0,.3)"; g.beginPath(); g.ellipse(x, gy + 2, 20, 5, 0, 0, Math.PI * 2); g.fill();
+      if (M.fl > 0) g.filter = "brightness(2)"; g.drawImage(s.c, x - s.sz * k / 2, gy - (s.sz - 18) * k + bob + M.dy, s.sz * k, s.sz * k); g.filter = "none"; g.restore();
+    }
+    // chasseur : attaque quand le monstre est arrivé (vitesse limitée, comme en jeu)
+    tsc.cd -= dt;
+    if (M && !M.dying && M.x <= mxT + 1 && tsc.atk < 0 && tsc.cd <= 0) { tsc.atk = 0; tsc.cd = 0.75; tsc.hitDone = false; }
+    let atk = 0;
+    if (tsc.atk >= 0) { tsc.atk += dt / 0.42; atk = Math.min(1, tsc.atk);
+      if (!tsc.hitDone && atk > 0.55 && M) { tsc.hitDone = true; M.fl = 0.12; M.kb = 1; M.hp--;
+        const aura = HC.aura || "#c07cff";
+        if (S.cls && S.cls !== "spectre") tsc.fx.push({ k: "shot", x: hx + 30, y: gy - 50, tx: M.x, ty: gy - 30, life: 0.18, c: aura });
+        for (let i = 0; i < 8; i++) tsc.fx.push({ k: "spark", x: M.x - 6, y: gy - 30, vx: rand(-80, 80), vy: rand(-110, 10), life: 0.45, c: Math.random() < 0.5 ? aura : "#ffffff" });
+        tsc.fx.push({ k: "num", x: M.x + rand(-8, 8), y: gy - 66, vy: -30, life: 0.7, txt: fmt(P.atk() * (Math.random() < 0.3 ? 2.5 : 1)) });
+        if (S.sound && Math.random() < 0.5) try { sfx("hit"); } catch (e) {}
+        if (M.hp <= 0) { M.dying = true; for (let i = 0; i < 5; i++) tsc.coins.push({ t: -i * 0.08, sx: M.x, sy: gy - 30 }); }
+      }
+      if (tsc.atk >= 1) tsc.atk = -1; }
+    if (V) heroBlit(g, V, hx, gy, t, { h: 120, atk });
+    // effets
+    for (const f of tsc.fx) { f.life -= dt;
+      if (f.k === "spark") { f.x += f.vx * dt; f.y += f.vy * dt; f.vy += 300 * dt; g.globalAlpha = Math.max(0, Math.min(1, f.life * 2)); g.fillStyle = f.c; g.beginPath(); g.arc(f.x, f.y, 2.2, 0, Math.PI * 2); g.fill(); }
+      else if (f.k === "num") { f.y += f.vy * dt; g.globalAlpha = Math.max(0, Math.min(1, f.life * 2)); g.font = "900 13px system-ui"; g.textAlign = "center"; g.lineWidth = 3; g.strokeStyle = "#1a1030"; g.strokeText(f.txt, f.x, f.y); g.fillStyle = "#fff"; g.fillText(f.txt, f.x, f.y); }
+      else if (f.k === "shot") { g.globalAlpha = Math.max(0, f.life * 5); g.strokeStyle = f.c; g.lineWidth = 3; g.lineCap = "round"; g.beginPath(); g.moveTo(f.x, f.y); g.lineTo(f.tx, f.ty); g.stroke(); }
+    }
+    g.globalAlpha = 1; tsc.fx = tsc.fx.filter(f => f.life > 0);
+    // pièces qui volent jusqu'au coffre
+    for (const co of tsc.coins) { co.t += dt / 0.6; if (co.t < 0) continue; const k = Math.min(1, co.t), x = co.sx + (cx - co.sx) * k, y = co.sy + (cy - 26 - co.sy) * k - Math.sin(k * Math.PI) * 40;
+      g.fillStyle = "#ffd166"; g.beginPath(); g.arc(x, y, 3.6, 0, Math.PI * 2); g.fill(); g.strokeStyle = "#a8742a"; g.lineWidth = 1.2; g.stroke(); }
+    tsc.coins = tsc.coins.filter(co => co.t < 1);
+  } catch (e) { console.error(e); }
+}
 /* ================== ÉVÉNEMENTS ================== */
 cv.addEventListener("pointerdown", e => {
   const r = cv.getBoundingClientRect(), x = e.clientX - r.left;
@@ -4917,7 +5021,7 @@ $("resetBtn").onclick = () => modal("Tout effacer ?", "Ta progression, ton or et
   { t: "Annuler", alt: true },
   { t: "Effacer", f: () => { S = newState(); save(); hero.hp = P.maxHp(); skill = 0; spawnMonster(); refreshAll(); toast("Nouvelle partie !"); } }
 ]);
-document.addEventListener("visibilitychange", () => { if (document.hidden) { save(); stopMusic(); } else { offlineGains(); refreshAll(); } });
+document.addEventListener("visibilitychange", () => { if (document.hidden) { save(); stopMusic(); } else { afkAddOffline(); refreshAll(); } });
 window.addEventListener("pagehide", save);
 window.addEventListener("resize", resize);
 /* ---- défilement libre : en descendant dans les menus, le combat remonte et les onglets restent collés en haut ---- */
@@ -5575,6 +5679,7 @@ function refreshCust() {
   });
 }
 $("custBtn").onclick = e => { e.stopPropagation(); openCust(); };
+$("titleHero").addEventListener("click", e => { e.stopPropagation(); const r = e.currentTarget.getBoundingClientRect(); if (e.clientX - r.left > r.width * 0.68) afkClaim(); else if (tsc) tsc.cd = 0; });
 /* ================== CLAN (sans serveur) ==================
    Chaque clan a un code. Le premier membre connecté devient le « relais » (pair PeerJS « brumeria-clan-CODE »),
    les autres s'y connectent : membres, points et chat se synchronisent quand vous jouez en même temps.
@@ -5888,6 +5993,13 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 62, d: "Accueil animé et coffre AFK", l: [
+    "🎬 Sur l'accueil, ton chasseur <b>combat des monstres en boucle</b> (touche-le pour qu'il frappe plus vite).",
+    "🎁 Nouveau <b>coffre AFK</b> à côté de lui : il se remplit quand le jeu est fermé (et un peu pendant que tu joues). Il est plein au bout de <b>2 jours</b> (Rêveur ajoute 3 h par niveau). Il donne de l'or, de l'XP, des objets, des gemmes et des Cristaux. Touche-le pour l'ouvrir !",
+    "🌙 Les gains hors ligne vont maintenant dans le coffre : Rêveur et Âme vorace l'améliorent toujours.",
+    "⬆️ Améliorations dépassées remises à niveau : <b>Expérience</b> +10 %/niv. (au lieu de 5), <b>Érudit</b> +10 %/rang, <b>Pouvoir ancestral</b> +5 %/niv. (au lieu de 3), <b>Cristal vivant</b> +4 %/niv. (au lieu de 2), <b>Renaissance éclair</b> +15 niveaux/niv. (au lieu de 5). Tes niveaux déjà achetés comptent tout de suite.",
+    "🐛 Le titre au-dessus du chasseur ne s'affiche plus en double.",
+    "📈 Pour tout le monde : <b>+30 % d'XP</b> et <b>+10 % d'or</b> sur tout ce que tu gagnes en chassant (le coffre AFK compris)."] },
   { v: 61, d: "Le vrai chasseur de Brumeria !", l: [
     "🗡️ <b>Nouveau chasseur</b> : homme au long manteau à col montant et katana de brume, femme au kimono, masque et flamme. Les esprits et effets derrière lui sont retirés.",
     "🧬 Chaque race garde sa <b>couleur d'aura</b> (bordures, arme, yeux) et ses traits : oreilles d'elfe, de chat ou de loup, cornes, ailes, auréole, peau de l'orc, du golem, de l'ondin…",
@@ -6061,7 +6173,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 61, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 62, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
@@ -6105,7 +6217,7 @@ resize();
 hero.hp = P.maxHp();
 spawnMonster();
 refreshAll();
-offlineGains();
+afkAddOffline();
 save();
 requestAnimationFrame(loop);
 setInterval(autoExpTick, 5000);
