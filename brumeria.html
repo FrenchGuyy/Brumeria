@@ -24,6 +24,10 @@
   #levelNav { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
   .navBtn { background: #2a2e45; border: none; color: #e8e6f0; border-radius: 6px; width: 26px; height: 22px; font-size: 12px; }
   .navBtn:disabled { opacity: .3; }
+  .autoUpBtn { width: 100%; margin: 0 0 8px; border: 1px solid #3a3360; border-radius: 10px; padding: 9px; font-weight: 800; font-size: 13px; color: #d8ccff; background: #221c3a; }
+  .autoUpBtn.on { color: #12101c; background: linear-gradient(180deg, #8affc0, #3fd08a); border-color: #3fd08a; }
+  #lvlStep { width: auto; min-width: 26px; padding: 0 3px; font-size: 11px; font-weight: 800; color: #ffd166; }
+  #levelNav { gap: 4px; }
 
   /* Scène */
   #sceneWrap { position: relative; flex: 0 0 42%; min-height: 230px; }
@@ -551,6 +555,7 @@
         <button class="navBtn" id="prevLvl">◀</button>
         <span id="lvlTxt">Niveau 1</span>
         <button class="navBtn" id="nextLvl">▶</button>
+        <button class="navBtn" id="lvlStep" aria-label="Pas de déplacement">×1</button>
       </div>
     </div>
     <button id="towerBtn" class="topBtn" aria-label="Tour de la Brume"></button>
@@ -633,7 +638,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v62</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v63</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -642,7 +647,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v62 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v63 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -665,7 +670,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v62</div></div>
+  <div class="tsVer">v63</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -789,7 +794,7 @@ const TYPE_NAMES = {
   robot: ["Boulonix", "Robotin", "Circuit"], engrenage: ["Rouage", "Dentelix", "Pignon"], drone: ["Vrombix", "Hélicou", "Bzzdrone"], ressort: ["Boing", "Spiralou", "Rebondix"],
   guimauve: ["Moelleux", "Guimou", "Doudouce"], sucette: ["Spiralette", "Léchou", "Tourbillon"], gelee: ["Gélifou", "Tremblot", "Sucrin"], cupcake: ["Muffinou", "Crémeux", "Glaçou"],
   etoile: ["Étincelou", "Brillant", "Stellou"], comete: ["Filou", "Cométou", "Traînard"], astrol: ["Zorblux", "Antenou", "Glorp"], trou: ["Avaleur", "Gouffrou", "Néantin"] };
-const SUF = ["grognon", "farceur", "baveux", "ronfleur", "boudeur", "sauteur", "gourmand", "râleur", "timide", "furieux", "rigolo", "pressé"];
+const SUF = ["sauvage", "funeste", "vorace", "sinistre", "féroce", "farouche", "lugubre", "redoutable", "insatiable", "sombre", "rapace", "terrible"];
 const BOSS_T = ["Grand", "Chef", "Roi", "Maître", "Gros"];
 const ZONE_BOSS = ["Grand-Père Ronce", "Colosse de Givre", "Titan de Magma", "Léviathan des Récifs", "Seigneur de la Brume", "Mère des Marais", "Sphinx des Sables", "Colosse d'Acier", "Reine Sucrée", "Dévoreur d'Étoiles"];
 
@@ -835,16 +840,17 @@ const SLOTS = {
 const ADJ = ["de Brume", "du Veilleur", "des Cimes", "d'Aube", "du Marcheur", "de Lune", "des Braises", "du Givre"];
 
 const UPGRADES = [
+  // les 4 qu'on améliore en boucle sont en haut (Force, Endurance, Coup de doigt, Flair) ; v63 : +10 niveaux max pour les autres
   { id: "atk",   icon: "⚔️", name: "Force",        base: 8,  grow: 1.16, desc: (l, n) => "Attaque +" + fmt(atkFrom(l + n) - atkFrom(l)) },
   { id: "hp",    icon: "❤️", name: "Endurance",    base: 10, grow: 1.16, desc: (l, n) => "Vie max +" + fmt(hpFrom(l + n) - hpFrom(l)) },
-  { id: "spd",   icon: "💨", name: "Vitesse",      base: 25, grow: 1.35, max: 40, desc: (l, n) => "Attaques/s : " + spdFrom(l).toFixed(2) + " → " + spdFrom(l + n).toFixed(2) },
-  { id: "crit",  icon: "🎯", name: "Chance critique", base: 40, grow: 1.4, max: 45, desc: (l, n) => "Chance de coup critique : " + critFrom(l) + "% → " + critFrom(l + n) + "%" },
-  { id: "critdmg", icon: "💥", name: "Dégâts critiques", base: 60, grow: 1.42, max: 40, desc: (l, n) => "Coups critiques : +" + fmtDec(5 * l) + "% → +" + fmtDec(5 * (l + n)) + "% de dégâts en plus" },
-  { id: "combo", icon: "🔗", name: "Combo",        base: 45, grow: 1.38, max: 40, desc: (l, n) => "Chaque tap : +" + fmtDec(comboPer(l)) + "% → +" + fmtDec(comboPer(l + n)) + "% de dégâts (jusqu'à " + COMBO_MAX + " fois, 3 s)" },
-  { id: "fury",  icon: "😡", name: "Rage",         base: 70, grow: 1.4,  max: 30, desc: (l, n) => "Vie basse : jusqu'à +" + 8 * l + "% → +" + 8 * (l + n) + "% de dégâts" },
-  { id: "xp",    icon: "📘", name: "Expérience",   base: 200, grow: 1.55, max: 20, desc: (l, n) => "XP gagnée : +" + 10 * l + "% → +" + 10 * (l + n) + "%" },
   { id: "tap",   icon: "👆", name: "Coup de doigt", base: 15, grow: 1.18, desc: (l, n) => "Dégâts du tap : " + Math.round(tapFrom(l) * 100) + "% → " + Math.round(tapFrom(l + n) * 100) + "% de l'attaque" },
-  { id: "gold",  icon: "🪙", name: "Flair",        base: 50, grow: 1.3,  desc: (l, n) => "Or gagné : +" + l * 10 + "% → +" + (l + n) * 10 + "%" }
+  { id: "gold",  icon: "🪙", name: "Flair",        base: 50, grow: 1.3,  desc: (l, n) => "Or gagné : +" + l * 10 + "% → +" + (l + n) * 10 + "%" },
+  { id: "spd",   icon: "💨", name: "Vitesse",      base: 25, grow: 1.35, max: 50, desc: (l, n) => "Attaques/s : " + spdFrom(l).toFixed(2) + " → " + spdFrom(l + n).toFixed(2) },
+  { id: "crit",  icon: "🎯", name: "Chance critique", base: 40, grow: 1.4, max: 55, desc: (l, n) => "Chance de coup critique : " + critFrom(l) + "% → " + critFrom(l + n) + "%" },
+  { id: "critdmg", icon: "💥", name: "Dégâts critiques", base: 60, grow: 1.42, max: 50, desc: (l, n) => "Coups critiques : +" + fmtDec(5 * l) + "% → +" + fmtDec(5 * (l + n)) + "% de dégâts en plus" },
+  { id: "combo", icon: "🔗", name: "Combo",        base: 45, grow: 1.38, max: 50, desc: (l, n) => "Chaque tap : +" + fmtDec(comboPer(l)) + "% → +" + fmtDec(comboPer(l + n)) + "% de dégâts (jusqu'à " + COMBO_MAX + " fois, 3 s)" },
+  { id: "fury",  icon: "😡", name: "Rage",         base: 70, grow: 1.4,  max: 40, desc: (l, n) => "Vie basse : jusqu'à +" + 8 * l + "% → +" + 8 * (l + n) + "% de dégâts" },
+  { id: "xp",    icon: "📘", name: "Expérience",   base: 200, grow: 1.55, max: 30, desc: (l, n) => "XP gagnée : +" + 10 * l + "% → +" + 10 * (l + n) + "%" }
 ];
 const atkFrom  = l => (6 + l * 3) * Math.pow(1.13, l);
 const hpFrom   = l => (100 + l * 15) * Math.pow(1.12, l);
@@ -956,7 +962,7 @@ const P = {
   atk:  () => atkFrom(S.upg.atk) * (1 + eqBonus("atk") / 100) * (1 + 0.25 * S.pupg.patk) * (1 + 0.15 * T("g1")) * (1 + 0.2 * T("g5")) * (1 + petPv("atk") / 100) * (1 + bestStars() / 100) * CL().atk * (setOn("spectre", 2) ? 1.2 : 1) * (setOn("rodeur", 4) ? 1.25 : 1) * (setOn("arcaniste", 2) ? 1.2 : 1) * (setOn("arcaniste", 6) ? 1.4 : 1) * (1 + gemSum("atk") / 100) * (frenzyT > 0 ? 3 : 1) * (buffOn("rage") ? SKILLS.rage.power(T("rage")) : 1) * hlvB() * (1 + accSum("atk") / 100) * rPow("atk"),
   maxHp:() => hpFrom(S.upg.hp) * (1 + 0.1 * A2("a5")) * (1 + eqBonus("hp") / 100) * (1 + 0.25 * S.pupg.php) * (1 + 0.15 * T("d1")) * (1 + 0.2 * T("d6")) * (1 + petPv("hp") / 100) * (1 + gemSum("hp") / 100) * hlvB() * (1 + accSum("hp") / 100),
   spd:  () => spdFrom(S.upg.spd) * (1 + eqBonus("spd") / 100) * (1 + petPv("spd") / 100) * CL().spd * (setOn("rodeur", 2) ? 1.2 : 1) * (setOn("spectre", 6) ? 1.25 : 1) * (1 + affSum("spd") / 100) * (1 + gemSum("spd") / 100) * (buffOn("eclair") ? 2 : 1) * (1 + accSum("spd") / 100) * rPow("spd"),
-  crit: () => { if (rCrit()) return 100; const sc = (setOn("spectre", 4) ? 10 : 0) + affSum("crit") + accSum("crit") + petPv("crit"); return Math.min(60 + 3 * T("g2") + CL().crit + sc, critFrom(S.upg.crit) + eqBonus("crit") + 3 * T("g2") + CL().crit + sc); },
+  crit: () => { if (rCrit()) return 100; const sc = (setOn("spectre", 4) ? 10 : 0) + affSum("crit") + accSum("crit") + petPv("crit"); return Math.min(70 + 3 * T("g2") + CL().crit + sc, critFrom(S.upg.crit) + eqBonus("crit") + 3 * T("g2") + CL().crit + sc); },
   tap:  () => P.atk() * tapFrom(S.upg.tap) * (1 + (accSum("tap") + petPv("tap")) / 100) * (1 + 0.05 * A2("a6")) * rPow("tap"),
   goldMult: () => (1 + S.upg.gold * 0.1) * (1 + 0.05 * A2("a3")) * (1 + 0.1 * A2("a15")) * (1 + eqBonus("gold") / 100) * (1 + 0.25 * S.pupg.pgold) * (1 + 0.15 * T("p1")) * (1 + 0.2 * T("p6")) * (1 + petPv("gold") / 100) * (1 + affSum("orA") / 100) * (1 + gemSum("gold") / 100) * (evWeekend() ? 2 : 1) * (buffOn("pluie") ? SKILLS.pluie.power(T("pluie")) : 1) * (1 + accSum("gold") / 100) * rPow("gold") * 1.1 /* v62 : +10 % d'or pour tout le monde */
 };
@@ -972,10 +978,14 @@ const zoneIdx = l => Math.min(ZONES.length - 1, Math.floor((l - 1) / LPZ));
 const zoneOf = l => ZONES[zoneIdx(l)];
 const zoneProg = l => ((l - 1) % LPZ) / (LPZ - 1);
 // Mode Difficile : les 1000 niveaux recommencent, avec des monstres bien plus costauds (mais plus d'or et de meilleurs objets)
-const HARD = { hp: 250, dmg: 60, gold: 40, perles: 3 };
+const HARD = { hp: 250, dmg: 180, gold: 40, perles: 3 }; // dmg 60 → 180 (v63) : en Difficile les monstres étaient encore moins dangereux qu'en normal
 const hardOn = () => S.diff === 1 && !tower;
 const monHp   = l => 30 * Math.pow(1.2, l - 1) * (isBossLvl(l) ? 9 : 1) * (isZoneBoss(l) ? 1.7 : 1) * (1 + 0.6 * Math.min(1, l / 300)) * (hardOn() ? HARD.hp : 1);
-const monDmg  = l => 8 * Math.pow(1.15, l - 1) * (isBossLvl(l) ? 1.4 : 1) * (isZoneBoss(l) ? 1.3 : 1) * (hardOn() ? HARD.dmg : 1);
+// v63 : les dégâts des monstres suivent enfin la vie du chasseur (avant, ils devenaient inoffensifs après le niv. 100)
+// Au niveau où ton attaque suffit tout juste, un coup de boss ≈ 5-6 % de ta vie si tu as amélioré Force et Endurance à égalité :
+// on farme sans risque, mais les boss peuvent te tuer si tu négliges ta Vie.
+const dmgCurve = l => 8 * Math.pow(1.15, l - 1) * Math.exp(0.0295 * Math.max(0, l - 60)) * (1 + 0.5 * Math.min(1, Math.max(0, l - 60) / 120));
+const monDmg  = l => dmgCurve(l) * (isBossLvl(l) ? 1.4 : 1) * (isZoneBoss(l) ? 1.3 : 1) * (hardOn() ? HARD.dmg : 1);
 const monGoldB = l => 3 * Math.pow(1.17, l - 1) * (isBossLvl(l) ? 12 : 1) * (isZoneBoss(l) ? 3 : 1);
 const monGold = l => monGoldB(l) * (hardOn() ? HARD.gold : 1);
 
@@ -1109,7 +1119,7 @@ function killMonster() {
     if (S.kills > KILLS_PER_LEVEL) S.kills = KILLS_PER_LEVEL;
   }
   if (S.level > MAX_LEVEL) S.level = MAX_LEVEL;
-  if (S.level > S.maxLevel) { S.maxLevel = S.level; if (wasBoss) setTimeout(() => toast("✨ +1 point de compétence ! (onglet Compétences)"), 1400); }
+  if (S.level > S.maxLevel) { S.maxLevel = S.level; if (wasBoss) { if (treeAutoFill()) setTimeout(() => toast("🔁 Point de compétence replacé automatiquement"), 1400); else setTimeout(() => toast("✨ +1 point de compétence ! (onglet Compétences)"), 1400); } }
   if (S.maxLevel > S.best) { const was = S.best; S.best = S.maxLevel; if (was < VB_MIN && S.best >= VB_MIN) setTimeout(() => modal("🌑 Une présence dans le Néant…", '<img src="' + VB_IMG_SRC + '" style="width:200px;max-width:70%;filter:drop-shadow(0 0 14px #9b3cff)"><br><b style="color:#c77dff">Le Seigneur du Néant</b> s\'est réveillé !<br><br>Affronte-le dans <b>Journal → Événements</b>. Il revient 3 heures après chaque défaite.', [{ t: "Plus tard", alt: true }, { t: "L'affronter !", f: startVoidBoss }]), 1800); if (was < REB_MIN && S.best >= REB_MIN) setTimeout(() => toast(PERLE + " La Renaissance est débloquée !"), 2800); }
   if (!pack.some(m => m !== mon && m.hp > 0 && m.dying <= 0)) respawn = wasBoss ? 0.6 : 0.35; // courte marche jusqu'à la vague suivante
   refreshTop(); refreshUpgButtons();
@@ -1271,7 +1281,8 @@ let treeTab = 0;
 const brSpent = b => b.nodes.reduce((a, n) => a + T(n.id), 0), brTotal = b => b.nodes.reduce((a, n) => a + n.max, 0);
 function refreshSkills() {
   const box = $("skList"), free = ptsFree(), br = BRANCHES[treeTab] || BRANCHES[0];
-  let h = '<div class="treeHead2"><div><b style="font-size:20px;color:#ffd166">' + free + '</b> point' + (free > 1 ? "s" : "") + ' à placer<span class="th2s">' + ptsSpent() + " / " + TREE_TOTAL + ' placés · 1 point tous les 10 niveaux</span></div><button class="smallBtn" id="treeReset">↺ Réinitialiser</button></div>';
+  let h = '<div class="treeHead2"><div><b style="font-size:20px;color:#ffd166">' + free + '</b> point' + (free > 1 ? "s" : "") + ' à placer<span class="th2s">' + ptsSpent() + " / " + TREE_TOTAL + ' placés · 1 point tous les 10 niveaux</span></div><button class="smallBtn" id="treeReset">↺ Réinitialiser</button></div>' +
+    '<button class="autoUpBtn' + (S.treeAuto !== false ? " on" : "") + '" id="treeAutoBtn">🔁 Après une renaissance, replacer mes points tout seuls : ' + (S.treeAuto !== false ? "OUI" : "NON") + "</button>";
   h += '<div class="brTabs">' + BRANCHES.map((b, i) => '<button class="brTab' + (i === treeTab ? " on" : "") + '" style="--c:' + b.color + '" data-bt="' + i + '"><span>' + b.icon + " " + b.name + "</span><small>" + brSpent(b) + " / " + brTotal(b) + "</small></button>").join("") + "</div>";
   h += '<div class="nodeGrid">';
   br.nodes.forEach((n, i) => {
@@ -1283,9 +1294,10 @@ function refreshSkills() {
   box.innerHTML = h;
   box.querySelectorAll(".node2").forEach(el => el.onclick = () => showNode(NODE[el.dataset.n]));
   box.querySelectorAll("[data-bt]").forEach(el => el.onclick = () => { treeTab = +el.dataset.bt; sfx("buy"); refreshSkills(); });
+  $("treeAutoBtn").onclick = () => { S.treeAuto = S.treeAuto === false; sfx("buy"); if (S.treeAuto) treeAutoFill(); refreshSkills(); save(); };
   $("treeReset").onclick = () => {
     if (!ptsSpent()) { toast("Aucun point placé"); return; }
-    modal("↺ Réinitialiser l'arbre ?", "Tous tes points te sont rendus pour les replacer comme tu veux. C'est gratuit.", [{ t: "Annuler", alt: true }, { t: "Réinitialiser", f: () => { S.tree = {}; afterTree(); toast("Points rendus"); } }]);
+    modal("↺ Réinitialiser l'arbre ?", "Tous tes points te sont rendus pour les replacer comme tu veux. C'est gratuit.", [{ t: "Annuler", alt: true }, { t: "Réinitialiser", f: () => { S.tree = {}; S.treePlan = []; afterTree(); toast("Points rendus"); } }]);
   };
 }
 function showNode(n) {
@@ -1297,8 +1309,17 @@ function showNode(n) {
   if (!open) txt += '<br><br><span class="worse">' + ic("lock") + ' Mets d\'abord au moins 1 point dans « ' + n.branch.nodes[n.tier - 1].name + " »</span>";
   else if (r < n.max && free <= 0) txt += '<br><br><span class="worse">Plus de points : bats le prochain boss pour en gagner un</span>';
   const btns = [{ t: "Fermer", alt: true }];
-  if (open && r < n.max && free > 0) btns.push({ t: "+1 point", f: () => { S.tree[n.id] = r + 1; sfx("rare"); if (n.skill && !r) toast(n.icon + " " + n.name + " débloquée ! Bouton en bas à gauche"); afterTree(); showNode(n); } });
+  if (open && r < n.max && free > 0) btns.push({ t: "+1 point", f: () => { treePlanInit(); S.tree[n.id] = r + 1; S.treePlan.push(n.id); sfx("rare"); if (n.skill && !r) toast(n.icon + " " + n.name + " débloquée ! Bouton en bas à gauche"); afterTree(); showNode(n); } });
   modal("", txt, btns);
+}
+// L'ordre dans lequel tu as placé tes points est gardé : après une renaissance, ils se replacent tout seuls dès que tu les regagnes.
+function treePlanInit() { if (Array.isArray(S.treePlan)) return; S.treePlan = []; for (const b of BRANCHES) for (const n of b.nodes) for (let i = 0; i < T(n.id); i++) S.treePlan.push(n.id); }
+function treeAutoFill() {
+  if (S.treeAuto === false || !Array.isArray(S.treePlan) || ptsFree() <= 0) return 0;
+  const want = {}; let n = 0;
+  for (const id of S.treePlan) { want[id] = (want[id] || 0) + 1; const nd = NODE[id]; if (!nd || ptsFree() <= 0) continue; if (T(id) < want[id] && T(id) < nd.max && nodeOpen(nd)) { S.tree[id] = T(id) + 1; n++; } }
+  if (n) { statF++; try { buildSkillBar(); if ($("pSk").classList.contains("active")) refreshSkills(); } catch (e) {} }
+  return n;
 }
 function afterTree() {
   hero.hp = Math.min(hero.hp, P.maxHp());
@@ -1413,20 +1434,25 @@ function refreshReb() {
 function askRebirth() {
   if (tower) { toast("Quitte d'abord la Tour"); return; }
   const g = perlesFor(S.maxLevel); if (g <= 0) return;
-  modal(PERLE + " Renaître ?", "Tu vas gagner <b style='color:#c39bff'>+" + fmt(g) + " Cristaux de Renaissance</b>.<br><br>Ton or, tes améliorations et ton arbre de compétences repartent à zéro, et tu repars du <b>niveau " + rebStart(S.maxLevel) + "</b>. Tu gardes ton équipement et ton sac.",
+  modal(PERLE + " Renaître ?", "Tu vas gagner <b style='color:#c39bff'>+" + fmt(g) + " Cristaux de Renaissance</b>.<br><br>Tes améliorations repartent à zéro et tu repars du <b>niveau " + rebStart(S.maxLevel) + "</b>, mais tu reçois <b style='color:#ffd166'>" + fmt(rebGold(Math.max(rebStart(S.maxLevel), Math.floor(S.maxLevel * 0.6)))) + " " + COIN + "</b> pour te relancer." + (S.treeAuto !== false ? " Tes points de compétence se replacent tout seuls." : " Ton arbre de compétences repart à zéro.") + " Tu gardes ton équipement et ton sac.",
     [{ t: "Annuler", alt: true }, { t: "Renaître !", f: () => doRebirth(g) }]);
 }
 let modeMsg = false;
+// or offert à la renaissance : environ 1 000 monstres du niveau de référence (60 % du niveau atteint),
+// de quoi racheter Force / Endurance / Coup de doigt / Flair et remonter vite sans retourner farmer en arrière
+const rebGold = ref => ref > 1 ? Math.round(monGold(ref) * 1000) : 0;
 function doRebirth(g, mode) {
   S.perles += g; S.totalPerles += g; S.rebirths++;
   if (mode !== undefined && mode !== S.diff) { S.diff = mode; modeMsg = true; }
   const st = rebStart(S.maxLevel, modeMsg);
+  const ref = modeMsg ? st : Math.max(st, Math.floor(S.maxLevel * 0.6)); treePlanInit();
   S.gold = 0; S.upg = newState().upg; S.level = st; S.maxLevel = st; S.kills = 0; S.auto = true;
-  S.tree = {}; buffs = {}; cds = {}; skill = 0; respawn = 0; bossTimer = 0; hero.dead = 0; hero.hp = P.maxHp();
+  S.gold = rebGold(ref); const startGold = S.gold; // v63 : on ne repart plus avec 0 d'or
+  S.tree = {}; treeAutoFill(); buffs = {}; cds = {}; skill = 0; respawn = 0; bossTimer = 0; hero.dead = 0; hero.hp = P.maxHp();
   spawnMonster(); refreshAll(); save(); sfx("rare"); vib(60);
   for (let i = 0; i < 40; i++) particles.push({ x: rand(0, W), y: rand(0, H * 0.7), vx: rand(-40, 40), vy: rand(-120, -20), life: 1.2, c: pick(["#c39bff", "#8ecae6", "#ffffff"]), r: rand(3, 6), star: true });
   if (modeMsg) { modeMsg = false; modal(S.diff ? "💀 Mode Difficile" : "Mode Normal", (S.diff ? "Bienvenue en <b style='color:#ff6a78'>mode Difficile</b> !<br><br>Les 1000 niveaux recommencent. Les monstres ont <b>×" + HARD.hp + " de vie</b> et frappent <b>×" + HARD.dmg + "</b> plus fort, mais tu gagnes <b>×" + HARD.gold + " d'or</b>, <b>×" + HARD.perles + " Cristaux</b> en renaissant, plus d'XP, et des objets bien plus puissants : <span class='c5'>Émeraude</span>, <span class='c6'>Saphir</span>, <span class='c7'>Mythique</span>…" : "Tu reviens en <b>mode Normal</b>.") + (g ? "<br><br><b style='color:#c39bff'>+" + fmt(g) + " Cristaux</b>" : ""), [{ t: "C'est parti !" }]); }
-  else modal(PERLE + " Renaissance n°" + S.rebirths, "Ton chasseur renaît, plus fort qu'avant !<br><br><b style='color:#c39bff'>+" + fmt(g) + " Cristaux de Renaissance</b><br><br>Va les dépenser dans l'onglet <b>Chasseur</b>" + (S.rebirths >= ADV_MIN ? " ou dans la <b>Renaissance avancée</b>" : "") + ".", [{ t: "C'est parti !" }]);
+  else modal(PERLE + " Renaissance n°" + S.rebirths, "Ton chasseur renaît, plus fort qu'avant !<br><br><b style='color:#c39bff'>+" + fmt(g) + " Cristaux de Renaissance</b>" + (startGold ? "<br><b style='color:#ffd166'>+" + fmt(startGold) + " " + COIN + "</b> pour te relancer" : "") + (ptsSpent() ? "<br>🔁 " + ptsSpent() + " point" + (ptsSpent() > 1 ? "s" : "") + " de compétence replacé" + (ptsSpent() > 1 ? "s" : "") : "") + "<br><br>Va les dépenser dans l'onglet <b>Chasseur</b>" + (S.rebirths >= ADV_MIN ? " ou dans la <b>Renaissance avancée</b>" : "") + ".", [{ t: "C'est parti !" }]);
 }
 
 /* ================== ICÔNES (dessinées en SVG, 100 % originales) ================== */
@@ -2404,7 +2430,7 @@ function monThumb(c, type, color, boss) {
   const sz = 64; c.width = sz * DPR; c.height = sz * DPR; c.style.width = c.style.height = sz + "px";
   const x = c.getContext("2d"); x.setTransform(DPR, 0, 0, DPR, 0, 0);
   const fake = { color, eyes: 2, mouth: boss ? "crocs" : "sourire", blush: !boss, hat: boss ? "couronne" : null, hatColor: "#e63946", horns: boss, spots: [[-20, 6, 6], [10, 4, 7], [24, 14, 4], [-6, 14, 5], [-30, 16, 4]], wobble: 1, blinkEvery: 99, flash: 0, boss };
-  withCtx(x, () => { ctx.translate(sz / 2, sz - 6); ctx.scale(0.5, 0.5); BODY[type](fake, color, 0.5); if (boss) drawHat(fake, -90, 0); });
+  withCtx(x, () => { ctx.translate(sz / 2, sz - 4); ctx.scale(0.42, 0.42); BODY[type](fake, color, 0.5); });
 }
 function refreshBestiary() {
   const stars = bestStars();
@@ -2794,7 +2820,7 @@ function spawnTowerMonster() {
   const f = tower.floor; let L = Math.min(MAX_LEVEL, towerL(f)); if (isBossLvl(L)) L--;
   S.level = L; spawnMonster();
   const raw = 30 * Math.pow(1.2, towerL(f) - 1);
-  Object.assign(mon, { hp: raw * 6, max: raw * 6, dmg: 8 * Math.pow(1.15, towerL(f) - 1) * 1.5, gold: 3 * Math.pow(1.17, towerL(f) - 1) * 15,
+  Object.assign(mon, { hp: raw * 6, max: raw * 6, dmg: dmgCurve(towerL(f)) * 1.5, gold: 3 * Math.pow(1.17, towerL(f) - 1) * 15,
     boss: true, zb: false, rare: false, tower: true, name: "Gardien · étage " + f, hat: "couronne", scale: 1.35, color: pick(["#9b6cf0", "#5ce1ff", "#ff4d5e", "#52ffa0", "#ffd166"]) });
   bossTimer = 25 + 5 * T("d5"); sfx("boss");
 }
@@ -3088,14 +3114,14 @@ const fmtLeft = ms => { const m = Math.ceil(ms / 6e4); return m >= 60 ? Math.flo
 // Petites histoires sur le monde de Brumeria, affichées pendant le chargement
 const LORE = [
   ["La Brume", "Il y a longtemps, la Brume est descendue des montagnes. Là où elle passe, les rêves des bêtes et des plantes prennent vie… et deviennent des monstres."],
-  ["Les Gluons", "Ils naissent des flaques de rosée touchées par la Brume. Pas vraiment méchants. Juste très, très collants."],
-  ["Les Champis", "La nuit, ils dansent en cercle dans la Forêt Grise. Si tu n'en vois qu'un seul, c'est que les autres se cachent derrière toi."],
+  ["Les Gluons", "Des flaques de goudron que la Brume a réveillées. Leur cœur brille au fond de la vase… et ils ont des dents. Beaucoup de dents."],
+  ["Les Champis", "Sous leur chapeau, deux yeux brillent dans l'ombre. Si tu n'en vois qu'un seul, c'est que les autres se cachent derrière toi."],
   ["Grand-Père Ronce", "Il dort au cœur de la forêt depuis mille ans. Chaque fois qu'on le réveille, il est d'une humeur… épineuse."],
-  ["Les Poilus", "Dans les Pics Gelés, ils se tiennent chaud en se faisant des câlins. Ne les dérange jamais pendant leur sieste."],
+  ["Les Poilus", "Dans les Pics Gelés, des cristaux leur poussent sur les épaules. Leur poing peut fendre la glace… et les chasseurs distraits."],
   ["Le Colosse de Givre", "Il est né d'une tempête de neige qui refusait de s'arrêter. Son cœur est un flocon qui ne fond jamais."],
-  ["Les Flammèches", "Les esprits du Volcan Grondant adorent les marshmallows. Personne ne sait où ils les trouvent."],
+  ["Les Flammèches", "Les diablotins du Volcan Grondant gardent une boule de feu au creux de la main. Ils adorent aussi les marshmallows, allez savoir."],
   ["Le Titan de Magma", "Il garde le cœur du volcan. Quand il se met en colère, la terre tremble jusqu'à la mer."],
-  ["Les Méduzous", "Sous la mer, ils brillent pour guider les poissons perdus… ou pour les attirer dans leurs filaments."],
+  ["Les Méduzous", "Sous la mer, leurs filaments brillent pour guider les poissons perdus… ou pour les attirer jusqu'à leurs crocs."],
   ["Le Léviathan des Récifs", "Il n'a jamais vu le soleil. Il croit que les chasseurs sont des étoiles tombées du ciel."],
   ["Les Zieuteurs", "Au Cœur de Brume, ils observent tout. On raconte qu'ils connaissent ton nom avant même que tu arrives."],
   ["Le Seigneur de la Brume", "Il n'est pas né : il s'est réveillé. Il attend le chasseur capable de le rendormir pour toujours."],
@@ -3144,7 +3170,7 @@ function statsHtml() {
 function spawnInvasionBoss() {
   let L = Math.max(10, S.maxLevel); if (isBossLvl(L)) L--; S.level = L; spawnMonster();
   const raw = 30 * Math.pow(1.2, L - 1);
-  Object.assign(mon, { hp: raw * 25, max: raw * 25, dmg: 8 * Math.pow(1.15, L - 1) * 1.8, gold: 3 * Math.pow(1.17, L - 1) * 60, boss: true, zb: true, rare: false, tower: true, name: "Avatar de la Brume", hat: "couronne", scale: 1.8, color: "#7a5aff" });
+  Object.assign(mon, { hp: raw * 25, max: raw * 25, dmg: dmgCurve(L) * 1.8, gold: 3 * Math.pow(1.17, L - 1) * 60, boss: true, zb: true, rare: false, tower: true, name: "Avatar de la Brume", hat: "couronne", scale: 1.8, color: "#7a5aff" });
   bossTimer = 60 + 5 * T("d5"); sfx("boss");
 }
 /* --- images du Seigneur du Néant (fournies par le créateur du jeu) --- */
@@ -3172,7 +3198,7 @@ function spawnVoidBoss() {
   let L = vbLevel(); if (isBossLvl(L)) L--; S.level = L; spawnMonster();
   const hk = S.diff ? HARD.hp : 1, dk = S.diff ? HARD.dmg : 1, gk = S.diff ? HARD.gold : 1;
   const hp = 30 * Math.pow(1.2, L - 1) * (1 + 0.6 * Math.min(1, L / 300)) * 45 * hk;
-  Object.assign(mon, { hp, max: hp, dmg: 8 * Math.pow(1.15, L - 1) * 2.2 * dk, gold: monGoldB(L) * 120 * gk, boss: true, zb: true, rare: false, tower: true, vb: true, vbL: L,
+  Object.assign(mon, { hp, max: hp, dmg: dmgCurve(L) * 2.2 * dk, gold: monGoldB(L) * 120 * gk, boss: true, zb: true, rare: false, tower: true, vb: true, vbL: L,
     name: "Le Seigneur du Néant", hat: null, scale: 1.9, color: "#9b3cff", spawnT: 0, intro: VB_INTRO, enraged: false, atkTimer: VB_INTRO + 1.2, charge: null, nextSp: VB_INTRO + 7 });
   pack = [mon]; layoutPack(true); mon.px = mon.tx = W * 0.7; mon.py = 0;
   bossTimer = VB_TIME + 5 * T("d5") + VB_INTRO;
@@ -3313,6 +3339,8 @@ function palette(l) {
   if (palCache[l]) return palCache[l];
   const ph = zoneOf(l).phases, f = zoneProg(l) * (ph.length - 1), i = Math.min(ph.length - 2, Math.floor(f)), t = f - i, o = {};
   for (const k in ph[0]) o[k] = mix(ph[i][k], ph[i + 1][k], t);
+  // ambiance « Brume » : décors assombris et teintés de violet, pour aller avec le chasseur et les créatures
+  for (const k in o) if (typeof o[k] === "string" && o[k][0] === "#") o[k] = mix(o[k], k === "top" || k === "bot" ? "#1c1030" : "#140c22", k === "top" ? 0.42 : k === "bot" ? 0.3 : k === "near" || k === "gdark" ? 0.42 : 0.34);
   o.night = Math.max(0, (zoneProg(l) - 0.55) / 0.45);
   o.leaf = mix("#8acb5a", "#e8903a", Math.min(1, zoneProg(l) * 1.6));
   return (palCache[l] = o);
@@ -3514,7 +3542,17 @@ function buildLayers() {
     }
   }
   });
+  bakeMist(L, p, gy);
   layers = L;
+}
+// la brume est « cuite » une fois dans les images du décor (rien à recalculer à chaque image)
+function bakeMist(L, p, gy) {
+  const col = mix(p.far || "#6a5aa0", "#a07cff", 0.5), band = (c, y0, hb, a, op) => { const x = c.getContext("2d"); x.save(); x.setTransform(DPR, 0, 0, DPR, 0, 0); x.globalCompositeOperation = op;
+    const g = x.createLinearGradient(0, y0, 0, y0 + hb); g.addColorStop(0, col + "00"); g.addColorStop(0.6, col + a); g.addColorStop(1, col + "00"); x.fillStyle = g; x.fillRect(0, y0, c.width / DPR, hb); x.restore(); c._ver++; };
+  band(L.sky, gy * 0.6, gy * 0.42, "66", "source-over");
+  { const x = L.sky.getContext("2d"); x.save(); x.setTransform(DPR, 0, 0, DPR, 0, 0); const g = x.createLinearGradient(0, 0, 0, gy * 0.35); g.addColorStop(0, "rgba(8,4,18,.45)"); g.addColorStop(1, "rgba(8,4,18,0)"); x.fillStyle = g; x.fillRect(0, 0, W, gy * 0.35); x.restore(); }
+  band(L.far, gy * 0.35, gy * 0.75, "70", "source-atop");
+  band(L.mid, gy * 0.7, gy * 0.4, "48", "source-atop");
 }
 // Les couches du décor sont surtout transparentes en haut : on ne dessine que la bande utile (beaucoup moins de pixels par image)
 function layerTop(c) {
@@ -3556,9 +3594,19 @@ function drawBackground(t) {
     ctx.globalAlpha = 1;
   }
   blit(layers.far, 0.08, gy);
+  drawMist(t, gy, 0);
   blit(layers.mid, 0.3, gy + 6);
+  drawMist(t, gy, 1);
   blit(layers.ground, 1, H);
   blit(layers.near, 0.6, H);
+}
+/* --- nappes de brume qui dérivent entre les plans du décor (2 images par plan, très léger) --- */
+let mistS = null;
+function drawMist(t, gy, k) {
+  if (!mistS) { mistS = document.createElement("canvas"); mistS.width = 128; mistS.height = 32; const g = mistS.getContext("2d"), gr = g.createRadialGradient(64, 16, 2, 64, 16, 64); gr.addColorStop(0, "rgba(235,225,255,.9)"); gr.addColorStop(0.5, "rgba(235,225,255,.3)"); gr.addColorStop(1, "rgba(235,225,255,0)"); g.setTransform(1, 0, 0, 0.25, 0, 12); g.fillStyle = gr; g.fillRect(0, -48, 128, 128); }
+  const a0 = ctx.globalAlpha; ctx.globalAlpha = k ? 0.1 : 0.08; const y0 = gy * (k ? 0.82 : 0.66);
+  for (let i = 0; i < 2; i++) { const w = 300 + i * 60, x = ((-(scroll * (k ? 0.45 : 0.15) + t * (6 + i * 4)) + i * 260) % (W + w) + (W + w)) % (W + w) - w; ctx.drawImage(mistS, x, y0 + i * 14 + Math.sin(t * 0.3 + i) * 5 - 22, w, 44); }
+  ctx.globalAlpha = a0;
 }
 
 let _glow = null;
@@ -3932,386 +3980,1033 @@ function drawHorns(top, c) {
 }
 
 /* --- corps des monstres : chaque fonction dessine depuis les pieds et renvoie le haut de la tête --- */
-const BODY = {
-  gluant(m, c, t) {
-    if (m.horns) drawHorns(-46, m.flash > 0 ? "#fff" : "#f3ead8");
-    ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-44, 0); ctx.bezierCurveTo(-50, -62, 50, -62, 44, 0); ctx.closePath(); ctx.fill();
-    for (const k of [-30, -8, 18]) circ(k, -1 + Math.sin(t * 3 + k) * 1.5, 6);
-    ctx.fillStyle = shade(c, 0.4); ctx.beginPath(); ctx.ellipse(-20, -32, 9, 5, -0.6, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = shade(c, 0.25); circ(22, -14 - (t * 8 % 20), 2.6); circ(-26, -10 - ((t * 6 + 9) % 18), 2);
-    ctx.fillStyle = shade(c, 0.55); ctx.beginPath(); ctx.moveTo(-4, -46); ctx.quadraticCurveTo(-2, -56, 6, -58 + Math.sin(t * 4) * 2); ctx.quadraticCurveTo(4, -50, 4, -45); ctx.fill();
-    drawFace(m, 0, -24, 1, t); return -50;
+const BODY = {};
+/* ===== Créatures de la Brume : même style que le chasseur (corps sombres, éclats de couleur, yeux lumineux, silhouettes en pointes) ===== */
+const MBK = "#120a1e";                                  // noir-violet de la Brume (le manteau du chasseur)
+// couleur « vive » : les teintes pâles (glace, bonbons) sont ravivées pour briller comme les flammes du manteau
+const mbVC = {};
+function mbV(c) { if (mbVC[c]) return mbVC[c]; const n = parseInt(c.slice(1), 16), r = (n >> 16 & 255) / 255, g = (n >> 8 & 255) / 255, b = (n & 255) / 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b); let h = 0, l = (mx + mn) / 2, s = mx === mn ? 0 : l > 0.5 ? (mx - mn) / (2 - mx - mn) : (mx - mn) / (mx + mn);
+  if (mx !== mn) h = mx === r ? (g - b) / (mx - mn) + (g < b ? 6 : 0) : mx === g ? (b - r) / (mx - mn) + 2 : (r - g) / (mx - mn) + 4; h /= 6;
+  if (s < 0.08) { s = 0; l = Math.min(0.78, Math.max(0.62, l)); } else { s = Math.max(s, 0.78); l = Math.min(0.64, Math.max(0.52, l)); }
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q, f = tt => { tt = (tt + 1) % 1; return tt < 1 / 6 ? p + (q - p) * 6 * tt : tt < 0.5 ? q : tt < 2 / 3 ? p + (q - p) * (2 / 3 - tt) * 6 : p; };
+  const hx = v => Math.round(v * 255).toString(16).padStart(2, "0");
+  return (mbVC[c] = "#" + hx(f(h + 1 / 3)) + hx(f(h)) + hx(f(h - 1 / 3))); }
+const mbD = c => mix(c, MBK, 0.74), mbM = c => mix(c, MBK, 0.52), mbL = c => mix(c, "#ffffff", 0.45), mbG = c => mix(mbV(c), "#ffffff", 0.25);
+function mbPoly(p) { ctx.beginPath(); ctx.moveTo(p[0], p[1]); for (let i = 2; i < p.length; i += 2) ctx.lineTo(p[i], p[i + 1]); ctx.closePath(); }
+const mbGlowC = {};
+function mbGlow(x, y, r, c, a = 0.55) { // halo : une petite image par couleur, réutilisée (bien plus rapide qu'un dégradé à chaque image)
+  let s = mbGlowC[c]; if (!s) { s = mbGlowC[c] = document.createElement("canvas"); s.width = s.height = 64; const g = s.getContext("2d"), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, c); gr.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = gr; g.fillRect(0, 0, 64, 64); }
+  const a0 = ctx.globalAlpha; ctx.globalAlpha = a0 * a; ctx.drawImage(s, x - r, y - r, r * 2, r * 2); ctx.globalAlpha = a0; }
+// œil d'anime en amande, incliné, lumineux (comme le regard du chasseur sous son masque)
+function mbEye(x, y, w, h, tilt, c, m, t) {
+  const bl = m && ((t + (m.wobble || 0) * 1.7) % 3.7) < 0.11 ? 0.15 : 1, hh = h * bl; // clignement
+  ctx.save(); ctx.translate(x, y); ctx.rotate(tilt);
+  ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(0, 0, w * 1.35, h * 1.5 * bl + 1.5, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-w, 0); ctx.quadraticCurveTo(-w * 0.2, -hh * 1.3, w, -hh * 0.25); ctx.quadraticCurveTo(w * 0.1, hh * 1.1, -w, 0); ctx.fill();
+  if (bl > 0.5) { ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.ellipse(-w * 0.05, -hh * 0.2, w * 0.32, hh * 0.38, 0, 0, Math.PI * 2); ctx.fill(); }
+  ctx.restore();
+}
+function mbEyes(x, y, s, c, m, t, gap = 13) {
+  mbGlow(x - gap * s, y, 15 * s, c, 0.55); mbGlow(x + gap * s, y, 15 * s, c, 0.55);
+  mbEye(x - gap * s, y, 8.5 * s, 4.6 * s, 0.34, c, m, t); mbEye(x + gap * s, y, 8.5 * s, 4.6 * s, -0.34, c, m, t);
+}
+// gueule avec crocs
+function mbFangs(x, y, w, h, m, open = 0.5) {
+  ctx.fillStyle = "#08040e"; ctx.beginPath(); ctx.moveTo(x - w, y); ctx.quadraticCurveTo(x, y + h * (0.6 + open), x + w, y); ctx.quadraticCurveTo(x, y + h * 0.25, x - w, y); ctx.fill();
+  ctx.fillStyle = "#f2ecff"; const n = Math.max(3, Math.round(w / 4));
+  for (let i = 0; i < n; i++) { const k = (i + 0.5) / n, fx = x - w + 2 * w * k, fy = y + Math.sin(k * Math.PI) * h * 0.22; ctx.beginPath(); ctx.moveTo(fx - 2.2, fy); ctx.lineTo(fx, fy + 3.5 + (i % 2) * 2.5); ctx.lineTo(fx + 2.2, fy); ctx.fill(); }
+}
+// flamme de brume en pointes (comme les flammes du manteau)
+function mbFlame(x, y, h, w, c, t, sd = 0) {
+  const f = k => Math.sin(t * 7 + sd + k) * 2.5;
+  ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(x - w, y);
+  ctx.quadraticCurveTo(x - w * 0.9, y - h * 0.45, x - w * 0.35 + f(1), y - h * 0.62);
+  ctx.quadraticCurveTo(x - w * 0.25, y - h * 0.35, x + f(2) * 0.6, y - h);
+  ctx.quadraticCurveTo(x + w * 0.3, y - h * 0.55, x + w * 0.55 + f(3), y - h * 0.7);
+  ctx.quadraticCurveTo(x + w * 0.5, y - h * 0.3, x + w, y); ctx.closePath(); ctx.fill();
+}
+// petites particules de brume qui montent
+function mbMotes(cx, cy, r, c, t, n = 5, sd = 0) {
+  ctx.fillStyle = c;
+  for (let i = 0; i < n; i++) { const k = (t * 0.6 + i / n + sd) % 1, a = i * 2.4 + sd; ctx.globalAlpha = Math.sin(k * Math.PI) * 0.9; ctx.beginPath(); ctx.arc(cx + Math.cos(a) * r * 0.8, cy - k * r, 1.6 + (i % 2), 0, Math.PI * 2); ctx.fill(); }
+  ctx.globalAlpha = 1;
+}
+// fissure lumineuse
+function mbCrack(pts, c, w = 2) { ctx.strokeStyle = c; ctx.lineWidth = w; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.beginPath(); ctx.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) ctx.lineTo(pts[i], pts[i + 1]); ctx.stroke(); }
+// couronne de pointes pour les boss
+function mbCrown(x, y, s, c) {
+  ctx.fillStyle = MBK; mbPoly([x - 20 * s, y, x - 16 * s, y - 16 * s, x - 8 * s, y - 6 * s, x, y - 22 * s, x + 8 * s, y - 6 * s, x + 16 * s, y - 16 * s, x + 20 * s, y]); ctx.fill();
+  ctx.fillStyle = c; circ(x, y - 7 * s, 3 * s);
+}
+// cornes recourbées sombres
+function mbHorns(x, y, s, c) {
+  for (const d of [-1, 1]) { ctx.fillStyle = MBK; ctx.beginPath(); ctx.moveTo(x + d * 8 * s, y); ctx.quadraticCurveTo(x + d * 26 * s, y - 6 * s, x + d * 22 * s, y - 26 * s); ctx.quadraticCurveTo(x + d * 18 * s, y - 10 * s, x + d * 2 * s, y + 4 * s); ctx.fill();
+    ctx.strokeStyle = c; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(x + d * 10 * s, y - 2 * s); ctx.quadraticCurveTo(x + d * 22 * s, y - 8 * s, x + d * 21 * s, y - 20 * s); ctx.stroke(); }
+}
+function mbPolyCont(p) { for (let i = 0; i < p.length; i += 2) ctx.lineTo(p[i], p[i + 1]); }
+// « peau » des créatures : base noire teintée, liseré lumineux en haut à gauche, dégradé, motifs de flammes (comme le manteau)
+function mbSkin(path, c, t, o = {}) {
+  const V = mbV(c), base = o.base || mix(V, MBK, 0.84), rim = o.rim || mbG(c);
+  ctx.save();
+  path(); ctx.fillStyle = rim; ctx.fill();
+  ctx.translate(o.rx ?? 2.6, o.ry ?? 2.6); path(); ctx.fillStyle = base; ctx.fill(); ctx.translate(-(o.rx ?? 2.6), -(o.ry ?? 2.6));
+  path(); ctx.clip();
+  if (o.top != null) { const g = ctx.createLinearGradient(0, o.top, 0, o.top + (o.th || 50)); g.addColorStop(0, mix(V, MBK, 0.6)); g.addColorStop(1, "rgba(0,0,0,0)"); ctx.globalAlpha = 0.7; ctx.fillStyle = g; ctx.fillRect(-200, o.top, 400, o.th || 50); ctx.globalAlpha = 1; }
+  if (o.flames) for (const [x, y, h, w, sd] of o.flames) { mbFlame(x, y, h, w, mix(V, MBK, 0.35), t, sd || 0); mbFlame(x, y, h * 0.72, w * 0.55, V, t, (sd || 0) + 1); }
+  if (o.after) o.after();
+  ctx.restore();
+}
+// attaque : 0 → 1 → 0 pendant la morsure (le monstre se jette sur le chasseur)
+const mbAtk = m => m.bite > 0 ? Math.sin(Math.min(1, m.bite / 0.25) * Math.PI) : 0;
+const mbBase = (m, c, dark = "#1a1226") => m.flash > 0 ? mix(c, "#ffffff", 0.3) : dark;
+// membre articulé (épaule → coude → main), deux segments avec liseré lumineux ; renvoie la position du bout
+function mbLimb(x, y, l1, l2, a1, a2, w1, w2, base, rim) {
+  const ex = x + Math.cos(a1) * l1, ey = y + Math.sin(a1) * l1, hx = ex + Math.cos(a1 + a2) * l2, hy = ey + Math.sin(a1 + a2) * l2;
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+  if (rim) { ctx.strokeStyle = rim; ctx.lineWidth = w1 + 2.4; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(ex, ey); ctx.stroke(); ctx.lineWidth = w2 + 2.4; ctx.beginPath(); ctx.moveTo(ex, ey); ctx.lineTo(hx, hy); ctx.stroke(); }
+  ctx.strokeStyle = base; ctx.lineWidth = w1; ctx.beginPath(); ctx.moveTo(x + 0.8, y + 0.8); ctx.lineTo(ex + 0.8, ey + 0.8); ctx.stroke();
+  ctx.lineWidth = w2; ctx.beginPath(); ctx.moveTo(ex + 0.8, ey + 0.8); ctx.lineTo(hx + 0.8, hy + 0.8); ctx.stroke();
+  ctx.fillStyle = base; circ(ex + 0.8, ey + 0.8, Math.max(w1, w2) * 0.55);
+  return [hx, hy, a1 + a2];
+}
+// griffes au bout d'un membre
+function mbClaws(x, y, a, s, col) { ctx.fillStyle = col; for (const k of [-0.5, 0, 0.5]) { const b = a + k; ctx.beginPath(); ctx.moveTo(x + Math.cos(b + 1.4) * 2.5 * s, y + Math.sin(b + 1.4) * 2.5 * s); ctx.lineTo(x + Math.cos(b) * 9 * s, y + Math.sin(b) * 9 * s); ctx.lineTo(x + Math.cos(b - 1.4) * 2.5 * s, y + Math.sin(b - 1.4) * 2.5 * s); ctx.fill(); } }
+// pointes de cristal / givre
+function mbShard(x, y, h, w, a, base, rim) { ctx.save(); ctx.translate(x, y); ctx.rotate(a); ctx.fillStyle = base; mbPoly([-w, 0, -w * 0.4, -h, w * 0.5, -h * 0.82, w, 0]); ctx.fill(); ctx.fillStyle = rim; mbPoly([-w * 0.4, -h, -w * 0.1, -h * 0.3, -w * 0.7, 0, -w, 0]); ctx.globalAlpha = 0.9; ctx.fill(); ctx.globalAlpha = 1; ctx.restore(); }
+/* --- Forêt Grise --- */
+Object.assign(BODY, {
+  gluant(m, c, t) { c = mbV(c); // limace de goudron de brume
+    const w = Math.sin(t * 3 + m.wobble), E = mbG(c);
+    mbGlow(0, -30, 60, c, 0.22);
+    const body = () => { ctx.beginPath(); ctx.moveTo(-50, 0);
+      ctx.bezierCurveTo(-58, -32, -40, -68, -6, -70 - w * 2); ctx.bezierCurveTo(32, -72, 56, -42, 50, 0);
+      for (let i = 0; i < 5; i++) { const x = 42 - i * 22, d = 7 + ((i * 7) % 5) + Math.sin(t * 2 + i) * 2; ctx.quadraticCurveTo(x - 4, d, x - 10, 1); ctx.quadraticCurveTo(x - 15, -1, x - 22, 0); }
+      ctx.closePath(); };
+    mbSkin(body, c, t, { top: -72, th: 40, flames: [[-36, 2, 34, 12, 0], [-6, 2, 44, 14, 2], [28, 2, 30, 11, 4]], after: () => {
+      ctx.fillStyle = "rgba(255,255,255,.2)"; ctx.beginPath(); ctx.ellipse(-24, -54, 10, 4, -0.5, 0, Math.PI * 2); ctx.fill(); } });
+    for (const [x, h] of [[-28, 16], [-8, 22], [14, 15]]) { const y = -60 - Math.max(0, 6 - Math.abs(x) * 0.2); ctx.fillStyle = mix(c, MBK, 0.84); ctx.beginPath(); ctx.moveTo(x - 7, y + 4); ctx.lineTo(x + 3, y - h + w * 2); ctx.lineTo(x + 7, y + 4); ctx.fill(); ctx.strokeStyle = E; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x - 5, y + 2); ctx.lineTo(x + 3, y - h + w * 2); ctx.stroke(); }
+    mbGlow(14, -22, 16, c, 0.8); ctx.fillStyle = "#fff"; circ(14, -22, 2.6 + Math.sin(t * 4));
+    mbEyes(-12, -40, 1.05, E, m, t, 13);
+    mbFangs(-12, -26, 17, 12, m, 0.4 + 0.3 * Math.abs(w) + mbAtk(m));
+    if (m.horns || m.boss) mbHorns(-6, -62, 0.95, c);
+    if (m.boss) mbCrown(-6, -80, 1.1, c);
+    mbMotes(0, -44, 46, E, t, 6, 0.3);
+    return m.boss ? -104 : -82;
   },
-  champi(m, c, t) {
-    const stem = m.flash > 0 ? "#fff" : "#f6ead2", aw = Math.sin(t * 5 + m.wobble) * 0.3;
-    ctx.fillStyle = shade(stem, -0.15); ctx.beginPath(); ctx.ellipse(-11, -2, 9, 5, 0, 0, Math.PI * 2); ctx.ellipse(11, -2, 9, 5, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = stem; for (const sd of [-1, 1]) { ctx.save(); ctx.translate(sd * 18, -26); ctx.rotate(sd * (0.5 + aw)); rr(-4, 0, 8, 16, 4); ctx.fill(); ctx.restore(); }
-    rr(-20, -46, 40, 46, 12); ctx.fill();
-    drawFace(m, 0, -22, 0.85, t);
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, -46, 48, 32, 0, Math.PI, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = shade(c, -0.2); rr(-48, -50, 96, 8, 4); ctx.fill();
-    ctx.fillStyle = "rgba(255,255,255,.85)"; for (const [sx, sy, r] of m.spots) circ(sx, -72 + sy, r);
-    return -78;
+  champi(m, c, t) { c = mbV(c); // champignon maudit, regard dans l'ombre du chapeau
+    const E = mbG(c), sw = Math.sin(t * 4 + m.wobble) * 0.06;
+    ctx.fillStyle = "#140e1c"; for (const d of [-1, 1]) { ctx.beginPath(); ctx.moveTo(d * 8, -6); ctx.quadraticCurveTo(d * 22, -4, d * 28, 2); ctx.lineTo(d * 18, 2); ctx.quadraticCurveTo(d * 14, -1, d * 4, -2); ctx.fill(); }
+    const stem = () => { ctx.beginPath(); ctx.moveTo(-16, 0); ctx.quadraticCurveTo(-21, -26, -14, -50); ctx.lineTo(14, -50); ctx.quadraticCurveTo(21, -26, 16, 0); ctx.closePath(); };
+    mbSkin(stem, c, t, { base: m.flash > 0 ? "#fff" : "#221a2e", flames: [[-6, 2, 26, 8, 3], [8, 2, 18, 6, 5]] });
+    ctx.fillStyle = "#2e2440"; mbPoly([-18, -34, -12, -26, -8, -32, -3, -25, 2, -32, 7, -25, 12, -31, 18, -34, 13, -39, -13, -39]); ctx.fill();
+    ctx.strokeStyle = E; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-17, -34); ctx.lineTo(17, -34); ctx.stroke();
+    ctx.save(); ctx.translate(0, -50); ctx.rotate(sw);
+    ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(0, 2, 36, 10, 0, 0, Math.PI * 2); ctx.fill();
+    const cap = () => { ctx.beginPath(); ctx.moveTo(-50, 2);
+      ctx.bezierCurveTo(-52, -40, -18, -58, 2, -58); ctx.bezierCurveTo(28, -58, 54, -38, 50, 2);
+      mbPolyCont([42, 9, 33, 1, 24, 10, 13, 2, 2, 11, -9, 2, -20, 10, -30, 2, -41, 9]); ctx.closePath(); };
+    mbSkin(cap, c, t, { top: -58, th: 40, flames: [[-34, 9, 26, 11, 1], [-4, 11, 34, 13, 3], [28, 9, 24, 10, 6]], after: () => {
+      for (const [x, y, r] of [[-22, -32, 6.5], [8, -44, 5.5], [26, -24, 7], [-6, -20, 4], [-34, -12, 3.5]]) { mbGlow(x, y, r * 2.6, c, 0.6); ctx.fillStyle = E; circ(x, y, r); ctx.fillStyle = "rgba(255,255,255,.7)"; circ(x - r * 0.3, y - r * 0.3, r * 0.32); } } });
+    ctx.restore();
+    mbEyes(-4, -41, 0.85, E, m, t, 11);
+    mbFangs(-4, -30, 9, 7, m, 0.25 + mbAtk(m));
+    mbMotes(0, -76, 40, E, t, 7, 0.7);
+    if (m.horns || m.boss) mbHorns(2, -104, 0.9, c);
+    if (m.boss) mbCrown(2, -110, 1.1, c);
+    return m.boss ? -130 : -110;
   },
-  souche(m, c, t) {
-    const bark = m.flash > 0 ? "#ffffff" : "#8a5a36";
-    ctx.fillStyle = bark; rr(-30, -62, 60, 62, 8); ctx.fill();
-    ctx.fillStyle = shade(bark, -0.25); ctx.beginPath(); ctx.ellipse(-36, -4, 12, 6, 0.3, 0, Math.PI * 2); ctx.ellipse(36, -4, 12, 6, -0.3, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = shade(bark, -0.25); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-20, -54); ctx.lineTo(-18, -8); ctx.moveTo(20, -50); ctx.lineTo(22, -10); ctx.stroke();
-    ctx.fillStyle = "#d8a870"; ctx.beginPath(); ctx.ellipse(0, -62, 30, 8, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = "#b07e4a"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(0, -62, 18, 4.5, 0, 0, Math.PI * 2); ctx.stroke();
-    ctx.fillStyle = c; const wv = Math.sin(t * 3 + m.wobble) * 0.15;
-    ctx.beginPath(); ctx.ellipse(-10, -74, 12, 5, -0.7 + wv, 0, Math.PI * 2); ctx.ellipse(10, -76, 13, 5, 0.6 - wv, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "#6aa84f"; ctx.beginPath(); ctx.ellipse(-16, -60, 10, 4, 0.2, 0, Math.PI * 2); ctx.ellipse(18, -58, 7, 3, -0.3, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "#f3e6cf"; ctx.fillRect(21, -70, 3, 8); ctx.fillStyle = "#e0703a"; ctx.beginPath(); ctx.ellipse(22.5, -70, 6, 4.5, 0, Math.PI, Math.PI * 2); ctx.fill(); ctx.fillStyle = "#fff"; circ(20.5, -72, 1.1);
-    drawFace(m, 0, -34, 0.95, t); return -82;
+  souche(m, c, t) { c = mbV(c); // vieille souche possédée
+    const E = mbG(c), bark = m.flash > 0 ? "#fff" : "#1e1620", sw = Math.sin(t * 2.5 + m.wobble) - mbAtk(m) * 3;
+    ctx.fillStyle = "#140e14"; for (const [x, d] of [[-30, -1], [-14, -1], [16, 1], [32, 1]]) { ctx.beginPath(); ctx.moveTo(x - 8 * d, -10); ctx.quadraticCurveTo(x + 4 * d, -2, x + 13 * d, 2); ctx.lineTo(x - 2 * d, 2); ctx.closePath(); ctx.fill(); }
+    ctx.strokeStyle = "#140e14"; ctx.lineCap = "round"; ctx.lineWidth = 8;
+    ctx.beginPath(); ctx.moveTo(30, -50); ctx.quadraticCurveTo(54, -60 + sw * 3, 56, -80 + sw * 3); ctx.stroke();
+    ctx.lineWidth = 3.5; ctx.beginPath(); ctx.moveTo(56, -80 + sw * 3); ctx.lineTo(65, -88 + sw * 3); ctx.moveTo(56, -80 + sw * 3); ctx.lineTo(52, -93 + sw * 3); ctx.moveTo(56, -80 + sw * 3); ctx.lineTo(62, -76 + sw * 3); ctx.stroke();
+    const trunk = () => { ctx.beginPath(); ctx.moveTo(-38, 0); ctx.quadraticCurveTo(-42, -40, -34, -72);
+      mbPolyCont([-28, -86, -19, -74, -11, -94, -2, -76, 8, -90, 15, -74, 25, -84, 32, -70]); ctx.quadraticCurveTo(42, -40, 38, 0); ctx.closePath(); };
+    mbSkin(trunk, c, t, { base: bark, top: -90, th: 40, flames: [[-24, 2, 40, 12, 2], [6, 2, 52, 13, 4], [28, 2, 34, 10, 7]], after: () => {
+      ctx.strokeStyle = "#0e0a10"; ctx.lineWidth = 2.4; for (const x of [-26, -12, 24]) { ctx.beginPath(); ctx.moveTo(x, -50); ctx.quadraticCurveTo(x + 4, -64, x - 1, -84); ctx.stroke(); }
+      mbCrack([-30, -18, -22, -28, -26, -40, -16, -50], E, 2); mbCrack([28, -12, 20, -26, 26, -42], E, 1.8); } });
+    ctx.fillStyle = "#2c222a"; ctx.beginPath(); ctx.ellipse(1, -73, 27, 6, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = c; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.ellipse(1, -73, 17, 3.6, 0, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(1, -73, 8, 1.8, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(-4, -42, 22, 17, 0, 0, Math.PI * 2); ctx.fill();
+    mbEyes(-4, -46, 0.95, E, m, t, 10);
+    mbFangs(-4, -35, 13, 11, m, 0.3 + 0.2 * Math.abs(sw) + mbAtk(m));
+    mbFlame(-22, -82, 16, 7, c, t, 2); mbFlame(10, -88, 20, 7, c, t, 4);
+    ctx.strokeStyle = bark; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-32, -42); ctx.quadraticCurveTo(-54, -38 - sw * 3, -60, -22 - sw * 3); ctx.stroke();
+    ctx.strokeStyle = E; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(-34, -45); ctx.quadraticCurveTo(-54, -42 - sw * 3, -61, -26 - sw * 3); ctx.stroke();
+    ctx.strokeStyle = bark; ctx.lineWidth = 3.5; ctx.beginPath(); for (const [dx, dy] of [[-9, 6], [-5, 12], [3, 10]]) { ctx.moveTo(-60, -22 - sw * 3); ctx.lineTo(-60 + dx, -22 + dy - sw * 3); } ctx.stroke();
+    if (m.horns || m.boss) mbHorns(1, -88, 0.95, c);
+    if (m.boss) mbCrown(1, -100, 1.15, c);
+    mbMotes(0, -74, 44, E, t, 5, 0.1);
+    return m.boss ? -124 : -100;
   },
-  chauve(m, c, t) {
-    const cy = -52 + Math.sin(t * 3 + m.wobble) * 6, fl = Math.sin(t * 14) * 0.5;
-    ctx.fillStyle = shade(c, -0.25);
-    for (const sd of [-1, 1]) {
-      ctx.save(); ctx.translate(sd * 22, cy - 4); ctx.rotate(sd * fl); ctx.beginPath(); ctx.moveTo(0, 0);
-      ctx.quadraticCurveTo(sd * 26, -30, sd * 44, -22); ctx.lineTo(sd * 36, -8); ctx.lineTo(sd * 30, 2); ctx.lineTo(sd * 18, 0); ctx.lineTo(sd * 12, 8); ctx.closePath(); ctx.fill(); ctx.restore();
+  chauve(m, c, t) { c = mbV(c); // chauve-souris de brume
+    const E = mbG(c), fl = Math.sin(t * 9 + m.wobble), y0 = -66 + Math.sin(t * 3 + m.wobble) * 4, S = 1.25;
+    ctx.save(); ctx.translate(0, y0); ctx.scale(S, S);
+    for (const d of [-1, 1]) {
+      const up = fl * 14;
+      const wing = () => { ctx.beginPath(); ctx.moveTo(d * 10, -6);
+        ctx.quadraticCurveTo(d * 30, -32 - up, d * 60, -28 - up); ctx.lineTo(d * 54, -13 - up * 0.6); ctx.quadraticCurveTo(d * 48, -6 - up * 0.4, d * 42, -2 - up * 0.3);
+        ctx.quadraticCurveTo(d * 36, 4 - up * 0.2, d * 27, 6 - up * 0.1); ctx.quadraticCurveTo(d * 20, 8, d * 12, 10); ctx.closePath(); };
+      mbSkin(wing, c, t, { rx: d * -1.6, ry: 2, after: () => {
+        ctx.strokeStyle = c; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(d * 12, -4); ctx.lineTo(d * 58, -27 - up); ctx.moveTo(d * 14, 0); ctx.lineTo(d * 52, -13 - up * 0.6); ctx.moveTo(d * 14, 4); ctx.lineTo(d * 40, -2 - up * 0.3); ctx.stroke();
+        mbFlame(d * 34, 8 - up * 0.2, 16, 12, c, t, d + 2); } });
+      ctx.fillStyle = MBK; ctx.beginPath(); ctx.moveTo(d * 58, -28 - up); ctx.lineTo(d * 66, -38 - up); ctx.lineTo(d * 60, -24 - up); ctx.fill();
     }
-    ctx.fillStyle = c; circ(0, cy, 28);
-    ctx.beginPath(); ctx.moveTo(-20, cy - 16); ctx.lineTo(-16, cy - 38); ctx.lineTo(-6, cy - 24); ctx.moveTo(20, cy - 16); ctx.lineTo(16, cy - 38); ctx.lineTo(6, cy - 24); ctx.fill();
-    ctx.strokeStyle = shade(c, -0.4); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-8, cy + 26); ctx.lineTo(-9, cy + 33); ctx.moveTo(8, cy + 26); ctx.lineTo(9, cy + 33); ctx.stroke();
-    drawFace(m, 0, cy - 4, 0.85, t); return cy - 30;
-  },
-  yeti(m, c, t) {
-    if (m.horns) drawHorns(-82, m.flash > 0 ? "#fff" : "#d8d0c0");
-    ctx.fillStyle = shade(c, -0.25); ctx.beginPath(); ctx.ellipse(-16, -3, 12, 6, 0, 0, Math.PI * 2); ctx.ellipse(16, -3, 12, 6, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = c; for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2 + Math.sin(t * 2) * 0.04; circ(Math.cos(a) * 34, -42 + Math.sin(a) * 36, 12); }
-    circ(0, -42, 36);
-    ctx.fillStyle = m.flash > 0 ? "#fff" : shade(c, 0.55); ctx.beginPath(); ctx.ellipse(0, -40, 25, 23, 0, 0, Math.PI * 2); ctx.fill();
-    drawFace(m, 0, -44, 1, t); return -86;
-  },
-  glacon(m, c, t) {
-    const b = -Math.abs(Math.sin(t * 4 + m.wobble)) * 4;
-    ctx.save(); ctx.translate(0, b);
-    ctx.globalAlpha *= 0.92; ctx.fillStyle = c; rr(-36, -72, 72, 72, 14); ctx.fill();
-    ctx.globalAlpha /= 0.92; ctx.strokeStyle = "rgba(255,255,255,.7)"; ctx.lineWidth = 3; ctx.stroke();
-    ctx.fillStyle = "rgba(255,255,255,.55)"; ctx.beginPath(); ctx.moveTo(-26, -62); ctx.lineTo(-18, -62); ctx.lineTo(-28, -40); ctx.lineTo(-30, -48); ctx.fill();
-    drawFace(m, 2, -38, 1, t); ctx.restore(); return -72 + b;
-  },
-  flocon(m, c, t) {
-    const cy = -56 + Math.sin(t * 2.5 + m.wobble) * 7;
-    ctx.save(); ctx.translate(0, cy); ctx.rotate(t * 0.6);
-    ctx.strokeStyle = m.flash > 0 ? "#fff" : shade(c, 0.5); ctx.lineWidth = 5; ctx.lineCap = "round"; ctx.beginPath();
-    for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2, ca = Math.cos(a), sa = Math.sin(a);
-      ctx.moveTo(0, 0); ctx.lineTo(ca * 46, sa * 46);
-      for (const sd of [-1, 1]) { const b = a + sd * 0.6; ctx.moveTo(ca * 32, sa * 32); ctx.lineTo(ca * 32 + Math.cos(b) * 10, sa * 32 + Math.sin(b) * 10); } }
-    ctx.stroke(); ctx.restore();
-    ctx.fillStyle = c; circ(0, cy, 24);
-    drawFace(m, 0, cy - 2, 0.8, t); return cy - 26;
-  },
-  meduse(m, c, t) {
-    const cy = -62 + Math.sin(t * 2.4 + m.wobble) * 7, pu = Math.sin(t * 4 + m.wobble) * 0.06;
-    ctx.strokeStyle = shade(c, 0.35); ctx.lineWidth = 4; ctx.lineCap = "round";
-    for (let i = 0; i < 5; i++) { const x0 = -20 + i * 10; ctx.beginPath(); ctx.moveTo(x0, cy + 4); ctx.quadraticCurveTo(x0 + Math.sin(t * 3 + i) * 8, cy + 22, x0 + Math.sin(t * 3 + i + 1) * 6, cy + 40); ctx.stroke(); }
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, cy, 32 * (1 + pu), 28 * (1 - pu), 0, Math.PI, Math.PI * 2); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = shade(c, -0.15); ctx.beginPath(); for (let i = 0; i <= 8; i++) { const x0 = -32 + i * 8; ctx.lineTo(x0, cy + (i % 2 ? 6 : 1)); } ctx.lineTo(32, cy); ctx.lineTo(-32, cy); ctx.fill();
-    ctx.fillStyle = "rgba(255,255,255,.4)"; ctx.beginPath(); ctx.ellipse(-12, cy - 16, 8, 4, -0.5, 0, Math.PI * 2); ctx.fill();
-    drawFace(m, 0, cy - 10, 0.85, t); return cy - 28;
-  },
-  crabe(m, c, t) {
-    const sn = Math.abs(Math.sin(t * 5 + m.wobble)) * 0.5;
-    ctx.strokeStyle = shade(c, -0.3); ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.beginPath();
-    for (const sd of [-1, 1]) for (let i = 0; i < 3; i++) { ctx.moveTo(sd * (18 + i * 7), -18); ctx.lineTo(sd * (30 + i * 8), -8 + Math.sin(t * 8 + i) * 2); ctx.lineTo(sd * (34 + i * 8), 0); }
-    ctx.stroke();
-    ctx.fillStyle = shade(c, -0.1);
-    for (const sd of [-1, 1]) { ctx.save(); ctx.translate(sd * 34, -40); ctx.rotate(sd * -0.3); ctx.beginPath(); ctx.arc(0, 0, 12, sd > 0 ? -Math.PI * 0.75 + sn : Math.PI * 0.25 - sn, sd > 0 ? Math.PI * 1.25 - sn : Math.PI * 2.25 + sn); ctx.lineTo(0, 0); ctx.fill(); ctx.restore();
-      ctx.strokeStyle = shade(c, -0.1); ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(sd * 22, -26); ctx.lineTo(sd * 32, -36); ctx.stroke(); }
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, -26, 34, 20, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = shade(c, 0.3); ctx.beginPath(); ctx.ellipse(-10, -36, 10, 4, -0.2, 0, Math.PI * 2); ctx.fill();
-    drawFace(m, 0, -28, 0.8, t); return -54;
-  },
-  globe(m, c, t) {
-    const cy = -54 + Math.sin(t * 2 + m.wobble) * 5, inf = 1 + Math.sin(t * 1.5 + m.wobble) * 0.05;
-    ctx.fillStyle = shade(c, -0.2); ctx.beginPath(); ctx.moveTo(26, cy); ctx.lineTo(48, cy - 14 + Math.sin(t * 8) * 3); ctx.lineTo(48, cy + 14 - Math.sin(t * 8) * 3); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = shade(c, 0.4);
-    for (let i = 0; i < 14; i++) { const a = i / 14 * Math.PI * 2, r0 = 30 * inf; ctx.beginPath(); ctx.moveTo(Math.cos(a - 0.12) * r0, cy + Math.sin(a - 0.12) * r0); ctx.lineTo(Math.cos(a) * (r0 + 9), cy + Math.sin(a) * (r0 + 9)); ctx.lineTo(Math.cos(a + 0.12) * r0, cy + Math.sin(a + 0.12) * r0); ctx.fill(); }
-    ctx.fillStyle = c; circ(0, cy, 31 * inf);
-    ctx.fillStyle = shade(c, 0.5); ctx.beginPath(); ctx.ellipse(0, cy + 14, 20, 12, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = shade(c, -0.2); ctx.beginPath(); ctx.ellipse(8, cy + 4, 9, 5, 0.6 + Math.sin(t * 6) * 0.3, 0, Math.PI * 2); ctx.fill();
-    drawFace(m, -6, cy - 6, 0.9, t); return cy - 40;
-  },
-  poulpe(m, c, t) {
-    ctx.fillStyle = shade(c, -0.12);
-    for (let i = 0; i < 6; i++) { const x0 = -26 + i * 10.4, wv = Math.sin(t * 3 + i * 1.3) * 6; ctx.beginPath(); ctx.moveTo(x0 - 5, -36); ctx.quadraticCurveTo(x0 + wv, -14, x0 - 2 + wv * 1.4, -2); ctx.quadraticCurveTo(x0 + 6 + wv, -4, x0 + 5, -36); ctx.fill(); }
-    ctx.fillStyle = shade(c, 0.45); for (let i = 0; i < 6; i++) circ(-24 + i * 10.4 + Math.sin(t * 3 + i * 1.3) * 3, -16, 1.8);
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, -56, 32, 36, 0, Math.PI, Math.PI * 2); ctx.lineTo(30, -40); ctx.quadraticCurveTo(0, -30, -30, -40); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = shade(c, 0.3); circ(-14, -78, 5); circ(8, -84, 3.5); circ(18, -70, 4);
-    drawFace(m, 0, -50, 1, t); return -92;
-  },
-  fantome(m, c, t) {
-    const cy = -58 + Math.sin(t * 2.2 + m.wobble) * 8;
-    ctx.globalAlpha *= 0.9; ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-30, cy + 30);
-    ctx.lineTo(-30, cy); ctx.bezierCurveTo(-30, cy - 42, 30, cy - 42, 30, cy);
-    ctx.lineTo(30, cy + 30); for (let i = 0; i < 5; i++) { const x0 = 30 - (i + 1) * 12; ctx.quadraticCurveTo(x0 + 6, cy + 22 + Math.sin(t * 5 + i) * 4, x0, cy + 30); }
-    ctx.closePath(); ctx.fill(); ctx.globalAlpha /= 0.9;
-    ctx.fillStyle = shade(c, 0.35); ctx.beginPath(); ctx.ellipse(-14, cy - 20, 8, 4, -0.5, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = c; for (const sd of [-1, 1]) { ctx.beginPath(); ctx.ellipse(sd * 32, cy + 6 + Math.sin(t * 3 + sd) * 4, 8, 5, sd * 0.6, 0, Math.PI * 2); ctx.fill(); }
-    drawFace(m, 0, cy - 6, 1, t); return cy - 32;
-  },
-  prisme(m, c, t) {
-    ctx.fillStyle = shade(c, -0.2);
-    for (const sd of [-1, 1]) { ctx.beginPath(); ctx.moveTo(sd * 26, -60); ctx.lineTo(sd * 40, -84); ctx.lineTo(sd * 36, -56); ctx.closePath(); ctx.fill(); }
-    ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(0, -86); ctx.lineTo(30, -66); ctx.lineTo(32, -20); ctx.lineTo(14, 0); ctx.lineTo(-14, 0); ctx.lineTo(-32, -20); ctx.lineTo(-30, -66); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = shade(c, 0.35); ctx.beginPath(); ctx.moveTo(0, -86); ctx.lineTo(-30, -66); ctx.lineTo(-10, -60); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = shade(c, -0.18); ctx.beginPath(); ctx.moveTo(30, -66); ctx.lineTo(32, -20); ctx.lineTo(14, 0); ctx.lineTo(12, -40); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = "rgba(255,255,255," + (0.3 + 0.25 * Math.sin(t * 3 + m.wobble)) + ")"; ctx.beginPath(); ctx.moveTo(-20, -60); ctx.lineTo(-16, -62); ctx.lineTo(-22, -30); ctx.lineTo(-25, -32); ctx.fill();
-    drawFace(m, 0, -42, 1, t); return -88;
-  },
-  oeil(m, c, t) {
-    const cy = -56 + Math.sin(t * 3 + m.wobble) * 6, fl = Math.sin(t * 13) * 0.5;
-    ctx.fillStyle = shade(c, -0.3);
-    for (const sd of [-1, 1]) { ctx.save(); ctx.translate(sd * 22, cy - 6); ctx.rotate(sd * fl); ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(sd * 22, -26, sd * 40, -16); ctx.lineTo(sd * 32, -4); ctx.lineTo(sd * 26, 4); ctx.lineTo(sd * 14, 4); ctx.closePath(); ctx.fill(); ctx.restore(); }
-    ctx.fillStyle = c; circ(0, cy, 28);
-    ctx.fillStyle = shade(c, -0.2); for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.moveTo(-14 + i * 9, cy + 24); ctx.lineTo(-10 + i * 9, cy + 36 + Math.sin(t * 4 + i) * 3); ctx.lineTo(-6 + i * 9, cy + 24); ctx.fill(); }
-    drawFace(Object.assign({}, m, { eyes: 1 }), 0, cy - 4, 1.3, t); return cy - 30;
-  },
-  ombre(m, c, t) {
-    const body = m.flash > 0 ? c : mix(c, "#141022", 0.55), br = Math.sin(t * 4 + m.wobble) * 2;
-    ctx.fillStyle = shade(body, -0.2); for (const lx of [-22, -8, 10, 24]) { rr(lx - 4, -16, 9, 16, 4); ctx.fill(); }
-    ctx.fillStyle = body; ctx.beginPath(); ctx.ellipse(0, -34, 38, 24 + br, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); for (let i = 0; i < 7; i++) { const x0 = -30 + i * 10; ctx.moveTo(x0 - 6, -50); ctx.lineTo(x0 + Math.sin(t * 5 + i) * 2, -62 - (i % 2) * 6); ctx.lineTo(x0 + 6, -50); } ctx.fill();
-    ctx.beginPath(); ctx.moveTo(-24, -52); ctx.lineTo(-20, -76); ctx.lineTo(-8, -56); ctx.moveTo(8, -56); ctx.lineTo(20, -76); ctx.lineTo(24, -52); ctx.fill();
-    ctx.fillStyle = c; ctx.globalAlpha *= 0.35; circ(0, -34, 26); ctx.globalAlpha /= 0.35;
-    drawFace(Object.assign({}, m, { iris: c }), 0, -38, 1, t); return -76;
-  },
-  crapaud(m, c, t) {
-    const sac = 1 + Math.abs(Math.sin(t * 3 + m.wobble)) * 0.25;
-    ctx.fillStyle = shade(c, -0.2); ctx.beginPath(); ctx.ellipse(-30, -6, 14, 7, 0.3, 0, Math.PI * 2); ctx.ellipse(30, -6, 14, 7, -0.3, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, -28, 42, 28, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = shade(c, 0.45); ctx.beginPath(); ctx.ellipse(-2, -12, 18 * sac, 10 * sac, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = shade(c, -0.25); for (const [x, y] of [[-24, -40], [20, -44], [30, -26]]) circ(x, y, 3);
-    ctx.fillStyle = c; circ(-14, -52, 12); circ(14, -52, 12);
-    drawFace(m, 0, -50, 1, t); return -64;
-  },
-  moustique(m, c, t) {
-    const cy = -60 + Math.sin(t * 5 + m.wobble) * 7, fl = Math.sin(t * 40) * 0.6;
-    ctx.fillStyle = "rgba(220,240,255,.55)";
-    for (const sd of [-1, 1]) { ctx.save(); ctx.translate(sd * 6, cy - 14); ctx.rotate(sd * (0.6 + fl)); ctx.beginPath(); ctx.ellipse(sd * 18, -6, 20, 8, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
-    ctx.strokeStyle = shade(c, -0.4); ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.beginPath();
-    for (const lx of [-10, 0, 10]) { ctx.moveTo(lx, cy + 10); ctx.lineTo(lx - 6, cy + 30 + Math.sin(t * 6 + lx) * 3); }
-    ctx.moveTo(-18, cy + 2); ctx.lineTo(-40, cy + 8); ctx.stroke();
-    ctx.fillStyle = shade(c, -0.15); ctx.beginPath(); ctx.ellipse(16, cy + 6, 16, 9, 0.4, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = c; circ(-4, cy, 18);
-    drawFace(m, -6, cy - 2, 0.7, t); return cy - 30;
-  },
-  vase(m, c, t) {
-    const mud = m.flash > 0 ? c : mix(c, "#5a4a30", 0.55);
-    ctx.fillStyle = mud; ctx.beginPath(); ctx.moveTo(-46, 0); ctx.bezierCurveTo(-52, -40, -26, -66, 0, -64); ctx.bezierCurveTo(26, -66, 52, -40, 46, 0); ctx.closePath(); ctx.fill();
-    for (const k of [-34, -12, 10, 30]) circ(k, 0, 7);
-    ctx.fillStyle = shade(mud, 0.25); for (let i = 0; i < 3; i++) { const p = (t * 0.6 + i / 3) % 1; ctx.globalAlpha *= 1 - p; circ(-20 + i * 18, -40 - p * 20, 4 + p * 3); ctx.globalAlpha /= Math.max(0.01, 1 - p); }
-    ctx.strokeStyle = "#6b4a2a"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(20, -56); ctx.lineTo(30, -76); ctx.moveTo(26, -68); ctx.lineTo(34, -70); ctx.stroke();
-    drawFace(m, 0, -32, 1, t); return -76;
-  },
-  serpent(m, c, t) {
-    const sw = Math.sin(t * 3 + m.wobble) * 4;
-    ctx.fillStyle = shade(c, -0.15); ctx.beginPath(); ctx.ellipse(0, -10, 40, 12, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(2, -26, 32, 11, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = shade(c, -0.1); ctx.beginPath(); ctx.ellipse(4, -40, 22, 10, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-4, -40); ctx.quadraticCurveTo(-8 + sw, -62, -4 + sw, -72); ctx.lineTo(12 + sw, -70); ctx.quadraticCurveTo(10 + sw, -58, 12, -40); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(2 + sw, -76, 18, 13, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = shade(c, 0.35); for (let i = 0; i < 5; i++) circ(-24 + i * 12, -10, 2.4);
-    ctx.strokeStyle = "#e8425a"; ctx.lineWidth = 2; ctx.beginPath(); const tg = Math.abs(Math.sin(t * 6)) * 6; ctx.moveTo(-14 + sw, -72); ctx.lineTo(-20 - tg + sw, -72); ctx.lineTo(-24 - tg + sw, -75); ctx.moveTo(-20 - tg + sw, -72); ctx.lineTo(-24 - tg + sw, -69); ctx.stroke();
-    drawFace(m, 2 + sw, -78, 0.75, t); return -90;
-  },
-  cactus(m, c, t) {
-    const aw = Math.sin(t * 3 + m.wobble) * 0.15;
-    ctx.fillStyle = c;
-    for (const sd of [-1, 1]) { ctx.save(); ctx.translate(sd * 22, -40); ctx.rotate(sd * aw); rr(sd > 0 ? 0 : -14, -6, 14, 10, 5); ctx.fill(); rr(sd > 0 ? 4 : -14, -28, 10, 26, 5); ctx.fill(); ctx.restore(); }
-    rr(-24, -78, 48, 78, 22); ctx.fill();
-    ctx.strokeStyle = shade(c, -0.25); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-8, -70); ctx.lineTo(-8, -6); ctx.moveTo(8, -70); ctx.lineTo(8, -6); ctx.stroke();
-    ctx.fillStyle = "#fff6c8"; for (const [x, y] of [[-18, -60], [18, -50], [-18, -24], [18, -18], [0, -66]]) circ(x, y, 1.6);
-    ctx.fillStyle = "#ff6a9a"; for (let i = 0; i < 5; i++) { const a = i / 5 * Math.PI * 2; circ(Math.cos(a) * 5, -80 + Math.sin(a) * 5, 4); } ctx.fillStyle = "#ffd166"; circ(0, -80, 3);
-    drawFace(m, 0, -44, 0.95, t); return -88;
-  },
-  scorpion(m, c, t) {
-    const tl = Math.sin(t * 3 + m.wobble) * 0.2;
-    ctx.strokeStyle = shade(c, -0.3); ctx.lineWidth = 3.5; ctx.lineCap = "round"; ctx.beginPath();
-    for (const sd of [-1, 1]) for (let i = 0; i < 3; i++) { ctx.moveTo(sd * (8 + i * 8), -12); ctx.lineTo(sd * (18 + i * 9), 0); }
-    ctx.stroke();
-    ctx.fillStyle = shade(c, -0.1); ctx.save(); ctx.translate(22, -24);
-    for (let i = 0; i < 4; i++) { ctx.rotate(-0.55 - tl); ctx.translate(0, -12); circ(0, 0, 9 - i); }
-    ctx.fillStyle = "#3a2a20"; ctx.beginPath(); ctx.moveTo(-4, -4); ctx.lineTo(0, -16); ctx.lineTo(5, -4); ctx.fill(); ctx.restore();
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, -20, 30, 16, 0, 0, Math.PI * 2); ctx.fill();
-    for (const sd of [-1, 1]) { ctx.beginPath(); ctx.ellipse(-30, -30 + sd * 10, 10, 6, sd * 0.4, 0, Math.PI * 2); ctx.fill(); }
-    drawFace(m, -10, -22, 0.7, t); return -70;
-  },
-  momie(m, c, t) {
-    const band = m.flash > 0 ? "#ffffff" : mix(c, "#e8dcc0", 0.7), sw = Math.sin(t * 2 + m.wobble) * 3;
-    ctx.fillStyle = shade(band, -0.1); rr(-34, -52 + sw, 22, 10, 5); ctx.fill();
-    ctx.fillStyle = band; rr(-24, -76, 48, 76, 18); ctx.fill();
-    ctx.strokeStyle = shade(band, -0.25); ctx.lineWidth = 2; ctx.beginPath();
-    for (let y = -68; y < -4; y += 9) { ctx.moveTo(-22, y); ctx.lineTo(22, y + 4); }
-    ctx.stroke();
-    ctx.fillStyle = band; ctx.beginPath(); ctx.moveTo(18, -20); ctx.quadraticCurveTo(34, -10 + sw, 28, 6); ctx.lineTo(20, 2); ctx.fill();
-    ctx.fillStyle = "#2a2230"; rr(-16, -58, 32, 14, 6); ctx.fill();
-    drawFace(Object.assign({}, m, { iris: "#7ad0ff" }), 0, -51, 0.75, t); return -82;
-  },
-  sable(m, c, t) {
-    const rise = Math.sin(t * 2 + m.wobble) * 4;
-    ctx.fillStyle = shade(c, -0.15); ctx.beginPath(); ctx.ellipse(0, 0, 44, 9, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-26, 0); ctx.quadraticCurveTo(-30, -60 - rise, 0, -70 - rise); ctx.quadraticCurveTo(30, -60 - rise, 26, 0); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = shade(c, -0.25); ctx.lineWidth = 2; ctx.beginPath(); for (let i = 1; i < 5; i++) { const y = -i * 13; ctx.moveTo(-26 + i * 2, y); ctx.quadraticCurveTo(0, y + 5, 26 - i * 2, y); } ctx.stroke();
-    ctx.fillStyle = shade(c, 0.3); for (let i = 0; i < 4; i++) circ(-36 + i * 24 + Math.sin(t * 2 + i) * 3, -4, 2);
-    drawFace(m, 0, -50 - rise, 0.95, t); return -72 - rise;
-  },
-  robot(m, c, t) {
-    const sw = Math.sin(t * 4 + m.wobble) * 0.25;
-    ctx.fillStyle = shade(c, -0.3); rr(-20, -16, 12, 16, 3); ctx.fill(); rr(8, -16, 12, 16, 3); ctx.fill();
-    for (const sd of [-1, 1]) { ctx.save(); ctx.translate(sd * 30, -48); ctx.rotate(sd * sw); rr(-4, 0, 8, 22, 4); ctx.fill(); circ(0, 24, 5); ctx.restore(); }
-    ctx.fillStyle = c; rr(-28, -64, 56, 50, 8); ctx.fill();
-    ctx.fillStyle = "#1a2030"; rr(-20, -58, 40, 26, 6); ctx.fill();
-    ctx.fillStyle = shade(c, 0.3); rr(-12, -28, 24, 8, 3); ctx.fill();
-    ctx.strokeStyle = shade(c, -0.3); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -64); ctx.lineTo(0, -76); ctx.stroke();
-    ctx.fillStyle = Math.sin(t * 6) > 0 ? "#ff4d5e" : "#ffd166"; circ(0, -78, 4);
-    drawFace(Object.assign({}, m, { iris: "#5ce1ff", blush: false }), 0, -48, 0.75, t); return -82;
-  },
-  engrenage(m, c, t) {
-    const cy = -44;
-    ctx.save(); ctx.translate(0, cy); ctx.rotate(t * 0.8 + m.wobble);
-    ctx.fillStyle = c; ctx.fill(new Path2D(gearPath(0, 0, 42, 32, 10)));
-    ctx.fillStyle = shade(c, -0.25); circ(0, 0, 8);
+    mbGlow(0, 0, 32, c, 0.3);
+    const body = () => { ctx.beginPath(); ctx.ellipse(0, 2, 18, 21, 0, 0, Math.PI * 2); };
+    mbSkin(body, c, t, { base: m.flash > 0 ? mbL(c) : "#191124", flames: [[0, 24, 22, 12, 1]] });
+    ctx.fillStyle = "#191124"; mbPoly([-15, 12, -11, 25, -5, 17, 0, 28, 5, 17, 11, 25, 15, 12]); ctx.fill();
+    for (const d of [-1, 1]) { ctx.fillStyle = "#191124"; ctx.beginPath(); ctx.moveTo(d * 4, -14); ctx.lineTo(d * 17, -38); ctx.lineTo(d * 16, -12); ctx.fill(); ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(d * 8, -15); ctx.lineTo(d * 15, -30); ctx.lineTo(d * 14, -14); ctx.fill(); }
+    mbEyes(-2, -4, 0.75, E, m, t, 8);
+    mbFangs(-2, 6, 8, 7, m, 0.3 + mbAtk(m));
+    ctx.strokeStyle = "#191124"; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(-5, 22); ctx.lineTo(-7, 31); ctx.moveTo(5, 22); ctx.lineTo(7, 31); ctx.stroke();
+    if (m.horns || m.boss) mbHorns(0, -16, 0.6, c);
+    if (m.boss) mbCrown(0, -28, 0.85, c);
     ctx.restore();
-    ctx.fillStyle = shade(c, 0.25); circ(0, cy, 24);
-    drawFace(m, 0, cy, 0.85, t); return cy - 42;
-  },
-  drone(m, c, t) {
-    const cy = -64 + Math.sin(t * 3 + m.wobble) * 6;
-    ctx.strokeStyle = shade(c, -0.35); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-30, cy - 8); ctx.lineTo(30, cy - 8); ctx.stroke();
-    ctx.fillStyle = "rgba(220,230,240,.6)"; for (const sd of [-1, 1]) { ctx.beginPath(); ctx.ellipse(sd * 30, cy - 12, 16 * Math.abs(Math.sin(t * 30 + sd)) + 2, 3, 0, 0, Math.PI * 2); ctx.fill(); }
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, cy, 26, 16, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = shade(c, -0.25); ctx.beginPath(); ctx.ellipse(0, cy + 10, 18, 6, 0, 0, Math.PI); ctx.fill();
-    ctx.strokeStyle = shade(c, -0.35); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-10, cy + 14); ctx.lineTo(-14, cy + 26); ctx.moveTo(10, cy + 14); ctx.lineTo(14, cy + 26); ctx.stroke();
-    drawFace(Object.assign({}, m, { eyes: 1 }), 0, cy - 2, 0.9, t); return cy - 22;
-  },
-  ressort(m, c, t) {
-    const b = Math.abs(Math.sin(t * 4 + m.wobble)), h = 26 + b * 16;
-    ctx.fillStyle = shade(c, -0.3); rr(-18, -8, 36, 8, 3); ctx.fill();
-    ctx.strokeStyle = "#c8d2e2"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, -8);
-    for (let i = 1; i <= 6; i++) ctx.lineTo(i % 2 ? 12 : -12, -8 - i * h / 6); ctx.stroke();
-    const y0 = -8 - h;
-    ctx.fillStyle = c; rr(-26, y0 - 44, 52, 44, 10); ctx.fill();
-    ctx.fillStyle = shade(c, 0.3); rr(-20, y0 - 40, 12, 6, 3); ctx.fill();
-    drawFace(m, 0, y0 - 22, 0.9, t); return y0 - 44;
-  },
-  guimauve(m, c, t) {
-    const sq = 1 + Math.sin(t * 3 + m.wobble) * 0.04;
-    ctx.fillStyle = c; rr(-30 * sq, -66 / sq, 60 * sq, 66 / sq, 24); ctx.fill();
-    ctx.fillStyle = "rgba(255,255,255,.55)"; rr(-30 * sq, -66 / sq, 60 * sq, 22, 22); ctx.fill();
-    ctx.fillStyle = shade(c, 0.4); ctx.beginPath(); ctx.ellipse(-14, -50, 8, 4, -0.4, 0, Math.PI * 2); ctx.fill();
-    drawFace(m, 0, -34, 1, t); return -66 / sq;
-  },
-  sucette(m, c, t) {
-    const hop = Math.abs(Math.sin(t * 4 + m.wobble)) * 8;
-    ctx.fillStyle = "#f6ead2"; rr(-3, -46 - hop, 6, 46, 3); ctx.fill();
-    const cy = -70 - hop; ctx.fillStyle = c; circ(0, cy, 30);
-    ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = 5; ctx.beginPath();
-    for (let a = 0; a < Math.PI * 6; a += 0.2) { const r = a * 4.4; const x = Math.cos(a + t) * r, y = Math.sin(a + t) * r; a === 0 ? ctx.moveTo(x, cy + y) : ctx.lineTo(x, cy + y); if (r > 27) break; }
-    ctx.stroke();
-    ctx.fillStyle = "rgba(255,255,255,.8)"; circ(0, cy, 15);
-    drawFace(m, 0, cy, 0.7, t); return cy - 30;
-  },
-  gelee(m, c, t) {
-    const w = Math.sin(t * 5 + m.wobble) * 4;
-    ctx.globalAlpha *= 0.88; ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-34, 0); ctx.lineTo(-32 - w, -60); ctx.quadraticCurveTo(0, -70, 32 + w, -60); ctx.lineTo(34, 0); ctx.closePath(); ctx.fill(); ctx.globalAlpha /= 0.88;
-    ctx.fillStyle = "rgba(255,255,255,.6)"; ctx.beginPath(); ctx.moveTo(-26, -54); ctx.lineTo(-18, -56); ctx.lineTo(-24, -24); ctx.lineTo(-28, -26); ctx.fill();
-    ctx.fillStyle = "#fff"; for (const [x, y] of [[-14, -60], [10, -62], [24, -56], [-2, -66], [16, -50]]) { rr(x, y, 4, 2, 1); ctx.fill(); }
-    drawFace(m, 0, -32, 1, t); return -68;
-  },
-  cupcake(m, c, t) {
-    ctx.fillStyle = "#d88a4a"; ctx.beginPath(); ctx.moveTo(-28, -36); ctx.lineTo(28, -36); ctx.lineTo(20, 0); ctx.lineTo(-20, 0); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = "#b06a30"; ctx.lineWidth = 2; ctx.beginPath(); for (let i = -2; i <= 2; i++) { ctx.moveTo(i * 10, -36); ctx.lineTo(i * 8, 0); } ctx.stroke();
-    ctx.fillStyle = c; circ(-16, -42, 16); circ(16, -42, 16); circ(0, -56, 20); circ(0, -40, 18);
-    ctx.fillStyle = "#e8425a"; circ(2, -78, 6); ctx.strokeStyle = "#3a6a2a"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(4, -84); ctx.quadraticCurveTo(8, -92, 12, -92); ctx.stroke();
-    ctx.fillStyle = "#fff"; for (const [x, y] of [[-20, -50], [14, -56], [-6, -64], [20, -40]]) { rr(x, y, 4, 2, 1); ctx.fill(); }
-    drawFace(m, 0, -20, 0.8, t); return -86;
-  },
-  etoile(m, c, t) {
-    const cy = -56 + Math.sin(t * 2 + m.wobble) * 6;
-    ctx.save(); ctx.translate(0, cy); ctx.rotate(Math.sin(t * 1.5 + m.wobble) * 0.15);
-    ctx.fillStyle = c; ctx.fill(new Path2D(starPts(0, 0, 44, 22, 5)));
-    ctx.fillStyle = "rgba(255,255,255,.4)"; ctx.fill(new Path2D(starPts(-4, -4, 20, 10, 5)));
-    ctx.restore();
-    drawFace(m, 0, cy + 2, 0.85, t); return cy - 44;
-  },
-  comete(m, c, t) {
-    const cy = -54 + Math.sin(t * 2.5 + m.wobble) * 5;
-    for (let i = 4; i >= 0; i--) { ctx.fillStyle = rgba(c, 0.15 + i * 0.05); ctx.beginPath(); ctx.ellipse(26 + i * 12, cy - 2 + Math.sin(t * 6 + i) * 2, 20 - i * 3, 14 - i * 2, 0, 0, Math.PI * 2); ctx.fill(); }
-    ctx.fillStyle = shade(c, 0.3); circ(0, cy, 28); ctx.fillStyle = c; circ(4, cy + 2, 24);
-    ctx.fillStyle = shade(c, -0.2); circ(-12, cy - 12, 4); circ(14, cy + 14, 3);
-    drawFace(m, -2, cy, 0.85, t); return cy - 28;
-  },
-  astrol(m, c, t) {
-    for (const sd of [-1, 1]) { ctx.strokeStyle = shade(c, -0.2); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(sd * 12, -64); ctx.quadraticCurveTo(sd * 20, -84, sd * (18 + Math.sin(t * 4 + sd) * 4), -92); ctx.stroke(); ctx.fillStyle = "#ffe070"; circ(sd * (18 + Math.sin(t * 4 + sd) * 4), -92, 5); }
-    ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-36, 0); ctx.bezierCurveTo(-44, -70, 44, -70, 36, 0); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = shade(c, 0.35); circ(-18, -10, 6); circ(22, -16, 4);
-    drawFace(Object.assign({}, m, { eyes: 2 }), 0, -40, 0.85, t);
-    ctx.fillStyle = "#fff"; circ(0, -54, 6); ctx.fillStyle = "#14121e"; circ(-1.5, -54, 3);
-    return -96;
-  },
-  trou(m, c, t) {
-    const cy = -54 + Math.sin(t * 2 + m.wobble) * 4;
-    ctx.save(); ctx.translate(0, cy); ctx.rotate(-0.3);
-    ctx.strokeStyle = rgba(c, 0.8); ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(0, 0, 46, 12, 0, Math.PI, Math.PI * 2); ctx.stroke();
-    ctx.restore();
-    ctx.fillStyle = m.flash > 0 ? "#ffffff" : "#120a20"; circ(0, cy, 28);
-    ctx.strokeStyle = rgba(c, 0.6); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, cy, 22, t * 2, t * 2 + 4); ctx.stroke();
-    ctx.save(); ctx.translate(0, cy); ctx.rotate(-0.3);
-    ctx.strokeStyle = c; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(0, 0, 46, 12, 0, 0, Math.PI); ctx.stroke();
-    ctx.restore();
-    drawFace(Object.assign({}, m, { iris: c }), 0, cy - 2, 0.8, t); return cy - 30;
-  },
-  braise(m, c, t) {
-    const cy = -50 + Math.sin(t * 3 + m.wobble) * 6, fl = Math.sin(t * 10) * 3;
-    ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(0, cy - 46 - fl); ctx.bezierCurveTo(22, cy - 24, 30, cy + 2, 26, cy + 14); ctx.bezierCurveTo(20, cy + 32, -20, cy + 32, -26, cy + 14); ctx.bezierCurveTo(-30, cy + 2, -22, cy - 24, 0, cy - 46 - fl); ctx.fill();
-    ctx.fillStyle = m.flash > 0 ? "#ffffff" : "#ffd166"; ctx.beginPath(); ctx.moveTo(0, cy - 18 + fl); ctx.bezierCurveTo(13, cy - 4, 17, cy + 8, 13, cy + 16); ctx.bezierCurveTo(9, cy + 25, -9, cy + 25, -13, cy + 16); ctx.bezierCurveTo(-17, cy + 8, -13, cy - 4, 0, cy - 18 + fl); ctx.fill();
-    drawFace(m, 0, cy + 4, 0.85, t); return cy - 46;
-  },
-  roc(m, c, t) {
-    const rock = m.flash > 0 ? "#ffffff" : mix(c, "#6a5a54", 0.65), sw = Math.sin(t * 3 + m.wobble) * 3;
-    ctx.fillStyle = shade(rock, -0.15); rr(-54, -48 + sw, 18, 16, 6); ctx.fill(); rr(36, -48 - sw, 18, 16, 6); ctx.fill();
-    ctx.fillStyle = rock; ctx.beginPath(); ctx.moveTo(-36, 0); ctx.lineTo(-44, -38); ctx.lineTo(-26, -70); ctx.lineTo(8, -78); ctx.lineTo(38, -58); ctx.lineTo(42, 0); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = shade(rock, 0.18); ctx.beginPath(); ctx.moveTo(-26, -70); ctx.lineTo(8, -78); ctx.lineTo(-2, -62); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = "#ff8a3a"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
-    ctx.beginPath(); ctx.moveTo(-30, -16); ctx.lineTo(-20, -8); ctx.lineTo(-24, 0); ctx.moveTo(22, -66); ctx.lineTo(28, -54); ctx.lineTo(22, -46); ctx.moveTo(30, -18); ctx.lineTo(20, -10); ctx.stroke();
-    drawFace(m, 0, -42, 1, t); return -78;
-  },
-  lave(m, c, t) {
-    if (m.horns) drawHorns(-46, m.flash > 0 ? "#fff" : "#3a2a26");
-    ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-44, 0); ctx.bezierCurveTo(-50, -62, 50, -62, 44, 0); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = m.flash > 0 ? "#fff" : "#ffd166"; for (const k of [-30, -8, 18]) circ(k, -1 + Math.sin(t * 3 + k) * 1.5, 6);
-    ctx.fillStyle = shade(c, -0.5); ctx.beginPath(); ctx.ellipse(-18, -38, 12, 6, -0.4, 0, Math.PI * 2); ctx.ellipse(14, -42, 10, 5, 0.3, 0, Math.PI * 2); ctx.ellipse(30, -22, 7, 4, 0.8, 0, Math.PI * 2); ctx.fill();
-    drawFace(m, 0, -22, 1, t); return -46;
-  },
-  scarabee(m, c, t) {
-    const lg = Math.sin(t * 8 + m.wobble) * 3;
-    ctx.strokeStyle = "#2a1a14"; ctx.lineWidth = 3.5; ctx.lineCap = "round"; ctx.beginPath();
-    for (const lx of [-22, 0, 22]) { ctx.moveTo(lx, -14); ctx.lineTo(lx - 8 + lg, 0); }
-    ctx.stroke();
-    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(8, -34, 40, 28, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = shade(c, -0.35); ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(8, -62); ctx.lineTo(8, -8); ctx.stroke();
-    ctx.fillStyle = "rgba(255,255,255,.3)"; ctx.beginPath(); ctx.ellipse(-8, -48, 10, 5, -0.5, 0, Math.PI * 2); ctx.ellipse(24, -48, 8, 4, 0.5, 0, Math.PI * 2); ctx.fill();
-    const head = m.flash > 0 ? "#ffffff" : shade(c, -0.45);
-    ctx.fillStyle = head; circ(-32, -28, 17);
-    ctx.beginPath(); ctx.moveTo(-40, -40); ctx.quadraticCurveTo(-52, -66, -36, -72); ctx.quadraticCurveTo(-42, -58, -30, -44); ctx.fill();
-    drawFace(m, -34, -30, 0.62, t); return -72;
-  },
-  boule(m, c, t) {
-    const snow = m.flash > 0 ? "#ffffff" : shade(c, 0.65);
-    ctx.strokeStyle = "#6b4a2a"; ctx.lineWidth = 3; ctx.lineCap = "round"; const wv = Math.sin(t * 4 + m.wobble) * 4;
-    ctx.beginPath(); ctx.moveTo(-32, -40); ctx.lineTo(-54, -56 + wv); ctx.moveTo(-46, -50 + wv / 2); ctx.lineTo(-50, -62 + wv);
-    ctx.moveTo(32, -40); ctx.lineTo(54, -56 - wv); ctx.moveTo(46, -50 - wv / 2); ctx.lineTo(52, -60 - wv); ctx.stroke();
-    ctx.fillStyle = snow; circ(0, -38, 38);
-    ctx.fillStyle = shade(snow, -0.08); ctx.beginPath(); ctx.ellipse(10, -22, 24, 14, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = c; rr(-30, -26, 60, 9, 4); ctx.fill(); rr(14, -22, 9, 20, 3); ctx.fill();
-    drawFace(m, 0, -52, 1, t); return -76;
+    mbMotes(0, y0 + 14, 34, E, t, 4, 0.5);
+    return y0 - (m.boss ? 62 : 50);
   }
-};
+});
+/* --- Pics Gelés --- */
+Object.assign(BODY, {
+  yeti(m, c, t) { c = mbV(c); // colosse des neiges noires, épaules de cristal
+    const E = mbG(c), B = mbBase(m, c, "#1b1626"), a = mbAtk(m), br = Math.sin(t * 3 + m.wobble), st = Math.sin(t * 5 + m.wobble);
+    // jambes
+    for (const d of [-1, 1]) { const [x, y] = mbLimb(d * 14, -26, 14, 12, Math.PI / 2 + d * 0.15 + st * 0.15 * d, -d * 0.2, 13, 11, B, E); ctx.fillStyle = B; ctx.beginPath(); ctx.ellipse(x + d * 2, y + 1, 10, 4, 0, 0, Math.PI * 2); ctx.fill(); mbClaws(x - 6, y + 1, Math.PI, 0.6, "#e8e4ff"); }
+    // bras arrière
+    const sw = br * 0.15 - a * 0.9;
+    mbLimb(30, -66, 22, 22, 0.9 + sw, 0.6 - a * 0.6, 14, 12, mix(B, "#000000", 0.3), null);
+    const body = () => { ctx.beginPath(); ctx.moveTo(-30, -24); ctx.bezierCurveTo(-42, -60, -24, -92, 0, -92 - br); ctx.bezierCurveTo(26, -92, 42, -62, 30, -24);
+      mbPolyCont([22, -18, 16, -26, 8, -16, 0, -24, -8, -16, -16, -26, -22, -18]); ctx.closePath(); };
+    mbSkin(body, c, t, { base: B, top: -92, th: 40, flames: [[-16, -16, 34, 11, 1], [14, -16, 30, 10, 3]] });
+    // fourrure en mèches
+    ctx.fillStyle = B; for (let i = 0; i < 6; i++) { const x = -26 + i * 10, y = -84 + Math.abs(i - 2.5) * 5; ctx.beginPath(); ctx.moveTo(x - 6, y + 6); ctx.lineTo(x + 2, y - 8 + Math.sin(t * 4 + i) * 1.5); ctx.lineTo(x + 6, y + 6); ctx.fill(); }
+    // épaules de cristal
+    for (const [x, y, an] of [[-26, -70, -0.6], [-20, -78, -0.25], [24, -72, 0.6], [18, -80, 0.3]]) mbShard(x, y, 18, 6, an, mix(c, MBK, 0.4), E);
+    // visage
+    ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(-4, -62, 17, 12, 0, 0, Math.PI * 2); ctx.fill();
+    mbEyes(-4, -65, 0.85, E, m, t, 9);
+    mbFangs(-4, -56, 12, 9, m, 0.3 + a);
+    if (m.horns || m.boss) mbHorns(-2, -88, 1, c);
+    if (m.boss) mbCrown(-2, -102, 1.2, c);
+    // bras avant (frappe)
+    const [hx, hy, ha] = mbLimb(-32, -66, 22, 22, 2.3 - sw * 0.7 + a * 0.9, -0.9 + a * 0.5, 15, 13, B, E);
+    ctx.fillStyle = B; circ(hx, hy, 8); mbClaws(hx, hy, ha, 1, "#f0ecff");
+    mbMotes(0, -60, 50, E, t, 5, 0.2);
+    return m.boss ? -126 : -106;
+  },
+  glacon(m, c, t) { c = mbV(c); // golem de glace : bloc sombre, facettes lumineuses, mains de cristal flottantes
+    const E = mbG(c), B = mbBase(m, c, "#16182a"), a = mbAtk(m), fl = Math.sin(t * 2.4 + m.wobble) * 3;
+    ctx.save(); ctx.translate(0, fl * 0.4);
+    const body = () => { mbPoly([-34, -6, -38, -58, -26, -72, 20, -74, 36, -60, 34, -6, 14, 0, -14, 0]); };
+    mbSkin(body, c, t, { base: B, top: -74, th: 30, after: () => {
+      ctx.fillStyle = mix(c, MBK, 0.55); mbPoly([-38, -58, -26, -72, -4, -40, -20, -30]); ctx.fill();
+      ctx.fillStyle = mix(c, MBK, 0.68); mbPoly([20, -74, 36, -60, 12, -36, -4, -40]); ctx.fill();
+      mbCrack([-30, -10, -18, -26, -26, -42], E, 1.6); mbCrack([26, -12, 18, -30, 28, -44], E, 1.6);
+      mbFlame(0, 2, 34, 18, mix(c, MBK, 0.3), t, 3); mbFlame(0, 2, 22, 10, c, t, 4); } });
+    // éclats sur le dessus
+    for (const [x, h, an] of [[-24, 18, -0.3], [-8, 26, -0.05], [10, 20, 0.15], [24, 14, 0.4]]) mbShard(x, -70 + Math.abs(x) * 0.08, h, 6, an, mix(c, MBK, 0.45), E);
+    mbGlow(-2, -36, 26, c, 0.5);
+    mbEyes(-4, -40, 0.95, E, m, t, 11);
+    mbFangs(-4, -28, 12, 8, m, 0.2 + a);
+    if (m.horns || m.boss) mbHorns(-2, -86, 0.9, c);
+    if (m.boss) mbCrown(-2, -96, 1.1, c);
+    ctx.restore();
+    // mains de cristal qui flottent (articulées à distance)
+    for (const d of [-1, 1]) { const x = d * 52 - (d < 0 ? a * 14 : 0), y = -38 + Math.sin(t * 3 + d) * 5 - (d < 0 ? a * 8 : 0);
+      ctx.save(); ctx.translate(x, y); ctx.rotate(Math.sin(t * 2 + d) * 0.3); mbGlow(0, 0, 16, c, 0.4);
+      ctx.fillStyle = B; mbPoly([-8, -6, 0, -12, 8, -6, 6, 8, -6, 8]); ctx.fill(); ctx.strokeStyle = E; ctx.lineWidth = 1.4; ctx.stroke();
+      for (const k of [-1, 0, 1]) mbShard(k * 5, -10, 10, 2.6, k * 0.3, B, E); ctx.restore(); }
+    mbMotes(0, -50, 46, E, t, 5, 0.4);
+    return m.boss ? -118 : -100;
+  },
+  flocon(m, c, t) { c = mbV(c); // esprit-flocon : étoile à six branches qui tourne, un œil au centre
+    const E = mbG(c), B = mbBase(m, c, "#171428"), a = mbAtk(m), y0 = -62 + Math.sin(t * 2.5 + m.wobble) * 5, r = t * 0.8 + m.wobble;
+    ctx.save(); ctx.translate(0, y0);
+    mbGlow(0, 0, 50, c, 0.3);
+    ctx.save(); ctx.rotate(r);
+    for (let i = 0; i < 6; i++) { ctx.save(); ctx.rotate(i * Math.PI / 3); const ext = 1 + 0.12 * Math.sin(t * 4 + i) + a * 0.25;
+      const arm = () => { mbPoly([-5, -10, -4, -38 * ext, 0, -46 * ext, 4, -38 * ext, 5, -10]); };
+      mbSkin(arm, c, t, { base: B, rx: 1.4, ry: 1.4 });
+      for (const k of [0.45, 0.72]) { ctx.strokeStyle = B; ctx.lineWidth = 3.6; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(0, -46 * k * ext); ctx.lineTo(-10, -46 * k * ext - 9); ctx.moveTo(0, -46 * k * ext); ctx.lineTo(10, -46 * k * ext - 9); ctx.stroke();
+        ctx.strokeStyle = E; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(0, -46 * k * ext); ctx.lineTo(-10, -46 * k * ext - 9); ctx.stroke(); }
+      ctx.fillStyle = E; circ(0, -46 * ext, 2.4);
+      ctx.restore(); }
+    ctx.restore();
+    const core = () => { ctx.beginPath(); for (let i = 0; i < 6; i++) { const an = i * Math.PI / 3 + r; ctx.lineTo(Math.cos(an) * 20, Math.sin(an) * 20); } ctx.closePath(); };
+    mbSkin(core, c, t, { base: B, flames: [[0, 20, 22, 14, 2]] });
+    mbEyes(-1, -2, 0.75, E, m, t, 8);
+    mbFangs(-1, 6, 7, 5, m, 0.2 + a);
+    if (m.horns || m.boss) mbHorns(0, -16, 0.7, c);
+    if (m.boss) mbCrown(0, -26, 0.9, c);
+    ctx.restore();
+    mbMotes(0, y0 + 20, 40, E, t, 6, 0.6);
+    return y0 - (m.boss ? 60 : 50);
+  },
+  boule(m, c, t) { c = mbV(c); // boule de givre roulante, hérissée, petites pattes
+    const E = mbG(c), B = mbBase(m, c, "#191628"), a = mbAtk(m), roll = t * 1.6 + m.wobble, st = Math.sin(t * 8 + m.wobble);
+    for (const d of [-1, 1]) { const [x, y] = mbLimb(d * 16, -14, 9, 8, Math.PI / 2 + st * 0.35 * d, 0.3 * -d, 8, 7, B, E); mbClaws(x, y + 1, Math.PI / 2 + 0.6 * -d, 0.6, "#efeaff"); }
+    ctx.save(); ctx.translate(0, -44 - Math.abs(st) * 2 - a * 6);
+    // piquants
+    ctx.save(); ctx.rotate(roll * 0.4); for (let i = 0; i < 12; i++) { const an = i * Math.PI / 6; mbShard(Math.cos(an) * 30, Math.sin(an) * 30, 14 + (i % 3) * 4, 5, an + Math.PI / 2, mix(c, MBK, 0.5), E); } ctx.restore();
+    const ball = () => { ctx.beginPath(); ctx.arc(0, 0, 34, 0, Math.PI * 2); };
+    mbSkin(ball, c, t, { base: B, top: -34, th: 30, after: () => {
+      ctx.save(); ctx.rotate(roll); ctx.strokeStyle = mix(c, MBK, 0.5); ctx.lineWidth = 5; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(0, 0, 14 + i * 9, i, i + 2.2); ctx.stroke(); } ctx.restore();
+      mbFlame(-8, 36, 30, 16, mix(c, MBK, 0.35), t, 1); mbFlame(12, 36, 22, 10, c, t, 2); } });
+    mbEyes(-8, -6, 0.95, E, m, t, 11);
+    mbFangs(-8, 6, 13, 10, m, 0.3 + a);
+    if (m.horns || m.boss) mbHorns(-2, -28, 0.95, c);
+    if (m.boss) mbCrown(-2, -42, 1.1, c);
+    ctx.restore();
+    mbMotes(0, -40, 46, E, t, 5, 0.9);
+    return m.boss ? -112 : -92;
+  }
+});
+/* --- Volcan Grondant --- */
+Object.assign(BODY, {
+  braise(m, c, t) { // diablotin de braise : petit corps de cendre, tête-flamme, bras griffus
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1c1220"), a = mbAtk(m), y0 = -30 + Math.sin(t * 4 + m.wobble) * 3, st = Math.sin(t * 6 + m.wobble);
+    // queue
+    ctx.strokeStyle = B; ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(14, y0 + 6); ctx.quadraticCurveTo(34, y0 + 4 + st * 4, 36, y0 - 14 + st * 6); ctx.stroke();
+    ctx.fillStyle = c; mbPoly([36, y0 - 22 + st * 6, 31, y0 - 12 + st * 6, 41, y0 - 12 + st * 6]); ctx.fill();
+    // jambes
+    for (const d of [-1, 1]) { const [x, y] = mbLimb(d * 7, y0 + 12, 10, 10, Math.PI / 2 + d * st * 0.3, -d * 0.3, 6, 5, B, E); mbClaws(x, y, Math.PI / 2, 0.5, "#efe4ff"); }
+    // flamme de la tête (derrière)
+    mbFlame(0, y0 - 20, 46 + Math.sin(t * 9) * 4, 22, mix(c, MBK, 0.3), t, 1); mbFlame(0, y0 - 22, 34, 14, c, t, 2); mbFlame(0, y0 - 24, 18, 7, E, t, 3);
+    const body = () => { ctx.beginPath(); ctx.moveTo(-15, y0 + 14); ctx.bezierCurveTo(-24, y0 - 8, -18, y0 - 34, 0, y0 - 34); ctx.bezierCurveTo(18, y0 - 34, 24, y0 - 8, 15, y0 + 14); ctx.closePath(); };
+    mbSkin(body, c, t, { base: B, flames: [[0, y0 + 16, 22, 12, 4]], after: () => mbCrack([-10, y0 + 6, -4, y0 - 4, -8, y0 - 14], c, 1.4) });
+    // cornes de braise
+    for (const d of [-1, 1]) { ctx.fillStyle = MBK; ctx.beginPath(); ctx.moveTo(d * 8, y0 - 30); ctx.quadraticCurveTo(d * 20, y0 - 38, d * 16, y0 - 50); ctx.quadraticCurveTo(d * 14, y0 - 38, d * 3, y0 - 32); ctx.fill(); ctx.fillStyle = c; circ(d * 16, y0 - 49, 2); }
+    mbEyes(-3, y0 - 18, 0.75, E, m, t, 8);
+    mbFangs(-3, y0 - 9, 9, 7, m, 0.3 + a);
+    // bras (le gauche lance une boule de feu en attaque)
+    mbLimb(15, y0 - 10, 10, 10, 0.6 + st * 0.2, 0.9, 5, 4, B, E);
+    const [hx, hy, ha] = mbLimb(-15, y0 - 10, 10, 10, 2.4 - a * 1.6 + st * 0.2, -0.9 + a * 0.6, 5, 4, B, E);
+    mbClaws(hx, hy, ha, 0.6, "#efe4ff"); mbGlow(hx - 4, hy - 4, 12 + a * 8, c, 0.8); ctx.fillStyle = E; circ(hx - 4, hy - 4, 3 + a * 3);
+    if (m.horns || m.boss) mbHorns(0, y0 - 40, 0.7, c);
+    if (m.boss) mbCrown(0, y0 - 58, 0.9, c);
+    mbMotes(0, y0 - 30, 40, E, t, 7, 0.2);
+    return y0 - (m.boss ? 72 : 62);
+  },
+  roc(m, c, t) { // golem de roche : blocs articulés, coulées de magma
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1e1820"), a = mbAtk(m), br = Math.sin(t * 2 + m.wobble), st = Math.sin(t * 4 + m.wobble);
+    const rock = (pts, ox = 0, oy = 0) => { const p = pts.map((v, i) => v + (i % 2 ? oy : ox)); mbSkin(() => mbPoly(p), c, t, { base: B, rx: 2, ry: 2 }); };
+    // jambes en blocs
+    for (const d of [-1, 1]) { const ox = d * 16, lift = Math.max(0, st * d) * 4; rock([-9, -22, 9, -22, 11, -4, 8, 0, -10, 0, -11, -6], ox, -lift); ctx.fillStyle = c; ctx.fillRect(ox - 6, -14 - lift, 12, 2); }
+    // bras arrière
+    const sw = br * 0.12 - a * 0.8;
+    ctx.save(); ctx.translate(34, -66); ctx.rotate(0.3 + sw); rock([-8, -6, 8, -8, 10, 18, -8, 20]); ctx.translate(1, 22); ctx.rotate(0.3); rock([-10, -2, 10, -2, 12, 18, 0, 24, -12, 18]); ctx.restore();
+    // torse
+    const tor = () => mbPoly([-34, -28, -40, -64, -28, -86, -6, -94, 18, -90, 36, -70, 34, -30, 16, -22, -14, -22]);
+    mbSkin(tor, c, t, { base: B, top: -94, th: 30, after: () => {
+      ctx.fillStyle = mix(c, MBK, 0.62); mbPoly([-40, -64, -28, -86, -10, -60, -24, -44]); ctx.fill();
+      mbGlow(-2, -46, 26, c, 0.7);
+      mbCrack([-24, -30, -14, -42, -18, -54, -6, -62, 0, -74], c, 3); mbCrack([-14, -42, -2, -40, 8, -32], c, 2); mbCrack([30, -40, 20, -52, 24, -66], c, 2.4);
+      mbFlame(4, -20, 26, 14, mix(c, MBK, 0.3), t, 3); mbFlame(4, -20, 16, 8, c, t, 4); } });
+    // tête enfoncée
+    ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(-6, -72, 16, 10, 0, 0, Math.PI * 2); ctx.fill();
+    mbEyes(-6, -74, 0.8, E, m, t, 9);
+    mbFangs(-6, -66, 10, 6, m, 0.2 + a);
+    if (m.horns || m.boss) mbHorns(-4, -92, 1, c);
+    if (m.boss) mbCrown(-4, -106, 1.2, c);
+    // bras avant (coup de poing)
+    ctx.save(); ctx.translate(-36, -66); ctx.rotate(-0.3 - sw * 0.6 + a * 1.1); rock([-8, -8, 8, -6, 10, 20, -10, 18]); ctx.translate(-1, 22); ctx.rotate(-0.4 + a * 0.4); rock([-12, -2, 10, -2, 12, 18, 0, 26, -14, 18]); ctx.fillStyle = c; ctx.fillRect(-6, 8, 12, 2.4); ctx.restore();
+    mbMotes(0, -70, 50, E, t, 5, 0.3);
+    return m.boss ? -128 : -108;
+  },
+  lave(m, c, t) { // serpent de lave qui sort d'une flaque
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1c1218"), a = mbAtk(m);
+    // flaque
+    mbGlow(0, -2, 50, c, 0.5); ctx.fillStyle = MBK; ctx.beginPath(); ctx.ellipse(0, -1, 44, 9, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, -2, 36, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = E; ctx.beginPath(); ctx.ellipse(-6, -3, 18, 2.6, 0, 0, Math.PI * 2); ctx.fill();
+    // corps segmenté qui ondule (chaque segment suit le précédent)
+    const N = 9, pts = []; for (let i = 0; i <= N; i++) { const k = i / N; pts.push([Math.sin(t * 2.4 + m.wobble - k * 3) * 14 * k - a * 26 * k * k, -k * 80]); }
+    for (let i = 0; i < N; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[i + 1], w = 22 - i * 1.3;
+      ctx.strokeStyle = E; ctx.lineWidth = w + 3; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+      ctx.strokeStyle = B; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x0 + 1.5, y0 + 1); ctx.lineTo(x1 + 1.5, y1 + 1); ctx.stroke();
+      if (i % 2 === 0) { ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0 - w * 0.3, y0 - 2); ctx.lineTo(x1 + w * 0.2, y1 + 3); ctx.stroke(); } }
+    // collerette de pointes
+    const [hx, hy] = pts[N];
+    ctx.save(); ctx.translate(hx, hy);
+    for (let i = -3; i <= 3; i++) mbShard(i * 7, 6, 18 - Math.abs(i) * 2, 4, i * 0.3, MBK, c);
+    const head = () => { ctx.beginPath(); ctx.moveTo(-22, 6); ctx.bezierCurveTo(-26, -16, -8, -26, 4, -24); ctx.bezierCurveTo(18, -22, 22, -6, 18, 8); ctx.quadraticCurveTo(0, 14, -22, 6); };
+    mbSkin(head, c, t, { base: B, flames: [[-2, 12, 16, 12, 2]] });
+    mbEyes(-6, -8, 0.8, E, m, t, 8);
+    mbFangs(-8, 2, 12, 10, m, 0.4 + a);
+    if (m.horns || m.boss) mbHorns(0, -20, 0.75, c);
+    if (m.boss) mbCrown(0, -34, 0.95, c);
+    ctx.restore();
+    // gouttes qui retombent
+    for (let i = 0; i < 3; i++) { const k = (t * 0.9 + i / 3) % 1; ctx.fillStyle = c; circ(pts[3 + i * 2][0] + 10, pts[3 + i * 2][1] + k * 30, 2.4 * (1 - k)); }
+    mbMotes(0, -60, 40, E, t, 5, 0.5);
+    return hy - (m.boss ? 50 : 36);
+  },
+  scarabee(m, c, t) { // scarabée de cendre : 6 pattes articulées, grande corne, carapace veinée
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#191422"), a = mbAtk(m), st = t * 9 + m.wobble;
+    // pattes arrière (côté loin)
+    for (let i = 0; i < 3; i++) { const ph = Math.sin(st + i * 2.1); const [x, y] = mbLimb(-16 + i * 16, -24, 12, 14, 2.2 - i * 0.55 + ph * 0.25, -1.2 + i * 0.4, 4, 3, mix(B, "#000000", 0.35), null); }
+    const sh = () => { ctx.beginPath(); ctx.moveTo(-34, -22); ctx.bezierCurveTo(-36, -50, -14, -62, 6, -62); ctx.bezierCurveTo(30, -62, 44, -44, 40, -22); ctx.quadraticCurveTo(4, -14, -34, -22); };
+    mbSkin(sh, c, t, { base: B, top: -62, th: 30, after: () => {
+      ctx.strokeStyle = MBK; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(8, -62); ctx.quadraticCurveTo(4, -40, 6, -18); ctx.stroke();
+      for (const d of [-1, 1]) { ctx.strokeStyle = c; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(6 + d * 6, -56); ctx.quadraticCurveTo(6 + d * 22, -46, 6 + d * 24, -26); ctx.stroke(); ctx.beginPath(); ctx.moveTo(6 + d * 4, -46); ctx.quadraticCurveTo(6 + d * 14, -38, 6 + d * 14, -24); ctx.stroke(); }
+      ctx.fillStyle = "rgba(255,255,255,.18)"; ctx.beginPath(); ctx.ellipse(-12, -50, 10, 4, -0.4, 0, Math.PI * 2); ctx.fill(); } });
+    // tête + corne
+    ctx.save(); ctx.translate(-34, -30); ctx.rotate(-a * 0.4 + Math.sin(t * 3 + m.wobble) * 0.05);
+    ctx.fillStyle = MBK; ctx.beginPath(); ctx.moveTo(-4, -6); ctx.quadraticCurveTo(-16, -22, -12, -42); ctx.quadraticCurveTo(-6, -24, 6, -12); ctx.fill();
+    ctx.strokeStyle = c; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(-5, -10); ctx.quadraticCurveTo(-13, -24, -12, -40); ctx.stroke();
+    const hd = () => { ctx.beginPath(); ctx.ellipse(0, 0, 14, 12, 0, 0, Math.PI * 2); };
+    mbSkin(hd, c, t, { base: B });
+    mbEyes(-3, -2, 0.6, E, m, t, 6);
+    // mandibules
+    for (const d of [-1, 1]) { ctx.save(); ctx.translate(-10, 6 + d * 2); ctx.rotate(d * (0.3 + a * 0.5 + Math.sin(t * 6) * 0.08)); ctx.fillStyle = "#0c0814"; mbPoly([0, -2, -12, 0, -8, 3]); ctx.fill(); ctx.restore(); }
+    ctx.restore();
+    // pattes avant (côté proche)
+    for (let i = 0; i < 3; i++) { const ph = Math.sin(st + i * 2.1 + Math.PI); const [x, y, an] = mbLimb(-20 + i * 18, -20, 12, 15, 2.1 - i * 0.55 + ph * 0.25, -1.1 + i * 0.4, 5, 3.5, B, E); }
+    if (m.horns || m.boss) mbHorns(6, -60, 0.8, c);
+    if (m.boss) mbCrown(6, -72, 1, c);
+    mbMotes(0, -40, 46, E, t, 4, 0.6);
+    return m.boss ? -96 : -78;
+  }
+});
+/* --- Récif Englouti --- */
+Object.assign(BODY, {
+  meduse(m, c, t) { // méduse abyssale : cloche sombre, tentacules segmentés qui ondulent
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#171428"), a = mbAtk(m), pu = Math.sin(t * 3 + m.wobble), y0 = -76 + pu * 4;
+    // tentacules (chaque segment suit le précédent avec un retard)
+    for (let j = 0; j < 6; j++) { const x0 = -24 + j * 9.6; let px = x0, py = y0 + 10;
+      for (let i = 1; i <= 7; i++) { const nx = x0 + Math.sin(t * 3.2 - i * 0.7 + j * 1.3) * (2 + i * 1.6) - a * i * 2.2, ny = y0 + 10 + i * 8.5;
+        ctx.strokeStyle = i % 2 ? B : mix(c, MBK, 0.45); ctx.lineWidth = Math.max(1.6, 5 - i * 0.5); ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(nx, ny); ctx.stroke(); px = nx; py = ny; }
+      ctx.fillStyle = E; circ(px, py, 1.6); }
+    // bras-voiles centraux
+    for (const d of [-1, 1]) { ctx.fillStyle = mix(c, MBK, 0.5); ctx.beginPath(); ctx.moveTo(d * 4, y0 + 8); ctx.quadraticCurveTo(d * 16 + Math.sin(t * 2 + d) * 6, y0 + 34, d * 6 + Math.sin(t * 2.5 + d) * 8, y0 + 60); ctx.quadraticCurveTo(d * 2, y0 + 34, -d * 2, y0 + 8); ctx.fill(); }
+    mbGlow(0, y0 - 8, 46, c, 0.35);
+    const bell = () => { ctx.beginPath(); ctx.moveTo(-40 - pu * 2, y0 + 10); ctx.bezierCurveTo(-44, y0 - 34, -18, y0 - 46, 0, y0 - 46); ctx.bezierCurveTo(18, y0 - 46, 44, y0 - 34, 40 + pu * 2, y0 + 10);
+      mbPolyCont([30, y0 + 4, 22, y0 + 12, 12, y0 + 5, 2, y0 + 13, -8, y0 + 5, -18, y0 + 12, -28, y0 + 4]); ctx.closePath(); };
+    mbSkin(bell, c, t, { base: B, top: y0 - 46, th: 30, flames: [[-20, y0 + 10, 26, 10, 1], [4, y0 + 12, 34, 12, 2], [26, y0 + 10, 24, 9, 3]], after: () => {
+      ctx.strokeStyle = c; ctx.lineWidth = 1.3; for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(i * 4, y0 - 40); ctx.quadraticCurveTo(i * 14, y0 - 20, i * 15, y0 + 4); ctx.stroke(); } } });
+    mbEyes(-4, y0 - 18, 0.85, E, m, t, 10);
+    mbFangs(-4, y0 - 7, 10, 7, m, 0.2 + a);
+    if (m.horns || m.boss) mbHorns(0, y0 - 40, 0.9, c);
+    if (m.boss) mbCrown(0, y0 - 54, 1.1, c);
+    mbMotes(0, y0, 50, E, t, 6, 0.4);
+    return y0 - (m.boss ? 76 : 56);
+  },
+  crabe(m, c, t) { // crabe des abysses : pinces articulées, carapace à pointes
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1a1424"), a = mbAtk(m), st = t * 8 + m.wobble, sn = Math.sin(t * 4 + m.wobble);
+    // pattes (4 de chaque côté)
+    for (const d of [-1, 1]) for (let i = 0; i < 3; i++) { const ph = Math.sin(st + i * 2 + (d > 0 ? 1 : 0)); mbLimb(d * (10 + i * 7), -22, 14, 16, Math.PI / 2 - d * (1.0 - i * 0.2) + ph * 0.25 * d, d * 1.2, 5, 3.4, i === 1 ? mix(B, "#000000", 0.3) : B, i === 1 ? null : E); }
+    // pince arrière
+    const pinch = (sx, sy, a1, sc, open, near) => { const [x, y, an] = mbLimb(sx, sy, 16 * sc, 16 * sc, a1, -1.2, 7 * sc, 6 * sc, near ? B : mix(B, "#000000", 0.3), near ? E : null);
+      ctx.save(); ctx.translate(x, y); ctx.rotate(an);
+      const claw = () => { ctx.beginPath(); ctx.moveTo(-4, -8 * sc); ctx.quadraticCurveTo(20 * sc, -16 * sc, 26 * sc, -4 * sc); ctx.lineTo(10 * sc, -1 * sc); ctx.quadraticCurveTo(4, 8 * sc, -4, 8 * sc); ctx.closePath(); };
+      mbSkin(claw, c, t, { base: near ? B : mix(B, "#000000", 0.3), rx: 1.6, ry: 1.6 });
+      ctx.save(); ctx.translate(8 * sc, 4 * sc); ctx.rotate(0.15 + open * 0.6); ctx.fillStyle = near ? B : mix(B, "#000000", 0.3); mbPoly([0, -2, 18 * sc, 2 * sc, 16 * sc, 6 * sc, 0, 5]); ctx.fill(); ctx.strokeStyle = c; ctx.lineWidth = 1.2; ctx.stroke(); ctx.restore();
+      ctx.fillStyle = c; circ(8 * sc, -6 * sc, 1.8); ctx.restore(); };
+    pinch(26, -40, -0.9 + sn * 0.1, 0.9, 0.3 + 0.3 * Math.abs(sn), false);
+    const sh = () => { ctx.beginPath(); ctx.moveTo(-40, -26); mbPolyCont([-44, -36, -36, -42, -38, -52, -26, -54, -20, -64, -8, -60, 0, -68, 8, -60, 20, -64, 26, -54, 38, -52, 36, -42, 44, -36, 40, -26]); ctx.quadraticCurveTo(0, -14, -40, -26); ctx.closePath(); };
+    mbSkin(sh, c, t, { base: B, top: -68, th: 26, flames: [[-18, -18, 24, 10, 1], [16, -18, 20, 9, 2]], after: () => {
+      ctx.fillStyle = "rgba(255,255,255,.15)"; ctx.beginPath(); ctx.ellipse(-14, -50, 12, 4, -0.2, 0, Math.PI * 2); ctx.fill(); } });
+    // yeux pédonculés
+    for (const d of [-1, 1]) { const ex = -6 + d * 10 + Math.sin(t * 3 + d) * 2, ey = -76; ctx.strokeStyle = B; ctx.lineWidth = 3.4; ctx.beginPath(); ctx.moveTo(-6 + d * 7, -58); ctx.lineTo(ex, ey); ctx.stroke(); mbGlow(ex, ey, 9, c, 0.6); mbEye(ex, ey, 6, 3.6, d * -0.3, E, m, t); }
+    mbFangs(-6, -40, 12, 7, m, 0.2 + a);
+    if (m.horns || m.boss) mbHorns(-4, -66, 0.9, c);
+    if (m.boss) mbCrown(-4, -82, 1.1, c);
+    pinch(-28, -40, Math.PI + 0.9 - sn * 0.1 - a * 0.6, 1.1, 0.2 + a * 0.8 + 0.2 * Math.abs(sn), true);
+    mbMotes(0, -50, 46, E, t, 4, 0.7);
+    return m.boss ? -102 : -86;
+  },
+  globe(m, c, t) { // poisson-globe : se gonfle, piquants articulés
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#191428"), a = mbAtk(m), inf = 1 + 0.12 * Math.sin(t * 2 + m.wobble) + a * 0.25, y0 = -52 + Math.sin(t * 3 + m.wobble) * 4;
+    ctx.save(); ctx.translate(0, y0);
+    // queue
+    const tw = Math.sin(t * 7 + m.wobble) * 0.35;
+    ctx.save(); ctx.translate(30 * inf, 0); ctx.rotate(tw); ctx.fillStyle = B; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(14, -18, 24, -20); ctx.lineTo(18, 0); ctx.lineTo(24, 20); ctx.quadraticCurveTo(14, 18, 0, 0); ctx.fill(); ctx.strokeStyle = c; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(4, 0); ctx.lineTo(20, -14); ctx.moveTo(4, 0); ctx.lineTo(20, 14); ctx.stroke(); ctx.restore();
+    // piquants
+    for (let i = 0; i < 16; i++) { const an = i / 16 * Math.PI * 2 + 0.1; mbShard(Math.cos(an) * 30 * inf, Math.sin(an) * 30 * inf, 9 + 5 * inf, 3.2, an + Math.PI / 2, MBK, c); }
+    const ball = () => { ctx.beginPath(); ctx.arc(0, 0, 32 * inf, 0, Math.PI * 2); };
+    mbSkin(ball, c, t, { base: B, top: -32, th: 30, flames: [[-4, 34 * inf, 30, 18, 2]], after: () => {
+      ctx.fillStyle = mix(c, MBK, 0.6); for (const [x, y] of [[-14, -16], [10, -20], [16, 4], [-18, 10], [2, 16]]) circ(x * inf, y * inf, 3);
+      ctx.fillStyle = "rgba(255,255,255,.16)"; ctx.beginPath(); ctx.ellipse(-12, -18, 12, 5, -0.4, 0, Math.PI * 2); ctx.fill(); } });
+    // nageoires
+    for (const d of [-1, 1]) { ctx.save(); ctx.translate(-2, 10 + d * 4); ctx.rotate(Math.sin(t * 9 + d) * 0.4 + d * 0.6); ctx.fillStyle = mix(c, MBK, 0.4); ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-6, 14, 4, 18); ctx.quadraticCurveTo(6, 8, 0, 0); ctx.fill(); ctx.restore(); }
+    mbEyes(-10, -6, 0.9, E, m, t, 11);
+    mbFangs(-14, 8, 11, 8, m, 0.3 + a);
+    if (m.horns || m.boss) mbHorns(-4, -30 * inf, 0.9, c);
+    if (m.boss) mbCrown(-4, -44 * inf, 1.1, c);
+    ctx.restore();
+    mbMotes(0, y0, 44, E, t, 5, 0.1);
+    return y0 - 40 * inf - (m.boss ? 22 : 10);
+  },
+  poulpe(m, c, t) { // pieuvre des profondeurs : huit tentacules articulés, tête bulbeuse
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1a1428"), a = mbAtk(m), br = Math.sin(t * 2.2 + m.wobble), y0 = -54 + br * 2;
+    // tentacules (segments)
+    const tent = (x0, dir, ph, near) => { let px = x0, py = y0 + 8; const col = near ? B : mix(B, "#000000", 0.3);
+      for (let i = 1; i <= 8; i++) { const k = i / 8, nx = x0 + dir * k * 34 + Math.sin(t * 3 + ph - k * 3) * 8 * k - (near && dir < 0 ? a * 20 * k : 0), ny = y0 + 8 + k * 46 - k * k * 30 * (near ? 0.6 : 0.8) + Math.cos(t * 3 + ph - k * 3) * 4 * k;
+        if (near) { ctx.strokeStyle = E; ctx.lineWidth = 11 - i * 1.1 + 2.4; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(nx, ny); ctx.stroke(); }
+        ctx.strokeStyle = col; ctx.lineWidth = 11 - i * 1.1; ctx.beginPath(); ctx.moveTo(px + 1, py + 1); ctx.lineTo(nx + 1, ny + 1); ctx.stroke();
+        if (near && i % 2 === 0) { ctx.fillStyle = c; circ(nx, ny + (6 - i * 0.5) * 0.4, 1.5); } px = nx; py = ny; } };
+    for (const [x, d, p] of [[-10, -0.6, 1], [10, 0.6, 2], [-4, -1.1, 3], [4, 1.1, 4]]) tent(x, d, p, false);
+    const head = () => { ctx.beginPath(); ctx.moveTo(-30, y0 + 12); ctx.bezierCurveTo(-40, y0 - 22, -24, y0 - 56, 4, y0 - 56 + br); ctx.bezierCurveTo(30, y0 - 56, 42, y0 - 24, 30, y0 + 12); ctx.quadraticCurveTo(0, y0 + 20, -30, y0 + 12); ctx.closePath(); };
+    mbSkin(head, c, t, { base: B, top: y0 - 56, th: 30, flames: [[-14, y0 + 16, 26, 10, 2], [14, y0 + 16, 22, 9, 4]], after: () => {
+      ctx.fillStyle = mix(c, MBK, 0.55); for (const [x, y, r] of [[-16, -40, 4], [12, -44, 3], [22, -26, 3.4], [-22, -20, 2.6]]) circ(x, y0 + y, r);
+      ctx.fillStyle = "rgba(255,255,255,.16)"; ctx.beginPath(); ctx.ellipse(-12, y0 - 42, 10, 4, -0.4, 0, Math.PI * 2); ctx.fill(); } });
+    mbEyes(-4, y0 - 12, 0.95, E, m, t, 12);
+    mbFangs(-4, y0 + 2, 10, 7, m, 0.2 + a);
+    for (const [x, d, p] of [[-16, -1.2, 5], [16, 1.2, 6], [-6, -0.4, 7], [6, 0.4, 8]]) tent(x, d, p, true);
+    if (m.horns || m.boss) mbHorns(2, y0 - 50, 0.95, c);
+    if (m.boss) mbCrown(2, y0 - 64, 1.15, c);
+    mbMotes(0, y0 - 20, 50, E, t, 6, 0.8);
+    return y0 - (m.boss ? 86 : 70);
+  }
+});
+/* --- Cœur de Brume --- */
+Object.assign(BODY, {
+  fantome(m, c, t) { // spectre en haillons, mains griffues, comme un écho du chasseur
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#150f22"), a = mbAtk(m), y0 = -70 + Math.sin(t * 2.4 + m.wobble) * 5, wv = t * 4 + m.wobble;
+    mbGlow(0, y0, 52, c, 0.3);
+    // bras arrière
+    mbLimb(18, y0 - 4, 18, 18, 0.8 + Math.sin(wv) * 0.2, 0.7, 6, 5, mix(B, "#000000", 0.3), null);
+    const cloak = () => { ctx.beginPath(); ctx.moveTo(-24, y0 - 12); ctx.bezierCurveTo(-28, y0 - 46, 26, y0 - 50, 24, y0 - 12);
+      ctx.quadraticCurveTo(30, y0 + 20, 26 + Math.sin(wv) * 4, y0 + 44);
+      for (let i = 0; i < 6; i++) { const x = 20 - i * 9 + Math.sin(wv + i) * 3, y = y0 + 40 + (i % 2 ? -10 : 8) + Math.sin(wv * 1.3 + i) * 4; ctx.lineTo(x, y); }
+      ctx.quadraticCurveTo(-30, y0 + 16, -24, y0 - 12); ctx.closePath(); };
+    mbSkin(cloak, c, t, { base: B, top: y0 - 48, th: 30, flames: [[-12, y0 + 46, 40, 12, 1], [10, y0 + 46, 50, 13, 3]] });
+    // capuche
+    const hood = () => { ctx.beginPath(); ctx.moveTo(-22, y0 - 6); ctx.bezierCurveTo(-26, y0 - 40, -8, y0 - 54, 6, y0 - 58); ctx.quadraticCurveTo(4, y0 - 46, 24, y0 - 32); ctx.quadraticCurveTo(26, y0 - 14, 20, y0 - 4); ctx.closePath(); };
+    mbSkin(hood, c, t, { base: mix(B, "#000000", 0.15) });
+    ctx.fillStyle = "#05030a"; ctx.beginPath(); ctx.ellipse(-2, y0 - 22, 14, 13, 0, 0, Math.PI * 2); ctx.fill();
+    mbEyes(-2, y0 - 24, 0.75, E, m, t, 7);
+    // bras avant (griffe tendue en attaque)
+    const [hx, hy, ha] = mbLimb(-18, y0 - 2, 18, 18, 2.2 + Math.sin(wv) * 0.2 - a * 1.1, -0.8 + a * 0.6, 6, 5, B, E);
+    mbClaws(hx, hy, ha, 1.2, E);
+    if (m.horns || m.boss) mbHorns(2, y0 - 46, 0.85, c);
+    if (m.boss) mbCrown(2, y0 - 60, 1.05, c);
+    mbMotes(0, y0 + 20, 50, E, t, 7, 0.3);
+    return y0 - (m.boss ? 80 : 64);
+  },
+  prisme(m, c, t) { // cœur de cristal entouré d'éclats en orbite
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#16142a"), a = mbAtk(m), y0 = -62 + Math.sin(t * 2 + m.wobble) * 4, r = t * 1.2 + m.wobble;
+    const shardsBack = [], shardsFront = [];
+    for (let i = 0; i < 6; i++) { const an = r + i * Math.PI / 3, x = Math.cos(an) * (40 + a * 10), y = Math.sin(an) * 12; (Math.sin(an) < 0 ? shardsBack : shardsFront).push([x, y, an]); }
+    const sh = ([x, y, an]) => { ctx.save(); ctx.translate(x, y0 + y); ctx.rotate(Math.sin(t * 3 + an) * 0.3); const s = Math.sin(an) < 0 ? 0.75 : 1; ctx.scale(s, s); mbSkin(() => mbPoly([0, -14, 6, 0, 0, 14, -6, 0]), c, t, { base: B, rx: 1.4, ry: 1.4 }); ctx.restore(); };
+    shardsBack.forEach(sh);
+    mbGlow(0, y0, 48, c, 0.45);
+    const core = () => mbPoly([0, y0 - 44, 22, y0 - 16, 16, y0 + 22, 0, y0 + 34, -16, y0 + 22, -22, y0 - 16]);
+    mbSkin(core, c, t, { base: B, top: y0 - 44, th: 40, after: () => {
+      ctx.fillStyle = mix(c, MBK, 0.45); mbPoly([0, y0 - 44, -22, y0 - 16, -4, y0 - 6]); ctx.fill();
+      ctx.fillStyle = mix(c, MBK, 0.65); mbPoly([0, y0 - 44, 22, y0 - 16, 6, y0 - 6]); ctx.fill();
+      mbFlame(0, y0 + 34, 34, 14, mix(c, MBK, 0.3), t, 2); mbFlame(0, y0 + 34, 22, 8, c, t, 3);
+      mbCrack([0, y0 - 44, -4, y0 - 6, 0, y0 + 34], E, 1.2); } });
+    mbEyes(0, y0 - 10, 0.75, E, m, t, 8);
+    mbFangs(0, y0 + 0, 8, 6, m, 0.2 + a);
+    shardsFront.forEach(sh);
+    if (m.horns || m.boss) mbHorns(0, y0 - 38, 0.8, c);
+    if (m.boss) mbCrown(0, y0 - 50, 1, c);
+    mbMotes(0, y0 + 20, 50, E, t, 6, 0.5);
+    return y0 - (m.boss ? 74 : 56);
+  },
+  oeil(m, c, t) { // œil géant flottant, paupières à pointes, tentacules
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#181228"), a = mbAtk(m), y0 = -64 + Math.sin(t * 2.2 + m.wobble) * 5;
+    // tentacules
+    for (let j = 0; j < 5; j++) { const x0 = -16 + j * 8; let px = x0, py = y0 + 22;
+      for (let i = 1; i <= 6; i++) { const nx = x0 + Math.sin(t * 3 - i * 0.8 + j) * i * 1.6 + (j - 2) * i * 1.4, ny = y0 + 22 + i * 7; ctx.strokeStyle = i % 2 ? B : mix(c, MBK, 0.45); ctx.lineWidth = 5.5 - i * 0.7; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(nx, ny); ctx.stroke(); px = nx; py = ny; } }
+    mbGlow(0, y0, 50, c, 0.35);
+    const body = () => { ctx.beginPath(); ctx.arc(0, y0, 30, 0, Math.PI * 2); };
+    mbSkin(body, c, t, { base: B, flames: [[0, y0 + 32, 26, 18, 2]] });
+    // pointes autour
+    for (let i = 0; i < 9; i++) { const an = -Math.PI + i * Math.PI / 8; mbShard(Math.cos(an) * 28, y0 + Math.sin(an) * 28, 12, 4, an + Math.PI / 2, MBK, c); }
+    // le globe de l'œil, la pupille suit le chasseur (à gauche)
+    const op = m.blink > 0 ? 0.1 : 0.85 + a * 0.15;
+    ctx.save(); ctx.beginPath(); ctx.ellipse(0, y0, 22, 16 * op, 0, 0, Math.PI * 2); ctx.clip();
+    ctx.fillStyle = "#e9e2ff"; ctx.fillRect(-24, y0 - 18, 48, 36);
+    ctx.strokeStyle = "rgba(200,40,80,.5)"; ctx.lineWidth = 0.9; for (const [x1, y1, x2, y2] of [[-22, -4, -12, -1], [-20, 8, -11, 3], [22, -6, 12, -2], [20, 7, 12, 3]]) { ctx.beginPath(); ctx.moveTo(x1, y0 + y1); ctx.lineTo(x2, y0 + y2); ctx.stroke(); }
+    const px = -6 + Math.sin(t * 0.7) * 3; mbGlow(px, y0, 14, c, 0.9); ctx.fillStyle = c; circ(px, y0, 9); ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(px, y0, 2.6 + a * 2, 8, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = "#fff"; circ(px - 3, y0 - 3, 2);
+    ctx.restore();
+    ctx.strokeStyle = MBK; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(0, y0, 22, 16 * op, 0, 0, Math.PI * 2); ctx.stroke();
+    if (m.horns || m.boss) mbHorns(0, y0 - 28, 0.9, c);
+    if (m.boss) mbCrown(0, y0 - 44, 1.1, c);
+    mbMotes(0, y0 + 10, 46, E, t, 5, 0.2);
+    return y0 - (m.boss ? 66 : 48);
+  },
+  ombre(m, c, t) { // loup d'ombre : quatre pattes articulées, crinière de fumée
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#130e1e"), a = mbAtk(m), st = t * 7 + m.wobble, br = Math.sin(t * 3 + m.wobble);
+    const leg = (x, ph, near) => { const s = Math.sin(st + ph); const [fx, fy, an] = mbLimb(x, -34, 15, 16, Math.PI / 2 + s * 0.35, (x < 0 ? -0.5 : 0.6) + Math.max(0, -s) * 0.4, near ? 8 : 7, near ? 6 : 5, near ? B : mix(B, "#000000", 0.35), near ? E : null); if (near) mbClaws(fx - 3, fy + 1, Math.PI * 0.85, 0.6, E); };
+    leg(-22, 0, false); leg(24, Math.PI, false);
+    // queue de fumée
+    for (let i = 0; i < 3; i++) mbFlame(40 + i * 4, -46 + i * 2, 30 - i * 6, 10, i ? c : mix(c, MBK, 0.3), t, i + 5);
+    const body = () => { ctx.beginPath(); ctx.moveTo(-34, -56); ctx.bezierCurveTo(-20, -66, 22, -66, 40, -54); ctx.bezierCurveTo(46, -40, 34, -30, 22, -30); ctx.lineTo(-22, -30); ctx.bezierCurveTo(-36, -32, -40, -46, -34, -56); ctx.closePath(); };
+    mbSkin(body, c, t, { base: B, top: -66, th: 26, flames: [[-14, -28, 22, 12, 1], [12, -28, 26, 12, 3]] });
+    leg(-14, Math.PI, true); leg(30, 0, true);
+    // crinière en pointes
+    ctx.fillStyle = B; for (let i = 0; i < 6; i++) { const x = -30 + i * 9, y = -60 + i * 0.5; ctx.beginPath(); ctx.moveTo(x - 6, y + 4); ctx.lineTo(x - 2 + Math.sin(t * 5 + i) * 2, y - 16 + i * 1.2); ctx.lineTo(x + 6, y + 4); ctx.fill(); ctx.strokeStyle = c; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x - 4, y + 2); ctx.lineTo(x - 2 + Math.sin(t * 5 + i) * 2, y - 16 + i * 1.2); ctx.stroke(); }
+    // tête de loup (mâchoire articulée)
+    ctx.save(); ctx.translate(-36, -60 + br * 1.5); ctx.rotate(-0.1 + a * 0.2);
+    const hd = () => { ctx.beginPath(); ctx.moveTo(10, -14); ctx.quadraticCurveTo(-6, -18, -16, -6); ctx.lineTo(-30, 0); ctx.lineTo(-28, 5); ctx.lineTo(-10, 6); ctx.quadraticCurveTo(6, 10, 14, 4); ctx.closePath(); };
+    mbSkin(hd, c, t, { base: B, rx: 1.8, ry: 1.8 });
+    for (const d of [0, 1]) { ctx.fillStyle = B; mbPoly([-2 + d * 8, -14, 2 + d * 8, -30, 8 + d * 8, -12]); ctx.fill(); ctx.fillStyle = c; mbPoly([0 + d * 8, -15, 3 + d * 8, -25, 6 + d * 8, -14]); ctx.fill(); }
+    ctx.save(); ctx.translate(-8, 6); ctx.rotate(0.15 + a * 0.5); ctx.fillStyle = B; mbPoly([4, -2, -20, 0, -18, 5, 6, 4]); ctx.fill(); ctx.fillStyle = "#f2ecff"; for (const x of [-16, -11, -6]) mbPoly([x, 0, x + 1.4, -4, x + 2.8, 0]); ctx.fill(); ctx.restore();
+    ctx.fillStyle = "#f2ecff"; for (const x of [-26, -20, -14]) { ctx.beginPath(); ctx.moveTo(x, 5); ctx.lineTo(x + 1.5, 9); ctx.lineTo(x + 3, 5); ctx.fill(); }
+    mbGlow(-12, -6, 12, c, 0.8); mbEye(-12, -6, 6.4, 3.2, 0.3, E, m, t);
+    ctx.restore();
+    if (m.horns || m.boss) mbHorns(-34, -76, 0.8, c);
+    if (m.boss) mbCrown(-34, -90, 1, c);
+    mbMotes(0, -50, 50, E, t, 5, 0.9);
+    return m.boss ? -108 : -86;
+  }
+});
+/* --- Marais Toxique --- */
+Object.assign(BODY, {
+  crapaud(m, c, t) { // crapaud venimeux : pattes repliées articulées, gorge qui gonfle, langue en attaque
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#171a1e"), a = mbAtk(m), hop = Math.max(0, Math.sin(t * 2.6 + m.wobble)) ** 6, y0 = -hop * 14;
+    ctx.save(); ctx.translate(0, y0);
+    // patte arrière (cuisse + jambe repliée)
+    for (const [d, near] of [[1, false], [1, true]]) { const x = near ? 26 : 30, col = near ? B : mix(B, "#000000", 0.3); const [fx, fy] = mbLimb(x, -22, 16, 18, 2.4 - hop * 1.2, 2.1 + hop * 0.9, near ? 12 : 10, near ? 7 : 6, col, near ? E : null); ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(fx + 4, fy + 1, 9, 3, 0, 0, Math.PI * 2); ctx.fill(); }
+    const body = () => { ctx.beginPath(); ctx.moveTo(-34, -12); ctx.bezierCurveTo(-40, -44, -14, -58, 8, -54); ctx.bezierCurveTo(30, -50, 44, -34, 38, -12); ctx.quadraticCurveTo(0, 0, -34, -12); ctx.closePath(); };
+    mbSkin(body, c, t, { base: B, top: -58, th: 30, flames: [[-4, -4, 26, 14, 1], [24, -6, 20, 10, 3]], after: () => {
+      for (const [x, y, r] of [[-6, -44, 4.5], [12, -46, 3.6], [24, -34, 4.2], [6, -30, 3], [30, -20, 3]]) { mbGlow(x, y, r * 2.4, c, 0.5); ctx.fillStyle = c; circ(x, y, r); ctx.fillStyle = MBK; circ(x + 0.8, y + 0.8, r * 0.45); } } });
+    // gorge
+    const g = 6 + Math.sin(t * 5 + m.wobble) * 3 + a * 4; ctx.fillStyle = mix(c, MBK, 0.4); ctx.beginPath(); ctx.ellipse(-22, -10, g + 6, g, 0.2, 0, Math.PI * 2); ctx.fill();
+    // yeux globuleux
+    for (const d of [-1, 1]) { const ex = -16 + d * 10, ey = -52; ctx.fillStyle = B; circ(ex, ey, 9); mbGlow(ex, ey, 11, c, 0.6); mbEye(ex - 1, ey, 6, 3.4, -d * 0.25, E, m, t); }
+    // bouche + langue
+    ctx.strokeStyle = MBK; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(-38, -26); ctx.quadraticCurveTo(-20, -18 + a * 6, -2, -26); ctx.stroke();
+    if (a > 0.05) { ctx.strokeStyle = mix(c, "#ff4a8a", 0.5); ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(-34, -22); ctx.quadraticCurveTo(-50 - a * 20, -28, -60 - a * 40, -24); ctx.stroke(); ctx.fillStyle = mix(c, "#ff4a8a", 0.5); circ(-60 - a * 40, -24, 4); }
+    // patte avant
+    const [hx, hy] = mbLimb(-24, -20, 10, 12, 1.9 + hop * 0.4, -0.6, 7, 5, B, E); ctx.fillStyle = B; for (const k of [-1, 0, 1]) circ(hx - 3 + k * 4, hy + 1, 2.6);
+    if (m.horns || m.boss) mbHorns(-10, -58, 0.9, c);
+    if (m.boss) mbCrown(-10, -72, 1.1, c);
+    ctx.restore();
+    mbMotes(0, -40, 46, E, t, 5, 0.4);
+    return y0 - (m.boss ? 94 : 76);
+  },
+  moustique(m, c, t) { // moustique géant : ailes vibrantes, pattes articulées pendantes, dard
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#171420"), a = mbAtk(m), y0 = -74 + Math.sin(t * 3 + m.wobble) * 5, f = Math.sin(t * 40);
+    ctx.save(); ctx.translate(0, y0); ctx.scale(1.4, 1.4);
+    // ailes (deux paires, translucides)
+    for (const [d, off] of [[1, 0], [1, 0.5]]) { ctx.save(); ctx.translate(6, -10); ctx.rotate(-0.9 - off * 0.5 + f * 0.25); ctx.globalAlpha = 0.55; ctx.fillStyle = mix(c, MBK, 0.4); ctx.beginPath(); ctx.ellipse(18, 0, 22, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1; ctx.strokeStyle = E; ctx.lineWidth = 1.2; ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(36, 0); ctx.stroke(); ctx.restore(); }
+    // pattes pendantes (articulées)
+    for (let i = 0; i < 3; i++) { const sw = Math.sin(t * 3 + i) * 0.2; mbLimb(-4 + i * 8, 6, 14, 18, 1.9 - i * 0.25 + sw, -0.6 + i * 0.15, 2.6, 1.8, B, mix(c, MBK, 0.3)); }
+    // abdomen
+    const ab = () => { ctx.beginPath(); ctx.ellipse(26, 4, 22, 11, 0.35, 0, Math.PI * 2); };
+    mbSkin(ab, c, t, { base: B, flames: [[26, 16, 18, 14, 2]], after: () => { ctx.strokeStyle = c; ctx.lineWidth = 2.2; for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.arc(26 + (i - 1.5) * 9, 4 + (i - 1.5) * 3, 10, -0.8, 0.8); ctx.stroke(); } mbGlow(40, 10, 12, c, 0.7); } });
+    // thorax + tête
+    const th = () => { ctx.beginPath(); ctx.ellipse(0, -2, 13, 12, 0, 0, Math.PI * 2); };
+    mbSkin(th, c, t, { base: B });
+    const hd = () => { ctx.beginPath(); ctx.arc(-14, -8, 10, 0, Math.PI * 2); };
+    mbSkin(hd, c, t, { base: B });
+    // antennes plumeuses
+    for (const d of [-1, 1]) { ctx.strokeStyle = B; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(-18, -16); ctx.quadraticCurveTo(-24 + d * 4, -30, -30 + d * 6, -34 + Math.sin(t * 4 + d) * 2); ctx.stroke(); }
+    mbEyes(-15, -9, 0.55, E, m, t, 5);
+    // dard
+    ctx.strokeStyle = "#0c0814"; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(-22, -4); ctx.lineTo(-44 - a * 16, 4 + a * 10); ctx.stroke(); ctx.strokeStyle = c; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-34 - a * 8, 0 + a * 5); ctx.lineTo(-44 - a * 16, 4 + a * 10); ctx.stroke();
+    if (m.horns || m.boss) mbHorns(-12, -16, 0.6, c);
+    if (m.boss) mbCrown(-12, -26, 0.8, c);
+    ctx.restore();
+    mbMotes(10, y0 + 10, 30, E, t, 3, 0.6);
+    return y0 - (m.boss ? 66 : 56);
+  },
+  vase(m, c, t) { // golem de boue toxique qui dégouline, bras qui se reforment
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1a1a1c"), a = mbAtk(m), wb = Math.sin(t * 2 + m.wobble);
+    mbGlow(0, -40, 56, c, 0.22);
+    // bras arrière
+    mbLimb(26, -56, 18, 18, 0.7 + wb * 0.15, 0.8, 12, 10, mix(B, "#000000", 0.3), null);
+    const body = () => { ctx.beginPath(); ctx.moveTo(-40, 0); ctx.bezierCurveTo(-46, -30, -34, -78, -4, -82 + wb * 2); ctx.bezierCurveTo(28, -84, 44, -50, 40, 0);
+      for (let i = 0; i < 4; i++) { const x = 30 - i * 22, d = 4 + Math.sin(t * 1.5 + i * 2) * 3; ctx.quadraticCurveTo(x, d, x - 11, 0); ctx.lineTo(x - 22, 0); } ctx.closePath(); };
+    mbSkin(body, c, t, { base: B, top: -84, th: 40, flames: [[-24, 2, 40, 12, 1], [4, 2, 54, 14, 3], [28, 2, 36, 11, 5]], after: () => {
+      for (let i = 0; i < 5; i++) { const k = (t * 0.5 + i / 5) % 1, x = -28 + i * 14; ctx.fillStyle = mix(c, MBK, 0.35); ctx.beginPath(); ctx.ellipse(x, -70 + k * 60, 3, 5 + k * 4, 0, 0, Math.PI * 2); ctx.fill(); }
+      for (const [x, y] of [[-20, -60], [14, -66], [22, -40]]) { const k = ((t * 1.4 + x) % 1 + 1) % 1; ctx.strokeStyle = c; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x, y, 2 + k * 4, 0, Math.PI * 2); ctx.stroke(); } } });
+    // gouttes qui tombent du ventre
+    for (let i = 0; i < 3; i++) { const k = (t * 0.8 + i / 3) % 1; ctx.fillStyle = c; circ(-18 + i * 18, -6 + k * 8, 2.6 * (1 - k)); }
+    ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(-6, -52, 20, 13, 0, 0, Math.PI * 2); ctx.fill();
+    mbEyes(-6, -55, 0.9, E, m, t, 10);
+    mbFangs(-6, -45, 13, 10, m, 0.3 + a);
+    // bras avant qui frappe
+    const [hx, hy, ha] = mbLimb(-30, -54, 18, 20, 2.3 - wb * 0.15 + a * 0.9 - 0.4 * a, -0.7 + a * 0.4, 13, 11, B, E);
+    ctx.fillStyle = B; circ(hx, hy, 9); for (let k = 0; k < 3; k++) { ctx.fillStyle = B; ctx.beginPath(); ctx.ellipse(hx - 5 + k * 5, hy + 8 + Math.sin(t * 3 + k) * 2, 2.4, 5, 0, 0, Math.PI * 2); ctx.fill(); }
+    if (m.horns || m.boss) mbHorns(-4, -78, 1, c);
+    if (m.boss) mbCrown(-4, -92, 1.2, c);
+    mbMotes(0, -70, 50, E, t, 5, 0.2);
+    return m.boss ? -116 : -96;
+  },
+  serpent(m, c, t) { // serpent du marais : corps segmenté qui ondule, capuchon de cobra
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#16181c"), a = mbAtk(m);
+    const N = 14, pts = [];
+    for (let i = 0; i <= N; i++) { const k = i / N; const x = 44 - k * 70, y = k < 0.55 ? -6 - Math.sin(t * 3 - k * 9 + m.wobble) * 4 * (1 - k) : -6 - (k - 0.55) / 0.45 * 62; pts.push([x - (k > 0.55 ? Math.sin(t * 2 + m.wobble) * 6 * (k - 0.55) * 2 + a * 22 * ((k - 0.55) / 0.45) ** 2 : 0), y]); }
+    for (let i = 0; i < N; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[i + 1], w = 8 + Math.min(i, N - 3) * 1.3;
+      ctx.strokeStyle = E; ctx.lineWidth = w + 2.6; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke(); }
+    for (let i = 0; i < N; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[i + 1], w = 8 + Math.min(i, N - 3) * 1.3;
+      ctx.strokeStyle = B; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x0 + 1, y0 + 1); ctx.lineTo(x1 + 1, y1 + 1); ctx.stroke();
+      if (i % 2) { ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo((x0 + x1) / 2 - 2, (y0 + y1) / 2 - w * 0.3); ctx.lineTo((x0 + x1) / 2 + 2, (y0 + y1) / 2 + w * 0.3); ctx.stroke(); } }
+    // bout de queue
+    ctx.fillStyle = c; mbPoly([pts[0][0], pts[0][1] - 3, pts[0][0] + 10, pts[0][1] - 1 + Math.sin(t * 8) * 3, pts[0][0], pts[0][1] + 3]); ctx.fill();
+    const [hx, hy] = pts[N];
+    ctx.save(); ctx.translate(hx, hy);
+    const hood = () => { ctx.beginPath(); ctx.moveTo(0, 22); ctx.bezierCurveTo(-26, 14, -24, -14, -4, -20); ctx.bezierCurveTo(16, -24, 26, -6, 16, 20); ctx.closePath(); };
+    mbSkin(hood, c, t, { base: B, flames: [[-2, 24, 24, 12, 2]], after: () => { ctx.strokeStyle = c; ctx.lineWidth = 1.6; for (const d of [-1, 1]) { ctx.beginPath(); ctx.moveTo(d * 4, -10); ctx.quadraticCurveTo(d * 16, 0, d * 10, 16); ctx.stroke(); } } });
+    ctx.save(); ctx.rotate(-0.15 - a * 0.25); const hd = () => { ctx.beginPath(); ctx.moveTo(6, -12); ctx.quadraticCurveTo(-12, -16, -22, -6); ctx.lineTo(-24, 0); ctx.quadraticCurveTo(-10, 4, 8, 0); ctx.closePath(); };
+    mbSkin(hd, c, t, { base: mix(B, "#000000", 0.1), rx: 1.6, ry: 1.6 });
+    mbGlow(-10, -8, 12, c, 0.8); mbEye(-10, -8, 5.5, 2.8, 0.3, E, m, t);
+    ctx.fillStyle = "#f2ecff"; for (const x of [-20, -15]) { ctx.beginPath(); ctx.moveTo(x, -1); ctx.lineTo(x + 1.2, 5 + a * 3); ctx.lineTo(x + 2.4, -1); ctx.fill(); }
+    ctx.strokeStyle = mix(c, "#ff4a8a", 0.4); ctx.lineWidth = 1.6; const tg = Math.sin(t * 14) * 3; ctx.beginPath(); ctx.moveTo(-24, -1); ctx.lineTo(-32, -1 + tg); ctx.lineTo(-36, -4 + tg); ctx.moveTo(-32, -1 + tg); ctx.lineTo(-36, 2 + tg); ctx.stroke();
+    ctx.restore();
+    if (m.horns || m.boss) mbHorns(-2, -16, 0.75, c);
+    if (m.boss) mbCrown(-2, -30, 0.95, c);
+    ctx.restore();
+    mbMotes(0, -30, 50, E, t, 4, 0.7);
+    return hy - (m.boss ? 54 : 40);
+  }
+});
+/* --- Désert Doré --- */
+Object.assign(BODY, {
+  cactus(m, c, t) { // cactus guerrier : bras articulés hérissés, fleur maudite sur la tête
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#16201a"), a = mbAtk(m), sw = Math.sin(t * 2.4 + m.wobble);
+    const spines = (x, y, h, n) => { ctx.strokeStyle = "#f2ecff"; ctx.lineWidth = 1; for (let i = 0; i < n; i++) { const yy = y - i * h / n; ctx.beginPath(); ctx.moveTo(x - 7, yy); ctx.lineTo(x - 11, yy - 2); ctx.moveTo(x + 7, yy - 3); ctx.lineTo(x + 11, yy - 5); ctx.stroke(); } };
+    // bras arrière (coude articulé vers le haut)
+    ctx.save(); const ab = 0.2 + sw * 0.1; const [ax, ay] = mbLimb(16, -46, 16, 22, -0.15 + ab, -1.35, 12, 11, mix(B, "#000000", 0.3), null); ctx.restore();
+    const body = () => { ctx.beginPath(); ctx.moveTo(-16, 0); ctx.lineTo(-18, -72); ctx.bezierCurveTo(-18, -92, 18, -92, 18, -72); ctx.lineTo(16, 0); ctx.closePath(); };
+    mbSkin(body, c, t, { base: B, top: -90, th: 30, flames: [[-6, 2, 40, 10, 1], [8, 2, 30, 8, 3]], after: () => {
+      ctx.strokeStyle = MBK; ctx.lineWidth = 2; for (const x of [-8, 0, 8]) { ctx.beginPath(); ctx.moveTo(x, -84); ctx.lineTo(x * 0.9, -4); ctx.stroke(); }
+      ctx.strokeStyle = c; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-4, -84); ctx.lineTo(-4, -50); ctx.stroke(); } });
+    spines(0, -12, 70, 7);
+    // fleur maudite
+    for (let i = 0; i < 5; i++) { const an = i / 5 * Math.PI * 2 + t * 0.5; ctx.fillStyle = i % 2 ? c : mix(c, MBK, 0.3); ctx.beginPath(); ctx.ellipse(4 + Math.cos(an) * 7, -92 + Math.sin(an) * 4, 6, 3, an, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = MBK; circ(4, -92, 3.4); ctx.fillStyle = E; circ(4, -92, 1.6);
+    ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(-2, -60, 13, 11, 0, 0, Math.PI * 2); ctx.fill();
+    mbEyes(-2, -62, 0.7, E, m, t, 7);
+    mbFangs(-2, -54, 8, 6, m, 0.3 + a);
+    // bras avant (frappe vers le chasseur)
+    const [hx, hy, ha] = mbLimb(-16, -40, 16, 22, Math.PI + 0.1 - sw * 0.1 - a * 0.2, 1.3 - a * 1.1, 12, 11, B, E);
+    ctx.strokeStyle = "#f2ecff"; ctx.lineWidth = 1; for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(hx - 4, hy + k * 6); ctx.lineTo(hx - 9, hy + k * 6 - 2); ctx.stroke(); }
+    if (m.horns || m.boss) mbHorns(-2, -88, 0.85, c);
+    if (m.boss) mbCrown(4, -100, 1, c);
+    mbMotes(0, -60, 40, E, t, 4, 0.3);
+    return m.boss ? -122 : -106;
+  },
+  scorpion(m, c, t) { // scorpion d'obsidienne : queue segmentée articulée, pinces, 8 pattes
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1c1618"), a = mbAtk(m), st = t * 9 + m.wobble;
+    for (let i = 0; i < 4; i++) mbLimb(-10 + i * 10, -16, 11, 13, 2.0 - i * 0.35 + Math.sin(st + i * 1.7) * 0.25, -1.1 + i * 0.3, 3.4, 2.4, mix(B, "#000000", 0.35), null);
+    // queue : segments en chaîne, le dard frappe en avant
+    let x = 30, y = -22, an = -0.7; const segs = 6;
+    for (let i = 0; i < segs; i++) { const bend = -0.42 - Math.sin(t * 2 + m.wobble) * 0.06 - a * 0.25; an += bend; const l = 13 - i * 0.8, nx = x + Math.cos(an) * l, ny = y + Math.sin(an) * l, w = 13 - i * 1.2;
+      ctx.strokeStyle = E; ctx.lineWidth = w + 2.4; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(nx, ny); ctx.stroke();
+      ctx.strokeStyle = B; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x + 1, y + 1); ctx.lineTo(nx + 1, ny + 1); ctx.stroke();
+      ctx.fillStyle = c; circ((x + nx) / 2, (y + ny) / 2 - w * 0.25, 1.4); x = nx; y = ny; }
+    ctx.save(); ctx.translate(x, y); ctx.rotate(an + 0.4); mbGlow(6, 0, 12, c, 0.8); ctx.fillStyle = B; ctx.beginPath(); ctx.ellipse(4, 0, 7, 5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = c; mbPoly([8, -3, 20, 2, 8, 3]); ctx.fill(); ctx.restore();
+    const body = () => { ctx.beginPath(); ctx.moveTo(-30, -18); ctx.bezierCurveTo(-30, -36, 24, -40, 36, -24); ctx.quadraticCurveTo(30, -10, -24, -10); ctx.closePath(); };
+    mbSkin(body, c, t, { base: B, top: -38, th: 20, after: () => { ctx.strokeStyle = MBK; ctx.lineWidth = 2; for (const xx of [-8, 6, 20]) { ctx.beginPath(); ctx.moveTo(xx, -34); ctx.lineTo(xx - 2, -12); ctx.stroke(); } ctx.strokeStyle = c; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-24, -24); ctx.quadraticCurveTo(4, -34, 30, -26); ctx.stroke(); } });
+    // tête
+    const hd = () => { ctx.beginPath(); ctx.ellipse(-30, -18, 12, 10, 0, 0, Math.PI * 2); }; mbSkin(hd, c, t, { base: B });
+    mbEyes(-33, -21, 0.55, E, m, t, 5);
+    // pinces
+    for (const near of [false, true]) { const col = near ? B : mix(B, "#000000", 0.3); const [px, py, pa] = mbLimb(-36, near ? -14 : -20, 12, 14, Math.PI + (near ? 0.2 : -0.3) - a * 0.4, near ? -0.9 : 0.9, near ? 6 : 5, near ? 5 : 4, col, near ? E : null);
+      ctx.save(); ctx.translate(px, py); ctx.rotate(pa); ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(6, 0, 9, 6, 0, 0, Math.PI * 2); ctx.fill(); const op = 0.3 + a * 0.6 + Math.abs(Math.sin(t * 4)) * 0.15;
+      ctx.save(); ctx.translate(12, -2); ctx.rotate(-op); mbPoly([0, -2, 12, 0, 0, 3]); ctx.fill(); ctx.restore(); ctx.save(); ctx.translate(12, 2); ctx.rotate(op); mbPoly([0, -3, 11, 0, 0, 2]); ctx.fill(); ctx.restore(); if (near) { ctx.fillStyle = c; circ(4, -2, 1.6); } ctx.restore(); }
+    for (let i = 0; i < 4; i++) mbLimb(-12 + i * 10, -12, 11, 13, 2.2 - i * 0.35 + Math.sin(st + i * 1.7 + Math.PI) * 0.25, -1.1 + i * 0.3, 3.8, 2.8, B, E);
+    if (m.horns || m.boss) mbHorns(-28, -26, 0.6, c);
+    if (m.boss) mbCrown(-28, -36, 0.8, c);
+    mbMotes(0, -30, 50, E, t, 4, 0.2);
+    return m.boss ? -96 : -84;
+  },
+  momie(m, c, t) { // momie maudite : bandelettes, bras tendus articulés, marche lente
+    c = mbV(c); const E = mbG(c), W = m.flash > 0 ? "#fff" : "#3a3242", W2 = "#2a2432", a = mbAtk(m), st = Math.sin(t * 3 + m.wobble);
+    // jambes qui marchent
+    for (const [d, near] of [[1, false], [-1, true]]) { const col = near ? W : W2; const [fx, fy] = mbLimb(d * 6, -40, 20, 20, Math.PI / 2 + st * 0.3 * d, (st * d > 0 ? 0.3 : 0), 10, 9, col, near ? E : null); ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(fx - 3, fy, 8, 3.5, 0, 0, Math.PI * 2); ctx.fill(); }
+    // bras arrière tendu
+    mbLimb(10, -74, 18, 18, Math.PI + 0.15 + st * 0.08 - a * 0.2, 0.1, 9, 8, W2, null);
+    const body = () => { ctx.beginPath(); ctx.moveTo(-15, -38); ctx.lineTo(-18, -78); ctx.quadraticCurveTo(0, -86, 18, -78); ctx.lineTo(15, -38); ctx.closePath(); };
+    mbSkin(body, c, t, { base: W, top: -86, th: 20, flames: [[0, -36, 22, 12, 2]], after: () => { ctx.strokeStyle = MBK; ctx.lineWidth = 1.4; for (let i = 0; i < 6; i++) { ctx.beginPath(); ctx.moveTo(-20, -44 - i * 7); ctx.lineTo(20, -40 - i * 7 - (i % 2 ? 4 : -2)); ctx.stroke(); } mbCrack([-6, -50, 2, -56, -2, -64], c, 1.4); } });
+    // bandelettes qui flottent
+    for (let i = 0; i < 3; i++) { const bx = 14 - i * 4, by = -66 + i * 12; ctx.strokeStyle = W; ctx.lineWidth = 4; ctx.lineCap = "butt"; ctx.beginPath(); ctx.moveTo(bx, by); ctx.quadraticCurveTo(bx + 12, by + 4 + Math.sin(t * 4 + i) * 4, bx + 22, by + Math.sin(t * 3 + i) * 6); ctx.stroke(); }
+    // tête
+    const hd = () => { ctx.beginPath(); ctx.ellipse(0, -96, 15, 16, 0, 0, Math.PI * 2); };
+    mbSkin(hd, c, t, { base: W, after: () => { ctx.strokeStyle = MBK; ctx.lineWidth = 1.4; for (let i = 0; i < 5; i++) { ctx.beginPath(); ctx.moveTo(-16, -108 + i * 6); ctx.lineTo(16, -104 + i * 6 - (i % 2 ? 3 : 0)); ctx.stroke(); } } });
+    ctx.fillStyle = "#07040d"; ctx.fillRect(-14, -100, 24, 8);
+    mbEyes(-2, -96, 0.6, E, m, t, 6);
+    if (m.horns || m.boss) mbHorns(0, -108, 0.85, c);
+    if (m.boss) { ctx.fillStyle = MBK; mbPoly([-16, -106, -18, -124, 0, -118, 18, -124, 16, -106]); ctx.fill(); ctx.strokeStyle = c; ctx.lineWidth = 1.4; ctx.stroke(); ctx.fillStyle = c; circ(0, -114, 3); }
+    // bras avant tendu
+    const [hx, hy, ha] = mbLimb(-12, -74, 18, 18, Math.PI + 0.25 - st * 0.08 - a * 0.25, 0.1 - a * 0.2, 9, 8, W, E); mbClaws(hx, hy, ha, 0.8, E);
+    mbMotes(0, -80, 40, E, t, 5, 0.5);
+    return m.boss ? -130 : -116;
+  },
+  sable(m, c, t) { // élémentaire de sable : tourbillon, bras de sable, noyau-gemme
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1c1818"), a = mbAtk(m), r = t * 3 + m.wobble;
+    // tourbillon (anneaux qui tournent)
+    for (let i = 0; i < 7; i++) { const y = -6 - i * 9, w = 10 + i * 4.5, ph = r + i * 0.8; ctx.strokeStyle = i % 2 ? B : mix(c, MBK, 0.55); ctx.lineWidth = 7; ctx.lineCap = "round"; ctx.beginPath(); ctx.ellipse(Math.sin(ph) * 3, y, w, 4, 0, ph % (Math.PI * 2), ph % (Math.PI * 2) + 4.2); ctx.stroke(); }
+    const body = () => { ctx.beginPath(); ctx.moveTo(-30, -60); ctx.bezierCurveTo(-34, -96, 30, -100, 30, -62); ctx.quadraticCurveTo(14, -48, 0, -46); ctx.quadraticCurveTo(-18, -48, -30, -60); ctx.closePath(); };
+    mbSkin(body, c, t, { base: B, top: -96, th: 30, flames: [[-10, -46, 22, 12, 1], [12, -46, 18, 9, 3]] });
+    // bras de sable
+    for (const near of [false, true]) { const d = near ? -1 : 1, col = near ? B : mix(B, "#000000", 0.3); const [hx, hy] = mbLimb(d * 26, -70, 16, 18, near ? Math.PI - 0.4 - a * 0.5 + Math.sin(r) * 0.15 : 0.4 + Math.sin(r) * 0.15, near ? -0.6 + a * 0.4 : 0.6, 10, 8, col, near ? E : null); ctx.fillStyle = col; circ(hx, hy, 7); }
+    // noyau-gemme
+    mbGlow(0, -64, 22, c, 0.9); ctx.fillStyle = c; mbPoly([0, -76, 8, -64, 0, -52, -8, -64]); ctx.fill(); ctx.fillStyle = "#fff"; mbPoly([0, -74, 3, -66, 0, -62, -3, -66]); ctx.fill();
+    mbEyes(-2, -82, 0.75, E, m, t, 9);
+    // grains
+    for (let i = 0; i < 8; i++) { const an = r * 0.7 + i * 0.8, rr = 30 + (i % 3) * 8; ctx.fillStyle = i % 2 ? c : "#d8c8a8"; circ(Math.cos(an) * rr, -50 + Math.sin(an) * 12 - i * 3, 1.6); }
+    if (m.horns || m.boss) mbHorns(0, -92, 0.9, c);
+    if (m.boss) mbCrown(0, -106, 1.1, c);
+    return m.boss ? -128 : -108;
+  }
+});
+/* --- Cité Mécanique --- */
+function mbGear(x, y, r, n, rot, base, rim) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = base; ctx.beginPath();
+  for (let i = 0; i < n * 2; i++) { const an = i / (n * 2) * Math.PI * 2, rr = i % 2 ? r : r * 1.22; ctx.lineTo(Math.cos(an - 0.12) * rr, Math.sin(an - 0.12) * rr); ctx.lineTo(Math.cos(an + 0.12) * rr, Math.sin(an + 0.12) * rr); }
+  ctx.closePath(); ctx.fill(); if (rim) { ctx.strokeStyle = rim; ctx.lineWidth = 1.4; ctx.stroke(); } ctx.fillStyle = MBK; circ(0, 0, r * 0.35); ctx.restore(); }
+Object.assign(BODY, {
+  robot(m, c, t) { // automate de guerre : jambes à pistons, bras-canon, visière lumineuse
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1a1c26"), a = mbAtk(m), st = Math.sin(t * 5 + m.wobble), bob = Math.abs(st) * 2;
+    for (const [d, near] of [[1, false], [-1, true]]) { const col = near ? B : mix(B, "#000000", 0.3); const [fx, fy] = mbLimb(d * 12, -36 + bob, 16, 18, Math.PI / 2 + st * 0.3 * d, -0.3 * d * (st * d > 0 ? 1 : 0.2), 9, 7, col, near ? E : null);
+      ctx.fillStyle = col; mbPoly([fx - 12, fy + 2, fx + 8, fy + 2, fx + 6, fy - 5, fx - 8, fy - 5]); ctx.fill(); if (near) { ctx.fillStyle = c; ctx.fillRect(fx - 9, fy - 2, 14, 1.6); } }
+    // bras arrière
+    mbLimb(26, -66 + bob, 14, 16, 1.1 + st * 0.15, 0.6, 8, 7, mix(B, "#000000", 0.3), null);
+    const body = () => mbPoly([-28, -36 + bob, -32, -74 + bob, -20, -82 + bob, 22, -82 + bob, 30, -72 + bob, 28, -36 + bob, 14, -30 + bob, -14, -30 + bob]);
+    mbSkin(body, c, t, { base: B, top: -82 + bob, th: 26, flames: [[-8, -28 + bob, 24, 12, 1], [12, -28 + bob, 18, 9, 3]], after: () => {
+      ctx.strokeStyle = MBK; ctx.lineWidth = 1.6; ctx.strokeRect(-18, -66 + bob, 30, 22);
+      mbGlow(-3, -55 + bob, 14, c, 0.8); ctx.fillStyle = c; circ(-3, -55 + bob, 5 + Math.sin(t * 6) * 1); ctx.fillStyle = "#fff"; circ(-4, -56 + bob, 2);
+      for (const [x, y] of [[-24, -40], [22, -40], [-24, -74], [22, -74]]) { ctx.fillStyle = mix(c, MBK, 0.5); circ(x, y + bob, 1.8); } } });
+    // tête + visière
+    const hd = () => mbPoly([-18, -84 + bob, -16, -104 + bob, 14, -106 + bob, 18, -86 + bob]);
+    mbSkin(hd, c, t, { base: B });
+    ctx.fillStyle = "#07040d"; mbPoly([-16, -98 + bob, 14, -100 + bob, 14, -90 + bob, -16, -89 + bob]); ctx.fill();
+    mbEyes(-2, -94 + bob, 0.6, E, m, t, 7);
+    ctx.strokeStyle = B; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(8, -106 + bob); ctx.lineTo(12, -118 + bob); ctx.stroke(); ctx.fillStyle = c; circ(12, -119 + bob, 2.6 + Math.sin(t * 8));
+    if (m.horns || m.boss) mbHorns(-2, -104 + bob, 0.9, c);
+    if (m.boss) mbCrown(-2, -118 + bob, 1.1, c);
+    // bras-canon
+    const [hx, hy, ha] = mbLimb(-28, -68 + bob, 14, 14, 2.3 - st * 0.1 - a * 0.7, -0.9 + a * 0.6, 9, 8, B, E);
+    ctx.save(); ctx.translate(hx, hy); ctx.rotate(ha); ctx.fillStyle = B; ctx.fillRect(-2, -6, 18, 12); ctx.strokeStyle = E; ctx.lineWidth = 1.2; ctx.strokeRect(-2, -6, 18, 12); ctx.fillStyle = MBK; circ(16, 0, 4); if (a > 0.3) { mbGlow(18, 0, 14, c, 0.9); ctx.fillStyle = "#fff"; circ(18, 0, 3); } ctx.restore();
+    mbMotes(0, -70, 40, E, t, 3, 0.2);
+    return m.boss ? -138 : -122;
+  },
+  engrenage(m, c, t) { // créature-engrenage : un grand rouage qui tourne avec un œil, petites pattes
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1c1a22"), a = mbAtk(m), rot = t * (1.2 + a * 4) + m.wobble, st = Math.sin(t * 8 + m.wobble);
+    for (const d of [-1, 1]) { const [fx, fy] = mbLimb(d * 12, -16, 10, 10, Math.PI / 2 + st * 0.35 * d, -d * 0.4, 6, 5, B, E); ctx.fillStyle = B; ctx.fillRect(fx - 6, fy - 1, 12, 3); }
+    mbGear(30, -70, 12, 8, -rot * 1.8, mix(B, "#000000", 0.2), c);
+    mbGlow(0, -50, 48, c, 0.3);
+    ctx.save(); ctx.translate(0, -50); ctx.rotate(rot);
+    const g = () => { ctx.beginPath(); const n = 10, r = 32; for (let i = 0; i < n * 2; i++) { const an = i / (n * 2) * Math.PI * 2, rr = i % 2 ? r : r * 1.25; ctx.lineTo(Math.cos(an - 0.13) * rr, Math.sin(an - 0.13) * rr); ctx.lineTo(Math.cos(an + 0.13) * rr, Math.sin(an + 0.13) * rr); } ctx.closePath(); };
+    mbSkin(g, c, t, { base: B, rx: 2, ry: 2, after: () => { ctx.strokeStyle = MBK; ctx.lineWidth = 3; for (let i = 0; i < 5; i++) { const an = i / 5 * Math.PI * 2; ctx.beginPath(); ctx.moveTo(Math.cos(an) * 14, Math.sin(an) * 14); ctx.lineTo(Math.cos(an) * 28, Math.sin(an) * 28); ctx.stroke(); } ctx.strokeStyle = c; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(0, 0, 26, 0, Math.PI * 2); ctx.stroke(); } });
+    ctx.restore();
+    // œil central (ne tourne pas)
+    ctx.fillStyle = "#07040d"; circ(0, -50, 16); mbGlow(-3, -50, 14, c, 0.8);
+    ctx.fillStyle = c; circ(-3, -50, 8); ctx.fillStyle = MBK; ctx.fillRect(-4.5, -57, 3, 14); ctx.fillStyle = "#fff"; circ(-6, -53, 2);
+    ctx.strokeStyle = MBK; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, -50, 16, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
+    mbGear(-30, -76, 9, 7, rot * 2.2, mix(B, "#000000", 0.1), c);
+    if (m.horns || m.boss) mbHorns(0, -86, 0.9, c);
+    if (m.boss) mbCrown(0, -98, 1.1, c);
+    // vapeur
+    for (let i = 0; i < 3; i++) { const k = (t * 0.7 + i / 3) % 1; ctx.globalAlpha = 0.5 * (1 - k); ctx.fillStyle = "#d8d4e8"; circ(30 + k * 6, -84 - k * 30, 3 + k * 6); } ctx.globalAlpha = 1;
+    return m.boss ? -120 : -100;
+  },
+  drone(m, c, t) { // drone de chasse : hélices, bras-pince articulés, projecteur
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#191b26"), a = mbAtk(m), y0 = -70 + Math.sin(t * 3 + m.wobble) * 6, tl = Math.sin(t * 2 + m.wobble) * 0.08 - a * 0.25;
+    ctx.save(); ctx.translate(0, y0); ctx.rotate(tl);
+    // bras d'hélices
+    for (const d of [-1, 1]) { ctx.strokeStyle = B; ctx.lineWidth = 5; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(d * 14, -10); ctx.lineTo(d * 36, -20); ctx.stroke(); ctx.fillStyle = B; circ(d * 36, -20, 5);
+      const sp = t * 40 + d; ctx.globalAlpha = 0.5; ctx.fillStyle = mix(c, MBK, 0.3); ctx.beginPath(); ctx.ellipse(d * 36, -24, 22 * Math.abs(Math.cos(sp)) + 4, 3, 0, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1; ctx.strokeStyle = E; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(d * 36, -24, 22, 3, 0, 0, Math.PI * 2); ctx.stroke(); }
+    // bras-pinces
+    for (const d of [-1, 1]) { const [hx, hy, ha] = mbLimb(d * 12, 10, 12, 12, Math.PI / 2 + d * 0.3 + Math.sin(t * 3 + d) * 0.2 - (d < 0 ? a * 0.8 : 0), -d * 0.6, 4, 3, d < 0 ? B : mix(B, "#000000", 0.3), d < 0 ? E : null); mbClaws(hx, hy, ha, 0.6, E); }
+    const body = () => { ctx.beginPath(); ctx.ellipse(0, 0, 26, 16, 0, 0, Math.PI * 2); };
+    mbSkin(body, c, t, { base: B, top: -16, th: 14, flames: [[0, 18, 16, 14, 2]], after: () => { ctx.strokeStyle = MBK; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(-26, 2); ctx.lineTo(26, 2); ctx.stroke(); } });
+    // œil-projecteur
+    ctx.fillStyle = "#07040d"; circ(-12, -2, 9); mbGlow(-12, -2, 14, c, 0.9); ctx.fillStyle = c; circ(-12, -2, 5); ctx.fillStyle = "#fff"; circ(-13, -3, 2);
+    ctx.save(); ctx.globalAlpha = 0.12 + a * 0.2; ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-14, -2); ctx.lineTo(-80, 40); ctx.lineTo(-60, 60); ctx.closePath(); ctx.fill(); ctx.restore();
+    ctx.fillStyle = c; circ(10, -6, 2); circ(16, -4, 2);
+    if (m.horns || m.boss) mbHorns(0, -14, 0.7, c);
+    if (m.boss) mbCrown(0, -26, 0.9, c);
+    ctx.restore();
+    return y0 - (m.boss ? 58 : 46);
+  },
+  ressort(m, c, t) { // diable à ressort : corps sur un ressort qui rebondit, tête à crocs
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1b1a24"), a = mbAtk(m), bo = Math.abs(Math.sin(t * 4 + m.wobble)), comp = 1 - bo * 0.45 + a * 0.3, H = 46 * comp;
+    // socle
+    ctx.fillStyle = B; mbPoly([-20, 0, -16, -8, 16, -8, 20, 0]); ctx.fill(); ctx.strokeStyle = E; ctx.lineWidth = 1.2; ctx.stroke();
+    // ressort (spires)
+    for (let i = 0; i < 7; i++) { const y = -8 - i * H / 7; ctx.strokeStyle = i % 2 ? c : "#cfc8e0"; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(0, y, 12, 3.4, 0, Math.PI, Math.PI * 2); ctx.stroke(); ctx.strokeStyle = MBK; ctx.beginPath(); ctx.ellipse(0, y, 12, 3.4, 0, 0, Math.PI); ctx.stroke(); }
+    const y0 = -8 - H;
+    ctx.save(); ctx.translate(0, y0); ctx.rotate(Math.sin(t * 3 + m.wobble) * 0.12 - a * 0.3);
+    // bras mous
+    for (const d of [-1, 1]) { const [hx, hy, ha] = mbLimb(d * 20, -16, 12, 12, Math.PI / 2 + d * 1.1 + Math.sin(t * 6 + d) * 0.5, d * 0.6, 4, 3, B, d < 0 ? E : null); ctx.fillStyle = B; circ(hx, hy, 4); }
+    const hd = () => { ctx.beginPath(); ctx.moveTo(-24, 0); ctx.bezierCurveTo(-30, -30, -14, -42, 0, -42); ctx.bezierCurveTo(14, -42, 30, -30, 24, 0); ctx.closePath(); };
+    mbSkin(hd, c, t, { base: B, top: -42, th: 24, flames: [[-8, 2, 20, 10, 1], [10, 2, 16, 8, 3]] });
+    // chapeau de bouffon à pointes
+    for (const [x, an] of [[-14, -0.7], [0, 0], [14, 0.7]]) { ctx.save(); ctx.translate(x, -38); ctx.rotate(an + Math.sin(t * 5 + x) * 0.15); ctx.fillStyle = MBK; mbPoly([-6, 0, 0, -20, 6, 0]); ctx.fill(); ctx.fillStyle = c; circ(0, -21, 3); ctx.restore(); }
+    mbEyes(-2, -22, 0.75, E, m, t, 8);
+    mbFangs(-2, -12, 14, 10, m, 0.4 + a);
+    if (m.horns || m.boss) mbHorns(0, -44, 0.8, c);
+    if (m.boss) mbCrown(0, -60, 1, c);
+    ctx.restore();
+    return y0 - (m.boss ? 80 : 66);
+  }
+});
+/* --- Royaume Sucré (version « bonbons maudits ») --- */
+Object.assign(BODY, {
+  guimauve(m, c, t) { // guimauve corrompue : corps moelleux sombre, coulures de sucre, petits bras
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#221a2c"), a = mbAtk(m), sq = Math.sin(t * 3 + m.wobble) * 0.06 + a * 0.08;
+    ctx.save(); ctx.scale(1 + sq, 1 - sq);
+    for (const d of [-1, 1]) { const [fx, fy] = mbLimb(d * 12, -12, 7, 7, Math.PI / 2 + Math.sin(t * 6 + d) * 0.3, 0, 8, 7, B, d < 0 ? E : null); }
+    const body = () => { ctx.beginPath(); ctx.moveTo(-34, -10); ctx.bezierCurveTo(-38, -40, -36, -70, 0, -72); ctx.bezierCurveTo(36, -70, 38, -40, 34, -10); ctx.quadraticCurveTo(0, -2, -34, -10); ctx.closePath(); };
+    mbSkin(body, c, t, { base: B, top: -72, th: 30, flames: [[-14, -4, 30, 12, 1], [14, -4, 26, 11, 3]], after: () => {
+      ctx.fillStyle = mix(c, "#ffffff", 0.2); ctx.beginPath(); ctx.moveTo(-36, -54); ctx.bezierCurveTo(-30, -74, 30, -74, 36, -54); for (let i = 0; i < 6; i++) { const x = 36 - i * 12, d = 6 + (i % 2) * 8 + Math.sin(t * 2 + i) * 2; ctx.quadraticCurveTo(x - 3, -54 + d, x - 6, -54); ctx.lineTo(x - 12, -54); } ctx.closePath(); ctx.globalAlpha = 0.85; ctx.fill(); ctx.globalAlpha = 1;
+      ctx.fillStyle = "rgba(255,255,255,.3)"; ctx.beginPath(); ctx.ellipse(-14, -64, 9, 3, -0.2, 0, Math.PI * 2); ctx.fill(); } });
+    mbEyes(-4, -38, 0.9, E, m, t, 11);
+    mbFangs(-4, -27, 12, 9, m, 0.3 + a);
+    for (const d of [-1, 1]) { const [hx, hy] = mbLimb(d * 32, -36, 9, 9, d < 0 ? Math.PI - 0.3 - a * 0.8 + Math.sin(t * 4) * 0.2 : 0.4 + Math.sin(t * 4) * 0.2, d < 0 ? -0.5 : 0.5, 8, 7, B, d < 0 ? E : null); ctx.fillStyle = B; circ(hx, hy, 5); }
+    if (m.horns || m.boss) mbHorns(0, -66, 0.95, c);
+    if (m.boss) mbCrown(0, -80, 1.15, c);
+    ctx.restore();
+    mbMotes(0, -50, 44, E, t, 6, 0.4);
+    return m.boss ? -106 : -88;
+  },
+  sucette(m, c, t) { // sucette vivante : disque en spirale qui tourne sur un bâton, bras
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1e1828"), a = mbAtk(m), sw = Math.sin(t * 2.5 + m.wobble) * 0.08 - a * 0.2, rot = t * 1.5 + m.wobble;
+    ctx.save(); ctx.rotate(sw);
+    // bâton
+    ctx.strokeStyle = E; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -52); ctx.stroke(); ctx.strokeStyle = "#2e2838"; ctx.lineWidth = 6.5; ctx.beginPath(); ctx.moveTo(1, 0); ctx.lineTo(1, -52); ctx.stroke();
+    for (const d of [-1, 1]) { const [hx, hy] = mbLimb(0, -36, 12, 12, d < 0 ? Math.PI - 0.2 - a * 0.6 + Math.sin(t * 5) * 0.3 : 0.2 + Math.sin(t * 5) * 0.3, d < 0 ? 0.8 : -0.8, 4, 3.4, B, d < 0 ? E : null); mbClaws(hx, hy, d < 0 ? Math.PI : 0, 0.5, E); }
+    ctx.translate(0, -84);
+    mbGlow(0, 0, 44, c, 0.35);
+    const disc = () => { ctx.beginPath(); ctx.arc(0, 0, 32, 0, Math.PI * 2); };
+    mbSkin(disc, c, t, { base: B, after: () => {
+      ctx.save(); ctx.rotate(rot); ctx.strokeStyle = c; ctx.lineWidth = 6; ctx.beginPath(); for (let k = 0; k < 90; k++) { const an = k * 0.18, r = 2 + k * 0.33; ctx.lineTo(Math.cos(an) * r, Math.sin(an) * r); } ctx.stroke();
+      ctx.strokeStyle = mix(c, MBK, 0.6); ctx.lineWidth = 3; ctx.beginPath(); for (let k = 0; k < 90; k++) { const an = k * 0.18 + Math.PI, r = 2 + k * 0.33; ctx.lineTo(Math.cos(an) * r, Math.sin(an) * r); } ctx.stroke(); ctx.restore();
+      ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.beginPath(); ctx.ellipse(-12, -16, 10, 4, -0.5, 0, Math.PI * 2); ctx.fill(); } });
+    // pointes de sucre cassé
+    for (let i = 0; i < 7; i++) { const an = -Math.PI * 0.95 + i * 0.3; mbShard(Math.cos(an) * 31, Math.sin(an) * 31, 10, 4, an + Math.PI / 2, MBK, c); }
+    ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(-2, 2, 17, 11, 0, 0, Math.PI * 2); ctx.fill();
+    mbEyes(-2, -1, 0.75, E, m, t, 8);
+    mbFangs(-2, 6, 10, 7, m, 0.3 + a);
+    if (m.horns || m.boss) mbHorns(0, -28, 0.85, c);
+    if (m.boss) mbCrown(0, -42, 1.05, c);
+    ctx.restore();
+    return m.boss ? -136 : -122;
+  },
+  gelee(m, c, t) { // cube de gelée : tremble, translucide, un cœur-bonbon à l'intérieur
+    c = mbV(c); const E = mbG(c), a = mbAtk(m), wb = Math.sin(t * 7 + m.wobble) * 3 * (1 + a), wb2 = Math.cos(t * 6 + m.wobble) * 2;
+    const box = () => { ctx.beginPath(); ctx.moveTo(-32, 0); ctx.quadraticCurveTo(-36 - wb, -32, -30 + wb2, -62); ctx.quadraticCurveTo(0, -68 - wb, 30 + wb2, -62); ctx.quadraticCurveTo(36 + wb, -32, 32, 0); ctx.closePath(); };
+    mbSkin(box, c, t, { base: mix(c, MBK, 0.7), top: -66, th: 40, after: () => {
+      ctx.fillStyle = mix(c, MBK, 0.45); ctx.beginPath(); ctx.moveTo(-30 + wb2, -62); ctx.quadraticCurveTo(0, -68 - wb, 30 + wb2, -62); ctx.lineTo(24, -54); ctx.quadraticCurveTo(0, -58, -24, -54); ctx.closePath(); ctx.fill();
+      // bonbon-cœur et bulles à l'intérieur
+      ctx.save(); ctx.translate(12, -22 + Math.sin(t * 2) * 3); ctx.rotate(t * 0.8); ctx.fillStyle = E; mbPoly([-6, 0, 0, -7, 6, 0, 0, 7]); ctx.fill(); ctx.restore();
+      for (let i = 0; i < 5; i++) { const k = (t * 0.4 + i / 5) % 1; ctx.strokeStyle = mix(c, "#ffffff", 0.3); ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(-20 + i * 9, -4 - k * 54, 1.5 + (i % 2), 0, Math.PI * 2); ctx.stroke(); }
+      mbFlame(-16, 2, 24, 10, c, t, 2);
+      ctx.fillStyle = "rgba(255,255,255,.28)"; ctx.beginPath(); ctx.ellipse(-20, -46, 4, 10, 0.2, 0, Math.PI * 2); ctx.fill(); } });
+    ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(-8, -34, 18, 11, 0, 0, Math.PI * 2); ctx.fill();
+    mbEyes(-8, -36, 0.8, E, m, t, 9);
+    mbFangs(-8, -28, 10, 7, m, 0.3 + a);
+    // flaque
+    ctx.fillStyle = mix(c, MBK, 0.6); ctx.beginPath(); ctx.ellipse(0, 1, 38, 4, 0, 0, Math.PI * 2); ctx.fill();
+    if (m.horns || m.boss) mbHorns(0, -62, 0.9, c);
+    if (m.boss) mbCrown(0, -76, 1.1, c);
+    mbMotes(0, -50, 40, E, t, 4, 0.8);
+    return m.boss ? -102 : -84;
+  },
+  cupcake(m, c, t) { // cupcake mimique : moule à pointes, crème qui s'ouvre en gueule, cerise-œil
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#20182a"), a = mbAtk(m), op = 0.25 + 0.15 * Math.abs(Math.sin(t * 3 + m.wobble)) + a * 0.6, st = Math.sin(t * 7 + m.wobble);
+    for (const d of [-1, 1]) { const [fx, fy] = mbLimb(d * 14, -10, 8, 8, Math.PI / 2 + st * 0.35 * d, -d * 0.3, 5, 4, B, d < 0 ? E : null); mbClaws(fx, fy, Math.PI / 2, 0.5, E); }
+    // moule à plis
+    const cup = () => { ctx.beginPath(); ctx.moveTo(-26, -6); ctx.lineTo(-32, -40); ctx.lineTo(32, -40); ctx.lineTo(26, -6); ctx.closePath(); };
+    mbSkin(cup, c, t, { base: B, flames: [[-10, -4, 24, 10, 2], [12, -4, 20, 9, 4]], after: () => { ctx.strokeStyle = MBK; ctx.lineWidth = 2; for (let i = -3; i <= 3; i++) { ctx.beginPath(); ctx.moveTo(i * 9, -40); ctx.lineTo(i * 7.5, -6); ctx.stroke(); } } });
+    // gueule entre moule et crème
+    ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(0, -42, 32, 6 + op * 14, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#f2ecff"; for (let i = -3; i <= 3; i++) { ctx.beginPath(); ctx.moveTo(i * 8 - 3, -40); ctx.lineTo(i * 8, -40 - 5 - op * 5); ctx.lineTo(i * 8 + 3, -40); ctx.fill(); }
+    // crème (couvercle qui s'ouvre)
+    ctx.save(); ctx.translate(30, -42); ctx.rotate(-op * 0.7);
+    const cream = () => { ctx.beginPath(); ctx.moveTo(-64, 0); ctx.bezierCurveTo(-68, -18, -52, -22, -46, -26); ctx.bezierCurveTo(-46, -40, -24, -42, -22, -30); ctx.bezierCurveTo(-14, -48, 8, -36, 2, -22); ctx.bezierCurveTo(8, -14, 6, -4, 2, 0); ctx.closePath(); };
+    mbSkin(cream, c, t, { base: mix(c, MBK, 0.55), after: () => { ctx.fillStyle = "rgba(255,255,255,.25)"; ctx.beginPath(); ctx.ellipse(-42, -20, 8, 3, -0.3, 0, Math.PI * 2); ctx.fill(); for (const [x, y, col] of [[-50, -12, E], [-30, -18, "#fff"], [-16, -10, E], [-40, -30, "#fff"]]) { ctx.fillStyle = col; ctx.fillRect(x, y, 4, 1.6); } } });
+    // cerise-œil
+    ctx.strokeStyle = B; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-28, -40); ctx.quadraticCurveTo(-24, -52, -18, -54); ctx.stroke();
+    ctx.fillStyle = B; circ(-30, -38, 8); mbGlow(-31, -38, 12, c, 0.8); mbEye(-31, -38, 5.5, 3.4, 0.2, E, m, t);
+    ctx.restore();
+    if (m.horns || m.boss) mbHorns(0, -66, 0.8, c);
+    if (m.boss) mbCrown(0, -80, 1, c);
+    mbMotes(0, -50, 44, E, t, 5, 0.6);
+    return m.boss ? -104 : -88;
+  }
+});
+/* --- Néant Étoilé --- */
+Object.assign(BODY, {
+  etoile(m, c, t) { // étoile déchue : cinq branches, bras et jambes formés par les pointes, roue lente
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#16142a"), a = mbAtk(m), y0 = -56 + Math.sin(t * 2.6 + m.wobble) * 4, rot = Math.sin(t * 1.5 + m.wobble) * 0.25 - a * 0.5;
+    mbGlow(0, y0, 56, c, 0.4);
+    ctx.save(); ctx.translate(0, y0); ctx.rotate(rot);
+    const st = () => { ctx.beginPath(); for (let i = 0; i < 10; i++) { const an = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? 18 : 42 + (i === 0 ? 4 : 0) + Math.sin(t * 4 + i) * 2; ctx.lineTo(Math.cos(an) * r, Math.sin(an) * r); } ctx.closePath(); };
+    mbSkin(st, c, t, { base: B, top: -42, th: 40, after: () => {
+      for (let i = 0; i < 5; i++) { const an = -Math.PI / 2 + i * Math.PI * 2 / 5; ctx.strokeStyle = c; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(Math.cos(an) * 10, Math.sin(an) * 10); ctx.lineTo(Math.cos(an) * 36, Math.sin(an) * 36); ctx.stroke(); }
+      mbFlame(0, 40, 30, 18, mix(c, MBK, 0.3), t, 2); mbFlame(0, 40, 20, 9, c, t, 3); } });
+    ctx.fillStyle = "#07040d"; ctx.beginPath(); ctx.ellipse(-2, 0, 15, 10, 0, 0, Math.PI * 2); ctx.fill();
+    mbEyes(-2, -2, 0.7, E, m, t, 7);
+    mbFangs(-2, 4, 8, 6, m, 0.3 + a);
+    if (m.horns || m.boss) mbHorns(0, -24, 0.8, c);
+    if (m.boss) mbCrown(0, -44, 1, c);
+    ctx.restore();
+    // poussière d'étoiles en orbite
+    for (let i = 0; i < 6; i++) { const an = t * 1.4 + i * 1.05; const x = Math.cos(an) * 52, y = y0 + Math.sin(an) * 14; ctx.fillStyle = i % 2 ? E : "#fff"; ctx.save(); ctx.translate(x, y); ctx.rotate(an); mbPoly([0, -3.4, 1, -1, 3.4, 0, 1, 1, 0, 3.4, -1, 1, -3.4, 0, -1, -1]); ctx.fill(); ctx.restore(); }
+    return y0 - (m.boss ? 72 : 56);
+  },
+  comete(m, c, t) { // comète-bête : tête rocheuse enflammée, longue traîne, mâchoire
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#1a1626"), a = mbAtk(m), y0 = -62 + Math.sin(t * 3 + m.wobble) * 5, hx = -a * 18;
+    // traîne
+    for (let i = 0; i < 4; i++) { const w = 22 - i * 4, l = 80 - i * 10; ctx.fillStyle = i === 0 ? mix(c, MBK, 0.45) : i === 1 ? mix(c, MBK, 0.2) : i === 2 ? c : E; ctx.beginPath(); ctx.moveTo(hx, y0 - w);
+      for (let k = 1; k <= 6; k++) ctx.lineTo(hx + l * k / 6, y0 - w * (1 - k / 6) + Math.sin(t * 8 + k + i) * 3 - k * 3); ctx.lineTo(hx + l + 10, y0 - 18);
+      for (let k = 6; k >= 1; k--) ctx.lineTo(hx + l * k / 6, y0 + w * (1 - k / 6) + Math.sin(t * 7 + k + i) * 3 - k * 3); ctx.lineTo(hx, y0 + w); ctx.closePath(); ctx.fill(); }
+    mbGlow(hx, y0, 40, c, 0.6);
+    ctx.save(); ctx.translate(hx, y0);
+    const rock = () => mbPoly([-24, -6, -18, -22, -2, -26, 16, -18, 24, -2, 18, 16, 0, 22, -18, 14]);
+    mbSkin(rock, c, t, { base: B, after: () => { mbCrack([-16, -16, -4, -8, -8, 4, 4, 12], c, 2); ctx.fillStyle = mix(c, MBK, 0.6); circ(10, -8, 4); circ(6, 10, 3); } });
+    mbEyes(-6, -6, 0.7, E, m, t, 8);
+    // mâchoire articulée
+    ctx.save(); ctx.translate(-4, 8); ctx.rotate(0.1 + a * 0.5 + Math.sin(t * 5) * 0.05); ctx.fillStyle = B; mbPoly([10, -2, -22, 0, -18, 8, 8, 6]); ctx.fill(); ctx.fillStyle = "#f2ecff"; for (const x of [-18, -12, -6, 0]) mbPoly([x, 0, x + 1.6, -4, x + 3.2, 0]); ctx.fill(); ctx.restore();
+    ctx.fillStyle = "#f2ecff"; for (const x of [-20, -14, -8, -2]) mbPoly([x, 6, x + 1.6, 10, x + 3.2, 6]); ctx.fill();
+    if (m.horns || m.boss) mbHorns(0, -22, 0.8, c);
+    if (m.boss) mbCrown(0, -36, 1, c);
+    ctx.restore();
+    return y0 - (m.boss ? 62 : 46);
+  },
+  astrol(m, c, t) { // être astral : silhouette de constellation, cape d'étoiles, bras articulés reliés par des lignes
+    c = mbV(c); const E = mbG(c), B = mbBase(m, c, "#120e24"), a = mbAtk(m), y0 = -8 + Math.sin(t * 2 + m.wobble) * 3;
+    mbGlow(0, y0 - 56, 56, c, 0.3);
+    // cape
+    const cape = () => { ctx.beginPath(); ctx.moveTo(-16, y0 - 84); ctx.quadraticCurveTo(-40, y0 - 50, -34 + Math.sin(t * 3) * 3, y0); ctx.lineTo(34 + Math.sin(t * 3 + 1) * 3, y0); ctx.quadraticCurveTo(40, y0 - 50, 16, y0 - 84); ctx.closePath(); };
+    mbSkin(cape, c, t, { base: B, top: y0 - 84, th: 40, flames: [[-18, y0 + 2, 34, 12, 1], [0, y0 + 2, 44, 13, 3], [18, y0 + 2, 30, 11, 5]], after: () => {
+      for (let i = 0; i < 14; i++) { const x = ((i * 37) % 60) - 30, y = y0 - 10 - ((i * 23) % 70), tw = 0.5 + 0.5 * Math.sin(t * 3 + i); ctx.globalAlpha = tw; ctx.fillStyle = i % 3 ? "#fff" : E; circ(x, y, 1 + (i % 2)); } ctx.globalAlpha = 1; } });
+    // tête : étoile à l'intérieur d'une capuche
+    const hood = () => { ctx.beginPath(); ctx.moveTo(-16, y0 - 78); ctx.bezierCurveTo(-20, y0 - 104, 0, y0 - 116, 6, y0 - 118); ctx.quadraticCurveTo(4, y0 - 104, 18, y0 - 92); ctx.lineTo(16, y0 - 78); ctx.closePath(); };
+    mbSkin(hood, c, t, { base: B });
+    ctx.fillStyle = "#05030a"; ctx.beginPath(); ctx.ellipse(0, y0 - 90, 11, 11, 0, 0, Math.PI * 2); ctx.fill();
+    mbEyes(0, y0 - 91, 0.55, E, m, t, 5);
+    // bras-constellation : articulations = étoiles, segments = lignes lumineuses
+    for (const d of [-1, 1]) { const a1 = d < 0 ? Math.PI - 0.6 - a * 0.6 + Math.sin(t * 2) * 0.2 : 0.6 + Math.sin(t * 2 + 1) * 0.2, a2 = d < 0 ? 0.7 - a * 0.5 : -0.7;
+      const sx = d * 16, sy = y0 - 72, ex = sx + Math.cos(a1) * 20, ey = sy + Math.sin(a1) * 20, hx = ex + Math.cos(a1 + a2) * 18, hy = ey + Math.sin(a1 + a2) * 18;
+      ctx.strokeStyle = E; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(ex, ey); ctx.lineTo(hx, hy); ctx.stroke();
+      for (const [x, y, r] of [[sx, sy, 3], [ex, ey, 3.4], [hx, hy, 4]]) { mbGlow(x, y, r * 3, c, 0.8); ctx.fillStyle = "#fff"; circ(x, y, r * 0.7); }
+      for (const k of [-0.5, 0, 0.5]) { const an = a1 + a2 + k; ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(hx + Math.cos(an) * 8, hy + Math.sin(an) * 8); ctx.stroke(); } }
+    if (m.horns || m.boss) mbHorns(2, y0 - 106, 0.8, c);
+    if (m.boss) mbCrown(2, y0 - 120, 1, c);
+    mbMotes(0, y0 - 40, 50, E, t, 6, 0.1);
+    return y0 - (m.boss ? 140 : 124);
+  },
+  trou(m, c, t) { // trou noir vivant : sphère d'ombre, anneau de matière qui tourne, griffes du vide
+    c = mbV(c); const E = mbG(c), a = mbAtk(m), y0 = -60 + Math.sin(t * 2 + m.wobble) * 4, r = t * 1.6 + m.wobble;
+    const ring = (front) => { ctx.save(); ctx.translate(0, y0); ctx.rotate(-0.25); ctx.beginPath(); if (front) ctx.ellipse(0, 0, 52, 12, 0, 0, Math.PI); else ctx.ellipse(0, 0, 52, 12, 0, Math.PI, Math.PI * 2);
+      ctx.strokeStyle = mix(c, MBK, 0.3); ctx.lineWidth = 9; ctx.stroke(); ctx.strokeStyle = c; ctx.lineWidth = 4; ctx.stroke(); ctx.strokeStyle = "#fff"; ctx.lineWidth = 1; ctx.stroke();
+      for (let i = 0; i < 8; i++) { const an = r + i * 0.785; if ((Math.sin(an) > 0) !== front) continue; ctx.fillStyle = i % 2 ? "#fff" : E; circ(Math.cos(an) * 52, Math.sin(an) * 12, 2); } ctx.restore(); };
+    ring(false);
+    // griffes du vide (tentacules d'ombre articulés)
+    for (let j = 0; j < 4; j++) { const base = -2.6 + j * 0.55 + (j > 1 ? 1.5 : 0), d = Math.cos(base) < 0 ? -1 : 1; mbLimb(Math.cos(base) * 26, y0 + Math.sin(base) * 26, 14, 14, base + Math.sin(t * 3 + j) * 0.3 - (d < 0 ? a * 0.5 : 0), d * 0.6, 5, 3.5, "#07040d", c); }
+    mbGlow(0, y0, 50, c, 0.5);
+    const sph = () => { ctx.beginPath(); ctx.arc(0, y0, 30, 0, Math.PI * 2); };
+    mbSkin(sph, c, t, { base: "#05030a", rim: E, after: () => { ctx.strokeStyle = mix(c, MBK, 0.5); ctx.lineWidth = 2; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(0, y0, 10 + i * 7, r * (1 + i * 0.3), r * (1 + i * 0.3) + 2.4); ctx.stroke(); } } });
+    mbEyes(-4, y0 - 4, 0.85, E, m, t, 10);
+    mbFangs(-4, y0 + 8, 12, 9, m, 0.3 + a);
+    ring(true);
+    if (m.horns || m.boss) mbHorns(0, y0 - 28, 0.9, c);
+    if (m.boss) mbCrown(0, y0 - 44, 1.1, c);
+    return y0 - (m.boss ? 66 : 50);
+  }
+});
+
 
 function drawMonster(t) {
   if (!pack.length) return;
@@ -4348,7 +5043,7 @@ function drawOneMonster(t) {
   const q = QUAL(), skip = pack.length >= 4 ? q.skip[1] : q.skip[0];
   const redraw = (frameN + m._ph) % skip === 0 || m.flash > 0 || m.dying > 0 || !m._drawn;
   if (redraw) {
-    m._top = drawOff(m._c, SZ, SZ / 2, BY, () => { ctx.scale(sc, sc); const tp = BODY[m.type](m, m.flash > 0 ? shade(m.color, 0.6) : m.color, t); if (m.hat) drawHat(m, tp, t); return tp; });
+    m._top = drawOff(m._c, SZ, SZ / 2, BY, () => { ctx.scale(sc, sc); return BODY[m.type](m, m.flash > 0 ? shade(m.color, 0.6) : m.color, t); });
     m._drawn = true;
   }
   const top = m._top;
@@ -4430,6 +5125,7 @@ function loopBody(now) {
   uiT += dt; if (uiT > 0.25) { uiT = 0; refreshUpgButtons(); refreshSkill(); updateSkillBar(); refreshLive(); }
   sanT += raw; if (sanT > 10) { sanT = 0; sanitize(); }
   if (!document.hidden) S.afk = Math.min(offMax(), (+S.afk || 0) + Math.min(raw, 1) * AFK_ON);
+  if (!document.hidden && !tower) tickAutoUp(Math.min(raw, 1));
 }
 
 function update(dt) {
@@ -4489,7 +5185,7 @@ function refreshTop() {
   }
   const z = zoneOf(S.level);
   $("zoneName").innerHTML = (S.diff ? '<span class="hardTag">💀</span>' : "") + z.name + " (" + (zoneIdx(S.level) + 1) + "/" + ZONES.length + ")";
-  $("lvlTxt").textContent = "Niveau " + S.level;
+  $("lvlTxt").textContent = "Niv. " + S.level;
   $("prevLvl").disabled = S.level <= 1;
   $("nextLvl").disabled = S.level >= S.maxLevel;
   const boss = isBossLvl(S.level);
@@ -4518,7 +5214,7 @@ function refreshStats() {
     st("coins", "Bonus d'or", "+" + Math.round((P.goldMult() - 1) * 100) + "%") + st("pointer", "Tap", fmt(P.tap())) +
     st("spiral", "Frappe Brume", fmt(P.atk() * 12 * (1 + eqBonus("skill") / 100) * (1 + 0.3 * T("g4")) * CL().fb * setFb())) + st("perle", "Renaissances", S.rebirths);
 }
-/* --- Améliorations : achat x1 / x5 / x10 / x50 / max --- */
+/* --- Améliorations : achat x1 / x10 / x50 / max, et amélioration automatique (4 h par jour) --- */
 let buyMult = 1;
 function bulk(u) {
   const l = S.upg[u.id], cap = u.max !== undefined ? u.max : Infinity, target = buyMult === "max" ? Infinity : buyMult;
@@ -4535,13 +5231,14 @@ const upgEls = {};
 function refreshUpg() {
   const list = $("upgList"); list.innerHTML = "";
   const bar = document.createElement("div"); bar.className = "multBar";
-  for (const m of [1, 5, 10, 50, "max"]) {
+  for (const m of [1, 10, 50, "max"]) {
     const b = document.createElement("button"); b.className = "multBtn" + (buyMult === m ? " on" : "");
     b.textContent = m === "max" ? "MAX" : "×" + m;
     b.onclick = () => { buyMult = m; refreshUpg(); };
     bar.appendChild(b);
   }
   list.appendChild(bar);
+  const ab = document.createElement("button"); ab.id = "autoUpBtn"; ab.className = "autoUpBtn"; ab.onclick = toggleAutoUp; list.appendChild(ab); refreshAutoUp();
   for (const u of UPGRADES) {
     const d = document.createElement("div"); d.className = "upg";
     d.innerHTML = '<div class="upgIcon">' + u.icon + '</div><div class="upgTxt"><div class="upgName">' + u.name + ' <span class="lv"></span></div><div class="upgDesc"></div></div>';
@@ -4562,6 +5259,31 @@ function refreshUpgButtons() {
     setHtml(e.btn, maxed ? "MAX" : (bk.n > 1 ? "×" + bk.n + " " : "") + COIN + fmt(bk.c));
     e.btn.disabled = maxed || bk.n === 0 || bk.short === true || S.gold < bk.c;
   }
+}
+const AUTO_UP_MAX = 4 * 3600; // 4 h par jour
+function autoUpLeft() { const a = S.autoUp || (S.autoUp = { on: false, day: "", used: 0 }); if (a.day !== dayKey()) { a.day = dayKey(); a.used = 0; } return Math.max(0, AUTO_UP_MAX - a.used); }
+function toggleAutoUp() {
+  const a = S.autoUp || (S.autoUp = { on: false, day: "", used: 0 });
+  if (!a.on && autoUpLeft() <= 0) { toast("⏳ Amélioration auto épuisée pour aujourd'hui (4 h). Reviens demain !"); return; }
+  a.on = !a.on; sfx("buy"); toast(a.on ? "🤖 Amélioration auto activée" : "Amélioration auto en pause"); refreshAutoUp(); save();
+}
+function refreshAutoUp() {
+  const b = $("autoUpBtn"); if (!b) return; const a = S.autoUp || {}, left = autoUpLeft(), h = Math.floor(left / 3600), m = Math.floor(left % 3600 / 60);
+  const t = (a.on ? "🤖 Auto : ACTIVÉ" : "🤖 Améliorer automatiquement") + " · reste " + h + " h " + String(m).padStart(2, "0") + " aujourd'hui";
+  if (b.textContent !== t) b.textContent = t; b.classList.toggle("on", !!a.on);
+}
+let autoUpT = 0;
+function tickAutoUp(dt) { // achète l'amélioration la moins chère tant qu'on a l'or (temps réel, compté même en ×3)
+  const a = S.autoUp; if (!a || !a.on) return;
+  a.used = (a.day === dayKey() ? a.used : 0) + dt; a.day = dayKey();
+  if (a.used >= AUTO_UP_MAX) { a.on = false; toast("⏳ Amélioration auto : tes 4 h du jour sont finies"); refreshAutoUp(); return; }
+  if ((autoUpT += dt) < 0.5) return; autoUpT = 0;
+  let n = 0;
+  while (n < 40) { let best = null, bc = Infinity;
+    for (const u of UPGRADES) { const l = S.upg[u.id]; if (u.max !== undefined && l >= u.max) continue; const c = upgCost(u, l); if (c < bc) { bc = c; best = u; } }
+    if (!best || bc > S.gold) break; const oldMax = P.maxHp(); S.gold -= bc; S.upg[best.id]++; if (best.id === "hp") { statF++; hero.hp += P.maxHp() - oldMax; } n++; }
+  if (n) { statF++; refreshTop(); if ($("pUpg").classList.contains("active")) { refreshStats(); refreshUpgButtons(); } }
+  refreshAutoUp();
 }
 function buyUpg(u) {
   const bk = bulk(u);
@@ -4961,8 +5683,10 @@ cv.addEventListener("pointerdown", e => {
 });
 $("skillBtn").onclick = useSkill; $("rpowBtn").onclick = () => { if ((cds.rpow || 0) > gameT) toast(RPW().n + " : encore " + Math.ceil(cds.rpow - gameT) + " s"); else useRacePower(); };
 $("bossBtn").onclick = () => { S.auto = true; S.level = S.maxLevel; S.kills = 0; spawnMonster(); refreshTop(); };
-$("prevLvl").onclick = () => { if (!tower && S.level > 1) { S.level--; S.kills = 0; S.auto = false; spawnMonster(); refreshTop(); } };
-$("nextLvl").onclick = () => { if (!tower && S.level < S.maxLevel) { S.level++; S.kills = 0; S.auto = S.level === S.maxLevel; spawnMonster(); refreshTop(); } };
+let lvlStep = 1; // ◀ ▶ avancent de 1, 10 ou 50 niveaux
+$("lvlStep").onclick = () => { lvlStep = lvlStep === 1 ? 10 : lvlStep === 10 ? 50 : 1; $("lvlStep").textContent = "×" + lvlStep; sfx("buy"); };
+$("prevLvl").onclick = () => { if (!tower && S.level > 1) { S.level = Math.max(1, S.level - lvlStep); S.kills = 0; S.auto = false; spawnMonster(); refreshTop(); } };
+$("nextLvl").onclick = () => { if (!tower && S.level < S.maxLevel) { S.level = Math.min(S.maxLevel, S.level + lvlStep); S.kills = 0; S.auto = S.level === S.maxLevel; spawnMonster(); refreshTop(); } };
 document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
   document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
   document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
@@ -5079,7 +5803,7 @@ function arMyStats() {
   return { atk: P.atk(), hp: P.maxHp(), rate: Math.max(2.4, Math.min(9, P.spd() * 1.6)), crit: Math.min(0.75, P.crit() / 100), cm: critMult(), lvl: Math.max(1, S.maxLevel), hard: S.diff ? 1 : 0, cls: S.cls || "spectre", pets: activePets().map(id => [id, Math.round(PETS[id].atk(S.pets[id]) * (1 + accSum("pet") / 100) * 0.6 * 100) / 100]) };
 }
 const arBaseHp = (l, h) => 30 * Math.pow(1.2, l - 1) * (1 + 0.6 * Math.min(1, l / 300)) * (h ? HARD.hp : 1);
-const arBaseDmg = (l, h) => 8 * Math.pow(1.15, l - 1) * (h ? HARD.dmg : 1);
+const arBaseDmg = (l, h) => dmgCurve(l) * (h ? HARD.dmg : 1);
 
 /* ---------- images (chasseurs et monstres dessinés par le jeu) ---------- */
 const arSprites = {};
@@ -5790,7 +6514,7 @@ function startClanBoss() {
 function spawnClanBoss() {
   let L = Math.max(10, S.maxLevel); if (isBossLvl(L)) L--; S.level = L; spawnMonster();
   const raw = 30 * Math.pow(1.2, L - 1) * (1 + 0.6 * Math.min(1, L / 300)) * (S.diff ? HARD.hp : 1), [nm, col] = cbInfo();
-  Object.assign(mon, { hp: raw * 400, max: raw * 400, dmg: 8 * Math.pow(1.15, L - 1) * 0.6 * (S.diff ? HARD.dmg : 1), gold: 0, boss: true, zb: true, rare: false, tower: true, cb: true, cbRaw: raw,
+  Object.assign(mon, { hp: raw * 400, max: raw * 400, dmg: dmgCurve(L) * 0.6 * (S.diff ? HARD.dmg : 1), gold: 0, boss: true, zb: true, rare: false, tower: true, cb: true, cbRaw: raw,
     name: nm + " · boss de clan", hat: "couronne", scale: 2, color: col });
   pack = [mon]; layoutPack(true);
   bossTimer = CB_TIME; sfx("boss");
@@ -5993,6 +6717,17 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 63, d: "Les créatures de la Brume", l: [
+    "👹 <b>Les 40 créatures ont été redessinées</b> dans le style du chasseur : corps sombres, flammes de couleur, yeux qui brillent, crocs. Chaque biome a ses propres monstres et leurs boss portent cornes et couronne.",
+    "🦴 Les monstres sont <b>articulés</b> : bras, pattes, ailes, queues et tentacules bougent, et ils frappent ou mordent quand ils attaquent.",
+    "🌫️ Les biomes passent en <b>ambiance Brume</b> : couleurs plus sombres, brume entre les plans du décor.",
+    "⚖️ <b>Équilibrage</b> : après le niveau 60, les monstres ne devenaient plus jamais dangereux. Leurs dégâts suivent maintenant ta vie : on farme tranquille, mais <b>les boss peuvent te tuer si tu négliges l'Endurance</b>. En Difficile, les dégâts des monstres passent de ×60 à ×180.",
+    "✍️ Nouveaux surnoms pour les monstres (sauvage, funeste, vorace…) et histoires de l'accueil mises à jour.",
+    "💰 <b>Renaissance</b> : tu repars avec de l'or selon le niveau atteint (environ 1 000 monstres du niveau 60 % de ton record). Plus besoin de retourner farmer en arrière !",
+    "🔁 Tes <b>points de compétence se replacent tout seuls</b> après une renaissance, dans l'ordre où tu les avais mis (option dans l'onglet Compétences).",
+    "🤖 Nouveau bouton <b>Améliorer automatiquement</b> : il achète toujours l'amélioration la moins chère. Utilisable 4 h par jour.",
+    "⬆️ Force, Endurance, Coup de doigt et Flair sont en haut de la liste. Achat ×1, ×10, ×50 ou MAX (le ×5 disparaît). <b>+10 niveaux max</b> pour Vitesse, Chance critique (plafond 60 % → 70 %), Dégâts critiques, Combo, Rage et Expérience.",
+    "🧭 À côté des flèches de niveau, un bouton ×1 / ×10 / ×50 pour monter ou descendre vite."] },
   { v: 62, d: "Accueil animé et coffre AFK", l: [
     "🎬 Sur l'accueil, ton chasseur <b>combat des monstres en boucle</b> (touche-le pour qu'il frappe plus vite).",
     "🎁 Nouveau <b>coffre AFK</b> à côté de lui : il se remplit quand le jeu est fermé (et un peu pendant que tu joues). Il est plein au bout de <b>2 jours</b> (Rêveur ajoute 3 h par niveau). Il donne de l'or, de l'XP, des objets, des gemmes et des Cristaux. Touche-le pour l'ouvrir !",
@@ -6173,7 +6908,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 62, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 63, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
