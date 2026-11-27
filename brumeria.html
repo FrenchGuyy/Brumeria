@@ -635,13 +635,14 @@
         <div class="volRow"><span>🎵 Musique</span><input type="range" min="0" max="100" step="1" id="volMusic" class="vol"><b id="volMusicTxt"></b></div>
         <div class="volRow"><span>💥 Effets</span><input type="range" min="0" max="100" step="1" id="volSfx" class="vol"><b id="volSfxTxt"></b></div>
         <div class="volRow"><span>📳 Vibrations</span><span></span><button class="smallBtn" id="vibBtn">Activées</button></div>
+        <div class="volRow"><span>💡 Conseils</span><span></span><button class="smallBtn" id="tipsBtn">Activés</button></div>
         <button class="smallBtn" id="volTest" style="width:100%;margin-top:6px">▶ Tester les effets</button>
       </div>
       <div class="optSec">🖥️ Affichage</div>
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v68</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v69</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -650,7 +651,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v68 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v69 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -673,7 +674,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v68</div></div>
+  <div class="tsVer">v69</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -924,6 +925,7 @@ function sanitize() {
     for (const o of ["upg", "pupg"]) { if (!S[o] || typeof S[o] !== "object") S[o] = N[o]; for (const k in S[o]) if (!okNum(S[o][k]) || S[o][k] < 0) S[o][k] = 0; }
     const okIt = it => it && typeof it === "object" && SLOTS[it.slot] && okNum(it.val) && RARITY[it.rar];
     if (!Array.isArray(S.inv)) S.inv = []; S.inv = S.inv.filter(okIt);
+    if (!S.tips) { S.tips = {}; if ((S.totalKills || 0) > 3000) for (const k of ["upg", "bag", "tree", "pet", "reb", "afk", "death", "boss"]) S.tips[k] = 1; }
     if (!S.lockMig) { const best = {}; for (const it of S.inv) if (it.set) { const k = it.set + "|" + it.slot; if (!best[k] || it.val > best[k].val) best[k] = it; } for (const k in best) best[k].lock = true; S.lockMig = 1; } // v64 : cadenas
     if (!S.equip || typeof S.equip !== "object") S.equip = N.equip; for (const k in N.equip) if (S.equip[k] && !okIt(S.equip[k])) S.equip[k] = null;
     if (!S.pets || typeof S.pets !== "object") S.pets = {}; if (!Array.isArray(S.petsOn)) S.petsOn = []; S.petsOn = S.petsOn.filter(id => PETS[id]);
@@ -1035,7 +1037,7 @@ function makeMonster(n) {
   const rare = !boss && (Math.random() < 1 / 200 || forceRare); forceRare = false;
   const name = zb ? ZONE_BOSS[zoneIdx(l)] : boss ? pr(BOSS_T) + " " + pr(TYPE_NAMES[type]) : pr(TYPE_NAMES[type]) + " " + (rare ? "doré" : pr(SUF));
   const hp = monHp(l) * (rare ? 3 : 1) * WAVE.hp[k];
-  const mon = { name, boss, zb, type, rare, hp, max: hp, dmg: monDmg(l) * WAVE.dmg[k], gold: monGold(l) * (rare ? 25 : 1) * WAVE.gold[k], px: W * 0.7, tx: W * 0.7, py: 0,
+  const mon = { name, boss, zb, type, rare, hp, max: hp, dmg: monDmg(l) * WAVE.dmg[k], wk: WAVE.dmg[k], gold: monGold(l) * (rare ? 25 : 1) * WAVE.gold[k], px: W * 0.7, tx: W * 0.7, py: 0,
     color: pr(z.mon), eyes: r() < 0.25 ? 1 : 2, mouth: pr(["sourire", "crocs", "langue", "o", "grimace"]), blush: r() < 0.5,
     hat: boss ? "couronne" : (r() < 0.45 ? pr(z.key === "foret" ? ["feuille", "fleur", "bonnet"] : ["bonnet", "bonnet", "fleur"]) : null),
     hatColor: pr(["#e63946", "#ffd166", "#4ea8de", "#f4a261", "#b07cff", "#52d17c"]), horns: r() < 0.35,
@@ -1137,18 +1139,26 @@ function killMonster() {
   refreshTop(); refreshUpgButtons();
 }
 
+// Morts : plus de boucle. Si le chasseur tombe 2 fois en 90 s au même endroit, il recule un peu pour farmer,
+// puis il retente tout seul un peu plus tard (pour qu'on ne reste jamais bloqué en jeu inactif).
+let deathLog = [], retryAt = 0;
 function heroDies() {
-  hero.dead = 1.5; sfx("lose"); vib(80);
-  if (mon && mon.boss) failBoss("Ton chasseur est tombé face au boss.");
-  else { toast("Ton chasseur se relève… Améliore-le si ça bloque !"); for (const m of packAlive()) m.hp = m.max; }
+  hero.dead = 1.5; sfx("lose"); vib(80); tipTrigger("death");
+  if (mon && mon.boss) { failBoss("Ton chasseur est tombé face au boss."); return; }
+  if (tower) { for (const m of packAlive()) m.hp = m.max; return; }
+  const now = Date.now(); deathLog = deathLog.filter(d => now - d.t < 90000 && d.l === S.level); deathLog.push({ t: now, l: S.level });
+  if (deathLog.length >= 2) { const back = Math.max(1, Math.min(10, Math.round(S.level * 0.02))); S.level = Math.max(1, S.level - back); S.kills = 0; S.auto = false; retryAt = now + 75000; deathLog = []; spawnMonster(); refreshTop();
+    toast("Ton chasseur recule de " + back + " niveau" + (back > 1 ? "x" : "") + " pour souffler. Il retentera tout seul dans un moment !"); }
+  else { toast("Ton chasseur se relève… Améliore Endurance si ça bloque !"); for (const m of packAlive()) m.hp = m.max; }
 }
+function tickRetry() { if (retryAt && Date.now() > retryAt && !tower) { retryAt = 0; if (!S.auto && S.level < S.maxLevel) { S.auto = true; toast("💪 Ton chasseur repart à l'assaut !"); } } }
 function failBoss(msg) {
   if (tower && tower.cb) { cbEnd(); return; }
   if (tower && tower.vb) { exitTower("Le <b>Seigneur du Néant</b> t'a vaincu…<br><br>Renforce-toi et reviens l'affronter : il t'attend dans l'onglet Journal → Événements."); return; }
   if (tower && tower.inv) { exitTower("L'Avatar de la Brume t'a repoussé… Améliore-toi et réessaie, l'invasion dure toute la journée."); return; }
   if (tower) { const f = tower.floor; exitTower((msg.includes("Temps") ? "Temps écoulé" : "Ton chasseur est tombé") + " à l'étage <b>" + f + "</b>."); return; }
-  toast(msg + " Entraîne-toi un peu !");
-  S.level = Math.max(1, S.level - 1); S.kills = KILLS_PER_LEVEL; S.auto = false;
+  toast(msg + " Il retentera tout seul dans un moment (améliore-toi en attendant) !"); tipTrigger("boss");
+  S.level = Math.max(1, S.level - 1); S.kills = KILLS_PER_LEVEL; S.auto = false; retryAt = Date.now() + 60000;
   bossTimer = 0; spawnMonster(); refreshTop();
 }
 
@@ -1251,6 +1261,13 @@ const ptsFree = () => ptsEarned() - ptsSpent();
 const nodeOpen = n => n.tier === 0 || T(n.branch.nodes[n.tier - 1].id) > 0;
 const cdMult = () => Math.max(0.25, 1 - 0.05 * S.pupg.pskill - 0.05 * A2("a8"));
 const critMult = () => Math.round((2.5 + 0.5 * T("g3") + 0.3 * T("g7") + (setOn("spectre", 4) ? 0.5 : 0)) * (1 + 0.05 * S.upg.critdmg) * (1 + 0.05 * A2("a1")) * 100) / 100;
+// v69 : un coup ne peut pas dépasser une part de ta vie max. Les joueurs qui ont beaucoup misé sur l'attaque
+// (Âme guerrière, panoplies, classe, Clic fantôme, Écho…) avançaient plus vite que leur vie et mouraient en boucle.
+// Farm : ≤ 3,5 % par coup pour un monstre seul, partagé quand ils sont en groupe (la régénération suit) · boss : ≤ 6,5 % · boss de zone : ≤ 8 % · Tour / Invasion / Néant : ≤ 10 %.
+function hitDmg(m, mult = 1) {
+  const cap = (m.tower ? 0.1 : m.zb ? 0.08 : m.boss ? 0.065 : 0.035 * (m.wk || 1)) * (S.diff ? 1.25 : 1) * mult; // en groupe, chaque monstre a un plafond plus bas (le groupe entier ≈ un seul monstre)
+  return Math.min(m.dmg * mult, P.maxHp() * cap) * dmgTaken();
+}
 const dmgTaken = () => Math.max(0.1, (1 - 0.08 * T("d3")) * (1 - 0.04 * T("d8")) * (1 - 0.05 * A2("a14")) * (buffOn("rempart") ? 0.2 : 1));
 const setFb = () => (setOn("spectre", 6) ? 2 : 1) * (setOn("arcaniste", 6) ? 1.5 : 1) * (1 + affSum("fb") / 100) * (1 + gemSum("fb") / 100);
 
@@ -2902,8 +2919,7 @@ const TUTO = [
   { el: "#sceneWrap", txt: "Ton chasseur attaque tout seul. <b>Tape sur le monstre</b> pour l'aider !", pos: "in" },
   { el: "#skillBtn", txt: "Ce bouton se charge pendant le combat. Quand il brille, <b>appuie</b> pour un gros coup !", pos: "above" },
   { el: '.tab[data-p="pUpg"]', txt: "Dépense ton or ici pour <b>devenir plus fort</b>.", pos: "above" },
-  { el: '.tab[data-p="pBag"]', txt: "Les objets trouvés arrivent dans le <b>Sac</b>. Équipe les meilleurs !", pos: "above" },
-  { el: "#progress", txt: "Bats 10 monstres pour avancer. Tous les 10 niveaux, <b>un boss</b> t'attend. Bonne chasse !", pos: "below" }
+  { el: "#progress", txt: "Bats 10 monstres pour avancer. Tous les 10 niveaux, <b>un boss</b> t'attend. D'autres conseils arriveront au bon moment. Bonne chasse !", pos: "below" }
 ];
 let tutoStep = -1;
 function startTuto() { tutoStep = 0; showTuto(); }
@@ -2920,6 +2936,39 @@ function showTuto() {
   if (st.pos === "above") { b.style.top = "auto"; b.style.bottom = (innerHeight - r.top + 14) + "px"; }
   else { b.style.bottom = "auto"; b.style.top = (st.pos === "in" ? r.top + 60 : r.bottom + 14) + "px"; }
 }
+
+/* --- Conseils au fil du jeu : une bulle courte, une seule fois, quand la fonction devient utile --- */
+const TIPS = {
+  upg:   { el: '.tab[data-p="pUpg"]', pos: "above", txt: "💡 Monte surtout <b>Force</b> et <b>Endurance</b> : l'attaque pour avancer, la vie pour survivre aux boss." , when: () => S.maxLevel >= 6 },
+  bag:   { el: '.tab[data-p="pBag"]', pos: "above", txt: "🎒 Touche un objet pour l'<b>équiper</b>, le <b>vendre</b> ou lui mettre un <b>🔒 cadenas</b> pour le garder.", when: () => S.inv.length >= 3 },
+  tree:  { el: '.tab[data-p="pSk"]', pos: "above", txt: "✨ Tu as un <b>point de compétence</b> ! Place-le dans l'arbre pour débloquer des bonus et des pouvoirs.", when: () => ptsFree() > 0 && S.maxLevel >= 11 },
+  boss:  { el: '#progress', pos: "below", txt: "👹 Un boss te bloque ? Améliore-toi un peu : ton chasseur <b>retente tout seul</b> dans une minute.", when: () => false },
+  death: { el: '.tab[data-p="pUpg"]', pos: "above", txt: "💀 Ton chasseur est tombé. Pense à l'<b>Endurance</b> (la vie) : si ça recommence, il recule un peu et retente plus tard.", when: () => false },
+  auto:  { el: '.tab[data-p="pUpg"]', pos: "above", txt: "🤖 Le bouton <b>Améliorer automatiquement</b> (onglet Chasseur) achète pour toi, 4 h par jour.", when: () => S.maxLevel >= 25 },
+  pet:   { el: '.tab[data-p="pBag"]', pos: "above", txt: "🐾 Tu as un <b>familier</b> ! Il est dans Sac → Familiers : il combat avec toi et donne un bonus.", when: () => petsOwned() > 0 },
+  reb:   { el: '.tab[data-p="pReb"]', pos: "above", txt: "🔮 La <b>Renaissance</b> est débloquée : tu repars plus bas mais avec des <b>Cristaux</b> pour des bonus permanents, de l'or et tes points replacés.", when: () => S.maxLevel >= REB_MIN },
+  ames:  { el: '.tab[data-p="pUpg"]', pos: "above", txt: "👻 Tu as des <b>Âmes de Brume</b> ! Dépense-les dans Chasseur → Héros (talents, tenues) ou pour éveiller tes familiers.", when: () => (S.ames || 0) > 0 },
+  afk:   { el: '.tab[data-p="pJour"]', pos: "above", txt: "🎁 Quand le jeu est fermé, ton <b>coffre AFK</b> se remplit : ouvre-le sur l'écran d'accueil.", when: () => S.totalKills >= 300 }
+};
+let tipQ = [], tipOn = null, tipT = 0;
+function tipTrigger(id) { if (S.tipsOff || (S.tips || {})[id] || tipQ.includes(id) || tipOn === id) return; tipQ.push(id); }
+function tickTips(dt) {
+  if ((tipT += dt) < 1.5) return; tipT = 0;
+  if (S.tipsOff || tipOn || tutoStep >= 0 || !S.tutoDone) return;
+  S.tips = S.tips || {};
+  for (const id in TIPS) if (!S.tips[id] && !tipQ.includes(id)) { try { if (TIPS[id].when()) tipQ.push(id); } catch (e) {} }
+  if (!tipQ.length || $("modal").style.display === "flex" || $("modal").style.display === "block" || $("titleScreen").style.display !== "none") return;
+  const id = tipQ.shift(), t = TIPS[id], el = document.querySelector(t.el); S.tips[id] = 1; save();
+  if (!el || !el.getBoundingClientRect().width) return;
+  tipOn = id; el.classList.add("tutoHL");
+  const r = el.getBoundingClientRect(), b = $("tutoBox"), bw = Math.min(300, innerWidth - 20);
+  $("tutoTxt").innerHTML = t.txt; $("tutoNext").textContent = "OK"; $("tutoSkip").textContent = "Plus de conseils"; $("tutoStep").textContent = "Conseil";
+  $("tuto").style.display = "block"; b.style.width = bw + "px";
+  b.style.left = Math.min(innerWidth - bw - 10, Math.max(10, r.left + r.width / 2 - bw / 2)) + "px";
+  if (t.pos === "above") { b.style.top = "auto"; b.style.bottom = (innerHeight - r.top + 14) + "px"; } else { b.style.bottom = "auto"; b.style.top = (r.bottom + 14) + "px"; }
+  tipHide.t = setTimeout(tipHide, 9000); // disparaît tout seul
+}
+function tipHide() { if (!tipOn) return; tipOn = null; clearTimeout(tipHide.t); document.querySelectorAll(".tutoHL").forEach(e => e.classList.remove("tutoHL")); $("tuto").style.display = "none"; $("tutoSkip").textContent = "Passer"; }
 
 /* ================== STATS BONUS DES OBJETS ================== */
 const AFF = {
@@ -3023,7 +3072,7 @@ function bossSmash(m) {
   m.charge = null; m.nextSp = 7 + Math.random() * 3; m.bite = 0.25; $("bossAlert").classList.remove("show");
   shakeT = 0.4; sfx("lose"); vib(120);
   for (let i = 0; i < 24; i++) particles.push({ x: heroX() + rand(-30, 30), y: groundY() - rand(0, 60), vx: rand(-180, 180), vy: rand(-260, -60), life: 0.7, c: "#ff4d5e", r: rand(2, 5) });
-  if (!devGod && !buffOn("inv")) { hero.hp -= m.dmg * 4 * dmgTaken(); hero.hurt = 0.3; addFloatAt(heroX(), groundY() - 110, "-" + fmt(m.dmg * 4), "#ff4d5e", 22); }
+  if (!devGod && !buffOn("inv")) { const d = hitDmg(m, 4); hero.hp -= d; hero.hurt = 0.3; addFloatAt(heroX(), groundY() - 110, "-" + fmt(d), "#ff4d5e", 22); }
   if (hero.hp <= 0) { hero.hp = 0; heroDies(); }
 }
 function counterTap(m) {
@@ -5182,7 +5231,7 @@ function loopBody(now) {
 
 function update(dt) {
   if (comboT > 0) { comboT -= dt; if (comboT <= 0) comboN = 0; }
-  gameT += dt; racePowTick(dt); updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); updateGhostClicks(dt); if (S.pupg.pfb && skill >= 100) useSkill(); const rdt = dt / Math.max(1, typeof gameSpeed === "function" ? gameSpeed() : 1); // l'animation suit le temps réel, même en ×3
+  gameT += dt; racePowTick(dt); updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); updateGhostClicks(dt); tickRetry(); tickTips(Math.min(dt, 0.25)); if (S.pupg.pfb && skill >= 100) useSkill(); const rdt = dt / Math.max(1, typeof gameSpeed === "function" ? gameSpeed() : 1); // l'animation suit le temps réel, même en ×3
   hero.cast = Math.max(0, (hero.cast || 0) - rdt);
   hero.lunge = Math.max(0, hero.lunge - rdt);
   hero.hurt = Math.max(0, hero.hurt - dt);
@@ -5212,7 +5261,7 @@ function update(dt) {
     m.atkTimer -= dt;
     if (m.atkTimer > 0) continue;
     m.atkTimer = m.boss ? 1.3 : 1.6 + Math.random() * 0.3; m.bite = 0.25;
-    if (!devGod && !buffOn("inv")) hero.hp -= m.dmg * dmgTaken();
+    if (!devGod && !buffOn("inv")) hero.hp -= hitDmg(m);
     if (T("d4")) { const keep = skill; dealDamage(P.atk() * 0.5 * T("d4"), "thorns", m); skill = keep; }
     hero.hurt = 0.15; sfx("hurt");
     if (hero.hp <= 0) { hero.hp = 0; heroDies(); return; }
@@ -5785,8 +5834,8 @@ $("speedBtn").onclick = () => {
 };
 setSpeedBtn(); $("towerBtn").onclick = askTower;
 $("towerExit").onclick = () => tower && tower.cb ? modal("🐲 Arrêter le combat ?", "Tes dégâts déjà infligés seront comptés.", [{ t: "Continuer", alt: true }, { t: "Arrêter", f: () => cbEnd() }]) : tower && tower.vb ? modal("🌑 Fuir le combat ?", "Le Seigneur du Néant restera là. Tu pourras revenir l'affronter quand tu veux.", [{ t: "Rester", alt: true }, { t: "Fuir", f: () => exitTower() }]) : modal(ic("tower") + " Quitter la Tour ?", "Tu reviendras à ton farm. Ton record (étage " + S.tower.best + ") est gardé.", [{ t: "Rester", alt: true }, { t: "Quitter", f: () => exitTower() }]);
-$("tutoNext").onclick = () => { tutoStep++; showTuto(); };
-$("tutoSkip").onclick = endTuto;
+$("tutoNext").onclick = () => { if (tipOn) { tipHide(); return; } tutoStep++; showTuto(); };
+$("tutoSkip").onclick = () => { if (tipOn) { S.tipsOff = true; tipHide(); toast("Conseils désactivés (réactivables dans les Paramètres)"); save(); return; } endTuto(); };
 $("tutoAgain").onclick = () => { document.querySelector('.tab[data-p="pUpg"]').click(); setTimeout(startTuto, 200); };
 $("gearBtn").onclick = () => {
   document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
@@ -5815,6 +5864,7 @@ $("bestBtn").innerHTML = ic("bolt") + " Équiper le meilleur"; $("sellAll").inne
 $("modal").addEventListener("click", e => { if (e.target === $("modal")) closeModal(); });
 
 $("vibBtn").onclick = () => { S.vib = !S.vib; $("vibBtn").textContent = S.vib ? "Activées" : "Coupées"; save(); };
+$("tipsBtn").onclick = () => { S.tipsOff = !S.tipsOff; $("tipsBtn").textContent = S.tipsOff ? "Coupés" : "Activés"; save(); };
 $("resetBtn").onclick = () => modal("Tout effacer ?", "Ta progression, ton or et ton équipement seront perdus pour de bon.", [
   { t: "Annuler", alt: true },
   { t: "Effacer", f: () => { S = newState(); save(); hero.hp = P.maxHp(); skill = 0; spawnMonster(); refreshAll(); toast("Nouvelle partie !"); } }
@@ -5834,7 +5884,7 @@ $("upBtn").innerHTML = ic("swords"); $("upBtn").onclick = () => scroller.scrollT
 
 function refreshAll() {
   refreshTop(); refreshUpg(); refreshBag(); updateBagTab(); refreshSkills(); refreshReb(); buildSkillBar(); refreshXp();
-  $("vibBtn").textContent = S.vib ? "Activées" : "Coupées"; syncVolUI();
+  $("vibBtn").textContent = S.vib ? "Activées" : "Coupées"; $("tipsBtn").textContent = S.tipsOff ? "Coupés" : "Activés"; syncVolUI();
   ensureDaily(); updateJournalDot();
   if ($("pBag").classList.contains("active")) setSub("b", curSub("b"));
   if ($("pUpg").classList.contains("active") && curSub("c") === "cHero") refreshHero();
@@ -6797,6 +6847,10 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 69, d: "Plus de mort en boucle", l: [
+    "⚖️ <b>Équilibrage</b> : un coup de monstre ne peut plus dépasser une part de ta vie (3,5 % au farm, 6,5 % pour un boss, 8 % pour un boss de zone). Fini les morts en boucle quand ton attaque avance plus vite que ta vie, mais les boss restent un vrai défi.",
+    "💪 Si ton chasseur tombe 2 fois au même niveau, il <b>recule un peu</b> pour farmer, puis il <b>retente tout seul</b> un peu plus tard. Après un boss raté aussi : plus besoin de relancer à la main.",
+    "💡 <b>Conseils au fil du jeu</b> : le tutoriel du début est plus court, et de petites bulles t'expliquent chaque fonction au moment où elle devient utile (une seule fois). Désactivables dans les Paramètres."] },
   { v: 68, d: "Ajustements", l: ["🌀 La <b>Frappe Brume auto</b> coûte maintenant <b>150 000 Cristaux</b> (au lieu de 60 000) : c'est un vrai objectif de fin de jeu.", "📝 Textes de la Renaissance et du passage en Difficile plus clairs : tu gardes toujours tes améliorations de Renaissance, seules celles à l'or repartent à zéro."] },
   { v: 67, d: "Correctif", l: ["🐛 L'aperçu du chasseur dans Personnaliser n'est plus décalé ni coupé (et il se dessine plus vite)."] },
   { v: 66, d: "Les Âmes de Brume", l: [
@@ -7003,7 +7057,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 68, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 69, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
