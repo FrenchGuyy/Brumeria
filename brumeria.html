@@ -640,7 +640,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v64</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v65</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -649,7 +649,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v64 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v65 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -672,7 +672,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v64</div></div>
+  <div class="tsVer">v65</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -879,7 +879,7 @@ function newState() {
     equip: { arme: null, casque: null, armure: null, gants: null, ceinture: null, bottes: null, amulette: null }, inv: [],
     sound: true, vib: true, lastSeen: Date.now(), afk: 0, itemId: 1,
     perles: 0, totalPerles: 0, rebirths: 0, best: 1,
-    pupg: { patk: 0, php: 0, pgold: 0, pstart: 0, ploot: 0, pskill: 0, poff: 0 },
+    pupg: { patk: 0, php: 0, pgold: 0, pstart: 0, ploot: 0, pskill: 0, poff: 0, pclick: 0 },
     tree: {}, bonusPts: 0, music: true,
     stats: { bossKills: 0, taps: 0, legend: 0, items: 0, forges: 0, rares: 0, skills: 0, quests: 0, time: 0, bestHit: 0, goldTotal: 0 },
     ach: {}, daily: null, bestiary: {}, pets: {}, pet: null,
@@ -1077,14 +1077,15 @@ function hitMon(amount, kind) {
   if (devOneShot) amount = Math.max(amount, mon.hp);
   mon.hp -= amount; if (mon.vb) vbOnHit();
   if (amount > (S.stats.bestHit || 0)) S.stats.bestHit = amount;
-  const ls = affSum("vol"); if (ls && (kind === "auto" || kind === "tap" || kind === "pet")) hero.hp = Math.min(P.maxHp(), hero.hp + Math.min(amount, P.maxHp()) * ls / 100);
+  const ls = affSum("vol"); if (ls && (kind === "auto" || kind === "tap" || kind === "atap" || kind === "pet")) hero.hp = Math.min(P.maxHp(), hero.hp + Math.min(amount, P.maxHp()) * ls / 100);
   mon.flash = 0.12; mon.shake = crit ? 0.25 : 0.12; mon.squash = 0.15;
-  if (kind === "pet" && !crit) { if (Math.random() < 0.6) addFloat(fmt(amount), "#cfe4ff", 13); }
+  if (kind === "atap") { if (crit || Math.random() < 0.2) addFloat(fmt(amount) + (crit ? "!" : ""), "#d8c8ff", crit ? 18 : 13); particles.push({ x: monX() + rand(-20, 20), y: monY() - rand(20, 60), vx: rand(-60, 60), vy: rand(-120, -30), life: 0.4, c: "#c8b0ff", r: 2.5 }); }
+  else if (kind === "pet" && !crit) { if (Math.random() < 0.6) addFloat(fmt(amount), "#cfe4ff", 13); }
   else addFloat(fmt(amount) + (crit ? "!" : ""), kind === "skill" ? "#8ecae6" : crit ? "#ffd166" : "#fff", crit || kind === "skill" ? 26 : 18);
-  for (let i = 0; i < (crit ? 10 : 4); i++) particles.push({ x: monX(), y: monY() - 30, vx: rand(-120, 120), vy: rand(-180, -40), life: 0.5, c: mon.color, r: rand(2, 5) });
-  sfx(kind === "skill" ? "skill" : crit ? "crit" : "hit");
+  if (kind !== "atap") { for (let i = 0; i < (crit ? 10 : 4); i++) particles.push({ x: monX(), y: monY() - 30, vx: rand(-120, 120), vy: rand(-180, -40), life: 0.5, c: mon.color, r: rand(2, 5) });
+  sfx(kind === "skill" ? "skill" : crit ? "crit" : "hit"); }
   if (kind === "tap") addCombo();
-  if (kind === "auto" || kind === "tap") skill = Math.min(100, skill + (kind === "tap" ? 1.2 : 4) * (1 + 0.05 * S.pupg.pskill) * (1 + 0.2 * T("g4")) * (setOn("arcaniste", 4) ? 1.5 : 1));
+  if (kind === "auto" || kind === "tap" || kind === "atap") skill = Math.min(100, skill + (kind === "tap" ? 1.2 : kind === "atap" ? 0.4 : 4) * (1 + 0.05 * S.pupg.pskill) * (1 + 0.2 * T("g4")) * (setOn("arcaniste", 4) ? 1.5 : 1));
   if (mon.hp <= 0) killMonster();
 }
 
@@ -1352,7 +1353,8 @@ const PUPG = [
   { id: "pstart", icon: "🚀", name: "Départ rapide",     base: 3, grow: 1.8, max: 10, desc: l => "Après une renaissance, repars à " + 3 * l + "% → " + 3 * (l + 1) + "% du niveau atteint (au moins niv. " + (1 + 5 * (l + 1)) + ")" },
   { id: "ploot",  icon: "🍀", name: "Chance",            base: 2, grow: 1.6, max: 20, desc: l => "Chance de butin +" + l * 10 + "% → +" + (l + 1) * 10 + "%" },
   { id: "pskill", icon: "✨", name: "Maîtrise",          base: 3, grow: 1.7, max: 10, desc: l => "Recharge des compétences -" + l * 5 + "% → -" + (l + 1) * 5 + "%" },
-  { id: "poff",   icon: "🌙", name: "Rêveur",            base: 2, grow: 1.6, max: 8,  desc: l => "Coffre AFK : " + (48 + 3 * l) + " h max et +" + l * 10 + "% → " + (51 + 3 * l) + " h et +" + (l + 1) * 10 + "%" }
+  { id: "poff",   icon: "🌙", name: "Rêveur",            base: 2, grow: 1.6, max: 8,  desc: l => "Coffre AFK : " + (48 + 3 * l) + " h max et +" + l * 10 + "% → " + (51 + 3 * l) + " h et +" + (l + 1) * 10 + "%" },
+  { id: "pclick", icon: "👻", name: "Clic fantôme",      base: 4, grow: 1.5, max: 20, desc: l => "Clics automatiques : " + l + " → " + (l + 1) + " par seconde (50 % des dégâts du tap, sans Combo)" }
 ];
 const pCost = (u, l) => Math.ceil(u.base * Math.pow(u.grow, l));
 const ADV_MIN = 10; // Renaissances nécessaires
@@ -1561,7 +1563,7 @@ const COIN = ic("coin"), PERLE = ic("perle");
   const set = (list, map) => list.forEach(x => { if (map[x.id]) x.icon = ic(map[x.id]); });
   for (const [k, v] of Object.entries({ arme: "sword", casque: "helmet", armure: "armor", gants: "glove", ceinture: "belt", bottes: "boot", amulette: "amulet" })) SLOTS[k].icon = ic(v);
   set(UPGRADES, { atk: "sword", hp: "heart", spd: "wind", crit: "target", tap: "pointer", gold: "coins", critdmg: "burst", combo: "bolt", fury: "flame", xp: "book" });
-  set(PUPG, { patk: "swordP", php: "heartP", pgold: "chest", pstart: "rocket", ploot: "clover", pskill: "spiralP", poff: "moon" });
+  set(PUPG, { patk: "swordP", php: "heartP", pgold: "chest", pstart: "rocket", ploot: "clover", pskill: "spiralP", poff: "moon", pclick: "pointer" });
   const nm = { g1: "sword", g2: "target", rage: "flame", g3: "burst", g4: "spiral", eclair: "bolt", d1: "shield", d2: "heartPlus", soin: "heartLeaf", d3: "wall", d4: "cactus", d5: "hourglass", p1: "pouch", p2: "magnifier", pluie: "coinRain", p3: "tag", p4: "gem", p5: "gift", g5: "swordP", g6: "crown", execution: "anvil", g7: "star", d6: "heart", d7: "heartP", rempart: "tower", d8: "lock", p6: "coins", p7: "paw", tresor: "chest", p8: "book", p9: "medal" };
   for (const id in NODE) NODE[id].icon = ic(nm[id]);
   for (const id in SKILLS) SKILLS[id].icon = ic(nm[id]);
@@ -5121,7 +5123,7 @@ function loopBody(now) {
   const t = now / 1000;
   update(dt); S.stats.time = (S.stats.time || 0) + Math.min(raw, 1);
   const sh = shakeT > 0; if (sh) { shakeT -= raw; ctx.save(); ctx.translate(rand(-5, 5), rand(-4, 4)); }
-  if (!sceneHidden() && !arenaOn) { const vbOn = tower && tower.vb; if (vbOn) drawVoidBg(t); else drawBackground(t); drawHero(t); drawPet(t); drawMonster(t); if (!vbOn) drawForeground(t, dt); drawFx(dt); if (vbOn || vbFx) drawVoidUi(t); }
+  if (!sceneHidden() && !arenaOn) { const vbOn = tower && tower.vb; if (vbOn) drawVoidBg(t); else drawBackground(t); drawHero(t); drawPet(t); drawMonster(t); if (!vbOn) drawForeground(t, dt); drawFx(dt); drawGhostFx(dt); if (vbOn || vbFx) drawVoidUi(t); }
   else { if (floats.length) floats.length = 0; if (particles.length > 40) particles.length = 40; }
   if (sh) ctx.restore();
   saveT += raw; if (saveT > 5) { saveT = 0; save(); } // toutes les 5 vraies secondes, même en ×3
@@ -5133,7 +5135,7 @@ function loopBody(now) {
 
 function update(dt) {
   if (comboT > 0) { comboT -= dt; if (comboT <= 0) comboN = 0; }
-  gameT += dt; racePowTick(dt); updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); const rdt = dt / Math.max(1, typeof gameSpeed === "function" ? gameSpeed() : 1); // l'animation suit le temps réel, même en ×3
+  gameT += dt; racePowTick(dt); updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); updateGhostClicks(dt); const rdt = dt / Math.max(1, typeof gameSpeed === "function" ? gameSpeed() : 1); // l'animation suit le temps réel, même en ×3
   hero.cast = Math.max(0, (hero.cast || 0) - rdt);
   hero.lunge = Math.max(0, hero.lunge - rdt);
   hero.hurt = Math.max(0, hero.hurt - dt);
@@ -5575,7 +5577,7 @@ function afkAddOffline() { // au retour dans le jeu : le temps d'absence remplit
 }
 function afkLoot(secs) {
   let l = S.level; if (isBossLvl(l)) l = Math.max(1, l - 1);
-  const dps = P.atk() * P.spd() * (1 + P.crit() / 100 * (critMult() - 1)), ttk = monHp(l) / dps + 0.6, kills = secs / ttk, b = 1 + 0.05 * A2("a11");
+  const dps = (P.atk() * P.spd() + P.tap() * GHOST_K * (S.pupg.pclick || 0) * 0.3) * (1 + P.crit() / 100 * (critMult() - 1)), ttk = monHp(l) / dps + 0.6, kills = secs / ttk, b = 1 + 0.05 * A2("a11"); // Clic fantôme : 30 % de son effet hors ligne
   return { gold: kills * monGold(l) * P.goldMult() * 0.5 * (1 + 0.1 * S.pupg.poff) * b, xp: Math.round(kills * xpKill(l, false) * 0.5 * b),
     items: Math.min(30, Math.floor(secs / 1800)), gems: Math.floor(secs / 3600), cr: Math.floor(secs / 7200) };
 }
@@ -5675,6 +5677,24 @@ function titleLoop(now) {
       g.fillStyle = "#ffd166"; g.beginPath(); g.arc(x, y, 3.6, 0, Math.PI * 2); g.fill(); g.strokeStyle = "#a8742a"; g.lineWidth = 1.2; g.stroke(); }
     tsc.coins = tsc.coins.filter(co => co.t < 1);
   } catch (e) { console.error(e); }
+}
+/* --- Clic fantôme (amélioration de Renaissance) : jusqu'à 20 clics automatiques par seconde --- */
+const GHOST_K = 0.5; // un clic fantôme = 50 % d'un vrai tap, et il ne fait pas monter le Combo
+let ghostAcc = 0; const ghostFx = [];
+function updateGhostClicks(dt) {
+  const n = S.pupg.pclick || 0; if (!n || hero.dead > 0 || respawn > 0 || arenaOn) { ghostAcc = 0; return; }
+  ghostAcc += dt * n;
+  let k = 0;
+  while (ghostAcc >= 1 && k < 30) { ghostAcc -= 1; k++;
+    const al = packAlive(), tgt = al.length ? al[Math.floor(Math.random() * al.length)] : mon;
+    if (!tgt || tgt.dying > 0 || tgt.charge) continue;
+    dealDamage(P.tap() * GHOST_K, "atap", tgt);
+    if (ghostFx.length < 12) ghostFx.push({ x: (tgt.px || monX()) + rand(-22, 22), y: groundY() + (tgt.py || 0) - rand(30, 80), t: 0 });
+  }
+}
+function drawGhostFx(dt) { // petites ondes de brume là où le doigt fantôme tape
+  for (const f of ghostFx) { f.t += dt / 0.35; const a = 1 - f.t; if (a <= 0) continue; ctx.globalAlpha = a * 0.8; ctx.strokeStyle = "#c8b0ff"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(f.x, f.y, 6 + f.t * 16, 0, Math.PI * 2); ctx.stroke(); ctx.fillStyle = "#fff"; ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(f.x, f.y, 2.5 * a, 0, Math.PI * 2); ctx.fill(); }
+  ctx.globalAlpha = 1; for (let i = ghostFx.length - 1; i >= 0; i--) if (ghostFx[i].t >= 1) ghostFx.splice(i, 1);
 }
 /* ================== ÉVÉNEMENTS ================== */
 cv.addEventListener("pointerdown", e => {
@@ -6724,6 +6744,10 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 65, d: "Le Clic fantôme", l: [
+    "👻 Nouvelle amélioration de Renaissance : <b>Clic fantôme</b>. Chaque niveau ajoute 1 clic automatique par seconde, <b>jusqu'à 20 par seconde</b> au niveau max.",
+    "Un clic fantôme fait 50 % des dégâts d'un vrai tap et ne fait pas monter le Combo : taper soi-même reste plus fort, mais ton Coup de doigt sert enfin aussi quand tu laisses tourner le jeu.",
+    "Il compte aussi un peu dans le coffre AFK (30 % de son effet)."] },
   { v: 64, d: "Le cadenas", l: [
     "🔒 <b>Cadenas sur l'équipement</b> : touche un objet puis « Mettre un cadenas ». Un objet verrouillé n'est jamais vendu (ni à la main, ni par « Vendre les moins bons », ni par la vente automatique) et jamais fusionné.",
     "🧹 Les pièces de panoplie <b>ne bloquent plus la vente</b> : tout ce qui n'a pas de cadenas peut être vendu. La vente automatique garde quand même une nouvelle pièce de panoplie si elle est meilleure que les tiennes.",
@@ -6919,7 +6943,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 64, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 65, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
