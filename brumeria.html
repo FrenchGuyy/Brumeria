@@ -123,6 +123,8 @@
   .bg2 { background: linear-gradient(160deg, #35225a, #1f2338); } .bg3 { background: linear-gradient(160deg, #4a3812, #1f2338); }
   .bg4 { background: linear-gradient(160deg, #2a5260, #1f2338); } .bg5 { background: linear-gradient(160deg, #10503a, #1f2338); }
   .bg6 { background: linear-gradient(160deg, #142a6a, #1f2338); } .bg7 { background: linear-gradient(160deg, #5a1820, #1f2338); } .bg8 { background: linear-gradient(160deg, #5a5030, #2a3a4a 60%, #3a2a48); }
+  .lockB { position: absolute; top: 1px; left: 2px; font-size: 10px; line-height: 1; filter: drop-shadow(0 0 2px #000); }
+  .lockBtn { margin-top: 8px; } .lockBtn.on { background: #3a2e10; color: #ffd166; border: 1px solid #a07a20; }
   .setDot { position: absolute; bottom: 3px; right: 4px; width: 8px; height: 8px; border-radius: 2px; transform: rotate(45deg); box-shadow: 0 0 4px currentColor; }
   .setBox { border: 1px solid; border-radius: 10px; padding: 8px; margin-top: 10px; font-size: 12px; text-align: left; line-height: 1.6; }
   .setOff { color: #6a6d84; }
@@ -638,7 +640,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v63</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v64</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -647,7 +649,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v63 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v64 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -670,7 +672,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v63</div></div>
+  <div class="tsVer">v64</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -918,6 +920,7 @@ function sanitize() {
     for (const o of ["upg", "pupg"]) { if (!S[o] || typeof S[o] !== "object") S[o] = N[o]; for (const k in S[o]) if (!okNum(S[o][k]) || S[o][k] < 0) S[o][k] = 0; }
     const okIt = it => it && typeof it === "object" && SLOTS[it.slot] && okNum(it.val) && RARITY[it.rar];
     if (!Array.isArray(S.inv)) S.inv = []; S.inv = S.inv.filter(okIt);
+    if (!S.lockMig) { const best = {}; for (const it of S.inv) if (it.set) { const k = it.set + "|" + it.slot; if (!best[k] || it.val > best[k].val) best[k] = it; } for (const k in best) best[k].lock = true; S.lockMig = 1; } // v64 : cadenas
     if (!S.equip || typeof S.equip !== "object") S.equip = N.equip; for (const k in N.equip) if (S.equip[k] && !okIt(S.equip[k])) S.equip[k] = null;
     if (!S.pets || typeof S.pets !== "object") S.pets = {}; if (!Array.isArray(S.petsOn)) S.petsOn = []; S.petsOn = S.petsOn.filter(id => PETS[id]);
     if (!S.exp || typeof S.exp !== "object") S.exp = {}; if (!S.gems || typeof S.gems !== "object") S.gems = {}; if (!S.owned || typeof S.owned !== "object") S.owned = {};
@@ -2366,7 +2369,7 @@ const FUSE_CH = [1, 1, 0.8, 0.7, 0.6, 0.5, 0.4];   // chance de réussite selon 
 const FUSE_TOP = R_MYTH - 1;                        // on peut fusionner jusqu'à Saphir (→ Mythique). Le Divin ne se fusionne pas.
 const fuseLocked = r => r + 1 >= R_EMER && !S.won;  // Émeraude et plus : il faut avoir fini les 1000 niveaux
 const fusePct = r => Math.round(FUSE_CH[r] * 100);
-function fuseOk(i) { return !i.set && !(i.plus > 0) && !(i.gems && i.gems.some(Boolean)); }
+function fuseOk(i) { return !i.lock && !(i.plus > 0) && !(i.gems && i.gems.some(Boolean)); }
 function autoFuse() { // fusion automatique (option de la Forge)
   const a = S.autoFuse; if (!a || !a.on) return;
   let made = [], fails = 0;
@@ -2382,7 +2385,7 @@ function autoFuse() { // fusion automatique (option de la Forge)
   if (made.length) { const best = made.reduce((x, y) => y.rar > x.rar ? y : x); toast(ic("anvil") + " Fusion auto : " + made.length + " objet" + (made.length > 1 ? "s" : "") + " créé" + (made.length > 1 ? "s" : "") + ' (meilleur : <span class="c' + best.rar + '">' + RARITY[best.rar].name + "</span>)"); if (curSub("b") === "sForge") refreshForge(); }
 }
 function fuse(rar, forced, silent) {
-  const list = forced || S.inv.filter(i => i.rar === rar).sort((a, b) => a.val - b.val).slice(0, FUSE_N);
+  const list = forced || S.inv.filter(i => i.rar === rar && !i.lock).sort((a, b) => a.val - b.val).slice(0, FUSE_N);
   if (list.length < FUSE_N || rar > FUSE_TOP) return;
   if (fuseLocked(rar)) { if (!silent) toast(ic("lock") + " Finis d'abord les 1000 niveaux pour fusionner en " + RARITY[rar + 1].name); return; }
   S.inv = S.inv.filter(i => !list.includes(i));
@@ -2405,12 +2408,12 @@ function fuse(rar, forced, silent) {
 function refreshForge() {
   let h = '<div class="secTitle" style="margin-top:4px"><span>' + ic("anvil") + ' Fusion</span></div><div class="hint">Fusionne <b>' + FUSE_N + ' objets</b> de la même rareté pour obtenir 1 objet de la rareté supérieure. Les ' + FUSE_N + ' moins bons sont utilisés. À partir d\'Épique, la fusion peut <b>échouer</b> : les objets sont alors détruits (tu récupères leur prix de vente).<br>' + ic("lock") + ' Émeraude, Saphir et Mythique : il faut avoir fini les 1000 niveaux. Le Divin ne s\'obtient que par les événements.</div>';
   for (let r = 0; r <= FUSE_TOP; r++) {
-    const n = S.inv.filter(i => i.rar === r).length, lk = fuseLocked(r);
+    const n = S.inv.filter(i => i.rar === r && !i.lock).length, lk = fuseLocked(r);
     h += '<div class="upg' + (lk ? " fuseLk" : "") + '"><div class="fuseRow"><span class="c' + r + '">' + FUSE_N + " " + RARITY[r].name + "</span> → <span class=\"c" + (r + 1) + '">1 ' + RARITY[r + 1].name + '</span><br><span class="upgDesc">' + (lk ? ic("lock") + " Finis les 1000 niveaux" : "Dans ton sac : " + n + " · réussite <b style=\"color:" + (FUSE_CH[r] < 1 ? "#ff8a8a" : "#7fe0a0") + '">' + fusePct(r) + " %</b>") + '</span></div><button class="buy" data-fuse="' + r + '"' + (n < FUSE_N || lk ? " disabled" : "") + ">Fusionner</button></div>";
   }
   const af = S.autoFuse;
   h += '<div class="upg" style="display:block"><div style="display:flex;align-items:center;gap:8px"><b style="flex:1">' + ic("bolt") + ' Fusion automatique</b><button class="buy' + (af.on ? "" : " alt") + '" id="afTog">' + (af.on ? "Activée" : "Désactivée") + '</button></div>' +
-    '<div class="upgDesc" style="margin:6px 0">Dès que tu as ' + FUSE_N + ' objets de la même rareté, ils fusionnent tout seuls (avec les mêmes chances d\'échec). Ces objets ne sont plus vendus par la vente automatique. Les objets de panoplie, améliorés (+) ou avec des gemmes ne sont jamais fusionnés.</div><div class="upgDesc">Fusionner jusqu\'à :</div><div class="afChips">' +
+    '<div class="upgDesc" style="margin:6px 0">Dès que tu as ' + FUSE_N + ' objets de la même rareté, ils fusionnent tout seuls (avec les mêmes chances d\'échec). Ces objets ne sont plus vendus par la vente automatique. Les objets avec un 🔒, améliorés (+) ou avec des gemmes ne sont jamais fusionnés.</div><div class="upgDesc">Fusionner jusqu\'à :</div><div class="afChips">' +
     [0, 1, 2, 3, 4, 5, 6].map(r => '<button class="smallBtn c' + r + (af.maxRar === r ? " on" : "") + '" data-afr="' + r + '"' + (fuseLocked(r) ? " disabled" : "") + ">" + (fuseLocked(r) ? ic("lock") + " " : "") + RARITY[r].name + "</button>").join("") + "</div></div>";
   h += '<div class="secTitle"><span>' + ic("anvil") + ' Amélioration</span></div><div class="hint">Touche un objet (dans Équipement) puis « Améliorer » : +15 % de bonus par niveau, jusqu\'à +' + UPG_MAX + ". Coûte de l'or.</div>";
   $("sForge").innerHTML = h;
@@ -5307,10 +5310,11 @@ function buyBag() {
 }
 // Vente automatique : vend directement les objets trouvés selon les réglages du joueur
 function autoSellIt(it) {
-  const a = S.autoSell; if (!a.on || it.rar > a.maxRar || it.set) return false;
+  const a = S.autoSell; if (!a.on || it.rar > a.maxRar || it.lock) return false; // les objets 🔒 ne sont jamais vendus (les panoplies ne bloquent plus)
   const af = S.autoFuse; if (af && af.on && it.rar <= af.maxRar && !fuseLocked(it.rar) && S.inv.length < bagMax()) return false; // gardé pour la fusion automatique
   const cur = S.equip[it.slot];
   if (a.keepBetter && (!cur || it.val > cur.val)) return false;
+  if (it.set) { const own = S.inv.concat(Object.values(S.equip)).filter(x => x && x !== it && x.set === it.set && x.slot === it.slot); if (!own.length || own.every(x => it.val > x.val)) return false; } // une nouvelle pièce de panoplie meilleure que les tiennes est gardée
   const g = sellPrice(it); S.gold += g; S.stats.autoSold = (S.stats.autoSold || 0) + 1;
   addFloat("+" + fmt(g), "#ffd166", 14, -70);
   return true;
@@ -5322,7 +5326,7 @@ function refreshAutoSell() {
   h += '<div class="asRow"><span>Vendre jusqu\'à :</span><span class="asChips">';
   for (let r = 0; r <= AS_TOP; r++) { const lk = r >= R_EMER && !S.won; h += '<button class="asChip c' + r + (a.maxRar === r ? " on" : "") + '" data-asr="' + r + '"' + (lk ? " disabled" : "") + ">" + (lk ? ic("lock") + " " : "") + RARITY[r].name + "</button>"; }
   h += '</span></div><button class="asKeep' + (a.keepBetter ? " on" : "") + '" id="asKeep">' + (a.keepBetter ? "✓" : "✗") + " Garder les objets meilleurs que mon équipement</button>";
-  h += '<div class="asInfo">' + (a.on ? "Les objets " + (a.maxRar ? "jusqu'à " + RARITY[a.maxRar].name.toLowerCase() : "communs") + (a.keepBetter ? " moins bons que ton équipement" : "") + " sont vendus dès que tu les trouves. Les " + RARITY[R_MYTH].name.toLowerCase() + "s et divins ne sont jamais vendus, ni les objets de panoplie." + (S.autoFuse && S.autoFuse.on ? " Ceux que la fusion automatique doit utiliser sont gardés pour la Forge." : "") : "Désactivée : tous les objets vont dans ton sac.") + (S.stats.autoSold ? " · " + fmt(S.stats.autoSold) + " vendus" : "") + "</div>";
+  h += '<div class="asInfo">' + (a.on ? "Les objets " + (a.maxRar ? "jusqu'à " + RARITY[a.maxRar].name.toLowerCase() : "communs") + (a.keepBetter ? " moins bons que ton équipement" : "") + " sont vendus dès que tu les trouves. Les " + RARITY[R_MYTH].name.toLowerCase() + "s, les divins et les objets avec un 🔒 ne sont jamais vendus (touche un objet pour lui mettre un cadenas). Une pièce de panoplie n'est gardée que si elle est meilleure que les tiennes." + (S.autoFuse && S.autoFuse.on ? " Ceux que la fusion automatique doit utiliser sont gardés pour la Forge." : "") : "Désactivée : tous les objets vont dans ton sac.") + (S.stats.autoSold ? " · " + fmt(S.stats.autoSold) + " vendus" : "") + "</div>";
   $("autoSell").innerHTML = h;
   $("asToggle").onclick = () => { a.on = !a.on; sfx("buy"); refreshAutoSell(); save(); };
   $("asKeep").onclick = () => { a.keepBetter = !a.keepBetter; sfx("buy"); refreshAutoSell(); save(); };
@@ -5332,7 +5336,7 @@ function itemLine(it) { return "+" + it.val + (SLOTS[it.slot].flat ? " pts " : "
 function itemBase(stat, l) { return { atk: 3 + l * 0.35, hp: 3 + l * 0.35, gold: 2 + l * 0.2, spd: 1 + l * 0.06, crit: 1 + l * 0.03, skill: 5 + l * 0.5 }[stat]; }
 const shortVal = it => "+" + it.val + (SLOTS[it.slot].flat ? "" : "%");
 const setBadge = it => it.set ? '<span class="setDot" style="background:' + SETS[it.set].color + '"></span>' : "";
-const plusBadge = it => it.plus ? '<span class="plus">+' + it.plus + "</span>" : "";
+const plusBadge = it => (it.plus ? '<span class="plus">+' + it.plus + "</span>" : "") + (it.lock ? '<span class="lockB">🔒</span>' : "");
 let bagPage = 120, bagObs = null;
 function refreshBag() {
   if (!($("pBag").classList.contains("active") && curSub("b") === "sEq")) { updateBagTab(); return; } // pas affiché : rien à redessiner
@@ -5391,13 +5395,15 @@ function showItem(it, equipped) {
     if (cur) { const diff = it.val - cur.val; txt += '<br><span style="font-size:13px">Équipé : ' + itemLine(cur) + ' <span class="' + (diff > 0 ? "better" : "worse") + '">(' + (diff > 0 ? "+" : "") + diff + ')</span></span>'; }
     else txt += '<br><span class="better" style="font-size:13px">Emplacement vide : bonus gratuit !</span>';
   }
+  txt += '<br><button class="smallBtn lockBtn' + (it.lock ? " on" : "") + '" id="lockBtn">' + (it.lock ? "🔒 Verrouillé : jamais vendu ni fusionné" : "🔓 Mettre un cadenas") + "</button>";
   const pl = it.plus || 0;
   txt += '<br><br><span style="font-size:12px;color:#9a98ad">Amélioration : +' + pl + " / +" + UPG_MAX + (pl < UPG_MAX ? " · prochain : " + COIN + fmt(upCost(it)) : "") + "</span>";
   const up = { t: ic("anvil") + (pl < UPG_MAX ? " +1" : " Max"), alt: true, f: () => { if (pl < UPG_MAX) { upgradeItem(it); showItem(it, equipped); } } };
   const btns = equipped
     ? [{ t: "Retirer", alt: true, f: () => unequip(it.slot) }, up, { t: "Fermer" }]
-    : [{ t: "Vendre " + COIN + fmt(sellPrice(it)), alt: true, f: () => sell(it.id) }, up, { t: "Équiper", f: () => equip(it.id) }];
+    : [{ t: it.lock ? "🔒 Vendre" : "Vendre " + COIN + fmt(sellPrice(it)), alt: true, f: () => sell(it.id) }, up, { t: "Équiper", f: () => equip(it.id) }];
   modal("", txt, btns, true);
+  const lb = $("lockBtn"); if (lb) lb.onclick = () => { it.lock = !it.lock; sfx("buy"); save(); $("modal").style.display = "none"; refreshBag(); showItem(it, equipped); };
   const ga = $("gemAdd"); if (ga) ga.onclick = () => { $("modal").style.display = "none"; pickGem(it, equipped); };
   const go = $("gemOut"); if (go) go.onclick = () => { $("modal").style.display = "none"; unsocket(it, equipped); };
 }
@@ -5435,13 +5441,14 @@ function unequip(slot) {
 }
 function sell(id) {
   const i = S.inv.findIndex(x => x.id === id); if (i < 0) return;
+  if (S.inv[i].lock) { toast("🔒 Cet objet a un cadenas : retire-le pour pouvoir le vendre"); return; }
   S.gold += sellPrice(S.inv[i]); S.inv.splice(i, 1);
   sfx("coin"); refreshBag(); refreshTop(); save();
 }
 function sellWorse() {
   let total = 0, n = 0;
-  S.inv = S.inv.filter(it => { const cur = S.equip[it.slot]; if (cur && it.val <= cur.val && !it.set) { total += sellPrice(it); n++; return false; } return true; });
-  if (!n) { toast("Rien à vendre : tous tes objets sont meilleurs que ceux équipés"); return; }
+  S.inv = S.inv.filter(it => { const cur = S.equip[it.slot]; if (cur && it.val <= cur.val && !it.lock) { total += sellPrice(it); n++; return false; } return true; });
+  if (!n) { toast("Rien à vendre : tes autres objets sont meilleurs que ceux équipés, ou ont un 🔒"); return; }
   S.gold += total; sfx("coin"); toast(n + " objet(s) vendu(s) : +" + fmt(total) + " " + COIN);
   refreshBag(); refreshTop(); save();
 }
@@ -6717,6 +6724,10 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 64, d: "Le cadenas", l: [
+    "🔒 <b>Cadenas sur l'équipement</b> : touche un objet puis « Mettre un cadenas ». Un objet verrouillé n'est jamais vendu (ni à la main, ni par « Vendre les moins bons », ni par la vente automatique) et jamais fusionné.",
+    "🧹 Les pièces de panoplie <b>ne bloquent plus la vente</b> : tout ce qui n'a pas de cadenas peut être vendu. La vente automatique garde quand même une nouvelle pièce de panoplie si elle est meilleure que les tiennes.",
+    "🛡️ Pour ne rien perdre, ta meilleure pièce de chaque panoplie (par emplacement) a reçu un cadenas automatiquement."] },
   { v: 63, d: "Les créatures de la Brume", l: [
     "👹 <b>Les 40 créatures ont été redessinées</b> dans le style du chasseur : corps sombres, flammes de couleur, yeux qui brillent, crocs. Chaque biome a ses propres monstres et leurs boss portent cornes et couronne.",
     "🦴 Les monstres sont <b>articulés</b> : bras, pattes, ailes, queues et tentacules bougent, et ils frappent ou mordent quand ils attaquent.",
@@ -6908,7 +6919,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 63, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 64, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
