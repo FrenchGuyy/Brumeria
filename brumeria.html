@@ -641,7 +641,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v66</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v67</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -650,7 +650,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v66 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v67 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -673,7 +673,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v66</div></div>
+  <div class="tsVer">v67</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -2752,7 +2752,9 @@ const TITLES = [{ id: "novice", name: "Novice", ok: () => true }]
     { id: "ard30", name: "Roi du Cauchemar", ok: () => (arBestD()[3] || 0) >= 30 },
     { id: "arc25", name: "Âme de la meute", ok: () => (S.arenaCoop || 0) >= 25 }
   ]);
-function drawHeroPreview(c, tt = 1.3, sz = 150) { if (c && c.id === "titleHero") return; // l'accueil a sa propre scène animée c.width = c.height = sz * DPR; c.style.width = c.style.height = sz + "px";
+function drawHeroPreview(c, tt = 1.3, sz = 150) {
+  if (!c || c.id === "titleHero") return; // l'accueil a sa propre scène animée
+  if (c.width !== Math.round(sz * DPR)) { c.width = c.height = Math.round(sz * DPR); c.style.width = c.style.height = sz + "px"; } // taille fixée une fois (pas à chaque image)
   HC = heroColors(); const V = heroVariant(), x = c.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height); if (!V) return;
   const kk = Math.min(sz * 0.8 / V.h, sz * 0.95 / V.w); // tout le personnage tient dans la case
   x.setTransform(DPR, 0, 0, DPR, 0, 0); heroBlit(x, V, (sz - V.w * kk) / 2 + V.fx * kk, sz - 6, tt, { h: V.h * kk / V.small });
@@ -6795,6 +6797,7 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 67, d: "Correctif", l: ["🐛 L'aperçu du chasseur dans Personnaliser n'est plus décalé ni coupé (et il se dessine plus vite)."] },
   { v: 66, d: "Les Âmes de Brume", l: [
     "🪙 Nouvelles améliorations à l'or : <b>Dressage</b> (familiers jusqu'à +500 % de dégâts et +50 % de vitesse), <b>Aimant à or</b> (jusqu'à 30 % de chance d'or ×5) et <b>Sablier</b> (jusqu'à +15 s au chrono des boss).",
     "💎 Nouvelles améliorations de Renaissance : <b>Écho</b> (jusqu'à 50 % de chance de frapper 2 fois), <b>Butin royal</b> (jusqu'à 50 % de chance de double récompense de boss) et <b>Frappe Brume auto</b> (60 000 Cristaux).",
@@ -6999,7 +7002,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 66, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 67, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
