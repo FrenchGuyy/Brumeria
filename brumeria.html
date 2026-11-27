@@ -123,6 +123,7 @@
   .bg2 { background: linear-gradient(160deg, #35225a, #1f2338); } .bg3 { background: linear-gradient(160deg, #4a3812, #1f2338); }
   .bg4 { background: linear-gradient(160deg, #2a5260, #1f2338); } .bg5 { background: linear-gradient(160deg, #10503a, #1f2338); }
   .bg6 { background: linear-gradient(160deg, #142a6a, #1f2338); } .bg7 { background: linear-gradient(160deg, #5a1820, #1f2338); } .bg8 { background: linear-gradient(160deg, #5a5030, #2a3a4a 60%, #3a2a48); }
+  .cuSw button.ame { box-shadow: 0 0 0 2px #9b7cff inset, 0 0 8px #9b7cff; }
   .lockB { position: absolute; top: 1px; left: 2px; font-size: 10px; line-height: 1; filter: drop-shadow(0 0 2px #000); }
   .lockBtn { margin-top: 8px; } .lockBtn.on { background: #3a2e10; color: #ffd166; border: 1px solid #a07a20; }
   .setDot { position: absolute; bottom: 3px; right: 4px; width: 8px; height: 8px; border-radius: 2px; transform: rotate(45deg); box-shadow: 0 0 4px currentColor; }
@@ -640,7 +641,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v65</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v66</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -649,7 +650,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v65 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v66 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -672,7 +673,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v65</div></div>
+  <div class="tsVer">v66</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -852,7 +853,10 @@ const UPGRADES = [
   { id: "critdmg", icon: "💥", name: "Dégâts critiques", base: 60, grow: 1.42, max: 50, desc: (l, n) => "Coups critiques : +" + fmtDec(5 * l) + "% → +" + fmtDec(5 * (l + n)) + "% de dégâts en plus" },
   { id: "combo", icon: "🔗", name: "Combo",        base: 45, grow: 1.38, max: 50, desc: (l, n) => "Chaque tap : +" + fmtDec(comboPer(l)) + "% → +" + fmtDec(comboPer(l + n)) + "% de dégâts (jusqu'à " + COMBO_MAX + " fois, 3 s)" },
   { id: "fury",  icon: "😡", name: "Rage",         base: 70, grow: 1.4,  max: 40, desc: (l, n) => "Vie basse : jusqu'à +" + 8 * l + "% → +" + 8 * (l + n) + "% de dégâts" },
-  { id: "xp",    icon: "📘", name: "Expérience",   base: 200, grow: 1.55, max: 30, desc: (l, n) => "XP gagnée : +" + 10 * l + "% → +" + 10 * (l + n) + "%" }
+  { id: "xp",    icon: "📘", name: "Expérience",   base: 200, grow: 1.55, max: 30, desc: (l, n) => "XP gagnée : +" + 10 * l + "% → +" + 10 * (l + n) + "%" },
+  { id: "pet",   icon: "🐾", name: "Dressage",     base: 120, grow: 1.24, max: 50, desc: (l, n) => "Familiers : dégâts +" + 10 * l + "% → +" + 10 * (l + n) + "%, attaques " + (l ? "+" + l + "% plus rapides" : "normales") + " → +" + (l + n) + "%" },
+  { id: "magnet", icon: "🧲", name: "Aimant à or", base: 300, grow: 1.32, max: 30, desc: (l, n) => "Chance qu'un monstre lâche ×5 d'or : " + l + "% → " + (l + n) + "%" },
+  { id: "btime", icon: "⏳", name: "Sablier",      base: 500, grow: 1.6,  max: 15, desc: (l, n) => "Chrono des boss : +" + l + " s → +" + (l + n) + " s" }
 ];
 const atkFrom  = l => (6 + l * 3) * Math.pow(1.13, l);
 const hpFrom   = l => (100 + l * 15) * Math.pow(1.12, l);
@@ -875,11 +879,11 @@ const gameSpeed = () => SPEEDS.includes(S.speed) ? S.speed : S.speed > 3 ? 3 : (
 let devSpeed = 1, devGod = false, devOneShot = false;
 function newState() {
   return { ver: 7, won: false, gold: 0, level: 1, maxLevel: 1, kills: 0, auto: true, totalKills: 0,
-    upg: { atk: 0, hp: 0, spd: 0, crit: 0, tap: 0, gold: 0, critdmg: 0, combo: 0, fury: 0, xp: 0 }, diff: 0, wonH: false, pupg2: {},
+    upg: { atk: 0, hp: 0, spd: 0, crit: 0, tap: 0, gold: 0, critdmg: 0, combo: 0, fury: 0, xp: 0, pet: 0, magnet: 0, btime: 0 }, ames: 0, ameTot: 0, petUp: {}, ameTal: 0, diff: 0, wonH: false, pupg2: {},
     equip: { arme: null, casque: null, armure: null, gants: null, ceinture: null, bottes: null, amulette: null }, inv: [],
     sound: true, vib: true, lastSeen: Date.now(), afk: 0, itemId: 1,
     perles: 0, totalPerles: 0, rebirths: 0, best: 1,
-    pupg: { patk: 0, php: 0, pgold: 0, pstart: 0, ploot: 0, pskill: 0, poff: 0, pclick: 0 },
+    pupg: { patk: 0, php: 0, pgold: 0, pstart: 0, ploot: 0, pskill: 0, poff: 0, pclick: 0, pecho: 0, pboss: 0, pfb: 0 },
     tree: {}, bonusPts: 0, music: true,
     stats: { bossKills: 0, taps: 0, legend: 0, items: 0, forges: 0, rares: 0, skills: 0, quests: 0, time: 0, bestHit: 0, goldTotal: 0 },
     ach: {}, daily: null, bestiary: {}, pets: {}, pet: null,
@@ -1019,7 +1023,7 @@ function spawnMonster() {
   layoutPack(true); pack.forEach((m, i) => { m.spawnT = -i * 0.08; m.atkTimer = 1.2 + i * 0.35; });
   mon = pack[0];
   const boss = mon.boss, zb = mon.zb;
-  bossTimer = (zb ? 45 : boss ? BOSS_TIME : 0) + (boss ? 5 * T("d5") : 0);
+  bossTimer = (zb ? 45 : boss ? BOSS_TIME : 0) + (boss ? 5 * T("d5") + (S.upg.btime || 0) : 0);
   if (boss) setTimeout(() => sfx("boss"), 150);
   hero.atkTimer = Math.min(hero.atkTimer, 0.2); // le chasseur frappe dès que le monstre arrive
 }
@@ -1079,7 +1083,8 @@ function hitMon(amount, kind) {
   if (amount > (S.stats.bestHit || 0)) S.stats.bestHit = amount;
   const ls = affSum("vol"); if (ls && (kind === "auto" || kind === "tap" || kind === "atap" || kind === "pet")) hero.hp = Math.min(P.maxHp(), hero.hp + Math.min(amount, P.maxHp()) * ls / 100);
   mon.flash = 0.12; mon.shake = crit ? 0.25 : 0.12; mon.squash = 0.15;
-  if (kind === "atap") { if (crit || Math.random() < 0.2) addFloat(fmt(amount) + (crit ? "!" : ""), "#d8c8ff", crit ? 18 : 13); particles.push({ x: monX() + rand(-20, 20), y: monY() - rand(20, 60), vx: rand(-60, 60), vy: rand(-120, -30), life: 0.4, c: "#c8b0ff", r: 2.5 }); }
+  if (kind === "echo") { addFloat(fmt(amount) + (crit ? "!" : ""), "#c8a8ff", crit ? 22 : 16); }
+  else if (kind === "atap") { if (crit || Math.random() < 0.2) addFloat(fmt(amount) + (crit ? "!" : ""), "#d8c8ff", crit ? 18 : 13); particles.push({ x: monX() + rand(-20, 20), y: monY() - rand(20, 60), vx: rand(-60, 60), vy: rand(-120, -30), life: 0.4, c: "#c8b0ff", r: 2.5 }); }
   else if (kind === "pet" && !crit) { if (Math.random() < 0.6) addFloat(fmt(amount), "#cfe4ff", 13); }
   else addFloat(fmt(amount) + (crit ? "!" : ""), kind === "skill" ? "#8ecae6" : crit ? "#ffd166" : "#fff", crit || kind === "skill" ? 26 : 18);
   if (kind !== "atap") { for (let i = 0; i < (crit ? 10 : 4); i++) particles.push({ x: monX(), y: monY() - 30, vx: rand(-120, 120), vy: rand(-180, -40), life: 0.5, c: mon.color, r: rand(2, 5) });
@@ -1091,7 +1096,8 @@ function hitMon(amount, kind) {
 
 function killMonster() {
   mon.hp = 0; mon.dying = DIE_T;
-  const g = mon.gold * P.goldMult();
+  const mg = !mon.tower && Math.random() * 100 < (S.upg.magnet || 0), g = mon.gold * P.goldMult() * (mg ? 5 : 1); // Aimant à or
+  if (mg) addFloat("×5 !", "#ffd166", 22, -70);
   S.gold += g; S.totalKills++; S.stats.goldTotal = (S.stats.goldTotal || 0) + g;
   gainXp(xpKill(S.level, mon.boss));
   if (T("d7") && hero.dead <= 0) hero.hp = Math.min(P.maxHp(), hero.hp + P.maxHp() * 0.02 * T("d7"));
@@ -1103,6 +1109,8 @@ function killMonster() {
   if (mon.tower) { if (tower.vb) vbWin(); else if (tower.inv) invasionWin(); else towerClear(); respawn = tower.vb ? 2.2 : 0.6; refreshTop(); refreshUpgButtons(); return; }
   const wasBoss = mon.boss;
   rollLoot(wasBoss || mon.rare, mon.rare); if (wasBoss && T("p5")) rollLoot(true);
+  if (wasBoss && S.pupg.pboss && Math.random() * 100 < 5 * S.pupg.pboss) { S.gold += g; rollLoot(true); addGem(randGem()); setTimeout(() => toast("👑 Butin royal : récompense du boss doublée !"), 600); }
+  if (mon.zb && S.level === S.maxLevel) addAmes(4 + 2 * zoneIdx(S.level), "Boss de zone vaincu"); // Âmes de Brume
   const bk = mon.zb ? "zb" + zoneIdx(S.level) : mon.type; S.bestiary[bk] = (S.bestiary[bk] || 0) + 1;
   if (mon.rare) { S.bestiary["or_" + bk] = (S.bestiary["or_" + bk] || 0) + 1; S.stats.rares++; }
   qProg("kill"); clanAddPts(wasBoss ? 3 : 0.05); clanWeek(wasBoss ? "b" : "m", 1); if (wasBoss) { S.stats.bossKills++; qProg("boss"); dropPet(mon.zb); if (Math.random() < 0.3 + 0.1 * T("p9") || mon.zb) { const gt = randGem(); addGem(gt); setTimeout(() => toast(gemIcon(gt, 16) + " " + GEMS[gt].name + " trouvé !"), 1300); } }
@@ -1354,7 +1362,10 @@ const PUPG = [
   { id: "ploot",  icon: "🍀", name: "Chance",            base: 2, grow: 1.6, max: 20, desc: l => "Chance de butin +" + l * 10 + "% → +" + (l + 1) * 10 + "%" },
   { id: "pskill", icon: "✨", name: "Maîtrise",          base: 3, grow: 1.7, max: 10, desc: l => "Recharge des compétences -" + l * 5 + "% → -" + (l + 1) * 5 + "%" },
   { id: "poff",   icon: "🌙", name: "Rêveur",            base: 2, grow: 1.6, max: 8,  desc: l => "Coffre AFK : " + (48 + 3 * l) + " h max et +" + l * 10 + "% → " + (51 + 3 * l) + " h et +" + (l + 1) * 10 + "%" },
-  { id: "pclick", icon: "👻", name: "Clic fantôme",      base: 4, grow: 1.5, max: 20, desc: l => "Clics automatiques : " + l + " → " + (l + 1) + " par seconde (50 % des dégâts du tap, sans Combo)" }
+  { id: "pclick", icon: "👻", name: "Clic fantôme",      base: 4, grow: 1.5, max: 20, desc: l => "Clics automatiques : " + l + " → " + (l + 1) + " par seconde (50 % des dégâts du tap, sans Combo)" },
+  { id: "pecho",  icon: "🔊", name: "Écho",              base: 5, grow: 1.45, max: 25, desc: l => "Chance que ton attaque frappe 2 fois : " + 2 * l + "% → " + 2 * (l + 1) + "%" },
+  { id: "pboss",  icon: "👑", name: "Butin royal",       base: 8, grow: 1.6, max: 10, desc: l => "Chance qu'un boss donne double récompense (or, objet, gemme) : " + 5 * l + "% → " + 5 * (l + 1) + "%" },
+  { id: "pfb",    icon: "🌀", name: "Frappe Brume auto", base: 60000, grow: 1, max: 1, desc: l => l ? "La Frappe Brume se lance toute seule" : "La Frappe Brume se lance toute seule dès qu'elle est chargée (très cher : c'est un bonus de fin de jeu)" }
 ];
 const pCost = (u, l) => Math.ceil(u.base * Math.pow(u.grow, l));
 const ADV_MIN = 10; // Renaissances nécessaires
@@ -1562,8 +1573,8 @@ const COIN = ic("coin"), PERLE = ic("perle");
 (() => {
   const set = (list, map) => list.forEach(x => { if (map[x.id]) x.icon = ic(map[x.id]); });
   for (const [k, v] of Object.entries({ arme: "sword", casque: "helmet", armure: "armor", gants: "glove", ceinture: "belt", bottes: "boot", amulette: "amulet" })) SLOTS[k].icon = ic(v);
-  set(UPGRADES, { atk: "sword", hp: "heart", spd: "wind", crit: "target", tap: "pointer", gold: "coins", critdmg: "burst", combo: "bolt", fury: "flame", xp: "book" });
-  set(PUPG, { patk: "swordP", php: "heartP", pgold: "chest", pstart: "rocket", ploot: "clover", pskill: "spiralP", poff: "moon", pclick: "pointer" });
+  set(UPGRADES, { atk: "sword", hp: "heart", spd: "wind", crit: "target", tap: "pointer", gold: "coins", critdmg: "burst", combo: "bolt", fury: "flame", xp: "book", pet: "paw", magnet: "coins", btime: "hourglass" });
+  set(PUPG, { patk: "swordP", php: "heartP", pgold: "chest", pstart: "rocket", ploot: "clover", pskill: "spiralP", poff: "moon", pclick: "pointer", pecho: "burst", pboss: "crown", pfb: "spiralP" });
   const nm = { g1: "sword", g2: "target", rage: "flame", g3: "burst", g4: "spiral", eclair: "bolt", d1: "shield", d2: "heartPlus", soin: "heartLeaf", d3: "wall", d4: "cactus", d5: "hourglass", p1: "pouch", p2: "magnifier", pluie: "coinRain", p3: "tag", p4: "gem", p5: "gift", g5: "swordP", g6: "crown", execution: "anvil", g7: "star", d6: "heart", d7: "heartP", rempart: "tower", d8: "lock", p6: "coins", p7: "paw", tresor: "chest", p8: "book", p9: "medal" };
   for (const id in NODE) NODE[id].icon = ic(nm[id]);
   for (const id in SKILLS) SKILLS[id].icon = ic(nm[id]);
@@ -1619,8 +1630,8 @@ const GROUND_SP = ["blob", "mushroom", "fox", "golem", "turtle", "frog", "snail"
 for (const id in PETS) {
   const p = PETS[id];
   p.color = p.c; p.rk = [0, 1, 2, 3, 7, 8][p.rar]; p.ground = GROUND_SP.includes(p.sp); p.flat = p.pas === "crit"; p.pasTxt = PET_PTXT[p.pas];
-  p.atk = l => PET_ATK[p.rar] * (1 + 0.18 * (l - 1));
-  p.pv = l => Math.round(PET_PB[p.pas] * PET_RM[p.rar] * l * 10) / 10;
+  p.atk = l => PET_ATK[petR(id)] * (1 + 0.18 * (l - 1));            // la rareté compte l'éveil (Âmes de Brume)
+  p.pv = l => Math.round(PET_PB[p.pas] * PET_RM[petR(id)] * l * 10) / 10;
 }
 const PET_MAX = 20, PET_RATE = 1.2;
 const PET_SLOT_LV = [1, 15, 40, 80, 130];
@@ -2064,13 +2075,13 @@ function drawPet(t) {
 }
 function updatePet(dt, t) {
   for (const s of petShots) s.t += dt / 0.35;
-  for (const s of petShots) if (s.t >= 1 && !s.done) { s.done = true; if (mon && mon.dying <= 0 && respawn <= 0 && S.pets[s.id]) dealDamage(P.atk() * PETS[s.id].atk(S.pets[s.id]) * (1 + accSum("pet") / 100) * rPow("pet"), "pet"); }
+  for (const s of petShots) if (s.t >= 1 && !s.done) { s.done = true; if (mon && mon.dying <= 0 && respawn <= 0 && S.pets[s.id]) dealDamage(P.atk() * PETS[s.id].atk(S.pets[s.id]) * (1 + accSum("pet") / 100) * rPow("pet") * (1 + 0.1 * (S.upg.pet || 0)), "pet"); }
   petShots = petShots.filter(s => !s.done);
   if (!mon || mon.dying > 0 || respawn > 0 || hero.dead > 0) return;
   petPositions(t).forEach(([id, x, y], i) => {
     if (petTimers[id] == null) petTimers[id] = 0.3 + i * 0.25;
     petTimers[id] -= dt;
-    if (petTimers[id] <= 0) { petTimers[id] = PET_RATE; petShots.push({ x, y, t: 0, id }); }
+    if (petTimers[id] <= 0) { petTimers[id] = PET_RATE / (1 + 0.01 * (S.upg.pet || 0)); petShots.push({ x, y, t: 0, id }); }
   });
 }
 function rollPetRar(zb) {
@@ -2124,12 +2135,14 @@ function refreshPets() {
     h += '<div class="upg petCard r' + p.rk + (on ? " act" : "") + '">' + (l ? '<canvas data-pet="' + id + '"></canvas>' : '<div class="q">?</div>') + '<div class="upgTxt"><div class="upgName">' + (l ? '<span class="c' + p.rk + '">' + p.name + '</span> <span class="lv">niv. ' + l + "/" + PET_MAX + "</span>" : "???") + '</div><div class="petRar c' + p.rk + '">' + RARITY[p.rk].name + (on ? ' · <span class="petOn">ACTIF</span>' : "") + '</div><div class="upgDesc">' +
       (l ? p.info + "<br>Attaque : " + Math.round(p.atk(l) * 100) + "% de la tienne · " + p.pasTxt + " +" + (p.flat ? fmtDec(p.pv(l)) : p.pv(l) + "%") : "Se trouve à partir de : " + ZONES[p.zone].name) + "</div></div>" +
       (l ? (S.exp[id] ? (expDone(id) ? '<button class="buy" data-claim="' + id + '">Récupérer</button>' : '<span class="expLeft">En expédition<br>' + fmtLeft(S.exp[id].end - Date.now()) + "</span>") : '<button class="buy' + (on ? " alt" : "") + '" data-tog="' + id + '">' + (on ? "Retirer" : "Activer") + "</button>") : "") + "</div>";
+    if (l) { const r = petR(id); h += '<div class="expRow"><span>✨ Éveil : <b class="c' + [0, 1, 2, 3, 7, 8][r] + '">' + RARITY[[0, 1, 2, 3, 7, 8][r]].name + "</b>" + (r > p.rar ? " (base " + RARITY[p.rk].name + ")" : "") + "</span>" + (r < 5 ? '<button class="smallBtn" data-awk="' + id + '">Éveiller · ' + AME_PET(r) + " 👻</button>" : "<span>MAX</span>") + "</div>"; }
     if (l && !on && !S.exp[id]) h += '<div class="expRow"><span>' + ic("rocket") + " Envoyer " + p.name + " en expédition :</span>" + EXP_H.map(x => '<button class="smallBtn" data-exp="' + id + '" data-h="' + x + '">' + x + " h</button>").join("") + "</div>";
   }
   h += '<div class="hint" style="margin-top:6px">' + ic("rocket") + " Un familier en expédition ne combat pas, mais revient avec de l'or, des gemmes (et des objets dès 4 h). Retire-le d'abord des familiers actifs.</div>";
   $("sPets").innerHTML = h;
   $("sPets").querySelectorAll("[data-exp]").forEach(b => b.onclick = () => sendExp(b.dataset.exp, +b.dataset.h));
   $("petBestBtn").onclick = equipBestPets;
+  $("sPets").querySelectorAll("[data-awk]").forEach(b => b.onclick = () => awakenPet(b.dataset.awk));
   $("sPets").querySelectorAll("[data-expall]").forEach(b => b.onclick = () => { sendAllExp(+b.dataset.expall); refreshPets(); save(); });
   if ($("claimAllBtn")) $("claimAllBtn").onclick = () => { claimAllExp(); refreshPets(); save(); };
   $("autoExpBtn").onclick = () => { S.autoExp = Object.assign({ on: false, h: 4 }, S.autoExp); S.autoExp.on = !S.autoExp.on; if (S.autoExp.on) { autoExpTick(); toast("🔁 Expéditions auto activées : les familiers non actifs partent tout seuls"); } refreshPets(); save(); };
@@ -2692,6 +2705,10 @@ const LOOKS = {
   trim: { label: "Énergie", list: [["Cyan", "#5ce1ff"], ["Or", "#ffd166"], ["Rouge", "#ff4d5e"], ["Émeraude", "#52ffa0"], ["Violet", "#c07cff"], ["Blanc", "#f0f4ff"]] },
   hair: { label: "Cheveux", list: [["Argent", "#e4eaf4", "#9fb0c8"], ["Noir", "#2e2e3c", "#17171f"], ["Blond", "#f2d27a", "#c8a04a"], ["Roux", "#d0653a", "#9a4220"], ["Rose", "#f0a0c8", "#c070a0"], ["Bleu nuit", "#4a6ab4", "#2a4078"], ["Châtain", "#8a5a3a", "#5a3a22"], ["Blanc", "#f6f6fa", "#c8ccd8"], ["Violet", "#a070e0", "#6a40a8"], ["Vert", "#5ac88a", "#2e8a5a"]] }
 };
+// 10 : Tenues de Brume (payées en Âmes de Brume), ajoutées à la fin des listes
+LOOKS.coat.ame = LOOKS.coat.list.length; LOOKS.coat.list.push(["Ombre de Brume", "#160d24", "#0b0614"], ["Sang du Néant", "#4e0a26", "#300616"], ["Givre spectral", "#26425e", "#152a3e"], ["Or royal", "#5a4410", "#3a2b08"], ["Abysse", "#0c2e36", "#061c22"]);
+LOOKS.trim.ame = LOOKS.trim.list.length; LOOKS.trim.list.push(["Brume", "#b89aff"], ["Néant", "#9b3cff"], ["Aurore", "#ff9ad8"], ["Soleil noir", "#ffa030"], ["Spectre vert", "#3dffc8"]);
+LOOKS.hair.ame = LOOKS.hair.list.length; LOOKS.hair.list.push(["Blanc spectral", "#f6f2ff", "#c8c0e8"], ["Violet de Brume", "#9a7ae0", "#6a4ab0"], ["Cendre", "#7a7480", "#4a4650"], ["Flamme", "#ff6a3a", "#c03a1a"]);
 // options gratuites (choisies au début, modifiables quand tu veux)
 const SKINS = [["Claire", "#f6dfcc"], ["Pêche", "#f1d8c4"], ["Dorée", "#e3bb94"], ["Mate", "#c99a74"], ["Brune", "#9a6a4a"], ["Ébène", "#6e4a34"]];
 const EYES = [["Énergie", null], ["Bleu", "#4fa8ff"], ["Vert", "#52d17c"], ["Ambre", "#ffb03a"], ["Violet", "#b07cff"], ["Rouge", "#ff4d5e"], ["Gris", "#b8c4d6"]];
@@ -2754,12 +2771,39 @@ function refreshHero() {
   h += '<div class="secTitle"><span>' + ic("medal") + ' Titres</span><span style="font-size:11px;color:#9a98ad">' + got.length + " / " + TITLES.length + " · débloqués avec les succès et la Tour</span></div><div class=\"titleList\">";
   for (const x of got) h += '<button class="titleChip' + ((S.title || "novice") === x.id ? " on" : "") + '" data-ti="' + x.id + '">' + x.name + "</button>";
   h += "</div>";
+  h += ameShopHtml();
   h += statsHtml();
-  $("heroPanel").innerHTML = h;
+  $("heroPanel").innerHTML = h; bindAmeShop();
   drawHeroPreview($("heroPrev"));
   $("heroPanel").querySelectorAll("[data-cls]").forEach(b => b.onclick = () => { S.cls = b.dataset.cls; heroShots = []; sfx("rare"); refreshHero(); refreshStats(); save(); });
   $("heroCust").onclick = openCust;
   $("heroPanel").querySelectorAll("[data-ti]").forEach(b => b.onclick = () => { S.title = b.dataset.ti; sfx("buy"); refreshHero(); save(); });
+}
+
+/* ================== ÂMES DE BRUME 👻 ==================
+   Gagnées aux boss de zone (en progressant), à la Tour (nouveaux étages), à l'Invasion, au Seigneur du Néant et à l'Arène. */
+function addAmes(n, why) { n = Math.max(0, Math.round(n)); if (!n) return; S.ames = (S.ames || 0) + n; S.ameTot = (S.ameTot || 0) + n; if (why) setTimeout(() => toast("👻 +" + n + " Âme" + (n > 1 ? "s" : "") + " de Brume · " + why), 1600); }
+const AME_TAL = [20, 30, 45, 65, 90, 120, 160, 210, 270, 350]; // 11 : talents rares (+1 point de compétence chacun)
+const petR = id => Math.min(5, PETS[id].rar + ((S.petUp || {})[id] || 0));
+const AME_PET = r => [15, 30, 60, 120, 240][r] || 0;              // 9 : éveil d'un familier (rareté +1)
+const AME_LOOK = 25;                                              // 10 : tenues de Brume
+const ameLook = (k, i) => LOOKS[k] && LOOKS[k].ame != null && i >= LOOKS[k].ame;
+function ameShopHtml() {
+  const t = S.ameTal || 0;
+  return '<div class="secTitle"><span>👻 Âmes de Brume</span><span style="color:#d8c8ff">' + fmt(S.ames || 0) + ' Âmes</span></div>' +
+    '<div class="hint">Gagne des Âmes en battant les boss de zone, en montant dans la Tour, à l\'Invasion, contre le Seigneur du Néant et à l\'Arène.</div>' +
+    '<div class="upg"><div class="upgIcon">✨</div><div class="upgTxt"><div class="upgName">Talent rare <span class="lv">' + t + " / " + AME_TAL.length + '</span></div><div class="upgDesc">+1 point de compétence pour toujours (gardé à la Renaissance)</div></div>' +
+    (t < AME_TAL.length ? '<button class="buy" id="ameTalBtn"' + ((S.ames || 0) < AME_TAL[t] ? " disabled" : "") + ">" + AME_TAL[t] + " 👻</button>" : '<button class="buy" disabled>MAX</button>') + "</div>" +
+    '<div class="hint">🐾 <b>Éveil des familiers</b> : dans le Sac → Familiers, chaque familier peut monter en rareté avec des Âmes.<br>🎨 <b>Tenues de Brume</b> : dans Personnaliser, de nouvelles couleurs de manteau, d\'énergie (lame et aura) et de cheveux à ' + AME_LOOK + " Âmes.</div>";
+}
+function bindAmeShop() {
+  const b = $("ameTalBtn"); if (b) b.onclick = () => { const t = S.ameTal || 0, c = AME_TAL[t]; if (c == null || (S.ames || 0) < c) return; S.ames -= c; S.ameTal = t + 1; S.bonusPts = (S.bonusPts || 0) + 1; sfx("rare"); toast("✨ Talent rare : +1 point de compétence !"); treeAutoFill(); refreshHero(); updateSkillBar(); save(); };
+}
+function awakenPet(id) {
+  const r = petR(id), c = AME_PET(r); if (r >= 5 || !S.pets[id]) return;
+  if ((S.ames || 0) < c) { toast("Il faut " + c + " Âmes de Brume 👻"); return; }
+  modal("", "Éveiller <b>" + PETS[id].name + "</b> ?<br><br>Rareté : <span class=\"c" + [0, 1, 2, 3, 7, 8][r] + "\">" + RARITY[[0, 1, 2, 3, 7, 8][r]].name + "</span> → <span class=\"c" + [0, 1, 2, 3, 7, 8][r + 1] + "\">" + RARITY[[0, 1, 2, 3, 7, 8][r + 1]].name + "</span><br>Son attaque et son bonus augmentent.", [{ t: "Annuler", alt: true }, { t: "Éveiller (" + c + " 👻)", f: () => {
+    S.ames -= c; S.petUp = S.petUp || {}; S.petUp[id] = (S.petUp[id] || 0) + 1; statF++; sfx("rare"); vib(40); toast("🐾 " + PETS[id].name + " s'éveille !"); refreshPets(); refreshStats(); save(); } }]);
 }
 
 /* ================== ARMES DU HÉROS ================== */
@@ -2775,6 +2819,7 @@ function heroAttack() {
     heroShots.push({ t: 0, type: c.ranged, dmg: P.atk(), x: heroX() + hx + (c.ranged === "arrow" ? 10 : 0), y: groundY() + hy - (c.ranged === "orb" ? 14 : 0) });
     if (c.ranged === "arrow" && setOn("rodeur", 6) && Math.random() < 0.25) heroShots.push({ t: -0.35, type: "arrow", dmg: P.atk(), x: heroX() + 40, y: groundY() - 64 });
   } else { if (animOk()) hero.lunge = LUNGE; sfx("slash"); dealDamage(P.atk(), "auto"); } // les dégâts tombent à chaque coup, l'animation est limitée
+  if (S.pupg.pecho && Math.random() * 100 < 2 * S.pupg.pecho && mon && mon.dying <= 0) dealDamage(P.atk(), "echo"); // Écho : un 2e coup
 }
 function updateShots(dt) {
   for (const s of heroShots) s.t += dt / (s.type === "arrow" ? 0.16 : 0.28);
@@ -2833,7 +2878,7 @@ function towerClear() {
   const f = tower.floor, first = f > S.tower.best;
   rollLoot(true);
   if (first) {
-    S.tower.best = f;
+    S.tower.best = f; addAmes(1 + Math.floor(f / 10), "Étage " + f + " de la Tour");
     const p = f % 5 === 0 ? 1 + Math.floor(f / 10) : 0;
     if (p) { S.perles += p; setTimeout(() => toast(ic("tower") + " Étage " + f + " franchi : +" + p + " " + PERLE), 300); }
     else setTimeout(() => toast(ic("tower") + " Étage " + f + " franchi !"), 300);
@@ -3055,7 +3100,7 @@ function startInvasion() {
 }
 function invasionWin() {
   S.invDay = dayKey();
-  const a = randGem(), b = randGem(); addGem(a, 2); addGem(b, 2); S.perles += 5;
+  const a = randGem(), b = randGem(); addGem(a, 2); addGem(b, 2); S.perles += 5; addAmes(12, "Invasion repoussée");
   const dv = Math.random() < 0.04, it = makeItem(dv ? R_DIV : 3, S.maxLevel); S.inv.push(it); if (dv) { countRar(R_DIV); setTimeout(() => announceItem(it), 1200); }
   tower.done = "Tu as repoussé l'<b>Avatar de la Brume</b> !<br><br>+5 " + PERLE + "<br>" + GEMS[a].name + " et " + GEMS[b].name + " niv. 2<br>" + it.name + ' (<span class="c' + it.rar + '">' + RARITY[it.rar].name + "</span>)" + (dv ? "" : "<br><small style='color:#9a98ad'>4 % de chance d'obtenir un objet Divin à chaque invasion</small>");
   sfx("rare"); save();
@@ -3214,7 +3259,7 @@ function spawnVoidBoss() {
 }
 function vbWin() {
   const L = mon.vbL || vbLevel(), hd = S.diff ? 1 : 0;
-  S.vbKills = (S.vbKills || 0) + 1; S.vbNext = Date.now() + VB_RESPAWN;
+  S.vbKills = (S.vbKills || 0) + 1; S.vbNext = Date.now() + VB_RESPAWN; addAmes(20, "Seigneur du Néant vaincu");
   const cr = Math.round((10 + Math.floor(L / 50)) * (hd ? HARD.perles : 1)); S.perles += cr; S.totalPerles += cr;
   const gs = []; for (let i = 0; i < 3; i++) { const g = randGem(); addGem(g, 3); gs.push(GEMS[g].name); }
   const rar = hd ? (Math.random() < 0.12 ? 6 : R_EMER) : R_DIAM, it = makeItem(rar, L); S.inv.push(it); countRar(rar);
@@ -5135,7 +5180,7 @@ function loopBody(now) {
 
 function update(dt) {
   if (comboT > 0) { comboT -= dt; if (comboT <= 0) comboN = 0; }
-  gameT += dt; racePowTick(dt); updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); updateGhostClicks(dt); const rdt = dt / Math.max(1, typeof gameSpeed === "function" ? gameSpeed() : 1); // l'animation suit le temps réel, même en ×3
+  gameT += dt; racePowTick(dt); updatePet(dt, gameT); animPetThumbs(dt); updateShots(dt); updateFrenzy(dt); updateGhostClicks(dt); if (S.pupg.pfb && skill >= 100) useSkill(); const rdt = dt / Math.max(1, typeof gameSpeed === "function" ? gameSpeed() : 1); // l'animation suit le temps réel, même en ×3
   hero.cast = Math.max(0, (hero.cast || 0) - rdt);
   hero.lunge = Math.max(0, hero.lunge - rdt);
   hero.hurt = Math.max(0, hero.hurt - dt);
@@ -6280,6 +6325,7 @@ function arRewards(W, np, di) {
   const D = AR_DIFF[di] || AR_DIFF[1], k = D.rew * arCoop(np), L = Math.max(10, S.maxLevel);
   const gold = monGoldB(L) * 20 * W * k * (S.diff ? HARD.gold : 1), cr = Math.floor(W * W / 12 * k), gl = di >= 3 ? 3 : di >= 2 ? 2 : 1, gems = Math.floor(W / 10 * k);
   S.gold += gold; S.perles += cr; S.totalPerles += cr; for (let i = 0; i < gems; i++) addGem(randGem(), gl);
+  const am = Math.floor(W / 3 * [0.6, 1, 1.4, 2][di] || 0); if (am) addAmes(am, null);
   // équipement : 1 objet toutes les 5 vagues (+ objets garantis aux paliers), au niveau du joueur
   const items = [], nIt = Math.min(12, Math.floor(W / 5 * (0.8 + 0.2 * np)));
   for (let i = 0; i < nIt; i++) items.push(arRollRar(D.luck * Math.max(0.5, 1 - W / 120)));
@@ -6294,7 +6340,7 @@ function arRewards(W, np, di) {
   if (W >= (arena && arena.N || 0) && arena && arena.N && di >= 2) S.arenaWinH = true;
   save(); updateBagTab();
   const best = got.slice().sort((a, b) => b.rar - a.rar).slice(0, 4);
-  return { html: "+" + fmt(gold) + " " + COIN + (cr ? " · +" + cr + " " + PERLE : "") + (gems ? " · +" + gems + " gemme" + (gems > 1 ? "s" : "") + (gl > 1 ? " niv. " + gl : "") : "") +
+  return { html: "+" + fmt(gold) + " " + COIN + (cr ? " · +" + cr + " " + PERLE : "") + (am ? " · +" + am + " 👻" : "") + (gems ? " · +" + gems + " gemme" + (gems > 1 ? "s" : "") + (gl > 1 ? " niv. " + gl : "") : "") +
     (got.length ? '<div class="arLoot">' + best.map(it => '<span class="c' + it.rar + '">' + SLOTS[it.slot].icon + " " + it.name + " · " + RARITY[it.rar].name + "</span>").join("") + (got.length > best.length ? "<span style='color:#9a98ad'>+ " + (got.length - best.length) + " autre(s) objet(s)</span>" : "") + "</div>" : ""), k };
 }
 function arShowEnd() {
@@ -6405,7 +6451,7 @@ function refreshCust() {
   h += '<div class="cuRow"><div class="cuLbl">Personnage</div><div class="cuSex"><button data-sex="h" class="' + (L.sex !== "f" ? "on" : "") + '">♂ Homme</button><button data-sex="f" class="' + (L.sex === "f" ? "on" : "") + '">♀ Femme</button></div></div>';
   h += '<div class="cuRow"><div class="cuLbl">Pseudo</div><input id="cuPseudo" class="cuIn" maxlength="14" value="' + (S.pseudo || "Chasseur").replace(/[<>"]/g, "") + '"></div>';
   const sw = (key, list, cur, paid, lbl) => '<div class="cuRow"><div class="cuLbl"><span>' + lbl + "</span>" + (paid ? "<span>" + LOOK_PRICE + " " + PERLE + " par couleur bloquée</span>" : "") + '</div><div class="cuSw">' +
-    list.map((c, i) => { const own = !paid || lookOwned(key, i); return '<button data-k="' + key + '" data-i="' + i + '" title="' + c[0] + '" class="' + (cur === i ? "on" : "") + (own ? "" : " lockd") + (key === "eye" && !c[1] ? " energy" : "") + '" style="background:' + (c[1] || "#888") + '">' + (own ? "" : '<span class="pp">' + PERLE + "</span>") + "</button>"; }).join("") + "</div></div>";
+    list.map((c, i) => { const own = !paid || lookOwned(key, i), am = ameLook(key, i); return '<button data-k="' + key + '" data-i="' + i + '" title="' + c[0] + (am ? " (Tenue de Brume)" : "") + '" class="' + (cur === i ? "on" : "") + (own ? "" : " lockd") + (am ? " ame" : "") + (key === "eye" && !c[1] ? " energy" : "") + '" style="background:' + (c[1] || "#888") + '">' + (own ? "" : '<span class="pp">' + (am ? "👻" : PERLE) + "</span>") + "</button>"; }).join("") + "</div></div>";
   h += sw("hair", LOOKS.hair.list, L.hair, true, "Couleur des cheveux");
   h += sw("skin", SKINS, L.skin == null ? 1 : L.skin, false, "Peau");
   h += sw("coat", LOOKS.coat.list, L.coat, true, "Manteau");
@@ -6421,6 +6467,11 @@ function refreshCust() {
   $("cuPseudo").onchange = () => { S.pseudo = ($("cuPseudo").value || "").replace(/[<>"]/g, "").trim().slice(0, 14) || "Chasseur"; save(); };
   $("custBody").querySelectorAll("[data-k]").forEach(b => b.onclick = () => {
     const k = b.dataset.k, i = +b.dataset.i;
+    if (LOOKS[k] && !lookOwned(k, i) && ameLook(k, i)) { // Tenue de Brume
+      if ((S.ames || 0) < AME_LOOK) { toast("Il faut " + AME_LOOK + " Âmes de Brume 👻 (boss de zone, Tour, Invasion, Arène)"); return; }
+      modal("", "Débloquer la tenue de Brume <b>" + LOOKS[k].list[i][0] + "</b> pour " + AME_LOOK + " 👻 ?", [{ t: "Annuler", alt: true }, { t: "Débloquer", f: () => { S.ames -= AME_LOOK; S.owned[k + i] = true; L[k] = i; if (k === "trim") L.auraRace = false; sfx("rare"); refreshCust(); save(); } }]);
+      return;
+    }
     if (LOOKS[k] && !lookOwned(k, i)) {
       if (S.perles < LOOK_PRICE) { toast("Il faut " + LOOK_PRICE + " " + PERLE + " (gagnés avec les Renaissances)"); return; }
       modal("", "Débloquer la couleur <b>" + LOOKS[k].list[i][0] + "</b> pour " + LOOK_PRICE + " " + PERLE + " ?", [{ t: "Annuler", alt: true }, { t: "Débloquer", f: () => { S.perles -= LOOK_PRICE; S.owned[k + i] = true; L[k] = i; if (k === "trim") L.auraRace = false; sfx("rare"); refreshCust(); save(); } }]);
@@ -6744,6 +6795,11 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 66, d: "Les Âmes de Brume", l: [
+    "🪙 Nouvelles améliorations à l'or : <b>Dressage</b> (familiers jusqu'à +500 % de dégâts et +50 % de vitesse), <b>Aimant à or</b> (jusqu'à 30 % de chance d'or ×5) et <b>Sablier</b> (jusqu'à +15 s au chrono des boss).",
+    "💎 Nouvelles améliorations de Renaissance : <b>Écho</b> (jusqu'à 50 % de chance de frapper 2 fois), <b>Butin royal</b> (jusqu'à 50 % de chance de double récompense de boss) et <b>Frappe Brume auto</b> (60 000 Cristaux).",
+    "👻 Nouvelle monnaie : les <b>Âmes de Brume</b>. Tu les gagnes en battant un boss de zone, en franchissant un nouvel étage de la Tour, à l'Invasion, contre le Seigneur du Néant et à l'Arène.",
+    "✨ Boutique des Âmes (Chasseur → Héros) : <b>Talents rares</b> (+1 point de compétence, jusqu'à 10), <b>Éveil des familiers</b> (leur rareté monte jusqu'à Divin) et <b>Tenues de Brume</b> (14 nouvelles couleurs de manteau, d'énergie et de cheveux dans Personnaliser)."] },
   { v: 65, d: "Le Clic fantôme", l: [
     "👻 Nouvelle amélioration de Renaissance : <b>Clic fantôme</b>. Chaque niveau ajoute 1 clic automatique par seconde, <b>jusqu'à 20 par seconde</b> au niveau max.",
     "Un clic fantôme fait 50 % des dégâts d'un vrai tap et ne fait pas monter le Combo : taper soi-même reste plus fort, mais ton Coup de doigt sert enfin aussi quand tu laisses tourner le jeu.",
@@ -6943,7 +6999,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 65, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 66, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
