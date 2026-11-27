@@ -641,7 +641,7 @@
       <div class="opt"><span>Graphismes</span><span class="qualChips"><button class="smallBtn" data-q2="haute">Max</button> <button class="smallBtn" data-q2="normale">Haute</button> <button class="smallBtn" data-q2="eco">Économie</button></span></div>
       <div class="optSec">📦 Jeu et compte</div>
       <div class="opt"><span>📜 Nouveautés</span><button class="smallBtn" id="newsOpt">Voir</button></div>
-      <div class="opt"><span>🔄 Version <b>v67</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
+      <div class="opt"><span>🔄 Version <b>v68</b></span><button class="smallBtn" id="updBtn">Mettre à jour</button></div>
       <div class="opt"><span>🔑 Code de compte <b id="acctCode" class="acctCode"></b></span><span><button class="smallBtn" id="sendBtn">Envoyer</button> <button class="smallBtn" id="recvBtn">Récupérer</button></span></div>
       <div class="opt"><span>🛟 Sauvegardes de secours</span><button class="smallBtn" id="bakBtn">Voir</button></div>
       <div class="optSec">📊 Statistiques</div>
@@ -650,7 +650,7 @@
       <div class="optSec">⚙️ Autre</div>
       <div class="opt"><span>📘 Tutoriel</span><button class="smallBtn" id="tutoAgain">Revoir</button></div>
       <div class="opt"><span>Recommencer à zéro</span><button class="smallBtn danger" id="resetBtn">Effacer</button></div>
-      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v67 — sauvegarde automatique</p>
+      <p style="font-size:12px;color:#777;text-align:center;margin-top:14px">Brumeria v68 — sauvegarde automatique</p>
     </div>
   </div>
   </div>
@@ -673,7 +673,7 @@
     </div>
   </div>
   <div id="tsLore"><b id="tsLoreTitle"></b><span id="tsLoreTxt"></span></div>
-  <div class="tsVer">v67</div></div>
+  <div class="tsVer">v68</div></div>
 <div id="clanPanel"><div id="custBox"><div id="custHead">🛡️ Clan</div><button id="clanClose" aria-label="Fermer">✕</button><div id="clanBody" style="overflow-y:auto;padding:6px 14px 10px"></div></div></div>
 <div id="custPanel"><div id="custBox"><div id="custHead">👤 Ton chasseur</div><button id="custClose" aria-label="Fermer">✕</button><div id="custPrevWrap"><canvas id="custPrev"></canvas></div><div id="custBody"></div><button id="custDone">Terminé</button></div></div>
 <div id="arMenu"><div id="arMenuBox"><div class="arHead">⚔️ Arène de Brume</div><button id="arMenuClose" aria-label="Fermer">✕</button><div id="arMenuBody"></div></div></div>
@@ -1365,7 +1365,7 @@ const PUPG = [
   { id: "pclick", icon: "👻", name: "Clic fantôme",      base: 4, grow: 1.5, max: 20, desc: l => "Clics automatiques : " + l + " → " + (l + 1) + " par seconde (50 % des dégâts du tap, sans Combo)" },
   { id: "pecho",  icon: "🔊", name: "Écho",              base: 5, grow: 1.45, max: 25, desc: l => "Chance que ton attaque frappe 2 fois : " + 2 * l + "% → " + 2 * (l + 1) + "%" },
   { id: "pboss",  icon: "👑", name: "Butin royal",       base: 8, grow: 1.6, max: 10, desc: l => "Chance qu'un boss donne double récompense (or, objet, gemme) : " + 5 * l + "% → " + 5 * (l + 1) + "%" },
-  { id: "pfb",    icon: "🌀", name: "Frappe Brume auto", base: 60000, grow: 1, max: 1, desc: l => l ? "La Frappe Brume se lance toute seule" : "La Frappe Brume se lance toute seule dès qu'elle est chargée (très cher : c'est un bonus de fin de jeu)" }
+  { id: "pfb",    icon: "🌀", name: "Frappe Brume auto", base: 150000, grow: 1, max: 1, desc: l => l ? "La Frappe Brume se lance toute seule" : "La Frappe Brume se lance toute seule dès qu'elle est chargée (très cher : c'est un bonus de fin de jeu)" }
 ];
 const pCost = (u, l) => Math.ceil(u.base * Math.pow(u.grow, l));
 const ADV_MIN = 10; // Renaissances nécessaires
@@ -1432,9 +1432,9 @@ function refreshReb() {
     '<div class="statsBox">Niveau max de cette partie : <b>' + S.maxLevel + '</b><br>' +
     (g > 0 ? 'Si tu renais maintenant : <b style="color:#c39bff">+' + fmt(g) + ' ' + PERLE + '</b> <span style="color:#9a98ad;font-size:12px">(bonus de niveau ×' + fmtDec(rebLvlBonus(S.maxLevel)) + (S.diff ? " · Difficile ×" + HARD.perles : "") + ')</span><br>Au niveau ' + next + ' : <b style="color:#c39bff">+' + fmt(perlesFor(next)) + ' ' + PERLE + '</b>'
            : ic("lock") + ' Renaissance possible à partir du niveau <b>' + REB_MIN + '</b> (encore ' + (REB_MIN - S.maxLevel) + ' niveaux)') + '</div>' +
-    '<div class="statsBox" style="font-size:12px;line-height:1.6"><b style="color:#ff8fa3">Tu perds :</b> ton or, tes améliorations du Chasseur, ton niveau (tu repars du niveau ' + rebStart(S.maxLevel) + ').<br>' +
-    '<b style="color:#52d17c">Tu gardes :</b> ton équipement, ton sac et tes Cristaux.<br>' +
-    '<b style="color:#ffd166">Ton arbre de compétences</b> repart à zéro : tes points reviennent en battant les boss, à toi de tester un autre style !<br>' +
+    '<div class="statsBox" style="font-size:12px;line-height:1.6"><b style="color:#ff8fa3">Tu perds :</b> ton or, tes améliorations à l\'or (onglet Chasseur), ton niveau (tu repars du niveau ' + rebStart(S.maxLevel) + ').<br>' +
+    '<b style="color:#52d17c">Tu gardes :</b> tes améliorations de Renaissance (ici), ton équipement, ton sac, tes familiers, tes Cristaux et tes Âmes de Brume.<br>' +
+    '<b style="color:#ffd166">Ton arbre de compétences</b> repart à zéro, mais ' + (S.treeAuto !== false ? "tes points se replacent tout seuls dès que tu les regagnes." : "tes points reviennent en battant les boss : à toi de tester un autre style !") + '<br>' +
     'Plus tu vas loin avant de renaître, plus tu gagnes de Cristaux. Dépense-les dans l\'onglet Chasseur.</div>';
   const b = document.createElement("button"); b.className = "rebBtn"; b.innerHTML = g > 0 ? PERLE + " Renaître (+" + fmt(g) + ")" : ic("lock") + " Niveau " + REB_MIN + " requis";
   b.disabled = g <= 0; b.onclick = () => askRebirth();
@@ -1443,14 +1443,14 @@ function refreshReb() {
     const m = document.createElement("div"); m.className = "modeBox";
     m.innerHTML = '<b class="t">💀 Mode Difficile</b> ' + (S.diff ? '<span style="color:#ff6a78">· EN COURS</span>' : "") + "<br>Les 1000 niveaux recommencent : monstres ×" + HARD.hp + " de vie et ×" + HARD.dmg + " de dégâts, mais ×" + HARD.gold + " d'or, ×" + HARD.perles + " Cristaux, plus d'XP, objets bien plus forts et nouvelles raretés (<span class='c5'>Émeraude</span>, <span class='c6'>Saphir</span>, <span class='c7'>Mythique</span>).<br><small style='color:#9a98ad'>Changer de mode fait une Renaissance (tu gagnes tes Cristaux si tu en as).</small>";
     const mb = document.createElement("button"); mb.className = "modeBtn" + (S.diff ? " norm" : ""); mb.textContent = S.diff ? "Revenir en mode Normal" : "💀 Lancer le mode Difficile";
-    mb.onclick = () => { if (tower) { toast("Quitte d'abord la Tour"); return; } const nm = S.diff ? 0 : 1; modal(nm ? "💀 Mode Difficile ?" : "Mode Normal ?", (nm ? "Tu recommences au niveau 1 en <b>mode Difficile</b>." : "Tu recommences au niveau 1 en <b>mode Normal</b>.") + "<br><br>C'est une Renaissance : ton or, tes améliorations, ton niveau et ton arbre repartent à zéro. Tu gardes ton équipement, ton sac, tes familiers et tes Cristaux." + (g ? "<br><br><b style='color:#c39bff'>+" + fmt(g) + " Cristaux</b>" : ""), [{ t: "Annuler", alt: true }, { t: "Confirmer", f: () => doRebirth(g, nm) }]); };
+    mb.onclick = () => { if (tower) { toast("Quitte d'abord la Tour"); return; } const nm = S.diff ? 0 : 1; modal(nm ? "💀 Mode Difficile ?" : "Mode Normal ?", (nm ? "Tu recommences au niveau 1 en <b>mode Difficile</b>." : "Tu recommences au niveau 1 en <b>mode Normal</b>.") + "<br><br>C'est une Renaissance : ton or, tes améliorations à l'or, ton niveau et ton arbre repartent à zéro. Tu gardes <b>tes améliorations de Renaissance</b>, ton équipement, ton sac, tes familiers, tes Cristaux et tes Âmes de Brume." + (g ? "<br><br><b style='color:#c39bff'>+" + fmt(g) + " Cristaux</b>" : ""), [{ t: "Annuler", alt: true }, { t: "Confirmer", f: () => doRebirth(g, nm) }]); };
     m.appendChild(mb); box.appendChild(m);
   }
 }
 function askRebirth() {
   if (tower) { toast("Quitte d'abord la Tour"); return; }
   const g = perlesFor(S.maxLevel); if (g <= 0) return;
-  modal(PERLE + " Renaître ?", "Tu vas gagner <b style='color:#c39bff'>+" + fmt(g) + " Cristaux de Renaissance</b>.<br><br>Tes améliorations repartent à zéro et tu repars du <b>niveau " + rebStart(S.maxLevel) + "</b>, mais tu reçois <b style='color:#ffd166'>" + fmt(rebGold(Math.max(rebStart(S.maxLevel), Math.floor(S.maxLevel * 0.6)))) + " " + COIN + "</b> pour te relancer." + (S.treeAuto !== false ? " Tes points de compétence se replacent tout seuls." : " Ton arbre de compétences repart à zéro.") + " Tu gardes ton équipement et ton sac.",
+  modal(PERLE + " Renaître ?", "Tu vas gagner <b style='color:#c39bff'>+" + fmt(g) + " Cristaux de Renaissance</b>.<br><br>Tes améliorations à l'or repartent à zéro (tu gardes celles de Renaissance) et tu repars du <b>niveau " + rebStart(S.maxLevel) + "</b>, mais tu reçois <b style='color:#ffd166'>" + fmt(rebGold(Math.max(rebStart(S.maxLevel), Math.floor(S.maxLevel * 0.6)))) + " " + COIN + "</b> pour te relancer." + (S.treeAuto !== false ? " Tes points de compétence se replacent tout seuls." : " Ton arbre de compétences repart à zéro.") + " Tu gardes ton équipement et ton sac.",
     [{ t: "Annuler", alt: true }, { t: "Renaître !", f: () => doRebirth(g) }]);
 }
 let modeMsg = false;
@@ -6797,10 +6797,11 @@ $("custPanel").onclick = e => { if (e.target.id === "custPanel") closeCust(); };
 
 /* ================== NOUVEAUTÉS (journal des mises à jour) ================== */
 const NEWS = [
+  { v: 68, d: "Ajustements", l: ["🌀 La <b>Frappe Brume auto</b> coûte maintenant <b>150 000 Cristaux</b> (au lieu de 60 000) : c'est un vrai objectif de fin de jeu.", "📝 Textes de la Renaissance et du passage en Difficile plus clairs : tu gardes toujours tes améliorations de Renaissance, seules celles à l'or repartent à zéro."] },
   { v: 67, d: "Correctif", l: ["🐛 L'aperçu du chasseur dans Personnaliser n'est plus décalé ni coupé (et il se dessine plus vite)."] },
   { v: 66, d: "Les Âmes de Brume", l: [
     "🪙 Nouvelles améliorations à l'or : <b>Dressage</b> (familiers jusqu'à +500 % de dégâts et +50 % de vitesse), <b>Aimant à or</b> (jusqu'à 30 % de chance d'or ×5) et <b>Sablier</b> (jusqu'à +15 s au chrono des boss).",
-    "💎 Nouvelles améliorations de Renaissance : <b>Écho</b> (jusqu'à 50 % de chance de frapper 2 fois), <b>Butin royal</b> (jusqu'à 50 % de chance de double récompense de boss) et <b>Frappe Brume auto</b> (60 000 Cristaux).",
+    "💎 Nouvelles améliorations de Renaissance : <b>Écho</b> (jusqu'à 50 % de chance de frapper 2 fois), <b>Butin royal</b> (jusqu'à 50 % de chance de double récompense de boss) et <b>Frappe Brume auto</b> (150 000 Cristaux).",
     "👻 Nouvelle monnaie : les <b>Âmes de Brume</b>. Tu les gagnes en battant un boss de zone, en franchissant un nouvel étage de la Tour, à l'Invasion, contre le Seigneur du Néant et à l'Arène.",
     "✨ Boutique des Âmes (Chasseur → Héros) : <b>Talents rares</b> (+1 point de compétence, jusqu'à 10), <b>Éveil des familiers</b> (leur rareté monte jusqu'à Divin) et <b>Tenues de Brume</b> (14 nouvelles couleurs de manteau, d'énergie et de cheveux dans Personnaliser)."] },
   { v: 65, d: "Le Clic fantôme", l: [
@@ -7002,7 +7003,7 @@ $("newsPanel").onclick = e => { if (e.target.id === "newsPanel") $("newsPanel").
 if ((S.seenVer || 0) >= NEWS[0].v) $("newsDot").style.display = "none";
 
 /* ================== MISES À JOUR ================== */
-const GAME_VER = 67, ONLINE = location.protocol.startsWith("http");
+const GAME_VER = 68, ONLINE = location.protocol.startsWith("http");
 let swReg = null, updAsked = false, lastUpdCheck = 0;
 if ("serviceWorker" in navigator && ONLINE) navigator.serviceWorker.register("sw.js").then(r => { swReg = r; r.update().catch(() => {}); }).catch(() => {});
 function applyUpdate() {
